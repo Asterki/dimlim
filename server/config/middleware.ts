@@ -1,0 +1,38 @@
+// Dependencies
+import express from 'express';
+import path from 'path';
+import favicon from 'serve-favicon';
+import helmet from 'helmet';
+import session from 'express-session';
+import cookieParser from 'cookie-parser';
+import bodyParser from 'body-parser';
+
+import chalk from 'chalk';
+
+import { app } from '../index';
+
+// Requests
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
+app.use(cookieParser());
+
+// Static content
+app.use(favicon(path.join(__dirname, '../../public/favicon.ico')));
+app.use(express.static(path.join(__dirname, '../../src/assets/')));
+
+// Security
+// app.use(helmet());
+
+// Session and login
+app.use(
+	session({
+		secret: 'keyboard cat',
+		resave: false,
+		saveUninitialized: true,
+		cookie: { secure: true },
+	})
+);
+
+console.log(`${chalk.cyanBright('info')} - Middleware loaded`);
+
+export {}

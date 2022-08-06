@@ -1,3 +1,7 @@
+import chalk from 'chalk';
 import { app } from '../index';
 
-export {}
+app.use('/api/content', require('../api/content'));
+
+console.log(`${chalk.cyanBright('info ')} - Routes loaded`);
+export { app };

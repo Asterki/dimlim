@@ -1,0 +1,73 @@
+.page {
+    height: 100vh;
+
+    background-size: cover;
+    background-image: url("../../assets/images/bg-1.jpg");
+
+    .navbar * {
+        color: white;
+    }
+
+    .login-form {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+
+        width: 500px;
+        margin: 0 auto;
+        padding: 20px;
+        border-radius: 10px;
+
+        background-color: rgba(255, 255, 255, 0.8);
+        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+
+        .forgot-password {
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+
+            text-align: right;
+
+            a {
+                color: #2196f3;
+                text-decoration: none;
+            }
+        }
+
+        p {
+            margin: 0 !important;
+            padding: 0 !important;
+        }
+
+        input {
+            width: 100%;
+            border-radius: 5px;
+            padding: 5px;
+
+            background-color: rgb(247, 247, 247, 0.8);
+            border: 1px solid rgb(230, 230, 230, 0.8);
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            color: black;
+            outline: none !important;
+
+            &:focus {
+                border: 1px solid #2196f3;
+            }
+        }
+
+        button {
+            border-radius: 5px;
+            padding: 5px;
+            width: 100%;
+            border: none;
+            outline: none !important;
+
+            background-color: #2196f3;
+            color: white;
+
+            font-weight: bold;
+            cursor: pointer;
+        }
+    }
+}

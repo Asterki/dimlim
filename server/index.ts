@@ -20,15 +20,21 @@ const nextApp = next({ dev: JSON.parse(launchArgs.dev) });
 nextApp.prepare().then(() => {
     const handle = nextApp.getRequestHandler();
 
+    require("./config/middleware");
+    require("./config/auth");
+    require("./config/routes");
+    require("./config/databases");
+
     app.get("*", (req, res) => {
         handle(req, res);
     });
 
-    require("./config/middleware");
-    require("./config/routes");
-
     app.listen(launchArgs.port, () => {
-        console.log(`${chalk.magenta("event")} - Server running in ${launchArgs.dev == "true" ? "development" : "production"} mode at ${launchArgs.port}`);
+        console.log(
+            `${chalk.magenta("event")} - Server running in ${
+                launchArgs.dev == "true" ? "development" : "production"
+            } mode at ${launchArgs.port}`
+        );
     });
 });
 

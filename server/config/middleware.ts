@@ -6,33 +6,44 @@ import session from "express-session";
 import cookieParser from "cookie-parser";
 import bodyParser from "body-parser";
 import compression from "compression";
+import passport from "passport";
 
 import chalk from "chalk";
 
 import { app } from "../index";
 
-// Requests
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(bodyParser.json());
-app.use(cookieParser());
-app.use(compression());
+try {
+    app.disable("x-powered-by");
+    app.set("trust proxy", 1);
 
-// Static content
-app.use(favicon(path.join(__dirname, "../../public/favicon.ico")));
+    // Requests
+    app.use(bodyParser.urlencoded({ extended: true }));
+    app.use(bodyParser.json());
+    app.use(cookieParser());
+    app.use(compression());
 
-// Security
-// app.use(helmet());
+    // Static content
+    app.use(favicon(path.join(__dirname, "../../public/favicon.ico")));
 
-// Session and login
-// app.use(
-// 	session({
-// 		secret: 'keyboard cat',
-// 		resave: false,
-// 		saveUninitialized: true,
-// 		cookie: { secure: true },
-// 	})
-// );
+    // Security
+    // app.use(helmet());
 
-console.log(`${chalk.cyanBright("info ")} - Middleware loaded`);
+    // Session and login
+    app.use(
+        session({
+            secret: process.env.SESSION_SECRET as string,
+            resave: false,
+            saveUninitialized: true,
+            cookie: { secure: false },
+        })
+    );
+    app.use(passport.initialize());
+    app.use(passport.session());
+
+    console.log(`${chalk.cyanBright("info ")} - Middleware loaded`);
+} catch (err) {
+    console.log(`${chalk.redBright("error")} - There was an error loading the middleware`);
+    console.log(err);
+}
 
 export {};

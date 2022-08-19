@@ -1,7 +1,14 @@
-import chalk from 'chalk';
-import { app } from '../index';
+import chalk from "chalk";
+import { app } from "../index";
 
-app.use('/api/content', require('../api/content'));
+try {
+    app.use("/api/content", require("../api/content"));
+    app.use("/api/accounts", require("../api/accounts"));
 
-console.log(`${chalk.cyanBright('info ')} - Routes loaded`);
+    console.log(`${chalk.cyanBright("info ")} - Routes loaded`);
+} catch (err) {
+    console.log(`${chalk.redBright("error ")} - There was an error loading the routes`);
+    console.log(err);
+}
+
 export { app };

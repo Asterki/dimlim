@@ -11,7 +11,8 @@
 		"start:move-static": "cp -r ./locales ./build/ && cp ./src/assets -r ./build/src && cp -r ./public ./build/",
 		"start:run-server": "node ./build/server/index.js --dev false",
 		"build": "next build",
-		"lint": "next lint"
+		"lint": "next lint",
+		"setup": "mkdir data && cd data && mkdir db && mkdir profile-pictures && mkdir files && cd .. && npm i -y"
 	},
 	"dependencies": {
 		"-": "^0.0.1",

@@ -13,8 +13,8 @@ const router: express.Router = express.Router();
 router.post(
     "/register",
     rateLimit({
-        windowMs: ms("1 day"),
-        max: 10,
+        windowMs: ms("1 hour"),
+        max: 1,
         message: "rate-limit-exceeded",
     }),
     (req, res, next) => {

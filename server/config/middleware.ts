@@ -1,7 +1,7 @@
 // Dependencies
 import path from "path";
+import express from "express"
 import favicon from "serve-favicon";
-import helmet from "helmet";
 import session from "express-session";
 import cookieParser from "cookie-parser";
 import bodyParser from "body-parser";
@@ -24,9 +24,7 @@ try {
 
     // Static content
     app.use(favicon(path.join(__dirname, "../../public/favicon.ico")));
-
-    // Security
-    // app.use(helmet());
+    app.use("/assets/", express.static(path.join(__dirname, "../../src/assets")))
 
     // Session and login
     app.use(

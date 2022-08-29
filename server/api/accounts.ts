@@ -14,7 +14,7 @@ router.post(
     "/register",
     rateLimit({
         windowMs: ms("1 day"),
-        max: 1000, // !! CHANGE THIS TO 1
+        max: 10,
         message: "rate-limit-exceeded",
     }),
     (req, res, next) => {
@@ -32,7 +32,11 @@ router.post(
 
             if (!validator.isEmail(email)) return res.status(400).send("invalid-email");
             if (password.length < 8 || password.length > 64) return res.status(400).send("invalid-password");
-            if (username.length < 3 || username.length > 32 || !validator.isAlphanumeric(username))
+            if (
+                username.length < 3 ||
+                username.length > 32 ||
+                !validator.isAlphanumeric(username, "en-US", { ignore: "." })
+            )
                 return res.status(400).send("invalid-username");
 
             db.get("users", async (err: any, users: any) => {
@@ -50,9 +54,9 @@ router.post(
                 users = JSON.parse(users);
 
                 if (users.find((user: any) => user.email.value == email))
-                    return res.status(400).send("email-already-in-use");
+                    return res.status(200).send("email-already-in-use");
                 if (users.find((user: any) => user.username == username))
-                    return res.status(400).send("username-already-in-use");
+                    return res.status(200).send("username-already-in-use");
 
                 const user = {
                     username: username.toLowerCase(),
@@ -107,6 +111,40 @@ router.post(
         }
     }
 );
+
+router.post("/test-fields", (req, res) => {
+    if (!req.body.email || !req.body.username) return res.status(400).send("missing-params");
+    if (typeof req.body.email !== "string" || typeof req.body.username !== "string")
+        return res.status(400).send("invalid-params");
+
+    let { email, username } = req.body;
+
+    try {
+        db.get("users", async (err: any, users: any) => {
+            if (err) {
+                if (err.type == "NotFoundError") {
+                    db.put("users", JSON.stringify([]), (err: any) => {
+                        console.log(err);
+                        if (err) return res.status(500).send("server-error");
+                    });
+                }
+
+                return res.status(500).send("server-error");
+            }
+
+            users = JSON.parse(users);
+
+            if (users.find((user: any) => user.email.value == email))
+                return res.status(200).send("email-already-in-use");
+            if (users.find((user: any) => user.username == username))
+                return res.status(200).send("username-already-in-use");
+
+            res.status(200).send("success")
+        });
+    } catch (err) {
+        return res.status(500).send("server-error");
+    }
+});
 
 router.get("/test", (req, res) => {
     db.clear();

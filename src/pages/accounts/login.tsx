@@ -119,13 +119,11 @@ const Login: NextPage = (props: any) => {
                 <p className={styles["error-label"]}>{emailError}</p>
 
                 <br />
-                <br />
 
                 <label htmlFor="password">{props.lang.password}</label>
                 <input type="password" name="password" id="password" placeholder="••••••••" />
                 <p className={styles["error-label"]}>{passwordError}</p>
 
-                <br />
                 <br />
                 <br />
 
@@ -142,10 +140,12 @@ const Login: NextPage = (props: any) => {
                             <Spinner size="sm" hidden={!buttonLoading} animation="border" />
                         </Button>
                     </Col>
-                    <Col className={`${styles["forgot-password"]} align-middle`}>
+                    <Col className={`${styles["reset-password"]} align-middle`}>
                         <a href="/accounts/reset">{props.lang.forgotPassword}</a>
                     </Col>
                 </Row>
+                <br />
+                <p>{props.lang.doNotHaveAnAccount.split("&")[0]} <a href="/register">{props.lang.doNotHaveAnAccount.split("&")[1]}</a></p>
             </Container>
         </div>
     );

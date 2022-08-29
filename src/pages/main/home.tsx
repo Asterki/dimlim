@@ -42,7 +42,7 @@ const Home: NextPage = (props: any) => {
     return (
         <div>
             <h1>{props.lang.title}</h1>
-            Holy shit youre logged in!
+            Holy shit you&apos;re logged in!
         </div>
     );
 };

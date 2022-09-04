@@ -26,6 +26,7 @@ try {
     // Static content
     app.use(favicon(path.join(__dirname, "../../public/favicon.ico")));
     app.use("/assets/", express.static(path.join(__dirname, "../../src/assets")));
+    app.use("/avatars/", express.static(path.join(__dirname, "../../data/avatars")));
 
     // Session and login
     app.use(

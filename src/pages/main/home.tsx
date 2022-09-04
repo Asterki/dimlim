@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 import React from "react";
 import axios from "axios";
 import io from "socket.io-client";
@@ -74,6 +75,8 @@ const Home: NextPage = (props: any) => {
             <Navbar lang={props.lang.navbar} loggedIn={true} user={props.user} />
             <input type="text" id="something" /> <button onClick={sendMessage}>Send</button>
             <ul>{messagesToShow}</ul>
+            <br />
+            <img src={`/avatars/${props.user.userID}.png`} alt="yeah" />
         </div>
     );
 };

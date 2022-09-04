@@ -59,8 +59,8 @@ const NavbarComponent = (props: { loggedIn: boolean; lang: any; user: any | null
                             <Dropdown.Toggle variant="none" className="shadow-none" id="dropdown-basic">
                                 <img
                                     width="30"
-                                    src={`https://media.discordapp.net/attachments/866411937968160788/1015670054861410436/unknown.png`}
-                                    // alt="Shard Logo"
+                                    src={`/avatars/${props.user.userID}.png`}
+                                    alt="Profile Picture"
                                 />
                                 <p>
                                     <b>{props.user.username}</b>

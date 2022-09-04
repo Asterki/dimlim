@@ -54,11 +54,14 @@ const Settings: NextPage = (props: any) => {
             </Head>
 
             <Container className={styles["categories"]}>
-            <div className="input-group">
-                <label htmlFor="files">Select files</label>
-                <input id='files' accept=".jpg, .png, .jpeg, .bmp, .tif, .tiff|image/*" type="file" />
-                <button>Yes</button>
-            </div>
+                <div className="input-group">
+                    <form action="/api/upload/avatar" encType="multipart/form-data" method="POST">
+                        <label htmlFor="files">Select files</label>
+                        <input id="avatar" accept=".jpg, .png, .jpeg" name="avatar" type="file" />
+
+                        <input type="submit" value="EEEEE" />
+                    </form>
+                </div>
             </Container>
         </div>
     );

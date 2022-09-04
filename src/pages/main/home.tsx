@@ -1,13 +1,19 @@
 import React from "react";
 import axios from "axios";
+import io from "socket.io-client";
 
+import { Row, Col, Button, Container, Spinner, CloseButton } from "react-bootstrap";
+import Head from "next/head";
+import Navbar from "../../components/navbar";
+
+import styles from "../../styles/main/home.module.scss";
 import { GetServerSideProps, NextPage } from "next";
 
 export const getServerSideProps: GetServerSideProps = async (context: any) => {
     if (context.req.user == undefined)
         return {
             redirect: {
-                destination: "/accounts/login",
+                destination: "/login",
                 permanent: false,
             },
         };
@@ -26,6 +32,8 @@ export const getServerSideProps: GetServerSideProps = async (context: any) => {
         return {
             props: {
                 lang: languageResponse.data,
+                user: context.req.user,
+                host: process.env.HOST,
             },
         };
     } catch (err: any) {
@@ -39,10 +47,33 @@ export const getServerSideProps: GetServerSideProps = async (context: any) => {
 };
 
 const Home: NextPage = (props: any) => {
+    const [messages, setMessages] = React.useState(["Welcome to chat"]);
+
+    const socket = io();
+
+    const sendMessage = (e: any) => {
+        let messageToSend = `${props.user.username}: ${
+            (document.querySelector("#something") as HTMLInputElement).value
+        }`;
+        socket.emit("chat message", messageToSend);
+
+        setMessages([...messages, messageToSend]);
+    };
+
+    socket.on("chat message", (data) => {
+        setMessages([...messages, data]);
+    });
+
+    let messagesToShow = messages.map((message) => {
+        let key = Math.random();
+        return <li key={key}>{message}</li>;
+    });
+
     return (
-        <div>
-            <h1>{props.lang.title}</h1>
-            Holy shit you&apos;re logged in!
+        <div className={styles["page"]}>
+            <Navbar lang={props.lang.navbar} loggedIn={true} user={props.user} />
+            <input type="text" id="something" /> <button onClick={sendMessage}>Send</button>
+            <ul>{messagesToShow}</ul>
         </div>
     );
 };

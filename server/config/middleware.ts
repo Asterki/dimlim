@@ -1,16 +1,17 @@
 // Dependencies
 import path from "path";
-import express from "express"
+import express from "express";
 import favicon from "serve-favicon";
 import session from "express-session";
 import cookieParser from "cookie-parser";
 import bodyParser from "body-parser";
 import compression from "compression";
 import passport from "passport";
+import helmet from "helmet";
 
 import chalk from "chalk";
 
-import { app } from "../index";
+import { app, launchArgs } from "../index";
 
 try {
     app.disable("x-powered-by");
@@ -24,7 +25,7 @@ try {
 
     // Static content
     app.use(favicon(path.join(__dirname, "../../public/favicon.ico")));
-    app.use("/assets/", express.static(path.join(__dirname, "../../src/assets")))
+    app.use("/assets/", express.static(path.join(__dirname, "../../src/assets")));
 
     // Session and login
     app.use(
@@ -37,6 +38,50 @@ try {
     );
     app.use(passport.initialize());
     app.use(passport.session());
+
+    // Security, which is disabled in development mode
+    if (launchArgs.dev !== "true") {
+        app.use(helmet.contentSecurityPolicy());
+        app.use(helmet.crossOriginEmbedderPolicy({ policy: "require-corp" }));
+        app.use(helmet.crossOriginOpenerPolicy({ policy: "same-origin" }));
+        app.use(helmet.crossOriginResourcePolicy({ policy: "same-origin" }));
+        app.use(
+            helmet.dnsPrefetchControl({
+                allow: false,
+            })
+        );
+        app.use(
+            helmet.expectCt({
+                maxAge: 0,
+            })
+        );
+        app.use(
+            helmet.frameguard({
+                action: "sameorigin",
+            })
+        );
+        app.use(
+            helmet.hsts({
+                maxAge: 15552000,
+                includeSubDomains: true,
+            })
+        );
+        app.use(
+            helmet.permittedCrossDomainPolicies({
+                permittedPolicies: "none",
+            })
+        );
+        app.use(
+            helmet.referrerPolicy({
+                policy: "no-referrer",
+            })
+        );
+        app.use(helmet.ieNoOpen());
+        app.use(helmet.hidePoweredBy());
+        app.use(helmet.noSniff());
+        app.use(helmet.originAgentCluster());
+        app.use(helmet.xssFilter());
+    }
 
     console.log(`${chalk.cyanBright("info ")} - Middleware loaded`);
 } catch (err) {

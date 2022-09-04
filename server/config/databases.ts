@@ -1,5 +1,6 @@
 import levelUp from "levelup";
 import levelDown from "leveldown";
+import { launchArgs } from "..";
 
 import path from "path";
 import chalk from "chalk";
@@ -7,7 +8,9 @@ import chalk from "chalk";
 let db: any;
 
 try {
-    db = levelUp(levelDown(path.join(__dirname, "../../data/db")));
+    // Start the database
+    let dbPath = (launchArgs.dev == "true") ? "../../data/db" : "../../../data/db"
+    db = levelUp(levelDown(path.join(__dirname, dbPath)));
 
     db.on("ready", () => {
         console.log(`${chalk.magenta("event")} - Database connected and ready to use`);

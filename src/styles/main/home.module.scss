@@ -1,0 +1,27 @@
+.page {
+    height: 100vh;
+    background-color: #252a34;
+    color: white;
+
+    .in-app-notifications {
+        position: absolute;
+        bottom: 10px;
+        width: 35%;
+        left: 10px;
+
+        div {
+            border-radius: 20px;
+            border: 1px solid #404552; 
+            padding: 15px;
+            background-color: #383c4a;
+            font-size: 15px;
+
+            .close {
+                text-align: right;
+                position: absolute;
+                right: 10px;
+                top: 10px
+            }
+        }
+    }
+}

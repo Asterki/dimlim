@@ -4,6 +4,7 @@ import { app } from "../index";
 try {
     app.use("/api/content", require("../api/content"));
     app.use("/api/accounts", require("../api/accounts"));
+    app.use("/api/upload", require("../api/upload"))
 
     console.log(`${chalk.cyanBright("info ")} - Routes loaded`);
 } catch (err) {

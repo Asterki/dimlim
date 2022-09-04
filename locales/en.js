@@ -2,15 +2,30 @@ const en = {
     main: {
         welcome: {
             title: "Welcome to the app!",
+
+            navbar: {
+                login: "Login",
+                register: "Register",
+                about: "About",
+                support: "Support",
+                download: "Download",
+            },
         },
         home: {
             title: "Home",
+
+            navbar: {
+                profile: "Profile",
+                settings: "Settings",
+
+                logout: "Logout",
+            },
         },
     },
     accounts: {
         login: {
             pageTitle: "DIMLIM | Login",
-            title: "Login into Dispatch",
+            title: "Login into DIMLIM",
 
             email: "Email",
             password: "Password",
@@ -24,6 +39,14 @@ const en = {
             emailInvalid: "Email is invalid",
             emailOrPasswordIncorrect: "Email or password is incorrect",
             rateLimitExceeded: "Too many login attempts. Please try again later.",
+
+            navbar: {
+                login: "Login",
+                register: "Register",
+                about: "About",
+                support: "Support",
+                download: "Download",
+            },
         },
         register: {
             pageTitle: "DIMLIM | Register",
@@ -50,6 +73,27 @@ const en = {
             usernameInUse: "Username is already in use",
             emailInUse: "Email is already in use",
             rateLimitExceeded: "You already registered an account recently, please try again later",
+
+            navbar: {
+                login: "Login",
+                register: "Register",
+                about: "About",
+                support: "Support",
+                download: "Download",
+            },
+        },
+    },
+    settings: {
+        index: {
+            pageTitle: "DIMLIM | Settings",
+            title: "DIMLIM Settings",
+
+            navbar: {
+                profile: "Profile",
+                settings: "Settings",
+
+                logout: "Logout",
+            },
         },
     },
 };

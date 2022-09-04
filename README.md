@@ -29,17 +29,25 @@ $ git clone https://github.com/Asterki/dimlim.git
 $ cd dimlim
 ```
 
-Run the next command, which will automatically set up the app:
+Run the next command, which will automatically set up *most* of the app:
 
 ```bash
 $ npm run setup
 ```
 
+Then we need to configure our mail client, to do this, you need to edit the file at `/server/config/mail.ts`
+
+- **host:** Our mail host, example: `smtp.gmail.com.`
+- **port:** The port of the mail host, example: `465.`
+- **secure:** If the host uses SSL, example `true`.
+- **user:** Our mail user, provided by our domain provider.
+- **pass:** The password of our mail user, also provided by our domain provider.
+
 
 
 #### Environment Variables
 
-The environment variables should be saved in a .env file, and will need to contain the next keys:
+The environment variables should be saved in a `.env` file, and will need to contain the following keys:
 
 | Key            | Type   | Description                                       | Default | Required | Example                        |
 | -------------- | ------ | ------------------------------------------------- | ------- | -------- | ------------------------------ |

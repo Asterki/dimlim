@@ -4,11 +4,13 @@ import validator from "validator";
 
 import { Row, Col, Button, Container, Spinner } from "react-bootstrap";
 import Head from "next/head";
+import Navbar from "../../components/navbar";
 
 import styles from "../../styles/accounts/login.module.scss";
 import { GetServerSideProps, NextPage } from "next";
 
 export const getServerSideProps: GetServerSideProps = async (context: any) => {
+    // If the user is already logged in, it will redirect to the main page instead
     if (context.req.user !== undefined)
         return {
             redirect: {
@@ -18,6 +20,7 @@ export const getServerSideProps: GetServerSideProps = async (context: any) => {
         };
 
     try {
+        // Get the language pack
         let languageResponse: any = await axios({
             method: "get",
             url: `${process.env.HOST}/api/content/language/`,
@@ -45,17 +48,19 @@ export const getServerSideProps: GetServerSideProps = async (context: any) => {
 };
 
 const Login: NextPage = (props: any) => {
+    // Error states
     const [buttonLoading, setButtonLoading] = React.useState(false);
     const [emailError, setEmailError] = React.useState<string | null>(null);
     const [passwordError, setPasswordError] = React.useState<string | null>(null);
 
     const handleLogin = async (e: any) => {
+        // Reset errors, and set the button to load
         e.preventDefault();
         setButtonLoading(true);
-
         setEmailError(null);
         setPasswordError(null);
 
+        // Check for validity of inputs
         let email: string = (document.querySelector("#email") as HTMLInputElement).value;
         let password: string = (document.querySelector("#password") as HTMLInputElement).value;
 
@@ -74,6 +79,7 @@ const Login: NextPage = (props: any) => {
 
         (async () => {
             try {
+                // Send the request to the login api
                 let response: any = await axios({
                     method: "POST",
                     url: `${props.host}/api/accounts/login`,
@@ -83,8 +89,10 @@ const Login: NextPage = (props: any) => {
                     },
                 });
 
+                // If the login was successful, redirect to the main window 
                 if (response.data == "success") return (window.location.href = "/home");
 
+                // If not, reset inputs and show error
                 if (response.data == "invalid-credentials") {
                     (document.querySelector("#password") as HTMLInputElement).value = "";
 
@@ -92,6 +100,7 @@ const Login: NextPage = (props: any) => {
                     return setEmailError(props.lang.emailOrPasswordIncorrect);
                 }
 
+                // If the user exceeded the login rate
                 if (response.data == "rate-limit-exceeded") {
                     (document.querySelector("#password") as HTMLInputElement).value = "";
 
@@ -106,6 +115,8 @@ const Login: NextPage = (props: any) => {
 
     return (
         <div className={styles["page"]}>
+            <Navbar lang={props.lang.navbar} loggedIn={false} user={null} />
+
             <Head>
                 <title>{props.lang.pageTitle}</title>
             </Head>
@@ -145,7 +156,10 @@ const Login: NextPage = (props: any) => {
                     </Col>
                 </Row>
                 <br />
-                <p>{props.lang.doNotHaveAnAccount.split("&")[0]} <a href="/register">{props.lang.doNotHaveAnAccount.split("&")[1]}</a></p>
+                <p>
+                    {props.lang.doNotHaveAnAccount.split("&")[0]}{" "}
+                    <a href="/register">{props.lang.doNotHaveAnAccount.split("&")[1]}</a>
+                </p>
             </Container>
         </div>
     );

@@ -4,10 +4,10 @@ import validator from "validator";
 
 import { Row, Col, Button, Container, Spinner } from "react-bootstrap";
 import Head from "next/head";
+import Navbar from "../../components/navbar";
 
 import styles from "../../styles/accounts/register.module.scss";
 import { GetServerSideProps, NextPage } from "next";
-import { use } from "passport";
 
 export const getServerSideProps: GetServerSideProps = async (context: any) => {
     if (context.req.user !== undefined)
@@ -156,11 +156,13 @@ const Register: NextPage = (props: any) => {
     return (
         <div>
             <div className={styles["page"]}>
+                <Navbar lang={props.lang.navbar} loggedIn={false} user={null} />
+
                 <Head>
                     <title>{props.lang.pageTitle}</title>
                 </Head>
 
-                <Container className={styles["login-form"]}>
+                <Container className={styles["register-form"]}>
                     <h3>{props.lang.title}</h3>
                     <br />
 
@@ -202,7 +204,7 @@ const Register: NextPage = (props: any) => {
                                 <Spinner size="sm" hidden={!buttonLoading} animation="border" />
                             </Button>
                         </Col>
-                        <Col className={`${styles["forgot-password"]} align-middle`}>
+                        <Col className={`${styles["already-a-user"]} align-middle`}>
                             <p>
                                 {props.lang.alreadyHaveAnAccount.split("&")[0]}{" "}
                                 <a href="/login">{props.lang.alreadyHaveAnAccount.split("&")[1]}</a>

@@ -22,6 +22,7 @@ passport.use(
         },
         (req: any, email: string, password: string, done: any) => {
             try {
+                // Get from db and parse
                 db.get("users", async (err: any, users: any) => {
                     if (err) {
                         if (err.type == "NotFoundError") {
@@ -37,14 +38,18 @@ passport.use(
 
                     users = JSON.parse(users);
 
+                    // Find if user exists
                     const user = users.find((user: any) => user.email.value == email);
                     if (!user) {
                         return done(null, false, { message: "invalid-credentials" });
                     }
 
+                    // Compare passwords
                     if (!bcrypt.compareSync(password, user.password)) {
                         return done(null, false, { message: "invalid-credentials" });
                     }
+
+                    // TODO: Mail the user when there's a new login
 
                     return done(null, user);
                 });

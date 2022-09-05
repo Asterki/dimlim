@@ -2,7 +2,7 @@
 
 Open source code for the chat application: DIMLIM
 
-
+<br /><br />
 
 ## Setup
 
@@ -13,7 +13,7 @@ Open source code for the chat application: DIMLIM
 - Node.js v16.17.0 or higher
 - Typescript support (tsc and ts-node)
 
-
+<br />
 
 #### Installing
 
@@ -43,7 +43,7 @@ Then we need to configure our mail client, to do this, you need to edit the file
 - **user:** Our mail user, provided by our domain provider.
 - **pass:** The password of our mail user, also provided by our domain provider.
 
-
+<br />
 
 #### Environment Variables
 
@@ -57,7 +57,21 @@ The environment variables should be saved in a `.env` file, and will need to con
 | COOKIE_SECURE     | Boolean | If the cookie will work under SSL                  | false      | False                                                        | true                             |
 | COOKIE_MAX_AGE    | Number  | How long the session will last (in miliseconds)    | 604800000  | False                                                        | 2419200000                       |
 
+<br /><br />
 
-#### Contact
+## Screenshots
+
+![Register Page](https://www.imgbly.com/ib/plKEO0l67F.png)
+
+![Main Page](https://www.imgbly.com/ib/KG1MH3AA05.png)
+
+![2FA Page](https://www.imgbly.com/ib/L9CLE4KMfJ.png)
+
+<br />
+
+<br />
+
+## Contact
 
 asterki.dev@proton.me
+

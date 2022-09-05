@@ -67,6 +67,8 @@ The environment variables should be saved in a `.env` file, and will need to con
 
 ![2FA Page](https://www.imgbly.com/ib/L9CLE4KMfJ.png)
 
+https://streamable.com/6eca20
+
 <br />
 
 <br />

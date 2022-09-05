@@ -7,16 +7,16 @@ router.get("/language", (req, res) => {
     let { lang, category, page } = req.query;
 
     // Check that values are there and that they're the right type
-    if (!lang || !category || !page) return res.status(400).send("missing-parameters");
+    if (!lang || !category || !page) return res.send({ status: 400, message: "missing-params" });
     if (typeof lang !== "string" || typeof page !== "string" || typeof category !== "string")
-        return res.status(400).send("invalid-parameters");
+        return res.send({ status: 400, message: "invalid-params" });
 
     try {
-		// Send the language pack
+        // Send the language pack
         const langFile = getLang(lang)[category][page];
-        return res.status(200).send(langFile);
+        return res.send({ status: 200, content: langFile });
     } catch (err) {
-        return res.status(500).send("server-error");
+        return res.send({ status: 500, message: "server-error" });
     }
 });
 

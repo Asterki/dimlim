@@ -1,5 +1,5 @@
 import * as React from "react";
-import axios from "axios";
+import axios, { AxiosResponse } from "axios";
 import validator from "validator";
 
 import { Row, Col, Button, Container, Spinner } from "react-bootstrap";
@@ -19,7 +19,7 @@ export const getServerSideProps: GetServerSideProps = async (context: any) => {
         };
 
     try {
-        let languageResponse: any = await axios({
+        let languageResponse: AxiosResponse = await axios({
             method: "get",
             url: `${process.env.HOST}/api/content/language/`,
             params: {
@@ -29,9 +29,18 @@ export const getServerSideProps: GetServerSideProps = async (context: any) => {
             },
         });
 
+        if (languageResponse.data.status !== 200) {
+            return {
+                redirect: {
+                    destination: `/error?code=${languageResponse.data.status}`,
+                    permanent: false,
+                },
+            };
+        }
+
         return {
             props: {
-                lang: languageResponse.data,
+                lang: languageResponse.data.content,
                 host: process.env.HOST,
             },
         };
@@ -106,17 +115,17 @@ const Register: NextPage = (props: any) => {
 
         (async () => {
             try {
-                let testResults: any = await axios({
+                let testResults: AxiosResponse = await axios({
                     method: "POST",
-                    url: `${props.host}/api/accounts/test-fields`,
+                    url: `${props.host}/api/accounts/check-use`,
                     data: {
                         email: email,
                         username: username,
                     },
                 });
 
-                if (testResults.data == "success") {
-                    let response: any = await axios({
+                if (testResults.data.message == "all-good") {
+                    let response: AxiosResponse = await axios({
                         method: "POST",
                         url: `${props.host}/api/accounts/register`,
                         data: {
@@ -126,26 +135,30 @@ const Register: NextPage = (props: any) => {
                         },
                     });
 
-                    if (response.data == "success") return (window.location.href = "/home");
+                    if (response.data.message == "success") return (window.location.href = "/home");
 
-                    if (response.data == "rate-limit-exceeded") {
+                    if (response.data.message == "rate-limit-exceeded") {
                         (document.querySelector("#password") as HTMLInputElement).value = "";
 
                         setButtonLoading(false);
                         return setEmailError(props.lang.rateLimitExceeded);
                     }
+
+                    return (window.location.href = `/error?code=${response.data.status}&message=${response.data.message}`);
                 } else {
-                    if (testResults.data == "email-already-in-use") {
+                    if (testResults.data.message == "email-already-in-use") {
                         (document.querySelector("#email") as HTMLInputElement).value = "";
                         setButtonLoading(false);
                         return setEmailError(props.lang.emailInUse);
                     }
 
-                    if (testResults.data == "username-already-in-use") {
+                    if (testResults.data.message == "username-already-in-use") {
                         (document.querySelector("#username") as HTMLInputElement).value = "";
                         setButtonLoading(false);
                         return setUsernameError(props.lang.usernameInUse);
                     }
+
+                    return (window.location.href = `/error?code=${testResults.data.status}&message=${testResults.data.message}`);
                 }
             } catch (err: any) {
                 return (window.location.href = `/error?code=${err.response.status}`);

@@ -3,7 +3,7 @@
     background-color: #252a34;
     background-size: cover;
 
-    .login-form {
+    .login-form, .tfa-form {
         color: #d8d8d8;
         position: absolute;
         top: 50%;
@@ -80,7 +80,7 @@
 
 @media only screen and (max-width: 992px) {
     .page {
-        .login-form {
+        .login-form, .tfa-form {
             width: 90%;
 
             .reset-password {

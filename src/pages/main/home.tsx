@@ -1,6 +1,6 @@
 /* eslint-disable @next/next/no-img-element */
 import React from "react";
-import axios from "axios";
+import axios, { AxiosResponse } from "axios";
 import io from "socket.io-client";
 
 import { Row, Col, Button, Container, Spinner, CloseButton } from "react-bootstrap";
@@ -20,7 +20,7 @@ export const getServerSideProps: GetServerSideProps = async (context: any) => {
         };
 
     try {
-        let languageResponse: any = await axios({
+        let languageResponse: AxiosResponse = await axios({
             method: "get",
             url: `${process.env.HOST}/api/content/language/`,
             params: {
@@ -30,9 +30,18 @@ export const getServerSideProps: GetServerSideProps = async (context: any) => {
             },
         });
 
+        if (languageResponse.data.status !== 200) {
+            return {
+                redirect: {
+                    destination: `/error?code=${languageResponse.data.status}`,
+                    permanent: false,
+                },
+            };
+        }
+
         return {
             props: {
-                lang: languageResponse.data,
+                lang: languageResponse.data.content,
                 user: context.req.user,
                 host: process.env.HOST,
             },

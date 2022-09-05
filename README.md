@@ -49,13 +49,14 @@ Then we need to configure our mail client, to do this, you need to edit the file
 
 The environment variables should be saved in a `.env` file, and will need to contain the following keys:
 
-| Key            | Type   | Description                                       | Default | Required | Example                        |
-| -------------- | ------ | ------------------------------------------------- | ------- | -------- | ------------------------------ |
-| PORT           | Number | The port our server will listen to                | 8080    | False    | 80                             |
-| HOST           | String | The URL of our server, without the / at the end   | None    | True     | http://example.com             |
-| SESSION_SECRET | String | The key that will be used to encrypt the sessions | None    | True     | DK2h2vBb771PL57E7PejhIwZWSY1sL |
+| Key               | Type    | Description                                        | Default    | Required                                                     | Example                          |
+| ----------------- | ------- | -------------------------------------------------- | ---------- | ------------------------------------------------------------ | -------------------------------- |
+| PORT              | Number  | The port our server will listen to                 | 8080       | False                                                        | 80                               |
+| HOST              | String  | The URL of our server, without the / at the end    | None       | True                                                         | http://example.com               |
+| SESSION_SECRET    | String  | The key that will be used to encrypt the sessions  | An UUID v4 | False, but recommendable to change                           | DK2h2vBb771PL57E7PejhIwZWSY1sL   |
+| COOKIE_SECURE     | Boolean | If the cookie will work under SSL                  | false      | False                                                        | true                             |
+| COOKIE_MAX_AGE    | Number  | How long the session will last (in miliseconds)    | 604800000  | False                                                        | 2419200000                       |
 
- 
 
 #### Contact
 

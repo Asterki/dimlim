@@ -29,16 +29,20 @@ const en = {
 
             email: "Email",
             password: "Password",
+            tfa: "Two Factor Authentication",
 
             login: "Login",
+            submit: "Submit",
             forgotPassword: "Forgot Your Password?",
             doNotHaveAnAccount: "Don't have an account yet? & Register",
+            tfaHelp: "Go to your authentication app and insert the 6 digit code",
 
-            emailRequired: "Email is required",
-            passwordRequired: "Password is required",
-            emailInvalid: "Email is invalid",
-            emailOrPasswordIncorrect: "Email or password is incorrect",
-            rateLimitExceeded: "Too many login attempts. Please try again later.",
+            emailRequired: "Email is required.",
+            passwordRequired: "Password is required.",
+            emailInvalid: "Email is invalid.",
+            emailOrPasswordIncorrect: "Email or password is incorrect.",
+            rateLimitExceeded: "Too many login attempts, please try again later.",
+            invalidTfa: "Invalid TFA code, please try again.",
 
             navbar: {
                 login: "Login",

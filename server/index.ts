@@ -7,7 +7,7 @@ import http from "http";
 import socketIo from "socket.io";
 
 // Get startup values from process.env and minimist's argument parsing
-require("dotenv").config({ path: path.join(__dirname, "../.env.local") });
+require("dotenv").config({ path: path.join(__dirname, "../.env") });
 let launchArgs = minimist(process.argv.slice(2), {
     string: ["dev", "port"],
 

@@ -15,14 +15,18 @@ router.post(
     }),
     (req, res) => {
         try {
-            if (!req.user) return res.status(403).send("unauthorized");
+            if (!req.user) return res.send({ status: 403, message: "not-logged-in" });
 
             avatarUpload.single("avatar")(req, res, (err) => {
-                if (err.message == "invalid-type") return res.status(400).send("invalid-file-type");
-                return res.status(200).send("success");
+                if (err) {
+                    if (err.message == "invalid-type") return res.send({ status: 400, message: "invalid-file-type" });
+                    return res.send({ status: 500, message: "server-error" });
+                }
+
+                return res.send({ status: 200, message: "success" });
             });
         } catch (err) {
-            return res.status(500).send("server-error");
+            return res.send({ status: 500, message: "server-error" });
         }
     }
 );

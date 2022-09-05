@@ -8,6 +8,7 @@ import bodyParser from "body-parser";
 import compression from "compression";
 import passport from "passport";
 import helmet from "helmet";
+import { v4 as uuidv4 } from "uuid";
 
 import chalk from "chalk";
 
@@ -24,17 +25,22 @@ try {
     app.use(compression());
 
     // Static content
+    let avatarsPath = launchArgs.dev == "true" ? "../../data/avatars" : "../../../data/avatars";
+
     app.use(favicon(path.join(__dirname, "../../public/favicon.ico")));
     app.use("/assets/", express.static(path.join(__dirname, "../../src/assets")));
-    app.use("/avatars/", express.static(path.join(__dirname, "../../data/avatars")));
+    app.use("/avatars/", express.static(path.join(__dirname, avatarsPath)));
 
     // Session and login
     app.use(
         session({
-            secret: process.env.SESSION_SECRET as string,
+            secret: (process.env.SESSION_SECRET as string) || uuidv4(),
             resave: false,
             saveUninitialized: true,
-            cookie: { secure: false },
+            cookie: {
+                secure: (process.env.COOKIE_SECURE as string) == "true",
+                maxAge: parseInt(process.env.COOKIE_MAX_AGE as string) || 604800000,
+            },
         })
     );
     app.use(passport.initialize());

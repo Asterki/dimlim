@@ -1,5 +1,5 @@
 import * as React from "react";
-import axios from "axios";
+import axios, { AxiosResponse } from "axios";
 import validator from "validator";
 
 import { Row, Col, Button, Container, Spinner } from "react-bootstrap";
@@ -21,7 +21,7 @@ export const getServerSideProps: GetServerSideProps = async (context: any) => {
 
     try {
         // Get the language pack
-        let languageResponse: any = await axios({
+        let languageResponse: AxiosResponse = await axios({
             method: "get",
             url: `${process.env.HOST}/api/content/language/`,
             params: {
@@ -31,9 +31,18 @@ export const getServerSideProps: GetServerSideProps = async (context: any) => {
             },
         });
 
+        if (languageResponse.data.status !== 200) {
+            return {
+                redirect: {
+                    destination: `/error?code=${languageResponse.data.status}`,
+                    permanent: false,
+                },
+            };
+        }
+
         return {
             props: {
-                lang: languageResponse.data,
+                lang: languageResponse.data.content,
                 host: process.env.HOST,
             },
         };
@@ -52,7 +61,12 @@ const Login: NextPage = (props: any) => {
     const [buttonLoading, setButtonLoading] = React.useState(false);
     const [emailError, setEmailError] = React.useState<string | null>(null);
     const [passwordError, setPasswordError] = React.useState<string | null>(null);
+    const [tfaError, setTfaError] = React.useState<string | null>(null);
 
+    // Page that is showing
+    const [pageShowing, setPageShowing] = React.useState("login-form");
+
+    // When login button clicked
     const handleLogin = async (e: any) => {
         // Reset errors, and set the button to load
         e.preventDefault();
@@ -63,6 +77,7 @@ const Login: NextPage = (props: any) => {
         // Check for validity of inputs
         let email: string = (document.querySelector("#email") as HTMLInputElement).value;
         let password: string = (document.querySelector("#password") as HTMLInputElement).value;
+        let tfa: string = (document.querySelector("#tfa") as HTMLInputElement).value;
 
         if (!email) {
             setEmailError(props.lang.emailRequired);
@@ -86,27 +101,46 @@ const Login: NextPage = (props: any) => {
                     data: {
                         password: password,
                         email: email,
+                        tfaCode: tfa
                     },
                 });
 
-                // If the login was successful, redirect to the main window 
-                if (response.data == "success") return (window.location.href = "/home");
+                console.log(response);
+
+                // If the login was successful, redirect to the main window
+                if (response.data.message == "success") return (window.location.href = "/home");
+
+                // If the response was a "requires-tfa" show the tfa page
+                if (response.data.message == "requires-tfa") {
+                    setButtonLoading(false);
+                    return setPageShowing("tfa-form");
+                }
 
                 // If not, reset inputs and show error
-                if (response.data == "invalid-credentials") {
+                if (response.data.message == "invalid-credentials") {
                     (document.querySelector("#password") as HTMLInputElement).value = "";
 
                     setButtonLoading(false);
                     return setEmailError(props.lang.emailOrPasswordIncorrect);
                 }
 
+                // If the tfa code is invalid
+                if (response.data.message == "invalid-tfa-code") {
+                    (document.querySelector("#tfa") as HTMLInputElement).value = "";
+
+                    setButtonLoading(false);
+                    return setTfaError(props.lang.invalidTfa);
+                }
+
                 // If the user exceeded the login rate
-                if (response.data == "rate-limit-exceeded") {
+                if (response.data.message == "rate-limit-exceeded") {
                     (document.querySelector("#password") as HTMLInputElement).value = "";
 
                     setButtonLoading(false);
                     return setEmailError(props.lang.rateLimitExceeded);
                 }
+
+                return (window.location.href = `/error?code=${response.data.status}&message=${response.data.message}`);
             } catch (err: any) {
                 return (window.location.href = `/error?code=${err.response.status}`);
             }
@@ -121,7 +155,7 @@ const Login: NextPage = (props: any) => {
                 <title>{props.lang.pageTitle}</title>
             </Head>
 
-            <Container className={styles["login-form"]}>
+            <Container hidden={pageShowing !== "login-form"} className={styles["login-form"]}>
                 <h3>{props.lang.title}</h3>
                 <br />
 
@@ -160,6 +194,30 @@ const Login: NextPage = (props: any) => {
                     {props.lang.doNotHaveAnAccount.split("&")[0]}{" "}
                     <a href="/register">{props.lang.doNotHaveAnAccount.split("&")[1]}</a>
                 </p>
+            </Container>
+
+            <Container hidden={pageShowing !== "tfa-form"} className={styles["tfa-form"]}>
+                <h3>{props.lang.title}</h3>
+                <br />
+
+                <label htmlFor="tfa">{props.lang.tfa}: {props.lang.tfaHelp}</label>
+                <br />
+                <input type="text" name="tfa" id="tfa" placeholder="••••••" />
+                <sub className={styles["error-label"]}>{tfaError}</sub>
+
+                <br />
+                <br />
+
+                <Button
+                    onClick={handleLogin}
+                    disabled={buttonLoading}
+                    id="login-button"
+                    variant="primary"
+                    type="submit"
+                >
+                    <p hidden={buttonLoading}>{props.lang.submit}</p>
+                    <Spinner size="sm" hidden={!buttonLoading} animation="border" />
+                </Button>
             </Container>
         </div>
     );

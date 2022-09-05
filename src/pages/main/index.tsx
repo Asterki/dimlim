@@ -1,6 +1,6 @@
 /* eslint-disable @next/next/no-img-element */
 import React from "react";
-import axios from "axios";
+import axios, { AxiosResponse } from "axios";
 
 import { Container, Button, Row, Col } from "react-bootstrap";
 import Navbar from "../../components/navbar";
@@ -19,7 +19,7 @@ export const getServerSideProps: GetServerSideProps = async (context: any) => {
         };
 
     try {
-        let languageResponse: any = await axios({
+        let languageResponse: AxiosResponse = await axios({
             method: "get",
             url: `${process.env.HOST}/api/content/language/`,
             params: {
@@ -29,9 +29,18 @@ export const getServerSideProps: GetServerSideProps = async (context: any) => {
             },
         });
 
+        if (languageResponse.data.status !== 200) {
+            return {
+                redirect: {
+                    destination: `/error?code=${languageResponse.data.status}`,
+                    permanent: false,
+                },
+            };
+        }
+
         return {
             props: {
-                lang: languageResponse.data,
+                lang: languageResponse.data.content,
                 host: process.env.HOST,
             },
         };
@@ -61,14 +70,18 @@ const Index: NextPage = (props: any) => {
                         send your messages without worrying about security, privacy and trust.
                     </p>
                     <br />
-                        <Row xs="1" sm="1" md="2" className={styles["header-buttons"]}>
-                            <Col>
-                                <Button href="/login" className={styles["header-button"]}>Login</Button>
-                            </Col>
-                            <Col>
-                                <Button href="/register" className={styles["header-button"]}>Register</Button>
-                            </Col>
-                        </Row>
+                    <Row xs="1" sm="1" md="2" className={styles["header-buttons"]}>
+                        <Col>
+                            <Button href="/login" className={styles["header-button"]}>
+                                Login
+                            </Button>
+                        </Col>
+                        <Col>
+                            <Button href="/register" className={styles["header-button"]}>
+                                Register
+                            </Button>
+                        </Col>
+                    </Row>
                 </div>
 
                 <br />

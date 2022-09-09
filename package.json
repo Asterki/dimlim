@@ -50,7 +50,7 @@
 		"sass": "^1.54.3",
 		"serve-favicon": "^2.5.0",
 		"socket.io": "^4.5.1",
-		"socket.io-client": "^4.5.1",
+		"socket.io-client": "^4.5.2",
 		"speakeasy": "^2.0.0",
 		"uuid": "^8.3.2",
 		"validator": "^13.7.0"

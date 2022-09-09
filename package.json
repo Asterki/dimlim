@@ -39,7 +39,7 @@
 		"next": "^12.2.4",
 		"nodemailer": "^6.7.8",
 		"nodemon": "^2.0.19",
-		"npm": "^8.18.0",
+		"npm": "^8.19.1",
 		"passport": "^0.6.0",
 		"passport-local": "^1.0.0",
 		"path": "^0.12.7",

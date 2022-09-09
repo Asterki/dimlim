@@ -18,7 +18,6 @@ import { EmailVerificationCode, User } from "../types";
 import { checkTFA } from "../utils/tfa";
 
 const router: express.Router = express.Router();
-require("dotenv").config({ path: path.join(__dirname, "../.env") });
 
 // Account creation and deletion
 router.post(

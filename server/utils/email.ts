@@ -2,11 +2,12 @@ import nodemailer from "nodemailer";
 import validator from "validator";
 
 const mailTransporter = nodemailer.createTransport({
-    host: "smtp.gmail.com",
-    port: 465,
-    secure: true,
+    host: process.env.EMAIL_HOST as string,
+    port: parseInt(process.env.EMAIL_PORT as string),
+    secure: (process.env.EMAIL_SECURE as string) == "true" ? true : false,
     auth: {
-        
+        user: process.env.EMAIL_USER as string,
+        pass: process.env.EMAIL_PASS as string,
     },
 });
 

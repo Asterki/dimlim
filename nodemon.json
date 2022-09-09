@@ -1,3 +1,4 @@
 {
-	"ignore": ["src/*", "build/*"]
+    "ignore": ["src/*", "build/*"],
+    "watch": ["locale/", ".env", "*.ts"]
 }

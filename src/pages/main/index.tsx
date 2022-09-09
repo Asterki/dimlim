@@ -10,7 +10,7 @@ import { GetServerSideProps, NextPage } from "next";
 import styles from "../../styles/main/index.module.scss";
 
 export const getServerSideProps: GetServerSideProps = async (context: any) => {
-    if (context.req.user !== undefined)
+    if (context.req.isAuthenticated())
         return {
             redirect: {
                 destination: "/home",

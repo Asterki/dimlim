@@ -59,7 +59,7 @@ const NavbarComponent = (props: { loggedIn: boolean; lang: any; user: any | null
                             <Dropdown.Toggle variant="none" className="shadow-none" id="dropdown-basic">
                                 <img
                                     width="30"
-                                    src={`/avatars/${props.user.userID}.png`}
+                                    src={`/avatars/${props.user.userID}.png?w=32&h=32&c=32`}
                                     alt="Profile Picture"
                                 />
                                 <p>

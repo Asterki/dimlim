@@ -20,8 +20,7 @@ const avatarUpload = multer({
         files: 1,
     },
     fileFilter: (req: any, file: any, cb: multer.FileFilterCallback) => {
-        if (file.mimetype == "image/png" || file.mimetype == "image/jpg" || file.mimetype == "image/jpeg")
-            return cb(null, true);
+        if (file.mimetype == "image/png" || file.mimetype == "image/jpg" || file.mimetype == "image/jpeg") return cb(null, true);
 
         return cb(new Error("invalid-file-type"));
     },

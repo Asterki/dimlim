@@ -1,17 +1,62 @@
 import passport from "passport";
 import passportLocal from "passport-local";
 import bcrypt from "bcrypt";
-import speakeasy from "speakeasy";
 
 import db from "../config/databases";
+import { sendEmail } from "../utils/email";
 import { User } from "../types";
+import { checkTFA } from "../utils/tfa";
 
-passport.serializeUser((user: any, done: any) => {
-    return done(null, user);
+passport.serializeUser((sessionUser: any, done: any) => {
+    try {
+        db.get("users", async (err: any, result: any) => {
+            if (err) {
+                if (err.type == "NotFoundError") {
+                    db.put("users", JSON.stringify([]), (err: any) => {
+                        if (err) return done(err);
+                    });
+
+                    return done(null, false);
+                }
+
+                return done(err);
+            }
+
+            let users = JSON.parse(result);
+            let userFromDB: User = users.find((user: any) => user.email.value == sessionUser.email.value);
+
+            if (!userFromDB) return done(null, false);
+            else return done(null, userFromDB);
+        });
+    } catch (err) {
+        throw err;
+    }
 });
 
-passport.deserializeUser((user: any, done: any) => {
-    return done(null, user);
+passport.deserializeUser((sessionUser: any, done: any) => {
+    try {
+        db.get("users", async (err: any, result: any) => {
+            if (err) {
+                if (err.type == "NotFoundError") {
+                    db.put("users", JSON.stringify([]), (err: any) => {
+                        if (err) return done(err);
+                    });
+
+                    return done(null, false);
+                }
+
+                return done(err);
+            }
+
+            let users = JSON.parse(result);
+            let userFromDB: User = users.find((user: any) => user.email.value == sessionUser.email.value);
+
+            if (!userFromDB) return done(null, false);
+            else return done(null, userFromDB);
+        });
+    } catch (err) {
+        throw err;
+    }
 });
 
 passport.use(
@@ -40,28 +85,19 @@ passport.use(
 
                     // Find if user exists
                     users = JSON.parse(users);
-                    const user: User = users.find((user: any) => user.email.value == email);
-                    if (!user) {
-                        return done(null, false, { message: "invalid-credentials" });
-                    }
+                    let user: User = users.find((user: any) => user.email.value == email);
+                    if (!user) return done(null, false, { message: "invalid-credentials" });
 
                     // Compare passwords
-                    if (!bcrypt.compareSync(password, user.password)) {
-                        return done(null, false, { message: "invalid-credentials" });
-                    }
+                    if (!bcrypt.compareSync(password, user.password)) return done(null, false, { message: "invalid-credentials" });
 
                     // Verify if there's 2fa
-                    if (user.tfaSecret !== "") {
+                    if (user.tfa.secret !== "") {
                         if (!req.body.tfaCode) return done(null, false, { message: "requires-tfa" });
-                        else {
-                            let verified = speakeasy.totp.verify({
-                                secret: user.tfaSecret,
-                                encoding: "base32",
-                                token: req.body.tfaCode,
-                            });
+                        if (typeof req.body.tfaCode !== "string") return done(null, false, { message: "invalid-tfa-code" });
 
-                            if (verified == false) return done(null, false, { message: "invalid-tfa-code" })
-                        }
+                        let tfaResult = checkTFA(req.body.tfaCode, user, users);
+                        if (tfaResult == "invalid-tfa-code") return done(null, false, { message: "invalid-tfa-code" });
                     }
 
                     // TODO: Mail the user when there's a new login

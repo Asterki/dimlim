@@ -35,7 +35,7 @@ const en = {
             submit: "Submit",
             forgotPassword: "Forgot Your Password?",
             doNotHaveAnAccount: "Don't have an account yet? & Register",
-            tfaHelp: "Go to your authentication app and insert the 6 digit code",
+            tfaHelp: "Go to your authentication app and insert the 6 digit code, or insert one of your backup codes",
 
             emailRequired: "Email is required.",
             passwordRequired: "Password is required.",

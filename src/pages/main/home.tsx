@@ -11,7 +11,7 @@ import styles from "../../styles/main/home.module.scss";
 import { GetServerSideProps, NextPage } from "next";
 
 export const getServerSideProps: GetServerSideProps = async (context: any) => {
-    if (context.req.user == undefined)
+    if (!context.req.isAuthenticated())
         return {
             redirect: {
                 destination: "/login",
@@ -62,9 +62,7 @@ const Home: NextPage = (props: any) => {
     const socket = io();
 
     const sendMessage = (e: any) => {
-        let messageToSend = `${props.user.username}: ${
-            (document.querySelector("#something") as HTMLInputElement).value
-        }`;
+        let messageToSend = `${props.user.username}: ${(document.querySelector("#something") as HTMLInputElement).value}`;
         socket.emit("chat message", messageToSend);
 
         setMessages([...messages, messageToSend]);

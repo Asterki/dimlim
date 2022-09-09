@@ -39,11 +39,7 @@ nextApp.prepare().then(() => {
 
     // Start the main server
     server.listen(launchArgs.port, () => {
-        console.log(
-            `${chalk.magenta("event")} - Server running in ${
-                launchArgs.dev == "true" ? "development" : "production"
-            } mode at ${launchArgs.port}`
-        );
+        console.log(`${chalk.magenta("event")} - Server running in ${launchArgs.dev == "true" ? "development" : "production"} mode at ${launchArgs.port}`);
     });
 });
 

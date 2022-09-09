@@ -3,6 +3,7 @@ import ms from "ms";
 import rateLimit from "express-rate-limit";
 
 import { avatarUpload } from "../config/upload";
+import { reportError } from "../utils/error";
 
 const router: express.Router = express.Router();
 
@@ -20,13 +21,14 @@ router.post(
             avatarUpload.single("avatar")(req, res, (err) => {
                 if (err) {
                     if (err.message == "invalid-type") return res.send({ status: 400, message: "invalid-file-type" });
-                    return res.send({ status: 500, message: "server-error" });
+                    throw err;
                 }
 
                 return res.send({ status: 200, message: "success" });
             });
         } catch (err) {
-            return res.send({ status: 500, message: "server-error" });
+            let errorID = reportError(err);
+            return res.send({ status: 500, message: "server-error", id: errorID });
         }
     }
 );

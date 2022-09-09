@@ -9,7 +9,7 @@ let db: any;
 
 try {
     // Start the database
-    let dbPath = (launchArgs.dev == "true") ? "../../data/db" : "../../../data/db"
+    let dbPath = launchArgs.dev == "true" ? "../../data/db" : "../../../data/db";
     db = levelUp(levelDown(path.join(__dirname, dbPath)));
 
     db.on("ready", () => {

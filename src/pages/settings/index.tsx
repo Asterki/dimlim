@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 import * as React from "react";
 import axios, { AxiosResponse } from "axios";
 
@@ -9,7 +10,7 @@ import styles from "../../styles/settings/index.module.scss";
 import { GetServerSideProps, NextPage } from "next/types";
 
 export const getServerSideProps: GetServerSideProps = async (context: any) => {
-    if (context.req.user == undefined)
+    if (!context.req.isAuthenticated())
         return {
             redirect: {
                 destination: "/login",
@@ -58,7 +59,7 @@ const Settings: NextPage = (props: any) => {
     const [image, setImage] = React.useState("");
     const [text, setText] = React.useState("");
 
-    const getSomething = async (event: any) => {
+    const activate = async (event: any) => {
         let response: AxiosResponse = await axios({
             method: "post",
             url: `${props.host}/api/accounts/activate-tfa/`,
@@ -67,6 +68,33 @@ const Settings: NextPage = (props: any) => {
         console.log(response.data);
         setImage(response.data.image);
         setText(response.data.code);
+    };
+
+    const deactivate = async (event: any) => {
+        let response: AxiosResponse = await axios({
+            method: "post",
+            url: `${props.host}/api/accounts/deactivate-tfa/`,
+            data: {
+                code: (document.querySelector("#yes") as HTMLInputElement).value,
+            },
+        });
+
+        console.log(response.data);
+    };
+
+    const getCodes = async (event: any) => {
+        console.log((document.querySelector("#maybe") as HTMLInputElement).value)
+
+
+        let response: AxiosResponse = await axios({
+            method: "post",
+            url: `${props.host}/api/accounts/verify-tfa/`,
+            data: {
+                code: (document.querySelector("#maybe") as HTMLInputElement).value,
+            },
+        });
+
+        console.log(response.data);
     };
 
     return (
@@ -89,11 +117,20 @@ const Settings: NextPage = (props: any) => {
                     <br />
                     <br />
                     <br />
-                    <button onClick={getSomething}>Activate Two Factor Authentication</button>
-                    <img src={image} alt="" />
-                    <p>{text}</p>
                 </div>
             </Container>
+            <button onClick={activate}>Activate Two Factor Authentication</button>
+
+            <img src={image} alt="" />
+            <p>{text}</p>
+            <br />
+            <button onClick={deactivate}>Deactivate Two Factor Authentication</button>
+            <input type="text" name="" id="yes" />
+
+            <br />
+
+            <button onClick={getCodes}>Get Two Factor Authentication Codes</button>
+            <input type="text" name="" id="maybe" />
         </div>
     );
 };

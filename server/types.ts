@@ -8,7 +8,17 @@ interface User {
     };
     password: string;
     userID: string;
-    tfaSecret: string;
+    tfa: {
+        secret: string;
+        backupCodes: Array<string>;
+        seenBackupCodes: boolean;
+    };
 }
 
-export type { User };
+interface EmailVerificationCode {
+    code: string;
+    email: string;
+    expires: number;
+}
+
+export type { User, EmailVerificationCode };

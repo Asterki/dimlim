@@ -15,7 +15,7 @@ const checkTFA = (code: string, user: User, users: Array<User>) => {
         // Check if a backup code was submitted instead
         let backupCodeVerified = false;
 
-        user.tfa.backupCodes.forEach((listCode: string, index: number) => {
+        user.tfa.backupCodes.forEach(async (listCode: string, index: number) => {
             if (listCode !== "0") {
                 if (bcrypt.compareSync(code, listCode)) {
                     backupCodeVerified = true;
@@ -26,9 +26,7 @@ const checkTFA = (code: string, user: User, users: Array<User>) => {
 
                     // Push to database
                     newUserList.push(user);
-                    return db.put("users", JSON.stringify(newUserList), (err: any) => {
-                        if (err) throw err;
-                    });
+                    await db.put("users", newUserList);
                 }
             }
         });

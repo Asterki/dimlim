@@ -5,7 +5,7 @@ import { launchArgs } from "..";
 
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
-        let uploadDestination = launchArgs.dev == "true" ? "../../data/avatars" : "../../../data/avatars";
+        let uploadDestination = launchArgs.dev == true ? "../../data/avatars" : "../../../data/avatars";
         cb(null, path.join(__dirname, uploadDestination));
     },
     filename: (req: any, file: any, cb: any) => {

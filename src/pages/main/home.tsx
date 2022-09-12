@@ -38,7 +38,7 @@ export const getServerSideProps: GetServerSideProps = async (context: any) => {
                 },
             };
         }
-
+        
         return {
             props: {
                 lang: languageResponse.data.content,

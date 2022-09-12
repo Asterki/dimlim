@@ -9,13 +9,29 @@ import socketIo from "socket.io";
 // Get startup values from process.env and minimist's argument parsing
 require("dotenv").config({ path: path.join(__dirname, "../.env") });
 let launchArgs = minimist(process.argv.slice(2), {
-    string: ["dev", "port"],
+    string: ["port"],
+    boolean: ["dev", "setup"],
 
     default: {
-        dev: process.env.NODE_ENV !== "production" || "true",
+        dev: process.env.NODE_ENV !== "production" || true,
         port: process.env.PORT || 8080,
+        setup: false,
     },
 });
+
+// If the launch is in setup mode, this can be deleted after the first run
+if (launchArgs.setup == true) {
+    (async () => {
+        // Initialize all values in the database
+        let db = require("./config/databases").default;
+
+        await db.set("users", []);
+        await db.set("email-verification-codes", []);
+
+        console.log(`${chalk.green("success")} - Everything has been set up, you can run the app by running ${chalk.bold("npm run start")}`);
+        return process.exit();
+    })();
+}
 
 // Declare the servers that we're gonna use
 const app = express();
@@ -39,7 +55,7 @@ nextApp.prepare().then(() => {
 
     // Start the main server
     server.listen(launchArgs.port, () => {
-        console.log(`${chalk.magenta("event")} - Server running in ${launchArgs.dev == "true" ? "development" : "production"} mode at ${launchArgs.port}`);
+        console.log(`${chalk.magenta("event")} - Server running in ${launchArgs.dev == true ? "development" : "production"} mode at ${launchArgs.port}`);
     });
 });
 

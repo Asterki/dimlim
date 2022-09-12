@@ -1,10 +1,25 @@
 const es = {
     main: {
         welcome: {
-            title: "Welcome to the app!",
+            title: "Bienvenido a la app!",
+            
+            navbar: {
+                login: "Iniciar sesión",
+                register: "Registrarse",
+                about: "Acerca de",
+                support: "Soporte",
+                download: "Descarga",
+            },
         },
         home: {
-            title: "Home",
+            title: "Inicio",
+
+            navbar: {
+                profile: "Perfil",
+                settings: "Configuración",
+
+                logout: "Cerrar sesión",
+            },
         },
     },
     accounts: {
@@ -13,43 +28,76 @@ const es = {
             title: "Iniciar sesión en DIMLIM",
 
             email: "Correo electrónico",
-            password: "Comtraseña",
+            password: "Contraseña",
+            tfa: "Autentificación de dos factores",
 
-            login: "Ingresar",
-            forgotPassword: "¿Olvidó su contraseña?",
-            doNotHaveAnAccount: "¿Aún no tienes una cuenta? & Regístrese",
+            login: "Iniciar sesión",
+            submit: "Enviar",
+            forgotPassword: "¿Has olvidado la contraseña?",
+            doNotHaveAnAccount: "¿Aún no tienes una cuenta?, Registrate",
+            tfaHelp: "Vaya a su aplicación de autentificación e inserte el código de 6 dígitos, o inserte uno de sus códigos de respaldo",
 
-            emailRequired: "El correo electrónico es obligatorio",
-            passwordRequired: "Se requiere contraseña",
-            emailInvalid: "El correo electrónico no es válido",
-            emailOrPasswordIncorrect: "El correo electrónico o la contraseña son incorrectos",
-            rateLimitExceeded: "Demasiados intentos de inicio de sesión. Vuelva a intentarlo más tarde",
+            emailRequired: "El correo electrónico es requerido.",
+            passwordRequired: "La contraseña es requerida.",
+            emailInvalid: "Correo electrónico inválido.",
+            emailOrPasswordIncorrect: "El correo electrónico o la contraseña son incorrectos.",
+            rateLimitExceeded: "Demasiados intentos de inicio de sesión, por favor inténtelo más tarde.",
+            invalidTfa: "Codigo TFA inválido, por favor inténtelo más tarde.",
+
+            navbar: {
+                login: "Iniciar sesión",
+                register: "Registrarse",
+                about: "Acerca de",
+                support: "Soporte",
+                download: "Descarga",
+            },
         },
         register: {
-            pageTitle: "DIMLIM | Register",
-            title: "Register into DIMLIM",
+            pageTitle: "DIMLIM | Registrarse",
+            title: "Registrarse en DIMLIM",
 
-            email: "Email",
-            username: "Username",
-            password: "Password",
-            confirmPassword: "Confirm Password",
+            email: "Correo electrónico",
+            username: "Nombre de usuario",
+            password: "Contraseña",
+            confirmPassword: "Confirma la contraseña",
 
-            register: "Register",
-            alreadyHaveAnAccount: "Already have an account? & Login",
+            register: "Registrarse",
+            alreadyHaveAnAccount: "¿Ya tienes una cuenta?, Inicia sesión",
 
-            emailRequired: "Email is required",
-            usernameRequired: "Username is required",
-            passwordRequired: "Password is required",
-            confirmPasswordRequired: "Please confirm your password",
+            emailRequired: "El correo electrónico es requerido",
+            usernameRequired: "El nombre de usuario es requerido",
+            passwordRequired: "La contraseña es requerida",
+            confirmPasswordRequired: "Por favor confirma tu contraseña",
 
-            emailInvalid: "Email is invalid",
-            usernameInvalid: "Usernames can only contain letters, numbers, and dots (.)",
-            usernameLength: "Username must be between 3 and 32 characters",
-            passwordLength: "Password must be between 8 and 256 characters",
+            emailInvalid: "El correo electrónico es inválido",
+            usernameInvalid: "Los nombres de usuario solo pueden contener: letras, números, y puntos (.)",
+            usernameLength: "El nombre de usuario debe tener entre 3 y 32 caracteres",
+            passwordLength: "La contraseña debe tener entre 8 y 256 caracteres",
 
-            usernameInUse: "Username is already in use",
-            emailInUse: "Email is already in use",
-            rateLimitExceeded: "You already registered an account recently, please try again later",
+            usernameInUse: "El nombre de usuario ya está en uso",
+            emailInUse: "El correo electrónico ya está en uso",
+            rateLimitExceeded: "Ya registraste una cuenta recientemente, inténtelo de nuevo más tarde",
+
+            navbar: {
+                login: "Iniciar sesión",
+                register: "Registrarse",
+                about: "Acerca de",
+                support: "Soporte",
+                download: "Descarga",
+            },
+        },
+    },
+    settings: {
+        index: {
+            pageTitle: "DIMLIM | Configuración",
+            title: "DIMLIM Configuración",
+
+            navbar: {
+                profile: "Perfil",
+                settings: "Configuración",
+
+                logout: "Cerrar sesión",
+            },
         },
     },
 };

@@ -1,10 +1,10 @@
 import express from "express";
-import { getLang } from "../utils/locale";
+import { getLanguagePack } from "../utils/locale";
 import { reportError } from "../utils/error";
 
 const router: express.Router = express.Router();
 
-router.get("/language", (req, res) => {
+router.get("/language", (req: { query: { lang: string; category: string; page: string } }, res) => {
     let { lang, category, page } = req.query;
 
     // Check that values are there and that they're the right type
@@ -13,7 +13,7 @@ router.get("/language", (req, res) => {
 
     try {
         // Send the language pack
-        const langFile = getLang(lang)[category][page];
+        const langFile = getLanguagePack(lang)[category][page];
         return res.send({ status: 200, content: langFile });
     } catch (err) {
         let errorID = reportError(err);

@@ -38,7 +38,7 @@ export const getServerSideProps: GetServerSideProps = async (context: any) => {
                 },
             };
         }
-        
+
         return {
             props: {
                 lang: languageResponse.data.content,
@@ -79,11 +79,12 @@ const Home: NextPage = (props: any) => {
 
     return (
         <div className={styles["page"]}>
-            <Navbar lang={props.lang.navbar} loggedIn={true} user={props.user} />
+            <Navbar lang={props.lang.navbar} user={props.user} />
             <input type="text" id="something" /> <button onClick={sendMessage}>Send</button>
             <ul>{messagesToShow}</ul>
             <br />
-            <img src={`/avatars/${props.user.userID}.png`} alt="yeah" />
+            {/* <img src={`/avatars/${props.user.userID}.png`} alt="yeah" /> */}
+            <br />
         </div>
     );
 };

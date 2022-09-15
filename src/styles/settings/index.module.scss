@@ -4,4 +4,20 @@
     background-size: cover;
 
     color: white;
+
+    .categories {
+        width: 100% !important;
+        height: 70%;
+        padding: 0 !important;
+
+        border-radius: 5px;
+
+        * {
+            color: white !important;
+        }
+
+        img {
+            border-radius: 20px;
+        }
+    }
 }

@@ -1,7 +1,7 @@
 import express from "express";
 import rateLimit from "express-rate-limit";
 import ms from "ms";
-import passport, { use } from "passport";
+import passport from "passport";
 import bcrypt from "bcrypt";
 import validator from "validator";
 import speakeasy from "speakeasy";
@@ -12,9 +12,10 @@ import db from "../config/databases";
 import { sendEmail } from "../utils/email";
 import { launchArgs } from "..";
 
-import { reportError } from "../utils/error";
 import { EmailVerificationCode, User } from "../types";
+import { reportError } from "../utils/error";
 import { checkTFA } from "../utils/tfa";
+import { getLanguage } from "../utils/locale";
 
 const router: express.Router = express.Router();
 
@@ -37,7 +38,7 @@ router.post(
             return res.send({ status: 400, message: "invalid-parameters" });
 
         try {
-            let { email, password, username } = req.body;
+            let { email, password, username, lang } = req.body;
 
             // Validate that all fields meet the criteria
             if (!validator.isEmail(email)) return res.send({ status: 400, message: "invalid-email" });
@@ -52,13 +53,20 @@ router.post(
 
             // Create and push the user to the db
             let newUser: User = {
+                userID: uuidv4(),
+                created: Date.now(),
+
                 username: username.toLowerCase(),
                 email: {
                     value: email,
                     verified: false,
                 },
+
+                avatar: "",
+                bio: "",
+                preferredLanguage: getLanguage(lang),
+
                 password: bcrypt.hashSync(password, 10),
-                userID: uuidv4(),
                 tfa: {
                     secret: "",
                     backupCodes: [],
@@ -291,11 +299,16 @@ router.get(
 
             // Update the user
             user.email.verified = true;
-            let newUsersList: Array<User> = users.find((listUser: User) => listUser.userID !== user?.userID);
-            newUsersList.push(user);
+            let newUsersList: Array<User> = users.filter((listUser: User) => listUser.userID !== user?.userID);
+
+            // Remove the code from the database
+            codes.filter((listCode: EmailVerificationCode) => listCode.code !== code?.code);
+            await db.set("email-verification-codes", codes);
 
             // Push to db
-            await db.set("users");
+            newUsersList.push(user);
+            await db.set("users", newUsersList);
+
             return res.redirect("/verify-email?=success=true");
         } catch (err) {
             let errorID = reportError(err);
@@ -575,8 +588,10 @@ router.post("/check-use", async (req: any, res: any) => {
         return res.send({ status: 500, message: "server-error", id: errorID });
     }
 });
-// router.post("/test-auth", (req, res) => {
-//     db.put("users", JSON.stringify([]));
-// });
+
+router.post("/test-auth", async (req, res) => {
+    await db.set("users", []);
+    res.send("ha");
+});
 
 module.exports = router;

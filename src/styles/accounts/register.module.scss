@@ -14,7 +14,7 @@
         left: 50%;
         transform: translate(-50%, -50%);
 
-        width: 500px;
+        width: 90%;
         margin: 0 auto;
         padding: 20px;
         border-radius: 10px;
@@ -39,9 +39,11 @@
         .already-a-user {
             display: flex;
             align-items: center;
-            justify-content: flex-end;
+            justify-content: flex-start;
 
             text-align: right;
+            margin-top: 30px;
+            margin-bottom: 10px;
         }
 
         .error-label {

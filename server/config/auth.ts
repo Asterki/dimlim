@@ -23,6 +23,9 @@ app.use(
         saveUninitialized: true,
         store: new FileStore({
             path: path.join(__dirname, sessionsPath),
+            logFn: () => {
+                return;
+            },
         }),
         name: "session",
         cookie: {

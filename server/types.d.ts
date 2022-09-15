@@ -1,13 +1,20 @@
 import speakeasy from "speakeasy";
 
 interface User {
+    userID: string;
+    created: number;
+
     username: string;
     email: {
         value: string;
         verified: boolean;
     };
+
+    avatar: string;
+    bio: string
+    preferredLanguage: string,
+
     password: string;
-    userID: string;
     tfa: {
         secret: string;
         backupCodes: Array<string>;

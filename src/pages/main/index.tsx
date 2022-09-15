@@ -2,7 +2,8 @@
 import React from "react";
 import axios, { AxiosResponse } from "axios";
 
-import { Container, Button, Row, Col } from "react-bootstrap";
+import { Row, Col } from "react-bootstrap";
+import { Button, Container } from "@mui/material";
 import Navbar from "../../components/navbar";
 import Head from "next/head";
 
@@ -57,7 +58,7 @@ export const getServerSideProps: GetServerSideProps = async (context: any) => {
 const Index: NextPage = (props: any) => {
     return (
         <div className={styles["page"]}>
-            <Navbar lang={props.lang.navbar} loggedIn={false} user={null} />
+            <Navbar lang={props.lang.navbar} user={null} />
 
             <div className={styles["content"]}>
                 <div className={styles["header"]}>
@@ -72,12 +73,12 @@ const Index: NextPage = (props: any) => {
                     <br />
                     <Row xs="1" sm="1" md="2" className={styles["header-buttons"]}>
                         <Col>
-                            <Button href="/login" className={styles["header-button"]}>
+                            <Button variant="contained" href="/login" className={styles["header-button"]}>
                                 Login
                             </Button>
                         </Col>
                         <Col>
-                            <Button href="/register" className={styles["header-button"]}>
+                            <Button variant="contained" href="/register" className={styles["header-button"]}>
                                 Register
                             </Button>
                         </Col>

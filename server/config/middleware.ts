@@ -6,7 +6,6 @@ import cookieParser from "cookie-parser";
 import bodyParser from "body-parser";
 import compression from "compression";
 import helmet from "helmet";
-import { v4 as uuidv4 } from "uuid";
 
 import chalk from "chalk";
 
@@ -30,7 +29,7 @@ try {
     app.use("/avatars/", express.static(path.join(__dirname, avatarsPath)));
 
     // Security, which is disabled in development mode
-    if (launchArgs.dev !== "true") {
+    if (launchArgs.dev !== true) {
         app.use(helmet.contentSecurityPolicy());
         app.use(helmet.crossOriginEmbedderPolicy({ policy: "require-corp" }));
         app.use(helmet.crossOriginOpenerPolicy({ policy: "same-origin" }));

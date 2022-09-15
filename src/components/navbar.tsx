@@ -4,18 +4,18 @@ import * as React from "react";
 
 import { Navbar, Nav, NavDropdown, Container, Dropdown } from "react-bootstrap";
 import { NextPage } from "next";
+import { Avatar } from "@mui/material";
 
 import styles from "./navbar.module.scss";
 
-const NavbarComponent = (props: { loggedIn: boolean; lang: any; user: any | null }) => {
-    if (props.loggedIn == false) {
+const NavbarComponent = (props: { lang: any; user: any | null }) => {
+    if (props.user == null) {
         return (
             <Navbar className={styles["component"]} sticky="top" collapseOnSelect variant="dark" expand="lg">
                 <Container>
                     <Navbar.Brand>
                         <Navbar.Brand href="/">
-                            <img alt="" src="/logo.svg" width="30" height="30" className="d-inline-block align-top" />{" "}
-                            <b>DIMLIM</b>
+                            <img alt="" src="/logo.svg" width="30" height="30" className="d-inline-block align-top" /> <b>DIMLIM</b>
                         </Navbar.Brand>
                     </Navbar.Brand>
 
@@ -49,19 +49,16 @@ const NavbarComponent = (props: { loggedIn: boolean; lang: any; user: any | null
                 <Container>
                     <Navbar.Brand>
                         <Navbar.Brand href="/home">
-                            <img alt="" src="/logo.svg" width="30" height="30" className="d-inline-block align-top" />{" "}
-                            <b>DIMLIM</b>
+                            <img alt="" src="/logo.svg" width="30" height="30" className="d-inline-block align-top" /> <b>DIMLIM</b>
                         </Navbar.Brand>
                     </Navbar.Brand>
 
                     <Nav>
                         <Dropdown>
                             <Dropdown.Toggle variant="none" className="shadow-none" id="dropdown-basic">
-                                <img
-                                    width="30"
-                                    src={`/avatars/${props.user.userID}.png?w=32&h=32&c=32`}
-                                    alt="Profile Picture"
-                                />
+                                <Avatar src={props.user.avatar == "" ? "" : `/avatars/${props.user.avatar}`} sx={{ width: 30, height: 30 }}>
+                                    {props.user.username.split("")[0].toUpperCase()}
+                                </Avatar>
                                 <p>
                                     <b>{props.user.username}</b>
                                 </p>

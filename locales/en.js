@@ -86,6 +86,30 @@ const en = {
                 download: "Download",
             },
         },
+        verifyEmail: {
+            pageTitle: "DIMLIM | Verify Email",
+
+            expired: "The code is expired.",
+            invalid: "The code you entered is invalid.",
+            successNotLoggedIn: "Your email has been verified, you can now login into your account.",
+            successLoggedIn: "Your email has been verified.",
+
+            login: "Login",
+            goHome: "Go Home",
+
+            navbar: {
+                login: "Login",
+                register: "Register",
+                about: "About",
+                support: "Support",
+                download: "Download",
+
+                profile: "Profile",
+                settings: "Settings",
+
+                logout: "Logout",
+            },
+        },
     },
     settings: {
         index: {
@@ -97,6 +121,173 @@ const en = {
                 settings: "Settings",
 
                 logout: "Logout",
+            },
+
+            tabs: {
+                general: "General",
+                security: "Security",
+                privacy: "Privacy",
+                account: "Account",
+            },
+
+            general: {
+                title: "General Information",
+                username: "Username:",
+                bio: "Bio:",
+                email: "Email:",
+                preferredLanguage: "Preferred Language:",
+                contacts: "Contacts:",
+                blockedContacts: "Blocked Contacts:",
+                creation: "Account creation date:",
+
+                locales: {
+                    de: "Deutsch",
+                    en: "English",
+                    es: "Español",
+                    fr: "Français",
+                    pr: "Português",
+                },
+
+                dialogs: {
+                    avatar: {
+                        title: "Do you want to use this picture as your avatar?",
+                        cancel: "Cancel",
+                        yes: "Yes",
+                    },
+                    email: {
+                        title: "Please insert your new email",
+                        subTitle: "This email will be unverified and you'll have to go through the process of re-verifying your email",
+
+                        newEmail: "Your new email",
+                        password: "Your current password",
+
+                        cancel: "Cancel",
+                        yes: "Yes",
+
+                        missing: "Please fill all inputs",
+                        invalidEmail: "The email you entered is invalid",
+
+                        "email-already-in-use": "The email you entered is already in use",
+                        "user-not-found": "Aight mate how the hell are you doing this then, I'm not even gonna bother",
+                        "rate-limit-exceeded": "You've tried changing your email too many times, please try again later.",
+                    },
+                    language: {
+                        title: "Please select a language",
+                        subTitle: "This will set the app's language",
+
+                        cancel: "Cancel",
+                        change: "Change language",
+                    },
+                    bio: {
+                        title: "Please insert your new bio",
+                        cancel: "Cancel",
+                        change: "Change bio",
+                    },
+                },
+            },
+            security: {
+                password: "Password",
+                tfa: "Two Factor Authentication",
+
+                tfaActive: "Active",
+                tfaNotActive: "Not set up",
+
+                dialogs: {
+                    password: {
+                        title: "Change password",
+                        old: "Your old password",
+                        new: "Your new password",
+                        tfa: "TFA Code/Backup Code",
+
+                        cancel: "Cancel",
+                        change: "Change password",
+
+                        unauthorized: "Invalid password.",
+                        "missing-parameters": "Please fill all inputs.",
+                        "invalid-parameters": "Your new password should be more than 8 characters and less than 256 characters.",
+                        "invalid-tfa-code": "Invalid TFA code, please try again.",
+                        "rate-limit-exceeded": "You've tried to change your password too many times, please try again later.",
+                    },
+                    setupTfa: {
+                        title: "Two Factor Authentication",
+                        subTitle: "TFA adds an extra layer of security in which you also need a device to log into you account.",
+                        deactivateLabel: "TFA Code/Backup Code",
+
+                        emailVerified: "You need to verify your email to enable TFA",
+
+                        activate: "Activate",
+                        deactivate: "Deactivate",
+                        cancel: "Cancel",
+                        ok: "Ok",
+
+                        "missing-parameters": "Please fill all inputs.",
+                        "invalid-tfa-code": "Invalid TFA code, please try again.",
+                        "rate-limit-exceeded": "You've tried to deactivate TFA too many times, please try again later.",
+                    },
+                    activateTfa: {
+                        title: "Two Factor Authentication",
+                        warning: "MAKE SURE YOU ENTER THE CODE TO YOUR TFA APP, YOU WILL NOT SEE THIS CODE AGAIN, IF YOU LOSE IT, YOU LOSE YOUR ACCOUNT",
+                        done: "Done",
+                    },
+                    backupTfa: {
+                        title: "Two Factor Authentication",
+                        subTitle: "To confirm and to get your backup codes, please insert a code generated by your TFA app",
+                        warning:
+                            "These are your backup codes, if you lose your device you can use these codes to get back your account, you won't see them again, so save them somewhere safe.",
+
+                        done: "Done",
+                        submit: "Submit",
+
+                        "missing-parameters": "Please fill all inputs.",
+                        "invalid-tfa-code": "Invalid TFA code, please try again.",
+                        "rate-limit-exceeded": "You've tried to deactivate TFA too many times, please try again later.",
+                    },
+                },
+            },
+            account: {
+                emailStatus: "Email Status",
+                emailVerified: "Email Verified",
+                emailNotVerified: "Email Not Verified",
+
+                logout: "Logout",
+                logoutDesc: "Your messages will be deleted",
+
+                deleteAccount: "Delete account",
+                deleteAccount: "Delete everything on your account",
+
+                dialogs: {
+                    verifyEmail: {
+                        title: "Verify your email",
+                        subTitle: "Verify your email to activate TFA, and receive security updates, right into your email.",
+
+                        verify: "Verify",
+                        cancel: "Cancel",
+                    },
+                    verificationEmailSent: {
+                        title: "verify your email",
+                        subTitle: "We've sent an email to & with a code, it will expire in 5 hours.",
+                        ok: "Ok",
+                    },
+                    logout: {
+                        title: "Logout",
+                        warning: "All your messages will be deleted for security reasons.",
+                        cancel: "Cancel",
+                    },
+                    deleteAccount: {
+                        title: "Delete account",
+                        warning: "You won't be able to recover your account after this, proceed with caution.",
+
+                        password: "Password",
+                        tfaCode: "TFA Code/Backup Code",
+
+                        cancel: "Cancel",
+
+                        "missing-parameters": "Please fill all inputs.",
+                        "rate-limit-exceeded": "You've tried deleting your account too many times, please try again later.",
+                        "invalid-tfa-code": "Invalid TFA code",
+                        unauthorized: "Invalid password",
+                    },
+                },
             },
         },
     },

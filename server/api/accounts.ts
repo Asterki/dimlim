@@ -93,7 +93,7 @@ router.post(
     "/delete-account",
     rateLimit({
         windowMs: ms("1 hour"),
-        max: launchArgs.dev == true ? 100 : 1,
+        max: launchArgs.dev == true ? 100 : 5,
         statusCode: 200,
         message: {
             status: 429,
@@ -125,7 +125,7 @@ router.post(
                     token: req.body.tfaCode,
                 });
 
-                if (verified == false) return res.send({ status: 403, message: "unauthorized" });
+                if (verified == false) return res.send({ status: 403, message: "invalid-tfa-code" });
             }
 
             // Delete the user and logout
@@ -280,7 +280,6 @@ router.get(
         },
     }),
     async (req, res) => {
-        if (!req.isAuthenticated()) return res.redirect("/verify-email?login=true");
         if (!req.query.code || !req.query.email) return res.redirect("/");
 
         try {
@@ -290,8 +289,8 @@ router.get(
 
             // Checks
             if (!code) return res.redirect("/");
-            if (code.expires <= Date.now()) return res.redirect("/verify-email?expired=true");
-            if (code.code !== req.query.code) return res.redirect("/verify-email?invalid=true");
+            if (code.expires <= Date.now()) return res.redirect("/accounts/verify-email?expired=true");
+            if (code.code !== req.query.code) return res.redirect("/accounts/verify-email?invalid=true");
 
             // Get users
             let users = await db.get("users");
@@ -309,7 +308,7 @@ router.get(
             newUsersList.push(user);
             await db.set("users", newUsersList);
 
-            return res.redirect("/verify-email?=success=true");
+            return res.redirect("/accounts/verify-email?=success=true");
         } catch (err) {
             let errorID = reportError(err);
             return res.redirect(`/error?code=500&id=${errorID}`);
@@ -317,95 +316,7 @@ router.get(
     }
 );
 
-router.post(
-    "/change-email",
-    rateLimit({
-        windowMs: ms("1 hour"),
-        max: launchArgs.dev == true ? 100 : 1,
-        statusCode: 200,
-        message: {
-            status: 429,
-            message: "rate-limit-exceeded",
-        },
-    }),
-    async (req: any, res: any) => {
-        if (!req.isAuthenticated()) return res.send("unauthorized");
-        if (!req.body.password || !req.body.newEmail) return res.send({ status: 400, message: "missing-parameters" });
-        if (typeof req.body.password !== "string" || typeof req.body.newEmail !== "string" || !validator.isEmail(req.body.newEmail))
-            return res.send({ status: 400, message: "invalid-parameters" });
-
-        try {
-            let users = await db.get("users");
-            let user: User | undefined = users.find((user: User) => user.userID == req.user.userID);
-
-            if (!user) return res.send({ status: 400, message: "user-not-found" });
-
-            // Replace the user
-            let newUserList = users.filter((listUser: User) => listUser.userID !== user?.userID);
-            user.email = { value: req.body.newEmail, verified: false };
-
-            newUserList.push(user);
-
-            await db.set("users", newUserList);
-            return res.send({ status: 200, message: "success" });
-        } catch (err) {
-            let errorID = reportError(err);
-            return res.send({ status: 500, message: "server-error", id: errorID });
-        }
-    }
-);
-
 // Password actions // TODO
-router.post(
-    "/change-password",
-    rateLimit({
-        windowMs: ms("1 hour"),
-        max: launchArgs.dev == true ? 100 : 1,
-        statusCode: 200,
-        message: {
-            status: 429,
-            message: "rate-limit-exceeded",
-        },
-    }),
-    async (req: any, res: any) => {
-        if (!req.isAuthenticated) return res.send({ status: 403, message: "unauthorized" });
-        if (!req.body.oldPassword || !req.body.newPassword) return res.send({ status: 400, message: "missing-parameters" });
-        if (typeof req.body.oldPassword !== "string" || typeof req.body.newPassword !== "string")
-            return res.send({ status: 400, message: "invalid-parameters" });
-
-        try {
-            let users = await db.get("users");
-            let user: User | undefined = users.find((user: any) => user.email.value == req.user.email.value);
-
-            // Check if the user exists, and also if password is right
-            if (!user) return res.send({ status: 400, message: "user-not-found" });
-            if (!bcrypt.compareSync(req.body.oldPassword, user.password)) return res.send({ status: 403, message: "unauthorized" });
-
-            // Check tfa is provided
-            if (user.tfa.secret !== "") {
-                if (!req.body.tfaCode) return res.send({ status: 200, message: "requires-tfa" });
-                if (typeof req.body.tfaCode !== "string") return res.send({ status: 200, message: "invalid-tfa-code" });
-
-                let tfaResult = checkTFA(req.body.tfaCode, user, users);
-                if (tfaResult == "invalid-tfa-code") return res.send({ status: 200, message: "invalid-tfa-code" });
-            }
-
-            // Replace the user with the user with the new password
-            let newUserList = users.filter((listUser: User) => listUser.userID !== user?.userID);
-            user.password = bcrypt.hashSync(req.body.newPassword, 10);
-
-            // Push to db
-            newUserList.push(user);
-            await db.set("users", newUserList);
-
-            return res.send({ status: 200, message: "success" });
-        } catch (err) {
-            let errorID = reportError(err);
-            return res.send({ status: 500, message: "server-error", id: errorID });
-        }
-    }
-);
-
 router.post("/reset-password", (req: any, res: any) => {});
 
 // TFA related
@@ -447,7 +358,7 @@ router.post(
                 return res.send({
                     status: 200,
                     image: image_data,
-                    code: secret.otpauth_url,
+                    code: secret.base32,
                 });
             });
         } catch (err) {
@@ -461,7 +372,7 @@ router.post(
     "/deactivate-tfa",
     rateLimit({
         windowMs: ms("1 hour"),
-        max: launchArgs.dev == true ? 100 : 1,
+        max: launchArgs.dev == true ? 100 : 5,
         statusCode: 200,
         message: {
             status: 429,
@@ -470,8 +381,8 @@ router.post(
     }),
     async (req: any, res: any) => {
         if (!req.isAuthenticated()) return res.send({ status: 403, message: "unauthorized" });
-        if (!req.body.code) return res.send({ code: 400, status: "missing-parameters" });
-        if (typeof req.body.code !== "string") return res.send({ code: 400, message: "invalid-parameters" });
+        if (!req.body.tfaCode) return res.send({ code: 400, status: "missing-parameters" });
+        if (typeof req.body.tfaCode !== "string") return res.send({ code: 400, message: "invalid-parameters" });
 
         try {
             let users = await db.get("users");
@@ -488,6 +399,8 @@ router.post(
 
             // Remove the secret, and replace the user in the DB with the new user without the secret
             user.tfa.secret = "";
+            user.tfa.backupCodes = [];
+            user.tfa.seenBackupCodes = false;
             let newUserList = users.filter((listUser: User) => listUser.email !== user?.email);
 
             // Push changes to the DB
@@ -509,7 +422,7 @@ router.post(
     "/verify-tfa",
     rateLimit({
         windowMs: ms("1 hour"),
-        max: launchArgs.dev == true ? 100 : 1,
+        max: launchArgs.dev == true ? 100 : 5,
         statusCode: 200,
         message: {
             status: 429,
@@ -589,7 +502,7 @@ router.post("/check-use", async (req: any, res: any) => {
     }
 });
 
-router.post("/test-auth", async (req, res) => {
+router.get("/test-auth", async (req, res) => {
     await db.set("users", []);
     res.send("ha");
 });

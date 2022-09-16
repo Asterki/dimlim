@@ -21,10 +21,10 @@ export const getServerSideProps: GetServerSideProps = async (context: any) => {
 
     try {
         let languageResponse: AxiosResponse = await axios({
-            method: "get",
+            method: "post",
             url: `${process.env.HOST}/api/content/language/`,
-            params: {
-                lang: context.req.headers["accept-language"].split(",")[0],
+            data: {
+                lang: context.req.user.preferredLanguage == "" ? context.req.headers["accept-language"].split(",")[0] : context.req.user.preferredLanguage,
                 category: "main",
                 page: "home",
             },

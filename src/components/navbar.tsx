@@ -57,7 +57,6 @@ const NavbarComponent = (props: { lang: any; user: any | null }) => {
                         <Dropdown>
                             <Dropdown.Toggle variant="none" className="shadow-none" id="dropdown-basic">
                                 <Avatar src={props.user.avatar == "" ? "" : `/avatars/${props.user.avatar}`} sx={{ width: 30, height: 30 }}>
-                                    {props.user.username.split("")[0].toUpperCase()}
                                 </Avatar>
                                 <p>
                                     <b>{props.user.username}</b>

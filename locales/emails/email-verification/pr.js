@@ -1,16 +1,16 @@
 module.exports = {
-    subject: "Email Verification",
+    subject: "Verificação de e-mail",
     html: `
     <div style="text-align: center; font-family: Ubuntu">
         <div class="main">
-            <h1>DIMLIM Email Verification</h1>
-            <p>Hello {username}, we've received a request to verify your email</p>
+            <h1>Verificação de e-mail DIMLIM</h1>
+            <p>Olá {username}, recebemos uma solicitação para verificar seu e-mail</p>
     
-            <h3>To verify your email, please click the next button:</h3>
+            <h3>Para verificar seu e-mail, clique no próximo botão:</h3>
             <a href="{link}" style="background-color: #5294e2; color: white; padding: 10px; border-radius: 5px; text-decoration: none;">Verify My Email</a>
         <br>
         <br>
-            <p>If that didn't worked please copy and paste the next link into your search bar:</p>
+            <p>Se não funcionou, copie e cole o próximo link na barra de pesquisa:</p>
             <p style="color: #5294e2">{link}</p>
         </div>
     
@@ -18,7 +18,7 @@ module.exports = {
         <br>
     
         <div class="footer">
-            <p>If you didn't request this email, please ignore it.</p>
+            <p>Se você não solicitou este e-mail, ignore-o.</p>
         </div>
     </div>
     `,

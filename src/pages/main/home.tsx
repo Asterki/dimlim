@@ -1,14 +1,17 @@
 /* eslint-disable @next/next/no-img-element */
 import React from "react";
 import axios, { AxiosResponse } from "axios";
-import io from "socket.io-client";
+import { io } from "socket.io-client";
 
-import { Row, Col, Button, Container, Spinner, CloseButton } from "react-bootstrap";
+import { Row, Col, Container } from "react-bootstrap";
 import Head from "next/head";
 import Navbar from "../../components/navbar";
 
 import styles from "../../styles/main/home.module.scss";
 import { GetServerSideProps, NextPage } from "next";
+import { TabContext, TabList, TabPanel } from "@mui/lab";
+import { Avatar, Box, IconButton, Tab, Button, Dialog, DialogTitle, DialogActions } from "@mui/material";
+import { Delete, Chat, DoDisturbOn, DoDisturbOff } from "@mui/icons-material";
 
 export const getServerSideProps: GetServerSideProps = async (context: any) => {
     if (!context.req.isAuthenticated())
@@ -57,34 +60,243 @@ export const getServerSideProps: GetServerSideProps = async (context: any) => {
 };
 
 const Home: NextPage = (props: any) => {
-    const [messages, setMessages] = React.useState(["Welcome to chat"]);
+    const [currentTab, setCurrentTab] = React.useState("1");
 
-    const socket = io();
+    const [addContactDialogOpen, setAddContactDialogOpen] = React.useState(false);
+    const [contactDialogError, setContactDialogError] = React.useState("");
 
-    const sendMessage = (e: any) => {
-        let messageToSend = `${props.user.username}: ${(document.querySelector("#something") as HTMLInputElement).value}`;
-        socket.emit("chat message", messageToSend);
+    const [reload, setReload] = React.useState(false);
 
-        setMessages([...messages, messageToSend]);
+    // Websocket
+    const socket = io(props.host);
+
+    socket.on("connect", () => {
+        socket.emit("join-home-page-listener", props.user.userID);
+
+        socket.on("reload", (data) => {
+            return setReload(true);
+        });
+    });
+
+    // Button Action
+    const addContact = async (event: any) => {
+        let username = (document.querySelector("#dialog-username-username") as HTMLInputElement).value;
+
+        if (!username) return setContactDialogError(props.lang.dialogs.addContact["missing-parameters"]);
+        if (username.toLowerCase() == props.user.username) return setContactDialogError(props.lang.dialogs.addContact["self-add"]);
+
+        if (
+            props.user.contacts.find((listUser: any) => {
+                return listUser.username.toLowerCase() == username.toLowerCase();
+            }) !== undefined
+        )
+            return setContactDialogError(props.lang.dialogs.addContact["already-on-list"]);
+
+        let response = await axios({
+            method: "post",
+            url: `${props.host}/api/users/add-contact`,
+            data: {
+                contact: username,
+            },
+        });
+
+        if (response.data.code == 500) return (window.location.href = `/error?id=${response.data.id}`);
+
+        if (response.data.message == "success") {
+            return window.location.reload();
+        } else setContactDialogError(props.lang.dialogs.addContact[response.data.message]);
     };
 
-    socket.on("chat message", (data) => {
-        setMessages([...messages, data]);
+    // Contact Actions
+    const blockContact = async (event: any, username: string) => {
+        let response = await axios({
+            method: "post",
+            url: `${props.host}/api/users/block-contact`,
+            data: {
+                contact: username,
+            },
+        });
+
+        if (response.data.code == 500) return (window.location.href = `/error?id=${response.data.id}`);
+
+        if (response.data.message == "success") {
+            return window.location.reload();
+        }
+    };
+
+    const removeContact = async (event: any, username: string) => {
+        let response = await axios({
+            method: "post",
+            url: `${props.host}/api/users/remove-contact`,
+            data: {
+                contact: username,
+            },
+        });
+
+        if (response.data.code == 500) return (window.location.href = `/error?id=${response.data.id}`);
+
+        if (response.data.message == "success") {
+            return window.location.reload();
+        }
+    };
+
+    const unblockContact = async (event: any, username: string) => {
+        let response = await axios({
+            method: "post",
+            url: `${props.host}/api/users/unblock-contact`,
+            data: {
+                contact: username,
+            },
+        });
+
+        if (response.data.code == 500) return (window.location.href = `/error?id=${response.data.id}`);
+
+        if (response.data.message == "success") {
+            return window.location.reload();
+        }
+    };
+
+    const contactList = props.user.contacts.map((contact: { userID: string; username: string }) => {
+        return (
+            <div key={contact.username}>
+                <Container fluid className={styles["contact"]}>
+                    <Row>
+                        <Col className={styles["contact-info"]}>
+                            <Avatar src={`/avatars/${contact.userID}.png`} />
+                            <div className={styles["contact-general"]}>
+                                <p className={styles["contact-username"]}>{contact.username}</p>
+                            </div>
+                        </Col>
+                        <Col className={styles["actions-icon"]}>
+                            <IconButton onClick={(event: any) => blockContact(event, contact.username)}>
+                                <DoDisturbOn />
+                            </IconButton>
+                            <IconButton onClick={(event: any) => removeContact(event, contact.username)}>
+                                <Delete />
+                            </IconButton>
+                            <IconButton onClick={(event: any) => (window.location.href = `/chat/${contact.username}`)}>
+                                <Chat />
+                            </IconButton>
+                        </Col>
+                    </Row>
+                </Container>
+                <br />
+            </div>
+        );
     });
 
-    let messagesToShow = messages.map((message) => {
-        let key = Math.random();
-        return <li key={key}>{message}</li>;
+    const blockedContactList = props.user.blockedContacts.map((contact: { userID: string; username: string }) => {
+        return (
+            <div key={contact.username}>
+                <Container fluid className={styles["contact"]}>
+                    <Row>
+                        <Col className={styles["contact-info"]}>
+                            <Avatar src={`/avatars/${contact.userID}.png`} />
+                            <div className={styles["contact-general"]}>
+                                <p className={styles["contact-username"]}>{contact.username}</p>
+                            </div>
+                        </Col>
+                        <Col className={styles["actions-icon"]}>
+                            <IconButton onClick={(event: any) => unblockContact(event, contact.username)}>
+                                <DoDisturbOff />
+                            </IconButton>
+                        </Col>
+                    </Row>
+                </Container>
+                <br />
+            </div>
+        );
     });
+
+    React.useEffect(() => {
+        if (reload == true) return window.location.reload();
+    }, [reload]);
 
     return (
         <div className={styles["page"]}>
             <Navbar lang={props.lang.navbar} user={props.user} />
-            <input type="text" id="something" /> <button onClick={sendMessage}>Send</button>
-            <ul>{messagesToShow}</ul>
-            <br />
-            {/* <img src={`/avatars/${props.user.userID}.png`} alt="yeah" /> */}
-            <br />
+            <Head>
+                <title>{props.lang.pageTitle}</title>
+            </Head>
+            <Dialog open={addContactDialogOpen} className={styles["dialog-container"]} sx={{ backgroundColor: "none" }}>
+                <Container fluid className={styles["dialog"]}>
+                    <DialogTitle>{props.lang.dialogs.addContact.title}</DialogTitle>
+
+                    <p className={styles["dialog-label"]}>
+                        <b>{props.lang.dialogs.addContact.label}</b>
+                    </p>
+                    <input id="dialog-username-username" type="text" />
+                    <br />
+                    <br />
+                    <p className={styles["error"]}>{contactDialogError}</p>
+
+                    <DialogActions>
+                        <Button
+                            onClick={(event: any) => {
+                                setAddContactDialogOpen(false);
+                            }}
+                        >
+                            Cancel
+                        </Button>
+                        <Button onClick={addContact}>Add</Button>
+                    </DialogActions>
+                </Container>
+            </Dialog>
+
+            <TabContext value={currentTab}>
+                <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
+                    <TabList
+                        onChange={(event: any, newValue: string) => {
+                            setCurrentTab(newValue);
+                        }}
+                        variant="fullWidth"
+                    >
+                        <Tab className={styles["tab"]} label="Contacts" value="1" />
+                        <Tab className={styles["tab"]} label="Blocked" value="2" />
+                    </TabList>
+                </Box>
+
+                {/* Contacts Page */}
+                <TabPanel value="1">
+                    <Button variant="contained" onClick={() => setAddContactDialogOpen(true)} className={styles["add-contact-button"]}>
+                        Add Contact
+                    </Button>
+
+                    <br />
+                    <br />
+
+                    {props.user.contacts.length == 0 && (
+                        <Container fluid className={styles["no-contacts"]}>
+                            <p>You don&apos;t have any contacts yet, begin by pressing Add Contact</p>
+                        </Container>
+                    )}
+
+                    {props.user.contacts.length !== 0 && (
+                        <Container fluid className={styles["contacts"]}>
+                            {contactList}
+                        </Container>
+                    )}
+                </TabPanel>
+
+                {/* Blocked Contacts Page */}
+                <TabPanel value="2">
+                    <br />
+
+                    {props.user.blockedContacts.length == 0 && (
+                        <Container fluid className={styles["no-contacts"]}>
+                            <p>You don&apos;t have any blocked contacts yet</p>
+                        </Container>
+                    )}
+
+                    {props.user.blockedContacts.length !== 0 && (
+                        <Container fluid className={styles["contacts"]}>
+                            <h2>Blocked Contacts</h2>
+                            <br />
+                            {blockedContactList}
+                        </Container>
+                    )}
+                </TabPanel>
+            </TabContext>
         </div>
     );
 };

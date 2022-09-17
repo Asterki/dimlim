@@ -3,25 +3,97 @@
     background-color: #252a34;
     color: white;
 
-    .in-app-notifications {
-        position: absolute;
-        bottom: 10px;
-        width: 35%;
-        left: 10px;
+    .no-contacts {
+        color: #cccccc;
+        text-align: center;
+    }
 
-        div {
-            border-radius: 20px;
-            border: 1px solid #404552; 
-            padding: 15px;
-            background-color: #383c4a;
-            font-size: 15px;
+    .tab {
+        color: white !important;
+    }
 
-            .close {
-                text-align: right;
-                position: absolute;
-                right: 10px;
-                top: 10px
+    .add-contact-button {
+        width: 100%;
+    }
+
+    .contacts {
+        text-align: left !important;
+
+        .contact {
+            padding: 0;
+            border-bottom: 1px solid #313746;
+
+            .contact-info {
+                display: flex;
+                flex-wrap: wrap;
+                align-content: stretch;
+                align-items: center;
+                margin: 0 0 10px 0;
             }
+
+            .contact-general {
+                color: white;
+                margin-bottom: 0px !important;
+
+                .contact-username {
+                    margin: 0 0 0 5px;
+                }
+            }
+
+            .actions-icon {
+                text-align: right !important;
+
+                * {
+                    color: white !important;
+                }
+            }
+        }
+    }
+}
+
+
+.dialog-container {
+    border: none !important;
+    outline: none !important;
+    
+    .dialog {
+        color: white !important;
+        background-color: #2a2f3a !important;
+        text-align: center;
+    
+        button {
+            color: #5294e2 !important;
+        }
+    
+        img {
+            border-radius: 5px;
+        }
+    
+        input {
+            width: 100%;
+            border-radius: 5px;
+            padding: 5px;
+    
+            background-color: #222630;
+            border: 1px solid #212530;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            color: white;
+            outline: none !important;
+    
+            transition: all 0.1s ease-in-out;
+    
+            &:focus {
+                border: 1px solid #5294e2;
+            }
+        }
+    
+        .dialog-label {
+            text-align: left !important;
+            margin-bottom: 0;
+        }
+    
+        .error {
+            color: #ed4245;
         }
     }
 }

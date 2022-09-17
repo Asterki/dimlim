@@ -24,7 +24,7 @@ router.post(
     "/register",
     rateLimit({
         windowMs: ms("1 hour"),
-        max: launchArgs.dev == true ? 100 : 1,
+        max: launchArgs.dev == true ? 100 : 3,
         statusCode: 200,
         message: {
             status: 429,
@@ -65,6 +65,9 @@ router.post(
                 avatar: "",
                 bio: "",
                 preferredLanguage: getLanguage(lang),
+
+                contacts: [],
+                blockedContacts: [],
 
                 password: bcrypt.hashSync(password, 10),
                 tfa: {

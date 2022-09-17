@@ -56,15 +56,13 @@ const NavbarComponent = (props: { lang: any; user: any | null }) => {
                     <Nav>
                         <Dropdown>
                             <Dropdown.Toggle variant="none" className="shadow-none" id="dropdown-basic">
-                                <Avatar src={props.user.avatar == "" ? "" : `/avatars/${props.user.avatar}`} sx={{ width: 30, height: 30 }}>
-                                </Avatar>
+                                <Avatar src={props.user.avatar == "" ? "" : `/avatars/${props.user.avatar}`} sx={{ width: 30, height: 30 }}></Avatar>
                                 <p>
                                     <b>{props.user.username}</b>
                                 </p>
                             </Dropdown.Toggle>
 
                             <Dropdown.Menu variant="dark" className={`container ${styles.dropdown}`} align="end">
-                                <Dropdown.Item href="/profile">{props.lang.profile}</Dropdown.Item>
                                 <Dropdown.Item href="/settings">{props.lang.settings}</Dropdown.Item>
                                 <Dropdown.Divider />
                                 <Dropdown.Item href="/api/accounts/logout" className={styles["logout"]}>

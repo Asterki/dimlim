@@ -14,6 +14,9 @@ interface User {
     bio: string
     preferredLanguage: string,
 
+    contacts: Array;
+    blockedContacts: Array;
+
     password: string;
     tfa: {
         secret: string;

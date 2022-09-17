@@ -12,6 +12,7 @@ const en = {
             },
         },
         home: {
+            pageTitle: "DIMLIM | Home",
             title: "Home",
 
             navbar: {
@@ -19,6 +20,18 @@ const en = {
                 settings: "Settings",
 
                 logout: "Logout",
+            },
+
+            dialogs: {
+                addContact: {
+                    title: "Add Contact",
+                    label: "Please insert the person's username",
+
+                    "missing-parameters": "Please fill all inputs.",
+                    "self-add": "You can't add yourself as contact",
+                    "already-on-list": "That user is already in your contacts.",
+                    "user-not-found": "There's no user with that username",
+                },
             },
         },
     },

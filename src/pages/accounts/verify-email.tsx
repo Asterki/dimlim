@@ -55,8 +55,6 @@ export const getServerSideProps: GetServerSideProps = async (context: any) => {
 };
 
 const VerifyEmail: NextPage = (props: any) => {
-    console.log(props);
-
     return (
         <div className={styles["page"]}>
             <Navbar lang={props.lang.navbar} user={props.user} />

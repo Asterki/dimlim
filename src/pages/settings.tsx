@@ -4,7 +4,7 @@ import axios, { AxiosResponse } from "axios";
 import validator from "validator";
 
 import Head from "next/head";
-import Navbar from "../../components/navbar";
+import Navbar from "../components/navbar";
 
 import { Col, Container, Row } from "react-bootstrap";
 import {
@@ -26,7 +26,7 @@ import {
 import { TabContext, TabList, TabPanel } from "@mui/lab";
 import { AddAPhoto, Create, SecurityUpdateGood, Email, Logout, DeleteForever } from "@mui/icons-material";
 
-import styles from "../../styles/settings/index.module.scss";
+import styles from "../styles/settings.module.scss";
 import { GetServerSideProps, NextPage } from "next/types";
 
 export const getServerSideProps: GetServerSideProps = async (context: any) => {
@@ -730,7 +730,7 @@ const Settings: NextPage = (props: any) => {
                             <TabList
                                 scrollButtons={true}
                                 allowScrollButtonsMobile={true}
-                                variant="scrollable"
+                                variant="fullWidth"
                                 onChange={(event: any, tab: any) => {
                                     setActiveTab(tab);
                                 }}
@@ -831,9 +831,9 @@ const Settings: NextPage = (props: any) => {
                             </Container>
                             <br />
                             <br />
-                            <b>{props.lang.general.contacts}</b> 9 <br />
+                            <b>{props.lang.general.contacts}</b> {props.user.contacts.length} <br />
                             <br />
-                            <b>{props.lang.general.blockedContacts}</b> 0 <br />
+                            <b>{props.lang.general.blockedContacts}</b> {props.user.blockedContacts.length} <br />
                             <br />
                             <b>{props.lang.general.creation}</b> {new Date(props.user.created).toString()} <br />
                             <br />

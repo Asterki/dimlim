@@ -236,9 +236,9 @@ const Home: NextPage = (props: any) => {
                                 setAddContactDialogOpen(false);
                             }}
                         >
-                            Cancel
+                            {props.lang.dialogs.addContact.cancel}
                         </Button>
-                        <Button onClick={addContact}>Add</Button>
+                        <Button onClick={addContact}>{props.lang.dialogs.addContact.add}</Button>
                     </DialogActions>
                 </Container>
             </Dialog>
@@ -251,15 +251,15 @@ const Home: NextPage = (props: any) => {
                         }}
                         variant="fullWidth"
                     >
-                        <Tab className={styles["tab"]} label="Contacts" value="1" />
-                        <Tab className={styles["tab"]} label="Blocked" value="2" />
+                        <Tab className={styles["tab"]} label={props.lang.contacts} value="1" />
+                        <Tab className={styles["tab"]} label={props.lang.blocked} value="2" />
                     </TabList>
                 </Box>
 
                 {/* Contacts Page */}
                 <TabPanel value="1">
                     <Button variant="contained" onClick={() => setAddContactDialogOpen(true)} className={styles["add-contact-button"]}>
-                        Add Contact
+                        {props.lang.addContact}
                     </Button>
 
                     <br />
@@ -267,7 +267,7 @@ const Home: NextPage = (props: any) => {
 
                     {props.user.contacts.length == 0 && (
                         <Container fluid className={styles["no-contacts"]}>
-                            <p>You don&apos;t have any contacts yet, begin by pressing Add Contact</p>
+                            <p>{props.lang.noContacts}</p>
                         </Container>
                     )}
 
@@ -284,13 +284,13 @@ const Home: NextPage = (props: any) => {
 
                     {props.user.blockedContacts.length == 0 && (
                         <Container fluid className={styles["no-contacts"]}>
-                            <p>You don&apos;t have any blocked contacts yet</p>
+                            <p>{props.lang.noBlockedContacts}</p>
                         </Container>
                     )}
 
                     {props.user.blockedContacts.length !== 0 && (
                         <Container fluid className={styles["contacts"]}>
-                            <h2>Blocked Contacts</h2>
+                            <h2>{props.lang.blockedContacts}</h2>
                             <br />
                             {blockedContactList}
                         </Container>

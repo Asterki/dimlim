@@ -12,25 +12,37 @@ const de = {
             },
         },
         home: {
-            pageTitle: "DIMLIM | Home",
-            title: "Home",
+            pageTitle: "DIMLIM | Startseite",
+            title: "Zuhause",
 
             navbar: {
-                profile: "Profile",
-                settings: "Settings",
+                profile: "Profil",
+                settings: "Einstellungen",
 
-                logout: "Logout",
+                logout: "Abmelden",
             },
 
-            dialogs: {
-                addContact: {
-                    title: "Add Contact",
-                    label: "Please insert the person's username",
+            contacts: "Kontakte",
+            blocked: "Blockiert",
 
-                    "missing-parameters": "Please fill all inputs.",
-                    "self-add": "You can't add yourself as contact",
-                    "already-on-list": "That user is already in your contacts.",
-                    "user-not-found": "There's no user with that username",
+            addContact: "Kontakt hinzufügen",
+            noContacts: "Sie haben noch keine Kontakte, beginnen Sie mit Kontakt hinzufügen",
+
+            blockedContacts: "Blockierte Kontakte",
+            noBlockedContacts: "Du hast noch keine blockierten Kontakte",
+
+            dialogs: {
+                addContacts: {
+                    title: "Kontakt hinzufügen",
+                    label: "Bitte geben Sie den Benutzernamen der Person ein",
+
+                    cancel: "Abbrechen",
+                    add: "Hinzufügen",
+
+                    "missing-parameters": "Bitte füllen Sie alle Eingaben aus.",
+                    "self-add": "Sie können sich selbst nicht als Kontakt hinzufügen",
+                    "already-on-list": "Dieser Benutzer ist bereits in Ihren Kontakten.",
+                    "user-not-found": "Es gibt keinen Benutzer mit diesem Benutzernamen",
                 },
             },
         },

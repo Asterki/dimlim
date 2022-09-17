@@ -22,10 +22,22 @@ const en = {
                 logout: "Logout",
             },
 
+            contacts: "Contacts",
+            blocked: "Blocked",
+
+            addContact: "Add Contact",
+            noContacts: "You don't have any contacts yet, begin by pressing Add Contact",
+
+            blockedContacts: "Blocked Contacts",
+            noBlockedContacts: "You don't have any blocked contacts yet",
+
             dialogs: {
                 addContact: {
                     title: "Add Contact",
                     label: "Please insert the person's username",
+
+                    cancel: "Cancel",
+                    add: "Add",
 
                     "missing-parameters": "Please fill all inputs.",
                     "self-add": "You can't add yourself as contact",

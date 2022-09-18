@@ -1,5 +1,3 @@
-import speakeasy from "speakeasy";
-
 interface User {
     userID: string;
     created: number;
@@ -18,6 +16,8 @@ interface User {
     blockedContacts: Array;
 
     password: string;
+    chatSecret: string;
+
     tfa: {
         secret: string;
         backupCodes: Array<string>;

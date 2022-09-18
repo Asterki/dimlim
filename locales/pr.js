@@ -52,7 +52,7 @@ const pr = {
             pageTitle: "DIMLIM | Login",
             title: "Entrar no DIMLIM",
 
-            email: "E-mail",
+            email: "Email",
             password: "Senha",
             tfa: "Autenticação de dois fatores",
 
@@ -64,8 +64,8 @@ const pr = {
 
             emailRequired: "O e-mail é obrigatório.",
             passwordRequired: "A senha é obrigatória.",
-            emailInvalid: "E-mail inválido.",
-            emailOrPasswordIncorrect: "E-mail ou senha incorretos.",
+            emailInvalid: "Email inválido.",
+            emailOrPasswordIncorrect: "Email ou senha incorretos.",
             rateLimitExceeded: "Muitas tentativas de login, tente novamente mais tarde.",
             invalidTfa: "Código TFA inválido, tente novamente.",
 
@@ -81,7 +81,7 @@ const pr = {
             pageTitle: "DIMLIM | Cadastro",
             title: "Registrar no DIMLIM",
 
-            email: "E-mail",
+            email: "Email",
             username: "Nome de usuário",
             password: "Senha",
             confirmPassword: "Confirmar Senha",
@@ -94,13 +94,13 @@ const pr = {
             passwordRequired: "A senha é obrigatória",
             confirmPasswordRequired: "Por favor, confirme sua senha",
 
-            emailInvalid: "E-mail inválido",
+            emailInvalid: "Email inválido",
             usernameInvalid: "Os nomes de usuário podem conter apenas letras, números e pontos (.)",
             usernameLength: "O nome de usuário deve ter entre 3 e 32 caracteres",
             passwordLength: "A senha deve ter entre 8 e 256 caracteres",
 
             usernameInUse: "O nome de usuário já está em uso",
-            emailInUse: "E-mail já está em uso",
+            emailInUse: "Email já está em uso",
             rateLimitExceeded: "Você já registrou uma conta recentemente, tente novamente mais tarde",
 
             navbar: {
@@ -159,11 +159,11 @@ const pr = {
                 title: "Informações Gerais",
                 username: "Nome de usuário:",
                 bio: "Bio:",
-                email: "E-mail:",
+                email: "Email:",
                 preferredLanguage: "Idioma preferido:",
                 contacts: "Contatos:",
                 blockedContacts: "Contatos bloqueados:",
-                criação: "Data de criação da conta:",
+                creation: "Data de criação da conta:",
 
                 locales: {
                     de: "Deutsch",
@@ -210,7 +210,7 @@ const pr = {
                     },
                 },
             },
-            segurança: {
+            security: {
                 password: "Senha",
                 tfa: "Autenticação de dois fatores",
 
@@ -249,7 +249,7 @@ const pr = {
                         "invalid-tfa-code": "Código TFA inválido, tente novamente.",
                         "rate-limit-exceeded": "Você tentou desativar o TFA muitas vezes, tente novamente mais tarde.",
                     },
-                    activeTfa: {
+                    activateTfa: {
                         title: "Autenticação de dois fatores",
                         warning:
                             "CERTIFIQUE-SE DE INSERIR O CÓDIGO NO SEU APLICATIVO TFA, VOCÊ NÃO VERÁ ESTE CÓDIGO NOVAMENTE, SE VOCÊ PERDER, PERDE SUA CONTA",
@@ -273,13 +273,13 @@ const pr = {
             account: {
                 emailStatus: "Status do e-mail",
                 emailVerified: "Email verificado",
-                emailNotVerified: "E-mail não verificado",
+                emailNotVerified: "Email não verificado",
 
                 logout: "Sair",
                 logoutDesc: "Suas mensagens serão deletadas",
 
                 deleteAccount: "Excluir conta",
-                deleteAccount: "Excluir tudo em sua conta",
+                deleteAccountDesc: "Excluir tudo em sua conta",
 
                 dialogs: {
                     verifyEmail: {
@@ -319,4 +319,4 @@ const pr = {
     },
 };
 
-modulo.exports = pr;
+export default pr;

@@ -26,13 +26,13 @@ router.post(
                     throw err;
                 }
 
-                let users = await db.get("users");
-                let user: User | undefined = users.find((user: User) => user.userID == (req.user as User).userID);
+                const users = await db.get("users");
+                const user: User | undefined = users.find((user: User) => user.userID == (req.user as User).userID);
 
                 if (!user) return res.send({ status: 400, message: "user-not-found" });
 
                 // Replace the user
-                let newUserList = users.filter((listUser: User) => listUser.userID !== user?.userID);
+                const newUserList = users.filter((listUser: User) => listUser.userID !== user?.userID);
                 user.avatar = `${(req.user as User).userID}.png`;
 
                 newUserList.push(user);
@@ -42,7 +42,7 @@ router.post(
                 return res.redirect("/settings");
             });
         } catch (err) {
-            let errorID = reportError(err);
+            const errorID = reportError(err);
             return res.send({ status: 500, message: "server-error", id: errorID });
         }
     }

@@ -111,6 +111,30 @@ const fr = {
                 download: "Télécharger",
             },
         },
+        verifyEmail: {
+            pageTitle: "DIMLIM | Vérifier les courriels",
+
+            expired: "Le code est expiré.",
+            invalid: "Le code que vous avez entré est invalide.",
+            successNotLoggedIn: "Votre email a été vérifié, vous pouvez maintenant vous connecter à votre compte.",
+            successLoggedIn: "Votre mail a été vérifié.",
+
+            login: "Connexion",
+            goHome: "Rentrer chez soi",
+
+            navbar: {
+                login: "Connexion",
+                register: "S'inscrire",
+                about: "À propos de",
+                support: "Soutien",
+                download: "Télécharger",
+
+                profile: "Profil",
+                settings: "Réglages",
+
+                logout: "Se déconnecter",
+            },
+        },
     },
     settings: {
         index: {
@@ -172,7 +196,7 @@ const fr = {
                         "user-not-found": "Ok mon pote, comment diable fais-tu ça alors, je ne vais même pas m'embêter",
                         "rate-limit-exceeded": "Vous avez trop essayé de modifier votre adresse e-mail, veuillez réessayer plus tard.",
                     },
-                    Langue: {
+                    language: {
                         title: "Veuillez sélectionner une langue",
                         subTitle: "Ceci définira la langue de l'application",
 
@@ -226,7 +250,7 @@ const fr = {
                         "invalid-tfa-code": "Code TFA invalide, veuillez réessayer.",
                         "rate-limit-exceeded": "Vous avez trop essayé de désactiver TFA, veuillez réessayer plus tard.",
                     },
-                    activerTfa: {
+                    activateTfa: {
                         title: "Authentification à deux facteurs",
                         warning:
                             "ASSUREZ-VOUS D'ENTRER LE CODE SUR VOTRE APPLICATION TFA, VOUS NE VERREZ PLUS CE CODE, SI VOUS LE PERDEZ, VOUS PERDEZ VOTRE COMPTE",
@@ -249,16 +273,16 @@ const fr = {
             },
             account: {
                 emailStatus: "État de l'e-mail",
-                emailVerified: "E-mail vérifié",
-                emailNotVerified: "E-mail non vérifié",
+                emailVerified: "Email vérifié",
+                emailNotVerified: "Email non vérifié",
 
                 logout: "Déconnexion",
                 logoutDesc: "Vos messages seront supprimés",
 
                 deleteAccount: "Supprimer le compte",
-                deleteAccount: "Supprimer tout sur votre compte",
+                deleteAccountDesc: "Supprimer tout sur votre compte",
 
-                dialogues: {
+                dialogs: {
                     verifyEmail: {
                         title: "Vérifiez votre adresse e-mail",
                         subTitle: "Vérifiez votre e-mail pour activer TFA et recevez les mises à jour de sécurité directement dans votre e-mail.",
@@ -296,4 +320,4 @@ const fr = {
     },
 };
 
-module.exports = fr;
+export default fr;

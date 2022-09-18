@@ -12,13 +12,38 @@ const es = {
             },
         },
         home: {
-            title: "Inicio",
+            pageTitle: "DIMLIM | Página principal",
+            title: "Página principal",
 
             navbar: {
                 profile: "Perfil",
-                settings: "Configuración",
+                settings: "Ajustes",
 
                 logout: "Cerrar sesión",
+            },
+
+            contacts: "Contactos",
+            blocked: "Bloqueados",
+
+            addContact: "Añadir contactos",
+            noContacts: "Todavía no tienes contactos, presiona Añadir Contactos para añadir un contacto",
+
+            blockedContacts: "Contactos Bloqueados",
+            noBlockedContacts: "Todavía no tienes contactos bloqueados",
+
+            dialogs: {
+                addContact: {
+                    title: "Añadir contacto",
+                    label: "Porfavor ingresa el nombre de usuario de la persona",
+
+                    cancel: "Cancelar",
+                    add: "Añadir",
+
+                    "missing-parameters": "Complete todas las entradas.",
+                    "self-add": "You can't add yourself as contactNo puedes agregarte como contacto.",
+                    "already-on-list": "Ese usuario ya está en tus contactos.",
+                    "user-not-found": "No hay ningún usuario con ese nombre de usuario",
+                },
             },
         },
     },
@@ -34,7 +59,7 @@ const es = {
             login: "Iniciar sesión",
             submit: "Enviar",
             forgotPassword: "¿Has olvidado la contraseña?",
-            doNotHaveAnAccount: "¿Aún no tienes una cuenta?, Registrate",
+            doNotHaveAnAccount: "¿Aún no tienes una cuenta? & Registrate",
             tfaHelp: "Vaya a su aplicación de autentificación e inserte el código de 6 dígitos, o inserte uno de sus códigos de respaldo",
 
             emailRequired: "El correo electrónico es requerido.",
@@ -62,7 +87,7 @@ const es = {
             confirmPassword: "Confirma la contraseña",
 
             register: "Registrarse",
-            alreadyHaveAnAccount: "¿Ya tienes una cuenta?, Inicia sesión",
+            alreadyHaveAnAccount: "¿Ya tienes una cuenta? & Inicia sesión",
 
             emailRequired: "El correo electrónico es requerido",
             usernameRequired: "El nombre de usuario es requerido",
@@ -76,7 +101,7 @@ const es = {
 
             usernameInUse: "El nombre de usuario ya está en uso",
             emailInUse: "El correo electrónico ya está en uso",
-            rateLimitExceeded: "Ya registraste una cuenta recientemente, inténtelo de nuevo más tarde",
+            rateLimitExceeded: "Ya se registró una cuenta recientemente, inténtelo de nuevo más tarde",
 
             navbar: {
                 login: "Iniciar sesión",
@@ -135,7 +160,7 @@ const es = {
                 username: "Nombre de usuario:",
                 bio: "Biografía:",
                 email: "Correo electrónico:",
-                PreferredLanguage: "Idioma preferido:",
+                preferredLanguage: "Idioma preferido:",
                 contacts: "Contactos:",
                 blockedContacts: "Contactos bloqueados:",
                 creation: "Fecha de creación de la cuenta:",
@@ -253,7 +278,7 @@ const es = {
                 logoutDesc: "Tus mensajes serán eliminados",
 
                 deleteAccount: "Borrar cuenta",
-                deleteAccount: "Borrar todo en tu cuenta",
+                deleteAccountDesc: "Borrar todo en tu cuenta",
 
                 dialogs: {
                     verifyEmail: {
@@ -293,4 +318,4 @@ const es = {
     },
 };
 
-module.exports = es;
+export default es;

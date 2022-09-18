@@ -24,7 +24,7 @@ router.post(
     "/register",
     rateLimit({
         windowMs: ms("1 hour"),
-        max: launchArgs.dev == true ? 100 : 3,
+        max: launchArgs.dev == true ? 100 : 30,
         statusCode: 200,
         message: {
             status: 429,
@@ -38,7 +38,7 @@ router.post(
             return res.send({ status: 400, message: "invalid-parameters" });
 
         try {
-            let { email, password, username, lang } = req.body;
+            const { email, password, username, lang } = req.body;
 
             // Validate that all fields meet the criteria
             if (!validator.isEmail(email)) return res.send({ status: 400, message: "invalid-email" });
@@ -47,12 +47,12 @@ router.post(
                 return res.send({ status: 400, message: "invalid-username" });
 
             // Get values from database and check if they're in use
-            let users = await db.get("users");
+            const users = await db.get("users");
             if (users.find((user: any) => user.email.value == email)) return res.send({ status: 200, message: "email-already-in-use" });
             if (users.find((user: any) => user.username == username)) return res.send({ status: 200, message: "username-already-in-use" });
 
             // Create and push the user to the db
-            let newUser: User = {
+            const newUser: User = {
                 userID: uuidv4(),
                 created: Date.now(),
 
@@ -70,6 +70,8 @@ router.post(
                 blockedContacts: [],
 
                 password: bcrypt.hashSync(password, 10),
+                chatSecret: uuidv4(),
+
                 tfa: {
                     secret: "",
                     backupCodes: [],
@@ -86,7 +88,7 @@ router.post(
                 return res.send({ status: 200, message: "success" });
             });
         } catch (err) {
-            let errorID = reportError(err);
+            const errorID = reportError(err);
             return res.send({ status: 500, message: "server-error", id: errorID });
         }
     }
@@ -111,8 +113,8 @@ router.post(
 
         try {
             // Get the user list
-            let users = await db.get("users");
-            let user: User | undefined = users.find((user: User) => user.userID == req.user.userID);
+            const users = await db.get("users");
+            const user: User | undefined = users.find((user: User) => user.userID == req.user.userID);
             if (!user) return res.send({ status: 400, message: "user-not-found" });
 
             // Check the password
@@ -122,7 +124,7 @@ router.post(
             if (user.tfa.secret !== "") {
                 if (!req.body.tfaCode) return res.send({ status: 400, message: "no-tfa-code" });
 
-                let verified = speakeasy.totp.verify({
+                const verified = speakeasy.totp.verify({
                     secret: user.tfa.secret,
                     encoding: "base32",
                     token: req.body.tfaCode,
@@ -132,7 +134,7 @@ router.post(
             }
 
             // Delete the user and logout
-            let newUserList: Array<User> = users.filter((user: User) => user.userID !== req.user.userID);
+            const newUserList: Array<User> = users.filter((user: User) => user.userID !== req.user.userID);
             req.logout(async (err: any) => {
                 if (err) throw err;
 
@@ -140,7 +142,7 @@ router.post(
                 return res.send({ status: 200, message: "success" });
             });
         } catch (err) {
-            let errorID = reportError(err);
+            const errorID = reportError(err);
             return res.send({ status: 500, message: "server-error", id: errorID });
         }
     }
@@ -181,7 +183,7 @@ router.post(
                 });
             })(req, res, next);
         } catch (err) {
-            let errorID = reportError(err);
+            const errorID = reportError(err);
             return res.send({ status: 500, message: "server-error", id: errorID });
         }
     }
@@ -208,7 +210,7 @@ router.get(
                 res.redirect("/");
             });
         } catch (err) {
-            let errorID = reportError(err);
+            const errorID = reportError(err);
             return res.send({ status: 500, message: "server-error", id: errorID });
         }
     }
@@ -232,25 +234,26 @@ router.post(
         if (typeof req.body.lang !== "string") return res.send({ status: 400, message: "invalid-parameters" });
 
         try {
-            let users = await db.get("users");
-            let user: User | undefined = users.find((user: any) => user.email.value == req.user.email.value);
+            const users = await db.get("users");
+            const user: User | undefined = users.find((user: any) => user.email.value == req.user.email.value);
 
             if (!user) return res.send({ status: 400, message: "user-not-found" });
             if (user.email.verified == true) return res.send({ status: 200, message: "email-verified" });
 
             // Get the codes and filter out the old one
-            let codes = await db.get("email-verification-codes");
-            let newCodeList = codes.filter((code: EmailVerificationCode) => code.email !== req.user.email.value);
+            const codes = await db.get("email-verification-codes");
+            const newCodeList = codes.filter((code: EmailVerificationCode) => code.email !== req.user.email.value);
 
             // Generate the new code
-            let newCode: EmailVerificationCode = {
+            const newCode: EmailVerificationCode = {
                 code: uuidv4(),
                 email: user?.email.value as string,
                 expires: Date.now() + ms("5 hours"),
             };
 
             // Send the email
-            let emailContent = require(`../../locales/emails/email-verification/${req.body.lang}`);
+            // eslint-disable-next-line @typescript-eslint/no-var-requires
+            const emailContent = require(`../../locales/emails/email-verification/${req.body.lang}`);
             await sendEmail(
                 user?.email.value as string,
                 emailContent.subject,
@@ -265,7 +268,7 @@ router.post(
 
             return res.send({ status: 200, message: "success" });
         } catch (err) {
-            let errorID = reportError(err);
+            const errorID = reportError(err);
             return res.send({ status: 500, message: "server-error", id: errorID });
         }
     }
@@ -287,8 +290,8 @@ router.get(
 
         try {
             // Get code
-            let codes: Array<EmailVerificationCode> = await db.get("email-verification-codes");
-            let code: EmailVerificationCode | undefined = codes.find((listCode: EmailVerificationCode) => listCode.email == req.query.email);
+            const codes: Array<EmailVerificationCode> = await db.get("email-verification-codes");
+            const code: EmailVerificationCode | undefined = codes.find((listCode: EmailVerificationCode) => listCode.email == req.query.email);
 
             // Checks
             if (!code) return res.redirect("/");
@@ -296,12 +299,12 @@ router.get(
             if (code.code !== req.query.code) return res.redirect("/accounts/verify-email?invalid=true");
 
             // Get users
-            let users = await db.get("users");
-            let user: User = users.find((listUser: User) => listUser.email.value == code?.email);
+            const users = await db.get("users");
+            const user: User = users.find((listUser: User) => listUser.email.value == code?.email);
 
             // Update the user
             user.email.verified = true;
-            let newUsersList: Array<User> = users.filter((listUser: User) => listUser.userID !== user?.userID);
+            const newUsersList: Array<User> = users.filter((listUser: User) => listUser.userID !== user?.userID);
 
             // Remove the code from the database
             codes.filter((listCode: EmailVerificationCode) => listCode.code !== code?.code);
@@ -313,14 +316,14 @@ router.get(
 
             return res.redirect("/accounts/verify-email?=success=true");
         } catch (err) {
-            let errorID = reportError(err);
+            const errorID = reportError(err);
             return res.redirect(`/error?code=500&id=${errorID}`);
         }
     }
 );
 
 // Password actions // TODO
-router.post("/reset-password", (req: any, res: any) => {});
+// router.post("/reset-password", (_req: any, _res: any) => {});
 
 // TFA related
 router.post(
@@ -338,8 +341,8 @@ router.post(
         try {
             if (!req.isAuthenticated()) return res.send({ status: 403, message: "unauthorized" });
 
-            let users = await db.get("users");
-            let user: User | undefined = users.find((user: any) => user.userID == req.user.userID);
+            const users = await db.get("users");
+            const user: User | undefined = users.find((user: any) => user.userID == req.user.userID);
 
             // Check if user exists, if so, check if tfa is already activated, and if email is verified
             if (!user) return res.send({ status: 400, message: "user-not-found" });
@@ -347,9 +350,9 @@ router.post(
             if (user.email.verified == false) return res.send({ status: 400, message: "email-not-verified" });
 
             // Generate our secret
-            let secret: any = speakeasy.generateSecret({ length: 20 });
+            const secret: any = speakeasy.generateSecret({ length: 20 });
 
-            let newUserList: Array<User> = users.filter((user: User) => user.userID !== req.user.userID);
+            const newUserList: Array<User> = users.filter((user: User) => user.userID !== req.user.userID);
             user.tfa.secret = secret.base32;
             newUserList.push(user);
 
@@ -365,7 +368,7 @@ router.post(
                 });
             });
         } catch (err) {
-            let errorID = reportError(err);
+            const errorID = reportError(err);
             return res.send({ status: 500, message: "server-error", id: errorID });
         }
     }
@@ -388,8 +391,8 @@ router.post(
         if (typeof req.body.tfaCode !== "string") return res.send({ code: 400, message: "invalid-parameters" });
 
         try {
-            let users = await db.get("users");
-            let user: User | undefined = users.find((user: any) => user.userID == req.user.userID);
+            const users = await db.get("users");
+            const user: User | undefined = users.find((user: any) => user.userID == req.user.userID);
 
             // Checks
             if (!user) return res.send({ status: 400, message: "user-not-found" });
@@ -397,14 +400,14 @@ router.post(
             if (user.email.verified == false) return res.send({ status: 400, message: "email-not-verified" });
 
             // Check if the tfa code
-            let tfaResult = checkTFA(req.body.tfaCode, user, users);
+            const tfaResult = checkTFA(req.body.tfaCode, user, users);
             if (tfaResult == "invalid-tfa-code") return res.send({ status: 200, message: "invalid-tfa-code" });
 
             // Remove the secret, and replace the user in the DB with the new user without the secret
             user.tfa.secret = "";
             user.tfa.backupCodes = [];
             user.tfa.seenBackupCodes = false;
-            let newUserList = users.filter((listUser: User) => listUser.email !== user?.email);
+            const newUserList = users.filter((listUser: User) => listUser.email !== user?.email);
 
             // Push changes to the DB
             newUserList.push(user);
@@ -415,7 +418,7 @@ router.post(
                 message: "success",
             });
         } catch (err) {
-            let errorID = reportError(err);
+            const errorID = reportError(err);
             return res.send({ status: 500, message: "server-error", id: errorID });
         }
     }
@@ -438,15 +441,15 @@ router.post(
         if (typeof req.body.code !== "string") res.send({ code: 400, message: "invalid-parameters" });
 
         try {
-            let users = await db.get("users");
-            let user: User | undefined = users.find((user: User) => user.userID == req.user.userID);
+            const users = await db.get("users");
+            const user: User | undefined = users.find((user: User) => user.userID == req.user.userID);
 
             // Check if user exists
             if (!user) return res.send({ code: 400, message: "user-not-found" });
             if (user.tfa.secret == "") return res.send({ code: 400, message: "tfa-not-active" });
 
             // I'll leave this like this, because we don't want the user to use a backup code instead of the code provided by the tfa app
-            let verified = speakeasy.totp.verify({
+            const verified = speakeasy.totp.verify({
                 secret: user.tfa.secret,
                 encoding: "base32",
                 token: req.body.code,
@@ -456,19 +459,19 @@ router.post(
             if (user.tfa.seenBackupCodes == true) return res.send({ code: 200, message: "backup-codes-seen" });
 
             // Generate codes
-            let codeList: Array<string> = [];
+            const codeList: Array<string> = [];
             for (let i = 0; i < 10; i++) {
                 codeList.push(Math.random().toString(16).slice(2, 10));
             }
 
             // Hash codes
-            let hashedCodes: Array<string> = [];
+            const hashedCodes: Array<string> = [];
             codeList.forEach((code: string) => {
                 hashedCodes.push(bcrypt.hashSync(code, 10));
             });
 
             // Replace the old user with the new user
-            let newUserList: Array<User> = users.filter((listUser: User) => listUser.userID !== user?.userID);
+            const newUserList: Array<User> = users.filter((listUser: User) => listUser.userID !== user?.userID);
             user.tfa.backupCodes = hashedCodes;
             user.tfa.seenBackupCodes = true;
 
@@ -478,7 +481,7 @@ router.post(
 
             return res.send({ status: 200, message: "success", codes: codeList });
         } catch (err) {
-            let errorID = reportError(err);
+            const errorID = reportError(err);
             return res.send({ status: 500, message: "server-error", id: errorID });
         }
     }
@@ -492,7 +495,7 @@ router.post("/check-use", async (req: any, res: any) => {
 
     try {
         // Get from db
-        let users = await db.get("users");
+        const users = await db.get("users");
 
         // Checks
         if (users.find((user: any) => user.email.value == req.body.email)) return res.send({ status: 200, message: "email-already-in-use" });
@@ -500,7 +503,7 @@ router.post("/check-use", async (req: any, res: any) => {
 
         return res.send({ status: 200, message: "all-good" });
     } catch (err) {
-        let errorID = reportError(err);
+        const errorID = reportError(err);
         return res.send({ status: 500, message: "server-error", id: errorID });
     }
 });

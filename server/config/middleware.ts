@@ -22,7 +22,7 @@ try {
     app.use(compression());
 
     // Static content
-    let avatarsPath = launchArgs.dev == true ? "../../data/avatars" : "../../../data/avatars";
+    const avatarsPath = launchArgs.dev == true ? "../../data/avatars" : "../../../data/avatars";
 
     app.use(favicon(path.join(__dirname, "../../public/favicon.ico")));
     app.use("/assets/", express.static(path.join(__dirname, "../../src/assets")));

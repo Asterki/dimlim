@@ -880,6 +880,7 @@ const Settings: NextPage = (props: any) => {
                             </Container>
                         </TabPanel>
 
+                        {/* Account Configuration */}
                         <TabPanel value="3">
                             <Container fluid className={styles["actions"]}>
                                 <br />
@@ -893,9 +894,9 @@ const Settings: NextPage = (props: any) => {
                                     <p className={styles["action-title"]}>{props.lang.account.emailStatus}</p>
                                     <Row>
                                         <Col>
-                                            <h3>
+                                            <h6>
                                                 {props.user.email.verified == true ? props.lang.account.emailVerified : props.lang.account.emailNotVerified}
-                                            </h3>
+                                            </h6>
                                         </Col>
                                         <Col className={styles["action-icon"]}>
                                             <Email />
@@ -931,7 +932,7 @@ const Settings: NextPage = (props: any) => {
                                     <p className={styles["action-title"]}>{props.lang.account.deleteAccount}</p>
                                     <Row>
                                         <Col>
-                                            <h6>{props.lang.account.deleteAccount}</h6>
+                                            <h6>{props.lang.account.deleteAccountDesc}</h6>
                                         </Col>
                                         <Col className={styles["action-icon"]}>
                                             <DeleteForever />

@@ -3,15 +3,15 @@ import React from "react";
 import axios, { AxiosResponse } from "axios";
 import { io } from "socket.io-client";
 
-import { Row, Col, Container } from "react-bootstrap";
 import Head from "next/head";
 import Navbar from "../../components/navbar";
-
-import styles from "../../styles/main/home.module.scss";
-import { GetServerSideProps, NextPage } from "next";
+import { Row, Col, Container } from "react-bootstrap";
 import { TabContext, TabList, TabPanel } from "@mui/lab";
 import { Avatar, Box, IconButton, Tab, Button, Dialog, DialogTitle, DialogActions } from "@mui/material";
 import { Delete, Chat, DoDisturbOn, DoDisturbOff } from "@mui/icons-material";
+
+import styles from "../../styles/main/home.module.scss";
+import { GetServerSideProps, NextPage } from "next";
 
 export const getServerSideProps: GetServerSideProps = async (context: any) => {
     if (!context.req.isAuthenticated())
@@ -70,11 +70,13 @@ const Home: NextPage = (props: any) => {
     // Websocket
     const socket = io(props.host);
 
-    socket.on("connect", () => {
-        socket.emit("join-home-page-listener", props.user.userID);
+    React.useEffect(() => {
+        socket.on("connect", () => {
+            socket.emit("join-home-page-listener", props.user.userID);
 
-        socket.on("reload", (data) => {
-            return setReload(true);
+            socket.on("reload", (data) => {
+                return setReload(true);
+            });
         });
     });
 
@@ -174,7 +176,7 @@ const Home: NextPage = (props: any) => {
                             <IconButton onClick={(event: any) => removeContact(event, contact.username)}>
                                 <Delete />
                             </IconButton>
-                            <IconButton onClick={(event: any) => (window.location.href = `/chat/${contact.username}`)}>
+                            <IconButton onClick={(event: any) => (window.location.href = `/chat/${contact.username}?id=${contact.userID}`)}>
                                 <Chat />
                             </IconButton>
                         </Col>
@@ -215,9 +217,11 @@ const Home: NextPage = (props: any) => {
     return (
         <div className={styles["page"]}>
             <Navbar lang={props.lang.navbar} user={props.user} />
+
             <Head>
                 <title>{props.lang.pageTitle}</title>
             </Head>
+
             <Dialog open={addContactDialogOpen} className={styles["dialog-container"]} sx={{ backgroundColor: "none" }}>
                 <Container fluid className={styles["dialog"]}>
                     <DialogTitle>{props.lang.dialogs.addContact.title}</DialogTitle>
@@ -243,60 +247,62 @@ const Home: NextPage = (props: any) => {
                 </Container>
             </Dialog>
 
-            <TabContext value={currentTab}>
-                <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
-                    <TabList
-                        onChange={(event: any, newValue: string) => {
-                            setCurrentTab(newValue);
-                        }}
-                        variant="fullWidth"
-                    >
-                        <Tab className={styles["tab"]} label={props.lang.contacts} value="1" />
-                        <Tab className={styles["tab"]} label={props.lang.blocked} value="2" />
-                    </TabList>
-                </Box>
+            <div className={styles["main-content"]}>
+                <TabContext value={currentTab}>
+                    <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
+                        <TabList
+                            onChange={(event: any, newValue: string) => {
+                                setCurrentTab(newValue);
+                            }}
+                            variant="fullWidth"
+                        >
+                            <Tab className={styles["tab"]} label={props.lang.contacts} value="1" />
+                            <Tab className={styles["tab"]} label={props.lang.blocked} value="2" />
+                        </TabList>
+                    </Box>
 
-                {/* Contacts Page */}
-                <TabPanel value="1">
-                    <Button variant="contained" onClick={() => setAddContactDialogOpen(true)} className={styles["add-contact-button"]}>
-                        {props.lang.addContact}
-                    </Button>
+                    {/* Contacts Page */}
+                    <TabPanel value="1">
+                        <Button variant="contained" onClick={() => setAddContactDialogOpen(true)} className={styles["add-contact-button"]}>
+                            {props.lang.addContact}
+                        </Button>
 
-                    <br />
-                    <br />
+                        <br />
+                        <br />
 
-                    {props.user.contacts.length == 0 && (
-                        <Container fluid className={styles["no-contacts"]}>
-                            <p>{props.lang.noContacts}</p>
-                        </Container>
-                    )}
+                        {props.user.contacts.length == 0 && (
+                            <Container fluid className={styles["no-contacts"]}>
+                                <p>{props.lang.noContacts}</p>
+                            </Container>
+                        )}
 
-                    {props.user.contacts.length !== 0 && (
-                        <Container fluid className={styles["contacts"]}>
-                            {contactList}
-                        </Container>
-                    )}
-                </TabPanel>
+                        {props.user.contacts.length !== 0 && (
+                            <Container fluid className={styles["contacts"]}>
+                                {contactList}
+                            </Container>
+                        )}
+                    </TabPanel>
 
-                {/* Blocked Contacts Page */}
-                <TabPanel value="2">
-                    <br />
+                    {/* Blocked Contacts Page */}
+                    <TabPanel value="2">
+                        <br />
 
-                    {props.user.blockedContacts.length == 0 && (
-                        <Container fluid className={styles["no-contacts"]}>
-                            <p>{props.lang.noBlockedContacts}</p>
-                        </Container>
-                    )}
+                        {props.user.blockedContacts.length == 0 && (
+                            <Container fluid className={styles["no-contacts"]}>
+                                <p>{props.lang.noBlockedContacts}</p>
+                            </Container>
+                        )}
 
-                    {props.user.blockedContacts.length !== 0 && (
-                        <Container fluid className={styles["contacts"]}>
-                            <h2>{props.lang.blockedContacts}</h2>
-                            <br />
-                            {blockedContactList}
-                        </Container>
-                    )}
-                </TabPanel>
-            </TabContext>
+                        {props.user.blockedContacts.length !== 0 && (
+                            <Container fluid className={styles["contacts"]}>
+                                <h2>{props.lang.blockedContacts}</h2>
+                                <br />
+                                {blockedContactList}
+                            </Container>
+                        )}
+                    </TabPanel>
+                </TabContext>
+            </div>
         </div>
     );
 };

@@ -7,8 +7,9 @@ import http from "http";
 import socketIo from "socket.io";
 
 // Get startup values from process.env and minimist's argument parsing
+// eslint-disable-next-line @typescript-eslint/no-var-requires
 require("dotenv").config({ path: path.join(__dirname, "../.env") });
-let launchArgs = minimist(process.argv.slice(2), {
+const launchArgs = minimist(process.argv.slice(2), {
     string: ["port"],
     boolean: ["dev", "setup"],
 
@@ -23,7 +24,8 @@ let launchArgs = minimist(process.argv.slice(2), {
 if (launchArgs.setup == true) {
     (async () => {
         // Initialize all values in the database
-        let db = require("./config/databases").default;
+        // eslint-disable-next-line @typescript-eslint/no-var-requires
+        const db = require("./config/databases").default;
 
         await db.set("users", []);
         await db.set("email-verification-codes", []);

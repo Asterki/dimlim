@@ -31,14 +31,14 @@ router.post(
             return res.send({ status: 400, message: "invalid-parameters" });
 
         try {
-            let users = await db.get("users");
-            let user: User | undefined = users.find((user: User) => user.userID == req.user.userID);
+            const users = await db.get("users");
+            const user: User | undefined = users.find((user: User) => user.userID == req.user.userID);
 
             if (!user) return res.send({ status: 400, message: "user-not-found" });
             if (users.find((user: any) => user.email.value == req.body.email)) return res.send({ status: 200, message: "email-already-in-use" });
 
             // Replace the user
-            let newUserList = users.filter((listUser: User) => listUser.userID !== user?.userID);
+            const newUserList = users.filter((listUser: User) => listUser.userID !== user?.userID);
             user.email = { value: req.body.newEmail, verified: false };
 
             newUserList.push(user);
@@ -46,7 +46,7 @@ router.post(
             await db.set("users", newUserList);
             return res.send({ status: 200, message: "success" });
         } catch (err) {
-            let errorID = reportError(err);
+            const errorID = reportError(err);
             return res.send({ status: 500, message: "server-error", id: errorID });
         }
     }
@@ -58,14 +58,14 @@ router.post("/set-language", async (req: any, res: any) => {
     if (typeof req.body.newLanguage !== "string") return res.send({ status: 400, message: "invalid-parameters" });
 
     try {
-        let users = await db.get("users");
-        let user: User | undefined = users.find((user: User) => user.userID == req.user.userID);
+        const users = await db.get("users");
+        const user: User | undefined = users.find((user: User) => user.userID == req.user.userID);
 
         if (!user) return res.send({ status: 400, message: "user-not-found" });
         if (users.find((user: any) => user.email.value == req.body.email)) return res.send({ status: 200, message: "email-already-in-use" });
 
         // Replace the user
-        let newUserList = users.filter((listUser: User) => listUser.userID !== user?.userID);
+        const newUserList = users.filter((listUser: User) => listUser.userID !== user?.userID);
         user.preferredLanguage = req.body.newLanguage;
 
         newUserList.push(user);
@@ -73,7 +73,7 @@ router.post("/set-language", async (req: any, res: any) => {
         await db.set("users", newUserList);
         return res.send({ status: 200, message: "success" });
     } catch (err) {
-        let errorID = reportError(err);
+        const errorID = reportError(err);
         return res.send({ status: 500, message: "server-error", id: errorID });
     }
 });
@@ -84,14 +84,14 @@ router.post("/set-bio", async (req: any, res: any) => {
     if (typeof req.body.newBio !== "string") return res.send({ status: 400, message: "invalid-parameters" });
 
     try {
-        let users = await db.get("users");
-        let user: User | undefined = users.find((user: User) => user.userID == req.user.userID);
+        const users = await db.get("users");
+        const user: User | undefined = users.find((user: User) => user.userID == req.user.userID);
 
         if (!user) return res.send({ status: 400, message: "user-not-found" });
         if (users.find((user: any) => user.email.value == req.body.email)) return res.send({ status: 200, message: "email-already-in-use" });
 
         // Replace the user
-        let newUserList = users.filter((listUser: User) => listUser.userID !== user?.userID);
+        const newUserList = users.filter((listUser: User) => listUser.userID !== user?.userID);
         user.bio = req.body.newBio;
 
         newUserList.push(user);
@@ -99,7 +99,7 @@ router.post("/set-bio", async (req: any, res: any) => {
         await db.set("users", newUserList);
         return res.send({ status: 200, message: "success" });
     } catch (err) {
-        let errorID = reportError(err);
+        const errorID = reportError(err);
         return res.send({ status: 500, message: "server-error", id: errorID });
     }
 });
@@ -127,8 +127,8 @@ router.post(
             return res.send({ status: 400, message: "invalid-parameters" });
 
         try {
-            let users = await db.get("users");
-            let user: User | undefined = users.find((user: any) => user.email.value == req.user.email.value);
+            const users = await db.get("users");
+            const user: User | undefined = users.find((user: any) => user.email.value == req.user.email.value);
 
             // Check if the user exists, and also if password is right
             if (!user) return res.send({ status: 400, message: "user-not-found" });
@@ -139,14 +139,14 @@ router.post(
                 if (!req.body.tfaCode) return res.send({ status: 200, message: "requires-tfa" });
                 if (typeof req.body.tfaCode !== "string") return res.send({ status: 200, message: "invalid-tfa-code" });
 
-                let tfaResult = checkTFA(req.body.tfaCode, user, users);
+                const tfaResult = checkTFA(req.body.tfaCode, user, users);
                 if (tfaResult == "invalid-tfa-code") return res.send({ status: 200, message: "invalid-tfa-code" });
             }
 
             // Checks
 
             // Replace the user with the user with the new password
-            let newUserList = users.filter((listUser: User) => listUser.userID !== user?.userID);
+            const newUserList = users.filter((listUser: User) => listUser.userID !== user?.userID);
             user.password = bcrypt.hashSync(req.body.newPassword, 10);
 
             // Push to db
@@ -155,7 +155,7 @@ router.post(
 
             return res.send({ status: 200, message: "success" });
         } catch (err) {
-            let errorID = reportError(err);
+            const errorID = reportError(err);
             return res.send({ status: 500, message: "server-error", id: errorID });
         }
     }
@@ -172,9 +172,9 @@ router.post("/add-contact", async (req: any, res: any) => {
     try {
         if (!req.isAuthenticated()) return res.send({ status: 403, message: "unauthorized" });
 
-        let users = await db.get("users");
-        let user: User | undefined = users.find((user: any) => user.userID == req.user.userID);
-        let userToAdd: User | undefined = users.find((listUser: any) => listUser.username == req.body.contact);
+        const users = await db.get("users");
+        const user: User | undefined = users.find((user: any) => user.userID == req.user.userID);
+        const userToAdd: User | undefined = users.find((listUser: any) => listUser.username == req.body.contact);
 
         if (
             user?.contacts.find((listUser: any) => {
@@ -185,7 +185,7 @@ router.post("/add-contact", async (req: any, res: any) => {
 
         if (!userToAdd) return res.send({ status: 400, message: "user-not-found" });
 
-        let newUserList: Array<User> = users.filter((user: User) => user.userID !== req.user.userID);
+        const newUserList: Array<User> = users.filter((user: User) => user.userID !== req.user.userID);
         newUserList.filter((user: User) => user.userID !== userToAdd?.userID);
 
         // Remove old users
@@ -200,7 +200,7 @@ router.post("/add-contact", async (req: any, res: any) => {
         db.set("users", newUserList);
         return res.send({ status: 200, message: "success" });
     } catch (err) {
-        let errorID = reportError(err);
+        const errorID = reportError(err);
         return res.send({ status: 500, message: "server-error", id: errorID });
     }
 });
@@ -213,27 +213,25 @@ router.post("/remove-contact", async (req: any, res: any) => {
     try {
         if (!req.isAuthenticated()) return res.send({ status: 403, message: "unauthorized" });
 
-        let users = await db.get("users");
-        let user: User | undefined = users.find((user: any) => user.userID == req.user.userID);
-        let userToRemove: User | undefined = users.find((listUser: any) => listUser.username == req.body.contact);
+        const users = await db.get("users");
+        const user: User | undefined = users.find((user: any) => user.userID == req.user.userID);
+        const userToRemove: User | undefined = users.find((listUser: any) => listUser.username == req.body.contact);
         if (!userToRemove) return res.send({ status: 400, message: "user-not-found" });
 
         // Remove old users
-        let newUserList: Array<User> = users.filter((user: User) => user.userID !== req.user.userID);
+        const newUserList: Array<User> = users.filter((user: User) => user.userID !== req.user.userID);
         newUserList.filter((user: User) => user.userID !== userToRemove?.userID);
 
-        let newUserContactList = user?.contacts.filter((listUser: User) => {
+        const newUserContactList = user?.contacts.filter((listUser: User) => {
             return listUser.userID !== userToRemove?.userID;
         });
-        let newUserToRemoveContactList = userToRemove?.contacts.filter((listUser: User) => {
+        const newUserToRemoveContactList = userToRemove?.contacts.filter((listUser: User) => {
             return listUser.userID !== user?.userID;
         });
 
-        // @ts-ignore
-        user?.contacts = newUserContactList;
+        if (!user) return; // To make typescript happy
+        user.contacts = newUserContactList;
         userToRemove.contacts = newUserToRemoveContactList;
-
-        console.log(user, userToRemove);
 
         // Reload the main page to the other user if they're online
         io.sockets.to(userToRemove.userID).emit("reload");
@@ -243,7 +241,7 @@ router.post("/remove-contact", async (req: any, res: any) => {
         db.set("users", newUserList);
         return res.send({ status: 200, message: "success" });
     } catch (err) {
-        let errorID = reportError(err);
+        const errorID = reportError(err);
         return res.send({ status: 500, message: "server-error", id: errorID });
     }
 });
@@ -256,13 +254,13 @@ router.post("/block-contact", async (req: any, res: any) => {
     try {
         if (!req.isAuthenticated()) return res.send({ status: 403, message: "unauthorized" });
 
-        let users = await db.get("users");
-        let user: User | undefined = users.find((user: any) => user.userID == req.user.userID);
-        let userToAdd: User | undefined = users.find((listUser: any) => listUser.username == req.body.contact);
+        const users = await db.get("users");
+        const user: User | undefined = users.find((user: any) => user.userID == req.user.userID);
+        const userToAdd: User | undefined = users.find((listUser: any) => listUser.username == req.body.contact);
 
-        let newUserList: Array<User> = users.filter((user: User) => user.userID !== req.user.userID);
-        // @ts-ignore
-        user?.contacts = user?.contacts.filter((listUser: User) => {
+        const newUserList: Array<User> = users.filter((user: User) => user.userID !== req.user.userID);
+        if (!user) return; // To make typescript happy
+        user.contacts = user?.contacts.filter((listUser: User) => {
             return listUser.username !== req.body.contact;
         });
 
@@ -272,7 +270,7 @@ router.post("/block-contact", async (req: any, res: any) => {
         db.set("users", newUserList);
         return res.send({ status: 200, message: "success" });
     } catch (err) {
-        let errorID = reportError(err);
+        const errorID = reportError(err);
         return res.send({ status: 500, message: "server-error", id: errorID });
     }
 });
@@ -285,13 +283,13 @@ router.post("/unblock-contact", async (req: any, res: any) => {
     try {
         if (!req.isAuthenticated()) return res.send({ status: 403, message: "unauthorized" });
 
-        let users = await db.get("users");
-        let user: User | undefined = users.find((user: any) => user.userID == req.user.userID);
-        let userToAdd: User | undefined = users.find((listUser: any) => listUser.username == req.body.contact);
+        const users = await db.get("users");
+        const user: User | undefined = users.find((user: any) => user.userID == req.user.userID);
+        const userToAdd: User | undefined = users.find((listUser: any) => listUser.username == req.body.contact);
 
-        let newUserList: Array<User> = users.filter((user: User) => user.userID !== req.user.userID);
-        // @ts-ignore
-        user?.blockedContacts = user?.contacts.filter((listUser: User) => {
+        const newUserList: Array<User> = users.filter((user: User) => user.userID !== req.user.userID);
+        if (!user) return; // To make typescript happy
+        user.blockedContacts = user?.contacts.filter((listUser: User) => {
             return listUser.username !== req.body.contact;
         });
 
@@ -301,7 +299,7 @@ router.post("/unblock-contact", async (req: any, res: any) => {
         db.set("users", newUserList);
         return res.send({ status: 200, message: "success" });
     } catch (err) {
-        let errorID = reportError(err);
+        const errorID = reportError(err);
         return res.send({ status: 500, message: "server-error", id: errorID });
     }
 });

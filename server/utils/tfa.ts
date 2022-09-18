@@ -5,7 +5,7 @@ import db from "../config/databases";
 import { User } from "../types";
 
 const checkTFA = (code: string, user: User, users: Array<User>) => {
-    let verified = speakeasy.totp.verify({
+    const verified = speakeasy.totp.verify({
         secret: user.tfa.secret,
         encoding: "base32",
         token: code,
@@ -21,7 +21,7 @@ const checkTFA = (code: string, user: User, users: Array<User>) => {
                     backupCodeVerified = true;
 
                     // Update the user
-                    let newUserList = users.filter((listUser: User) => listUser.userID !== user.userID);
+                    const newUserList = users.filter((listUser: User) => listUser.userID !== user.userID);
                     user.tfa.backupCodes[index] = "0";
 
                     // Push to database

@@ -278,7 +278,7 @@ const en = {
                 logoutDesc: "Your messages will be deleted",
 
                 deleteAccount: "Delete account",
-                deleteAccount: "Delete everything on your account",
+                deleteAccountDesc: "Delete everything on your account",
 
                 dialogs: {
                     verifyEmail: {
@@ -318,4 +318,4 @@ const en = {
     },
 };
 
-module.exports = en;
+export default en;

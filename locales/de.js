@@ -32,7 +32,7 @@ const de = {
             noBlockedContacts: "Du hast noch keine blockierten Kontakte",
 
             dialogs: {
-                addContacts: {
+                addContact: {
                     title: "Kontakt hinzufügen",
                     label: "Bitte geben Sie den Benutzernamen der Person ein",
 
@@ -280,7 +280,7 @@ const de = {
                 logoutDesc: "Ihre Nachrichten werden gelöscht",
 
                 deleteAccount: "Konto löschen",
-                deleteAccount: "Lösche alles auf deinem Konto",
+                deleteAccountDesc: "Lösche alles auf deinem Konto",
 
                 dialogs: {
                     verifyEmail: {
@@ -320,4 +320,4 @@ const de = {
     },
 };
 
-module.exports = de;
+export default de;

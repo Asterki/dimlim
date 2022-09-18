@@ -12,18 +12,14 @@ const mailTransporter = nodemailer.createTransport({
 });
 
 const sendEmail = async (emailTo: string, subject: string, html: string) => {
-    try {
-        if (!validator.isEmail(emailTo)) return;
+    if (!validator.isEmail(emailTo)) return;
 
-        await mailTransporter.sendMail({
-            from: `"DIMLIM"`,
-            to: emailTo,
-            subject: subject,
-            html: html,
-        });
-    } catch (err) {
-        throw err;
-    }
+    await mailTransporter.sendMail({
+        from: `"DIMLIM"`,
+        to: emailTo,
+        subject: subject,
+        html: html,
+    });
 };
 
 export { mailTransporter, sendEmail };

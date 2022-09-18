@@ -1,21 +1,22 @@
 import passport from "passport";
 import passportLocal from "passport-local";
 import bcrypt from "bcrypt";
-import path, { dirname } from "path";
+import path from "path";
 import expressSession from "express-session";
 import { v4 as uuidv4 } from "uuid";
 
 import db from "../config/databases";
-import { sendEmail } from "../utils/email";
+// import { sendEmail } from "../utils/email";
 import { User } from "../types";
 import { checkTFA } from "../utils/tfa";
 import { app, launchArgs } from "..";
 
+// eslint-disable-next-line @typescript-eslint/no-var-requires
 const FileStore = require("session-file-store")(expressSession);
 
 // Session and login
 // I can't believe I'm using json for storage, but I have to run all of this in the same server
-let sessionsPath = launchArgs.dev == true ? "../../data/sessions" : "../../../data/sessions";
+const sessionsPath = launchArgs.dev == true ? "../../data/sessions" : "../../../data/sessions";
 app.use(
     expressSession({
         secret: (process.env.SESSION_SECRET as string) || uuidv4(),
@@ -39,27 +40,19 @@ app.use(passport.session());
 
 // Passport configuration
 passport.serializeUser(async (sessionUser: any, done: any) => {
-    try {
-        let users = await db.get("users");
-        let user = users.find((listUser: User) => sessionUser.userID == listUser.userID);
+    const users = await db.get("users");
+    const user = users.find((listUser: User) => sessionUser.userID == listUser.userID);
 
-        if (!user) return done(null, false);
-        else return done(null, user);
-    } catch (err) {
-        throw err;
-    }
+    if (!user) return done(null, false);
+    else return done(null, user);
 });
 
 passport.deserializeUser(async (sessionUser: any, done: any) => {
-    try {
-        let users = await db.get("users");
-        let user = users.find((listUser: User) => sessionUser.userID == listUser.userID);
+    const users = await db.get("users");
+    const user = users.find((listUser: User) => sessionUser.userID == listUser.userID);
 
-        if (!user) return done(null, false);
-        else return done(null, user);
-    } catch (err) {
-        throw err;
-    }
+    if (!user) return done(null, false);
+    else return done(null, user);
 });
 
 passport.use(
@@ -72,8 +65,8 @@ passport.use(
         },
         async (req: any, email: string, password: string, done: any) => {
             try {
-                let users = await db.get("users");
-                let user = users.find((listUser: User) => listUser.email.value == email);
+                const users = await db.get("users");
+                const user = users.find((listUser: User) => listUser.email.value == email);
                 if (!user) return done(null, false, { message: "invalid-credentials" });
 
                 // Compare passwords
@@ -84,7 +77,7 @@ passport.use(
                     if (!req.body.tfaCode) return done(null, false, { message: "requires-tfa" });
                     if (typeof req.body.tfaCode !== "string") return done(null, false, { message: "invalid-tfa-code" });
 
-                    let tfaResult = checkTFA(req.body.tfaCode, user, users);
+                    const tfaResult = checkTFA(req.body.tfaCode, user, users);
                     if (tfaResult == "invalid-tfa-code") return done(null, false, { message: "invalid-tfa-code" });
                 }
 

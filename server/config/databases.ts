@@ -8,7 +8,7 @@ let db: any;
 
 try {
     // Start the database
-    let dbPath = launchArgs.dev == true ? "../../data/db.sqlite" : "../../../data/db.sqlite";
+    const dbPath = launchArgs.dev == true ? "../../data/db.sqlite" : "../../../data/db.sqlite";
     db = new QuickDB({ filePath: path.join(__dirname, dbPath) });
 
     console.log(`${chalk.magenta("event")} - Database connected and ready to use`);

@@ -1,14 +1,10 @@
 import zlib from "zlib";
 import fs from "fs";
 
-let compressFile = (location: string) => {
-    try {
-        let fileStream = fs.createReadStream(location);
+const compressFile = (location: string) => {
+    const fileStream = fs.createReadStream(location);
 
-        fileStream.pipe(zlib.createGzip()).pipe(fs.createWriteStream(`${location}.gz`));
-    } catch (err) {
-        throw err;
-    }
+    fileStream.pipe(zlib.createGzip()).pipe(fs.createWriteStream(`${location}.gz`));
 };
 
 export { compressFile };

@@ -5,7 +5,7 @@ import { v4 as uuidv4 } from "uuid";
 
 const reportError = (errorToLog: any) => {
     // Generate the error ID
-    let errorID = uuidv4();
+    const errorID = uuidv4();
 
     // Get the logs in the file
     fs.readFile(path.join(__dirname, "../logs/errors.log"), (err: any, content: any) => {

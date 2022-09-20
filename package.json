@@ -4,7 +4,7 @@
     "private": true,
     "scripts": {
         "dev": "nodemon --config ./nodemon.json ./server/index.ts --dev true",
-        "start": "npm install typescript -g && npm-run-all start:*",
+        "start": "npm install typescript -g && npm install --only=dev && npm-run-all start:*",
         "start:clean": "rm -rf ./build/*",
         "start:build-server": "tsc -p ./server/tsconfig.json",
         "start:build-client": "next build",

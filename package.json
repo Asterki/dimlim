@@ -4,7 +4,7 @@
     "private": true,
     "scripts": {
         "dev": "nodemon --config ./nodemon.json ./server/index.ts --dev true",
-        "start": "npm install typescript -g && npm install --only=dev && npm-run-all start:*",
+        "start": "node ./build/server/index.js --dev false",
         "start:clean": "rm -rf ./build/*",
         "start:build-server": "tsc -p ./server/tsconfig.json",
         "start:build-client": "next build",
@@ -80,7 +80,6 @@
         "socket.io": "^4.5.1",
         "socket.io-client": "^4.5.1",
         "speakeasy": "^2.0.0",
-        "typescript": "^4.8.3",
         "uuid": "^8.3.2",
         "validator": "^13.7.0"
     },

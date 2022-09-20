@@ -1,5 +1,6 @@
-export const subject = "Vérification de l'Email";
-export const html = `
+module.exports = {
+    subject: "Vérification de l'Email",
+    html: `
     <div style="text-align: center; font-family: Ubuntu">
         <div class="main">
             <h1>Vérification des e-mails DIMLIM</h1>
@@ -20,4 +21,5 @@ export const html = `
             <p>Si vous n'avez pas demandé cet e-mail, veuillez l'ignorer.</p>
         </div>
     </div>
-    `;
+    `,
+};

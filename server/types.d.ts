@@ -17,6 +17,7 @@ interface User {
 
     password: string;
     chatSecret: string;
+    encSecret: string;
 
     tfa: {
         secret: string;

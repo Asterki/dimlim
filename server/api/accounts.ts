@@ -51,6 +51,16 @@ router.post(
             if (users.find((user: any) => user.email.value == email)) return res.send({ status: 200, message: "email-already-in-use" });
             if (users.find((user: any) => user.username == username)) return res.send({ status: 200, message: "username-already-in-use" });
 
+            const makeId = (length: number) => {
+                let result = "";
+                const characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+                const charactersLength = characters.length;
+                for (let i = 0; i < length; i++) {
+                    result += characters.charAt(Math.floor(Math.random() * charactersLength));
+                }
+                return result;
+            };
+
             // Create and push the user to the db
             const newUser: User = {
                 userID: uuidv4(),
@@ -71,6 +81,7 @@ router.post(
 
                 password: bcrypt.hashSync(password, 10),
                 chatSecret: uuidv4(),
+                encSecret: makeId(16),
 
                 tfa: {
                     secret: "",

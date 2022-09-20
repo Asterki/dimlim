@@ -180,9 +180,6 @@ const Login: NextPage = (props: any) => {
                             <Spinner size="sm" hidden={!buttonLoading} animation="border" />
                         </Button>
                     </Col>
-                    <Col className={`${styles["reset-password"]} align-middle`}>
-                        <Link href="/accounts/reset">{props.lang.forgotPassword}</Link>
-                    </Col>
                 </Row>
                 <br />
                 <p>

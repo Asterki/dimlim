@@ -13,30 +13,39 @@
     .chat-bar {
         position: fixed;
         bottom: 0px;
+
         display: flex;
+        flex-wrap: nowrap;
+        align-content: stretch;
+        align-items: center;
+        margin: 0 0 0 0;
 
         width: 100vw;
         padding: 0;
+        padding: 10px;
 
         background-color: #2a2f3a !important;
         box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-        padding: 10px;
 
-        textarea {
+        .message-input {
             background-color: #252a34;
+            border: 1px solid #252a34 !important;
             color: white;
 
             width: 100%;
-            padding: 3px;
+            padding: 6px;
 
             resize: none;
-
-            max-height: 70px;
-            min-height: 60px;
 
             border: none;
             outline: none !important;
             border-radius: 5px;
+
+            transition: all 0.1s ease-in-out;
+
+            &:focus {
+                border: 1px solid #5294e2 !important;
+            }
         }
 
         button {

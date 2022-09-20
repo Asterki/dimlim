@@ -318,4 +318,4 @@ const en = {
     },
 };
 
-export default en;
+module.exports = en;

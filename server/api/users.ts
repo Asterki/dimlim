@@ -130,6 +130,8 @@ router.post(
             const users = await db.get("users");
             const user: User | undefined = users.find((user: any) => user.email.value == req.user.email.value);
 
+            if (!user) return res.send({ status: 400, message: "user-not-found" });
+
             // Check if the user exists, and also if password is right
             if (!user) return res.send({ status: 400, message: "user-not-found" });
             if (!bcrypt.compareSync(req.body.oldPassword, user.password)) return res.send({ status: 403, message: "unauthorized" });
@@ -170,11 +172,11 @@ router.post("/add-contact", async (req: any, res: any) => {
     if (req.body.contact == req.user.username) return res.send({ status: 400, message: "self-add" });
 
     try {
-        if (!req.isAuthenticated()) return res.send({ status: 403, message: "unauthorized" });
-
         const users = await db.get("users");
         const user: User | undefined = users.find((user: any) => user.userID == req.user.userID);
         const userToAdd: User | undefined = users.find((listUser: any) => listUser.username == req.body.contact);
+
+        if (!userToAdd || !user) return res.send({ status: 400, message: "user-not-found" });
 
         if (
             user?.contacts.find((listUser: any) => {
@@ -211,12 +213,11 @@ router.post("/remove-contact", async (req: any, res: any) => {
     if (typeof req.body.contact !== "string") return res.send({ status: 400, message: "invalid-parameters" });
 
     try {
-        if (!req.isAuthenticated()) return res.send({ status: 403, message: "unauthorized" });
-
         const users = await db.get("users");
         const user: User | undefined = users.find((user: any) => user.userID == req.user.userID);
         const userToRemove: User | undefined = users.find((listUser: any) => listUser.username == req.body.contact);
-        if (!userToRemove) return res.send({ status: 400, message: "user-not-found" });
+
+        if (!userToRemove || !user) return res.send({ status: 400, message: "user-not-found" });
 
         // Remove old users
         const newUserList: Array<User> = users.filter((user: User) => user.userID !== req.user.userID);
@@ -252,11 +253,11 @@ router.post("/block-contact", async (req: any, res: any) => {
     if (typeof req.body.contact !== "string") return res.send({ status: 400, message: "invalid-parameters" });
 
     try {
-        if (!req.isAuthenticated()) return res.send({ status: 403, message: "unauthorized" });
-
         const users = await db.get("users");
         const user: User | undefined = users.find((user: any) => user.userID == req.user.userID);
         const userToAdd: User | undefined = users.find((listUser: any) => listUser.username == req.body.contact);
+
+        if (!userToAdd || !user) return res.send({ status: 400, message: "user-not-found" });
 
         const newUserList: Array<User> = users.filter((user: User) => user.userID !== req.user.userID);
         if (!user) return; // To make typescript happy
@@ -281,11 +282,11 @@ router.post("/unblock-contact", async (req: any, res: any) => {
     if (typeof req.body.contact !== "string") return res.send({ status: 400, message: "invalid-parameters" });
 
     try {
-        if (!req.isAuthenticated()) return res.send({ status: 403, message: "unauthorized" });
-
         const users = await db.get("users");
         const user: User | undefined = users.find((user: any) => user.userID == req.user.userID);
         const userToAdd: User | undefined = users.find((listUser: any) => listUser.username == req.body.contact);
+
+        if (!userToAdd || !user) return res.send({ status: 400, message: "user-not-found" });
 
         const newUserList: Array<User> = users.filter((user: User) => user.userID !== req.user.userID);
         if (!user) return; // To make typescript happy
@@ -298,6 +299,25 @@ router.post("/unblock-contact", async (req: any, res: any) => {
         newUserList.push(user as User);
         db.set("users", newUserList);
         return res.send({ status: 200, message: "success" });
+    } catch (err) {
+        const errorID = reportError(err);
+        return res.send({ status: 500, message: "server-error", id: errorID });
+    }
+});
+
+router.post("/get-key", async (req: any, res: any) => {
+    if (!req.isAuthenticated()) return res.send({ status: 403, message: "unauthorized" });
+    if (!req.body.contact || !req.body.user) return res.send({ status: 400, message: "missing-parameters" });
+    if (typeof req.body.contact !== "string" || typeof req.body.user !== "string") return res.send({ status: 400, message: "invalid-parameters" });
+
+    try {
+        const users = await db.get("users");
+        const user: User | undefined = users.find((listUser: any) => listUser.username == req.body.user);
+        const userToFind: User | undefined = users.find((listUser: any) => listUser.username == req.body.contact);
+
+        if (!userToFind || !user) return res.send({ status: 400, message: "user-not-found" });
+
+        res.send({ status: 200, message: [userToFind.encSecret, user.encSecret].sort().join("") });
     } catch (err) {
         const errorID = reportError(err);
         return res.send({ status: 500, message: "server-error", id: errorID });

@@ -1,5 +1,6 @@
-export const subject = "E-Mail-Verifizierung";
-export const html = `
+module.exports = {
+    subject: "E-Mail-Verifizierung",
+    html: `
     <div style="text-align: center; font-family: Ubuntu">
         <div class="main">
             <h1>DIMLIM-E-Mail-Verifizierung</h1>
@@ -21,4 +22,5 @@ export const html = `
         </div>
     </div>
 
-    `;
+    `,
+};

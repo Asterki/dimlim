@@ -8,8 +8,6 @@ io.sockets.on("connection", (socket: any) => {
         socket.join(userID);
     });
 
-    let currentRoom: any = null;
-
     socket.on("join-chat", async (data: any) => {
         const contactUsername = data.contact;
         const userUsername = data.user;
@@ -30,15 +28,10 @@ io.sockets.on("connection", (socket: any) => {
         // Checks
         if (room && Array.from(room.entries()).length > 2) return;
 
-        socket.leave(currentRoom);
-        currentRoom = roomName;
-
         return socket.join(roomName);
     });
 
     socket.on("message", async (data: any) => {
-        console.log(`New Message - ${data}`);
-
         if (!data.recipient || !data.author || !data.timestamp) return;
 
         const users = await db.get("users");
@@ -50,7 +43,8 @@ io.sockets.on("connection", (socket: any) => {
         // Check if the user is blocked
         if (recipient.blockedContacts.find((listUser: User) => listUser.userID == author?.userID) !== undefined) return;
 
-        socket.to(currentRoom).emit("message", data);
+        const roomName = [author.chatSecret, recipient.chatSecret].sort().join("&");
+        socket.to(roomName).emit("message", data);
     });
 });
 

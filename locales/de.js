@@ -320,4 +320,4 @@ const de = {
     },
 };
 
-export default de;
+module.exports = de;

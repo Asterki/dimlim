@@ -319,4 +319,4 @@ const pr = {
     },
 };
 
-export default pr;
+module.exports = pr;

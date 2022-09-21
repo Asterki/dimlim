@@ -55,3 +55,56 @@
         }
     }
 }
+
+.dialog-container {
+    border: none !important;
+    outline: none !important;
+    
+    .dialog {
+        color: white !important;
+        background-color: #2a2f3a !important;
+        text-align: center !important;
+
+        display: flex;
+        flex-direction: column;
+        flex-wrap: wrap;
+        justify-content: center;
+        align-items: center;
+
+        button {
+            color: #5294e2 !important;
+        }
+    
+        img {
+            border-radius: 5px;
+            width: 100px;
+        }
+    
+        input {
+            width: 100%;
+            border-radius: 5px;
+            padding: 5px;
+    
+            background-color: #222630;
+            border: 1px solid #212530;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            color: white;
+            outline: none !important;
+    
+            transition: all 0.1s ease-in-out;
+    
+            &:focus {
+                border: 1px solid #5294e2;
+            }
+        }
+    
+        .dialog-label {
+            text-align: left !important;
+            margin-bottom: 0;
+        }
+    
+        .error {
+            color: #ed4245;
+        }
+    }
+}

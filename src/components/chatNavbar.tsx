@@ -3,7 +3,7 @@ import * as React from "react";
 import { ChevronLeft } from "@mui/icons-material";
 
 import styles from "./chatNavbar.module.scss";
-import { Avatar, IconButton } from "@mui/material";
+import { Avatar, Button, IconButton } from "@mui/material";
 
 const ChatNavarComponent = (props: any) => {
     return (
@@ -13,10 +13,12 @@ const ChatNavarComponent = (props: any) => {
                     <ChevronLeft />
                 </IconButton>
 
-                <Avatar className={styles["contact-avatar"]} src={`/avatars/${props.contactUserID}.png`} />
-                <div className={styles["contact-general"]}>
-                    <p className={styles["contact-username"]}>{props.contactUsername}</p>
-                </div>
+                <Button onClick={props.openContactDialog}>
+                    <Avatar className={styles["contact-avatar"]} src={`/avatars/${props.contactUserID}.png`} />
+                    <div className={styles["contact-general"]}>
+                        <p className={styles["contact-username"]}>{props.contactUsername}</p>
+                    </div>
+                </Button>
             </div>
         </div>
     );

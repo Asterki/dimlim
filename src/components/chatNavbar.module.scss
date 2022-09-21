@@ -27,16 +27,24 @@
         margin: 0 0 0 0;
     }
 
-    .contact-general {
-        color: white;
-        margin-bottom: 0px !important;
+    div {
+        display: flex;
+        flex-wrap: wrap;
+        align-content: stretch;
+        align-items: center;
+        margin: 0 0 0 0;
+        
+        .contact-general {
+            color: white;
+            margin-bottom: 0px !important;
 
-        .contact-username {
+            .contact-username {
+                margin: 0 0 0 5px;
+            }
+        }
+
+        .contact-avatar {
             margin: 0 0 0 5px;
         }
-    }
-
-    .contact-avatar {
-        margin: 0 0 0 5px;
     }
 }

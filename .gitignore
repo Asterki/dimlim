@@ -13,7 +13,7 @@
 /out/
 
 # production
-
+/build
 
 # logs
 *.log
@@ -29,6 +29,7 @@ yarn-error.log*
 .pnpm-debug.log*
 
 # local env files
+*.env
 
 # vercel
 .vercel
@@ -38,3 +39,4 @@ yarn-error.log*
 next-env.d.ts
 
 # data
+/data

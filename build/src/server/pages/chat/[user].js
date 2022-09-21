@@ -1,416 +1,84 @@
+/*
+ * ATTENTION: An "eval-source-map" devtool has been used.
+ * This devtool is neither made for production nor for readable output files.
+ * It uses "eval()" calls to create a separate source file with attached SourceMaps in the browser devtools.
+ * If you are trying to read the output file, select a different devtool (https://webpack.js.org/configuration/devtool/)
+ * or disable the default devtool with "devtool: false".
+ * If you are looking for production-ready output files, see mode: "production" (https://webpack.js.org/configuration/mode/).
+ */
 (() => {
 var exports = {};
-exports.id = 658;
-exports.ids = [658];
+exports.id = "pages/chat/[user]";
+exports.ids = ["pages/chat/[user]"];
 exports.modules = {
 
-/***/ 0:
+/***/ "./src/components/chatNavbar.module.scss":
+/*!***********************************************!*\
+  !*** ./src/components/chatNavbar.module.scss ***!
+  \***********************************************/
 /***/ ((module) => {
 
-// Exports
-module.exports = {
-	"component": "chatNavbar_component__etMbJ",
-	"contact-info": "chatNavbar_contact-info__pupUH",
-	"contact-general": "chatNavbar_contact-general__ZoKzI",
-	"contact-username": "chatNavbar_contact-username__6HcK8",
-	"contact-avatar": "chatNavbar_contact-avatar__Zf2bK"
-};
-
+eval("// Exports\nmodule.exports = {\n\t\"component\": \"chatNavbar_component__etMbJ\",\n\t\"contact-info\": \"chatNavbar_contact-info__pupUH\",\n\t\"contact-general\": \"chatNavbar_contact-general__ZoKzI\",\n\t\"contact-username\": \"chatNavbar_contact-username__6HcK8\",\n\t\"contact-avatar\": \"chatNavbar_contact-avatar__Zf2bK\"\n};\n//# sourceURL=[module]\n//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiLi9zcmMvY29tcG9uZW50cy9jaGF0TmF2YmFyLm1vZHVsZS5zY3NzLmpzIiwibWFwcGluZ3MiOiJBQUFBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0EiLCJzb3VyY2VzIjpbIndlYnBhY2s6Ly9kaW1saW0vLi9zcmMvY29tcG9uZW50cy9jaGF0TmF2YmFyLm1vZHVsZS5zY3NzPzBmZDgiXSwic291cmNlc0NvbnRlbnQiOlsiLy8gRXhwb3J0c1xubW9kdWxlLmV4cG9ydHMgPSB7XG5cdFwiY29tcG9uZW50XCI6IFwiY2hhdE5hdmJhcl9jb21wb25lbnRfX2V0TWJKXCIsXG5cdFwiY29udGFjdC1pbmZvXCI6IFwiY2hhdE5hdmJhcl9jb250YWN0LWluZm9fX3B1cFVIXCIsXG5cdFwiY29udGFjdC1nZW5lcmFsXCI6IFwiY2hhdE5hdmJhcl9jb250YWN0LWdlbmVyYWxfX1pvS3pJXCIsXG5cdFwiY29udGFjdC11c2VybmFtZVwiOiBcImNoYXROYXZiYXJfY29udGFjdC11c2VybmFtZV9fNkhjSzhcIixcblx0XCJjb250YWN0LWF2YXRhclwiOiBcImNoYXROYXZiYXJfY29udGFjdC1hdmF0YXJfX1pmMmJLXCJcbn07XG4iXSwibmFtZXMiOltdLCJzb3VyY2VSb290IjoiIn0=\n//# sourceURL=webpack-internal:///./src/components/chatNavbar.module.scss\n");
 
 /***/ }),
 
-/***/ 6173:
+/***/ "./src/components/message.module.scss":
+/*!********************************************!*\
+  !*** ./src/components/message.module.scss ***!
+  \********************************************/
 /***/ ((module) => {
 
-// Exports
-module.exports = {
-	"component": "message_component__GVaMC",
-	"by-me": "message_by-me__Du9h9",
-	"content": "message_content__BryaQ",
-	"timestamp": "message_timestamp__Jbq6C",
-	"not-by-me": "message_not-by-me__7w_fU"
-};
-
+eval("// Exports\nmodule.exports = {\n\t\"component\": \"message_component__GVaMC\",\n\t\"by-me\": \"message_by-me__Du9h9\",\n\t\"content\": \"message_content__BryaQ\",\n\t\"timestamp\": \"message_timestamp__Jbq6C\",\n\t\"not-by-me\": \"message_not-by-me__7w_fU\"\n};\n//# sourceURL=[module]\n//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiLi9zcmMvY29tcG9uZW50cy9tZXNzYWdlLm1vZHVsZS5zY3NzLmpzIiwibWFwcGluZ3MiOiJBQUFBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0EiLCJzb3VyY2VzIjpbIndlYnBhY2s6Ly9kaW1saW0vLi9zcmMvY29tcG9uZW50cy9tZXNzYWdlLm1vZHVsZS5zY3NzPzY4OGMiXSwic291cmNlc0NvbnRlbnQiOlsiLy8gRXhwb3J0c1xubW9kdWxlLmV4cG9ydHMgPSB7XG5cdFwiY29tcG9uZW50XCI6IFwibWVzc2FnZV9jb21wb25lbnRfX0dWYU1DXCIsXG5cdFwiYnktbWVcIjogXCJtZXNzYWdlX2J5LW1lX19EdTloOVwiLFxuXHRcImNvbnRlbnRcIjogXCJtZXNzYWdlX2NvbnRlbnRfX0JyeWFRXCIsXG5cdFwidGltZXN0YW1wXCI6IFwibWVzc2FnZV90aW1lc3RhbXBfX0picTZDXCIsXG5cdFwibm90LWJ5LW1lXCI6IFwibWVzc2FnZV9ub3QtYnktbWVfXzd3X2ZVXCJcbn07XG4iXSwibmFtZXMiOltdLCJzb3VyY2VSb290IjoiIn0=\n//# sourceURL=webpack-internal:///./src/components/message.module.scss\n");
 
 /***/ }),
 
-/***/ 9399:
+/***/ "./src/styles/chat.module.scss":
+/*!*************************************!*\
+  !*** ./src/styles/chat.module.scss ***!
+  \*************************************/
 /***/ ((module) => {
 
-// Exports
-module.exports = {
-	"page": "chat_page__MxOtX",
-	"intro": "chat_intro__t5J12",
-	"chat-bar": "chat_chat-bar__yaeYo",
-	"message-input": "chat_message-input__UawLr"
-};
-
+eval("// Exports\nmodule.exports = {\n\t\"page\": \"chat_page__MxOtX\",\n\t\"intro\": \"chat_intro__t5J12\",\n\t\"chat-bar\": \"chat_chat-bar__yaeYo\",\n\t\"message-input\": \"chat_message-input__UawLr\",\n\t\"dialog-container\": \"chat_dialog-container__Q5tsW\",\n\t\"dialog\": \"chat_dialog__DgBqm\",\n\t\"dialog-label\": \"chat_dialog-label__zch8F\",\n\t\"error\": \"chat_error__HxD7R\"\n};\n//# sourceURL=[module]\n//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiLi9zcmMvc3R5bGVzL2NoYXQubW9kdWxlLnNjc3MuanMiLCJtYXBwaW5ncyI6IkFBQUE7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQSIsInNvdXJjZXMiOlsid2VicGFjazovL2RpbWxpbS8uL3NyYy9zdHlsZXMvY2hhdC5tb2R1bGUuc2Nzcz9iM2MwIl0sInNvdXJjZXNDb250ZW50IjpbIi8vIEV4cG9ydHNcbm1vZHVsZS5leHBvcnRzID0ge1xuXHRcInBhZ2VcIjogXCJjaGF0X3BhZ2VfX014T3RYXCIsXG5cdFwiaW50cm9cIjogXCJjaGF0X2ludHJvX190NUoxMlwiLFxuXHRcImNoYXQtYmFyXCI6IFwiY2hhdF9jaGF0LWJhcl9feWFlWW9cIixcblx0XCJtZXNzYWdlLWlucHV0XCI6IFwiY2hhdF9tZXNzYWdlLWlucHV0X19VYXdMclwiLFxuXHRcImRpYWxvZy1jb250YWluZXJcIjogXCJjaGF0X2RpYWxvZy1jb250YWluZXJfX1E1dHNXXCIsXG5cdFwiZGlhbG9nXCI6IFwiY2hhdF9kaWFsb2dfX0RnQnFtXCIsXG5cdFwiZGlhbG9nLWxhYmVsXCI6IFwiY2hhdF9kaWFsb2ctbGFiZWxfX3pjaDhGXCIsXG5cdFwiZXJyb3JcIjogXCJjaGF0X2Vycm9yX19IeEQ3UlwiXG59O1xuIl0sIm5hbWVzIjpbXSwic291cmNlUm9vdCI6IiJ9\n//# sourceURL=webpack-internal:///./src/styles/chat.module.scss\n");
 
 /***/ }),
 
-/***/ 1625:
+/***/ "./src/components/chatNavbar.tsx":
+/*!***************************************!*\
+  !*** ./src/components/chatNavbar.tsx ***!
+  \***************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "Z": () => (__WEBPACK_DEFAULT_EXPORT__)
-/* harmony export */ });
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(997);
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(6689);
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var _mui_icons_material__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(7915);
-/* harmony import */ var _mui_icons_material__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_mui_icons_material__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var _chatNavbar_module_scss__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(0);
-/* harmony import */ var _chatNavbar_module_scss__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(_chatNavbar_module_scss__WEBPACK_IMPORTED_MODULE_4__);
-/* harmony import */ var _mui_material__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(5692);
-/* harmony import */ var _mui_material__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(_mui_material__WEBPACK_IMPORTED_MODULE_3__);
-
-
-
-
-
-const ChatNavarComponent = (props)=>{
-    return /*#__PURE__*/ react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx("div", {
-        className: (_chatNavbar_module_scss__WEBPACK_IMPORTED_MODULE_4___default().component),
-        children: /*#__PURE__*/ (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)("div", {
-            className: (_chatNavbar_module_scss__WEBPACK_IMPORTED_MODULE_4___default()["contact-info"]),
-            children: [
-                /*#__PURE__*/ react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx(_mui_material__WEBPACK_IMPORTED_MODULE_3__.IconButton, {
-                    onClick: props.return,
-                    children: /*#__PURE__*/ react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx(_mui_icons_material__WEBPACK_IMPORTED_MODULE_2__.ChevronLeft, {})
-                }),
-                /*#__PURE__*/ react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx(_mui_material__WEBPACK_IMPORTED_MODULE_3__.Avatar, {
-                    className: (_chatNavbar_module_scss__WEBPACK_IMPORTED_MODULE_4___default()["contact-avatar"]),
-                    src: `/avatars/${props.contactUserID}.png`
-                }),
-                /*#__PURE__*/ react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx("div", {
-                    className: (_chatNavbar_module_scss__WEBPACK_IMPORTED_MODULE_4___default()["contact-general"]),
-                    children: /*#__PURE__*/ react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx("p", {
-                        className: (_chatNavbar_module_scss__WEBPACK_IMPORTED_MODULE_4___default()["contact-username"]),
-                        children: props.contactUsername
-                    })
-                })
-            ]
-        })
-    });
-};
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (ChatNavarComponent);
-
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   \"default\": () => (__WEBPACK_DEFAULT_EXPORT__)\n/* harmony export */ });\n/* harmony import */ var react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react/jsx-dev-runtime */ \"react/jsx-dev-runtime\");\n/* harmony import */ var react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__);\n/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react */ \"react\");\n/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_1__);\n/* harmony import */ var _mui_icons_material__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @mui/icons-material */ \"@mui/icons-material\");\n/* harmony import */ var _mui_icons_material__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_mui_icons_material__WEBPACK_IMPORTED_MODULE_2__);\n/* harmony import */ var _chatNavbar_module_scss__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./chatNavbar.module.scss */ \"./src/components/chatNavbar.module.scss\");\n/* harmony import */ var _chatNavbar_module_scss__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(_chatNavbar_module_scss__WEBPACK_IMPORTED_MODULE_4__);\n/* harmony import */ var _mui_material__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @mui/material */ \"@mui/material\");\n/* harmony import */ var _mui_material__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(_mui_material__WEBPACK_IMPORTED_MODULE_3__);\n\n\n\n\n\nconst ChatNavarComponent = (props)=>{\n    return /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxDEV)(\"div\", {\n        className: (_chatNavbar_module_scss__WEBPACK_IMPORTED_MODULE_4___default().component),\n        children: /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxDEV)(\"div\", {\n            className: (_chatNavbar_module_scss__WEBPACK_IMPORTED_MODULE_4___default()[\"contact-info\"]),\n            children: [\n                /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxDEV)(_mui_material__WEBPACK_IMPORTED_MODULE_3__.IconButton, {\n                    onClick: props.return,\n                    children: /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxDEV)(_mui_icons_material__WEBPACK_IMPORTED_MODULE_2__.ChevronLeft, {}, void 0, false, {\n                        fileName: \"/home/asterki/Documents/Programation/dimlim/src/components/chatNavbar.tsx\",\n                        lineNumber: 13,\n                        columnNumber: 21\n                    }, undefined)\n                }, void 0, false, {\n                    fileName: \"/home/asterki/Documents/Programation/dimlim/src/components/chatNavbar.tsx\",\n                    lineNumber: 12,\n                    columnNumber: 17\n                }, undefined),\n                /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxDEV)(_mui_material__WEBPACK_IMPORTED_MODULE_3__.Button, {\n                    onClick: props.openContactDialog,\n                    children: [\n                        /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxDEV)(_mui_material__WEBPACK_IMPORTED_MODULE_3__.Avatar, {\n                            className: (_chatNavbar_module_scss__WEBPACK_IMPORTED_MODULE_4___default()[\"contact-avatar\"]),\n                            src: `/avatars/${props.contactUserID}.png`\n                        }, void 0, false, {\n                            fileName: \"/home/asterki/Documents/Programation/dimlim/src/components/chatNavbar.tsx\",\n                            lineNumber: 17,\n                            columnNumber: 21\n                        }, undefined),\n                        /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxDEV)(\"div\", {\n                            className: (_chatNavbar_module_scss__WEBPACK_IMPORTED_MODULE_4___default()[\"contact-general\"]),\n                            children: /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxDEV)(\"p\", {\n                                className: (_chatNavbar_module_scss__WEBPACK_IMPORTED_MODULE_4___default()[\"contact-username\"]),\n                                children: props.contactUsername\n                            }, void 0, false, {\n                                fileName: \"/home/asterki/Documents/Programation/dimlim/src/components/chatNavbar.tsx\",\n                                lineNumber: 19,\n                                columnNumber: 25\n                            }, undefined)\n                        }, void 0, false, {\n                            fileName: \"/home/asterki/Documents/Programation/dimlim/src/components/chatNavbar.tsx\",\n                            lineNumber: 18,\n                            columnNumber: 21\n                        }, undefined)\n                    ]\n                }, void 0, true, {\n                    fileName: \"/home/asterki/Documents/Programation/dimlim/src/components/chatNavbar.tsx\",\n                    lineNumber: 16,\n                    columnNumber: 17\n                }, undefined)\n            ]\n        }, void 0, true, {\n            fileName: \"/home/asterki/Documents/Programation/dimlim/src/components/chatNavbar.tsx\",\n            lineNumber: 11,\n            columnNumber: 13\n        }, undefined)\n    }, void 0, false, {\n        fileName: \"/home/asterki/Documents/Programation/dimlim/src/components/chatNavbar.tsx\",\n        lineNumber: 10,\n        columnNumber: 9\n    }, undefined);\n};\n/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (ChatNavarComponent);\n//# sourceURL=[module]\n//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiLi9zcmMvY29tcG9uZW50cy9jaGF0TmF2YmFyLnRzeC5qcyIsIm1hcHBpbmdzIjoiOzs7Ozs7Ozs7Ozs7OztBQUFBO0FBQStCO0FBRW1CO0FBRUo7QUFDYTtBQUUzRCxNQUFNTSxrQkFBa0IsR0FBRyxDQUFDQyxLQUFVLEdBQUs7SUFDdkMscUJBQ0ksOERBQUNDLEtBQUc7UUFBQ0MsU0FBUyxFQUFFUCwwRUFBbUI7a0JBQy9CLDRFQUFDTSxLQUFHO1lBQUNDLFNBQVMsRUFBRVAsZ0ZBQXNCOzs4QkFDbEMsOERBQUNHLHFEQUFVO29CQUFDSyxPQUFPLEVBQUVILEtBQUssQ0FBQ0ksTUFBTTs4QkFDN0IsNEVBQUNWLDREQUFXOzs7O2lDQUFHOzs7Ozs2QkFDTjs4QkFFYiw4REFBQ0csaURBQU07b0JBQUNNLE9BQU8sRUFBRUgsS0FBSyxDQUFDSyxpQkFBaUI7O3NDQUNwQyw4REFBQ1QsaURBQU07NEJBQUNNLFNBQVMsRUFBRVAsa0ZBQXdCOzRCQUFFVyxHQUFHLEVBQUUsQ0FBQyxTQUFTLEVBQUVOLEtBQUssQ0FBQ08sYUFBYSxDQUFDLElBQUksQ0FBQzs7Ozs7cUNBQUk7c0NBQzNGLDhEQUFDTixLQUFHOzRCQUFDQyxTQUFTLEVBQUVQLG1GQUF5QjtzQ0FDckMsNEVBQUNhLEdBQUM7Z0NBQUNOLFNBQVMsRUFBRVAsb0ZBQTBCOzBDQUFHSyxLQUFLLENBQUNTLGVBQWU7Ozs7O3lDQUFLOzs7OztxQ0FDbkU7Ozs7Ozs2QkFDRDs7Ozs7O3FCQUNQOzs7OztpQkFDSixDQUNSO0NBQ0w7QUFFRCxpRUFBZVYsa0JBQWtCLEVBQUMiLCJzb3VyY2VzIjpbIndlYnBhY2s6Ly9kaW1saW0vLi9zcmMvY29tcG9uZW50cy9jaGF0TmF2YmFyLnRzeD81ZWFhIl0sInNvdXJjZXNDb250ZW50IjpbImltcG9ydCAqIGFzIFJlYWN0IGZyb20gXCJyZWFjdFwiO1xuXG5pbXBvcnQgeyBDaGV2cm9uTGVmdCB9IGZyb20gXCJAbXVpL2ljb25zLW1hdGVyaWFsXCI7XG5cbmltcG9ydCBzdHlsZXMgZnJvbSBcIi4vY2hhdE5hdmJhci5tb2R1bGUuc2Nzc1wiO1xuaW1wb3J0IHsgQXZhdGFyLCBCdXR0b24sIEljb25CdXR0b24gfSBmcm9tIFwiQG11aS9tYXRlcmlhbFwiO1xuXG5jb25zdCBDaGF0TmF2YXJDb21wb25lbnQgPSAocHJvcHM6IGFueSkgPT4ge1xuICAgIHJldHVybiAoXG4gICAgICAgIDxkaXYgY2xhc3NOYW1lPXtzdHlsZXNbXCJjb21wb25lbnRcIl19PlxuICAgICAgICAgICAgPGRpdiBjbGFzc05hbWU9e3N0eWxlc1tcImNvbnRhY3QtaW5mb1wiXX0+XG4gICAgICAgICAgICAgICAgPEljb25CdXR0b24gb25DbGljaz17cHJvcHMucmV0dXJufT5cbiAgICAgICAgICAgICAgICAgICAgPENoZXZyb25MZWZ0IC8+XG4gICAgICAgICAgICAgICAgPC9JY29uQnV0dG9uPlxuXG4gICAgICAgICAgICAgICAgPEJ1dHRvbiBvbkNsaWNrPXtwcm9wcy5vcGVuQ29udGFjdERpYWxvZ30+XG4gICAgICAgICAgICAgICAgICAgIDxBdmF0YXIgY2xhc3NOYW1lPXtzdHlsZXNbXCJjb250YWN0LWF2YXRhclwiXX0gc3JjPXtgL2F2YXRhcnMvJHtwcm9wcy5jb250YWN0VXNlcklEfS5wbmdgfSAvPlxuICAgICAgICAgICAgICAgICAgICA8ZGl2IGNsYXNzTmFtZT17c3R5bGVzW1wiY29udGFjdC1nZW5lcmFsXCJdfT5cbiAgICAgICAgICAgICAgICAgICAgICAgIDxwIGNsYXNzTmFtZT17c3R5bGVzW1wiY29udGFjdC11c2VybmFtZVwiXX0+e3Byb3BzLmNvbnRhY3RVc2VybmFtZX08L3A+XG4gICAgICAgICAgICAgICAgICAgIDwvZGl2PlxuICAgICAgICAgICAgICAgIDwvQnV0dG9uPlxuICAgICAgICAgICAgPC9kaXY+XG4gICAgICAgIDwvZGl2PlxuICAgICk7XG59O1xuXG5leHBvcnQgZGVmYXVsdCBDaGF0TmF2YXJDb21wb25lbnQ7XG4iXSwibmFtZXMiOlsiUmVhY3QiLCJDaGV2cm9uTGVmdCIsInN0eWxlcyIsIkF2YXRhciIsIkJ1dHRvbiIsIkljb25CdXR0b24iLCJDaGF0TmF2YXJDb21wb25lbnQiLCJwcm9wcyIsImRpdiIsImNsYXNzTmFtZSIsIm9uQ2xpY2siLCJyZXR1cm4iLCJvcGVuQ29udGFjdERpYWxvZyIsInNyYyIsImNvbnRhY3RVc2VySUQiLCJwIiwiY29udGFjdFVzZXJuYW1lIl0sInNvdXJjZVJvb3QiOiIifQ==\n//# sourceURL=webpack-internal:///./src/components/chatNavbar.tsx\n");
 
 /***/ }),
 
-/***/ 3793:
+/***/ "./src/components/message.tsx":
+/*!************************************!*\
+  !*** ./src/components/message.tsx ***!
+  \************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "Z": () => (__WEBPACK_DEFAULT_EXPORT__)
-/* harmony export */ });
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(997);
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(6689);
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var _message_module_scss__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(6173);
-/* harmony import */ var _message_module_scss__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_message_module_scss__WEBPACK_IMPORTED_MODULE_2__);
-
-
-
-const MessageComponent = (props)=>{
-    let date = new Date(props.timestamp);
-    let hour = date.getHours();
-    let minute = date.getMinutes().toString().length == 1 ? `0${date.getMinutes().toString()}` : date.getMinutes();
-    return /*#__PURE__*/ react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx("div", {
-        className: (_message_module_scss__WEBPACK_IMPORTED_MODULE_2___default().component),
-        children: /*#__PURE__*/ react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx("div", {
-            className: props.sentByMe ? (_message_module_scss__WEBPACK_IMPORTED_MODULE_2___default()["by-me"]) : (_message_module_scss__WEBPACK_IMPORTED_MODULE_2___default()["not-by-me"]),
-            children: /*#__PURE__*/ (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)("div", {
-                className: (_message_module_scss__WEBPACK_IMPORTED_MODULE_2___default().content),
-                children: [
-                    /*#__PURE__*/ react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx("p", {
-                        children: props.content
-                    }),
-                    /*#__PURE__*/ react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx("p", {
-                        className: (_message_module_scss__WEBPACK_IMPORTED_MODULE_2___default().timestamp),
-                        children: `${hour}:${minute}`
-                    })
-                ]
-            })
-        })
-    });
-};
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (MessageComponent);
-
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   \"default\": () => (__WEBPACK_DEFAULT_EXPORT__)\n/* harmony export */ });\n/* harmony import */ var react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react/jsx-dev-runtime */ \"react/jsx-dev-runtime\");\n/* harmony import */ var react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__);\n/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react */ \"react\");\n/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_1__);\n/* harmony import */ var _message_module_scss__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./message.module.scss */ \"./src/components/message.module.scss\");\n/* harmony import */ var _message_module_scss__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_message_module_scss__WEBPACK_IMPORTED_MODULE_2__);\n\n\n\nconst MessageComponent = (props)=>{\n    let date = new Date(props.timestamp);\n    let hour = date.getHours();\n    let minute = date.getMinutes().toString().length == 1 ? `0${date.getMinutes().toString()}` : date.getMinutes();\n    return /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxDEV)(\"div\", {\n        className: (_message_module_scss__WEBPACK_IMPORTED_MODULE_2___default().component),\n        children: /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxDEV)(\"div\", {\n            className: props.sentByMe ? (_message_module_scss__WEBPACK_IMPORTED_MODULE_2___default()[\"by-me\"]) : (_message_module_scss__WEBPACK_IMPORTED_MODULE_2___default()[\"not-by-me\"]),\n            children: /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxDEV)(\"div\", {\n                className: (_message_module_scss__WEBPACK_IMPORTED_MODULE_2___default().content),\n                children: [\n                    /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxDEV)(\"p\", {\n                        children: props.content\n                    }, void 0, false, {\n                        fileName: \"/home/asterki/Documents/Programation/dimlim/src/components/message.tsx\",\n                        lineNumber: 14,\n                        columnNumber: 21\n                    }, undefined),\n                    /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxDEV)(\"p\", {\n                        className: (_message_module_scss__WEBPACK_IMPORTED_MODULE_2___default().timestamp),\n                        children: `${hour}:${minute}`\n                    }, void 0, false, {\n                        fileName: \"/home/asterki/Documents/Programation/dimlim/src/components/message.tsx\",\n                        lineNumber: 15,\n                        columnNumber: 21\n                    }, undefined)\n                ]\n            }, void 0, true, {\n                fileName: \"/home/asterki/Documents/Programation/dimlim/src/components/message.tsx\",\n                lineNumber: 13,\n                columnNumber: 17\n            }, undefined)\n        }, void 0, false, {\n            fileName: \"/home/asterki/Documents/Programation/dimlim/src/components/message.tsx\",\n            lineNumber: 12,\n            columnNumber: 13\n        }, undefined)\n    }, void 0, false, {\n        fileName: \"/home/asterki/Documents/Programation/dimlim/src/components/message.tsx\",\n        lineNumber: 11,\n        columnNumber: 9\n    }, undefined);\n};\n/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (MessageComponent);\n//# sourceURL=[module]\n//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiLi9zcmMvY29tcG9uZW50cy9tZXNzYWdlLnRzeC5qcyIsIm1hcHBpbmdzIjoiOzs7Ozs7Ozs7O0FBQUE7QUFBMEI7QUFFaUI7QUFFM0MsTUFBTUUsZ0JBQWdCLEdBQUcsQ0FBQ0MsS0FBb0YsR0FBSztJQUMvRyxJQUFJQyxJQUFJLEdBQUcsSUFBSUMsSUFBSSxDQUFDRixLQUFLLENBQUNHLFNBQVMsQ0FBQztJQUNwQyxJQUFJQyxJQUFJLEdBQUdILElBQUksQ0FBQ0ksUUFBUSxFQUFFO0lBQzFCLElBQUlDLE1BQU0sR0FBR0wsSUFBSSxDQUFDTSxVQUFVLEVBQUUsQ0FBQ0MsUUFBUSxFQUFFLENBQUNDLE1BQU0sSUFBSSxDQUFDLEdBQUcsQ0FBQyxDQUFDLEVBQUVSLElBQUksQ0FBQ00sVUFBVSxFQUFFLENBQUNDLFFBQVEsRUFBRSxDQUFDLENBQUMsR0FBR1AsSUFBSSxDQUFDTSxVQUFVLEVBQUU7SUFFOUcscUJBQ0ksOERBQUNHLEtBQUc7UUFBQ0MsU0FBUyxFQUFFYix1RUFBbUI7a0JBQy9CLDRFQUFDWSxLQUFHO1lBQUNDLFNBQVMsRUFBRVgsS0FBSyxDQUFDWSxRQUFRLEdBQUdkLHNFQUFlLEdBQUdBLDBFQUFtQjtzQkFDbEUsNEVBQUNZLEtBQUc7Z0JBQUNDLFNBQVMsRUFBRWIscUVBQWlCOztrQ0FDN0IsOERBQUNlLEdBQUM7a0NBQUViLEtBQUssQ0FBQ2MsT0FBTzs7Ozs7aUNBQUs7a0NBQ3RCLDhEQUFDRCxHQUFDO3dCQUFDRixTQUFTLEVBQUViLHVFQUFtQjtrQ0FBRyxDQUFDLEVBQUVNLElBQUksQ0FBQyxDQUFDLEVBQUVFLE1BQU0sQ0FBQyxDQUFDOzs7OztpQ0FBSzs7Ozs7O3lCQUMxRDs7Ozs7cUJBQ0o7Ozs7O2lCQUNKLENBQ1I7Q0FDTDtBQUVELGlFQUFlUCxnQkFBZ0IsRUFBQyIsInNvdXJjZXMiOlsid2VicGFjazovL2RpbWxpbS8uL3NyYy9jb21wb25lbnRzL21lc3NhZ2UudHN4PzMyMTkiXSwic291cmNlc0NvbnRlbnQiOlsiaW1wb3J0IFJlYWN0IGZyb20gXCJyZWFjdFwiO1xuXG5pbXBvcnQgc3R5bGVzIGZyb20gXCIuL21lc3NhZ2UubW9kdWxlLnNjc3NcIjtcblxuY29uc3QgTWVzc2FnZUNvbXBvbmVudCA9IChwcm9wczogeyB0aW1lc3RhbXA6IHN0cmluZzsgc2VudEJ5TWU6IGJvb2xlYW47IGNvbnRlbnQ6IGFueTsgdHlwZTogXCJ0ZXh0XCIgfCBcImZpbGVcIiB9KSA9PiB7XG4gICAgbGV0IGRhdGUgPSBuZXcgRGF0ZShwcm9wcy50aW1lc3RhbXApO1xuICAgIGxldCBob3VyID0gZGF0ZS5nZXRIb3VycygpO1xuICAgIGxldCBtaW51dGUgPSBkYXRlLmdldE1pbnV0ZXMoKS50b1N0cmluZygpLmxlbmd0aCA9PSAxID8gYDAke2RhdGUuZ2V0TWludXRlcygpLnRvU3RyaW5nKCl9YCA6IGRhdGUuZ2V0TWludXRlcygpO1xuXG4gICAgcmV0dXJuIChcbiAgICAgICAgPGRpdiBjbGFzc05hbWU9e3N0eWxlc1tcImNvbXBvbmVudFwiXX0+XG4gICAgICAgICAgICA8ZGl2IGNsYXNzTmFtZT17cHJvcHMuc2VudEJ5TWUgPyBzdHlsZXNbXCJieS1tZVwiXSA6IHN0eWxlc1tcIm5vdC1ieS1tZVwiXX0+XG4gICAgICAgICAgICAgICAgPGRpdiBjbGFzc05hbWU9e3N0eWxlc1tcImNvbnRlbnRcIl19PlxuICAgICAgICAgICAgICAgICAgICA8cD57cHJvcHMuY29udGVudH08L3A+XG4gICAgICAgICAgICAgICAgICAgIDxwIGNsYXNzTmFtZT17c3R5bGVzW1widGltZXN0YW1wXCJdfT57YCR7aG91cn06JHttaW51dGV9YH08L3A+XG4gICAgICAgICAgICAgICAgPC9kaXY+XG4gICAgICAgICAgICA8L2Rpdj5cbiAgICAgICAgPC9kaXY+XG4gICAgKTtcbn07XG5cbmV4cG9ydCBkZWZhdWx0IE1lc3NhZ2VDb21wb25lbnQ7XG4iXSwibmFtZXMiOlsiUmVhY3QiLCJzdHlsZXMiLCJNZXNzYWdlQ29tcG9uZW50IiwicHJvcHMiLCJkYXRlIiwiRGF0ZSIsInRpbWVzdGFtcCIsImhvdXIiLCJnZXRIb3VycyIsIm1pbnV0ZSIsImdldE1pbnV0ZXMiLCJ0b1N0cmluZyIsImxlbmd0aCIsImRpdiIsImNsYXNzTmFtZSIsInNlbnRCeU1lIiwicCIsImNvbnRlbnQiXSwic291cmNlUm9vdCI6IiJ9\n//# sourceURL=webpack-internal:///./src/components/message.tsx\n");
 
 /***/ }),
 
-/***/ 8763:
+/***/ "./src/pages/chat/[user].tsx":
+/*!***********************************!*\
+  !*** ./src/pages/chat/[user].tsx ***!
+  \***********************************/
 /***/ ((module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
-__webpack_require__.a(module, async (__webpack_handle_async_dependencies__, __webpack_async_result__) => { try {
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__),
-/* harmony export */   "getServerSideProps": () => (/* binding */ getServerSideProps)
-/* harmony export */ });
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(997);
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(6689);
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(2167);
-/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var socket_io_client__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(4612);
-/* harmony import */ var crypto__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(6113);
-/* harmony import */ var crypto__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(crypto__WEBPACK_IMPORTED_MODULE_4__);
-/* harmony import */ var next_head__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(968);
-/* harmony import */ var next_head__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(next_head__WEBPACK_IMPORTED_MODULE_5__);
-/* harmony import */ var _components_chatNavbar__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(1625);
-/* harmony import */ var _components_message__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(3793);
-/* harmony import */ var _mui_material__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(5692);
-/* harmony import */ var _mui_material__WEBPACK_IMPORTED_MODULE_8___default = /*#__PURE__*/__webpack_require__.n(_mui_material__WEBPACK_IMPORTED_MODULE_8__);
-/* harmony import */ var react_bootstrap__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(358);
-/* harmony import */ var react_bootstrap__WEBPACK_IMPORTED_MODULE_9___default = /*#__PURE__*/__webpack_require__.n(react_bootstrap__WEBPACK_IMPORTED_MODULE_9__);
-/* harmony import */ var _mui_icons_material__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(7915);
-/* harmony import */ var _mui_icons_material__WEBPACK_IMPORTED_MODULE_10___default = /*#__PURE__*/__webpack_require__.n(_mui_icons_material__WEBPACK_IMPORTED_MODULE_10__);
-/* harmony import */ var _styles_chat_module_scss__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(9399);
-/* harmony import */ var _styles_chat_module_scss__WEBPACK_IMPORTED_MODULE_11___default = /*#__PURE__*/__webpack_require__.n(_styles_chat_module_scss__WEBPACK_IMPORTED_MODULE_11__);
-var __webpack_async_dependencies__ = __webpack_handle_async_dependencies__([socket_io_client__WEBPACK_IMPORTED_MODULE_3__]);
-socket_io_client__WEBPACK_IMPORTED_MODULE_3__ = (__webpack_async_dependencies__.then ? (await __webpack_async_dependencies__)() : __webpack_async_dependencies__)[0];
-
-
-
-
-
-
-
-
-
-
-
-
-const getServerSideProps = async (context)=>{
-    if (!context.req.isAuthenticated()) return {
-        redirect: {
-            destination: "/login",
-            permanent: false
-        }
-    };
-    if (!context.params.user) return {
-        redirect: {
-            destination: "/home",
-            permanent: false
-        }
-    };
-    try {
-        let keyResponse = await axios__WEBPACK_IMPORTED_MODULE_2___default()({
-            method: "post",
-            url: `${process.env.HOST}/api/users/get-key`,
-            headers: context.req.headers,
-            data: {
-                contact: context.params.user,
-                user: context.req.user.username
-            }
-        });
-        if (keyResponse.data.message == "user-not-found") {
-            return {
-                redirect: {
-                    destination: "/home",
-                    permanent: false
-                }
-            };
-        }
-        let languageResponse = await axios__WEBPACK_IMPORTED_MODULE_2___default()({
-            method: "post",
-            url: `${process.env.HOST}/api/content/language/`,
-            data: {
-                lang: context.req.user.preferredLanguage == "" ? context.req.headers["accept-language"].split(",")[0] : context.req.user.preferredLanguage,
-                category: "main",
-                page: "home"
-            }
-        });
-        if (languageResponse.data.status !== 200) {
-            return {
-                redirect: {
-                    destination: `/error?code=${languageResponse.data.status}`,
-                    permanent: false
-                }
-            };
-        }
-        return {
-            props: {
-                lang: languageResponse.data.content,
-                user: context.req.user,
-                host: process.env.HOST,
-                contact: context.params.user,
-                contactUserID: context.query.id,
-                chatKey: keyResponse.data.message
-            }
-        };
-    } catch (err) {
-        return {
-            redirect: {
-                destination: `/error?code=${err.response.status}`,
-                permanent: false
-            }
-        };
-    }
-};
-const Chat = (props)=>{
-    const [messageList, setMessageList] = react__WEBPACK_IMPORTED_MODULE_1___default().useState(new Array());
-    const [pendingMessage, setPendingMessage] = react__WEBPACK_IMPORTED_MODULE_1___default().useState({});
-    // Socket.io
-    const socket = (0,socket_io_client__WEBPACK_IMPORTED_MODULE_3__.io)(props.host);
-    socket.on("message", (data)=>{
-        if (data.author == props.user.username) return;
-        setPendingMessage(data);
-    });
-    const encrypt = (text)=>{
-        const iv = crypto__WEBPACK_IMPORTED_MODULE_4___default().randomBytes(16);
-        const cipher = crypto__WEBPACK_IMPORTED_MODULE_4___default().createCipheriv("aes-256-ctr", props.chatKey, iv);
-        const encrypted = Buffer.concat([
-            cipher.update(text),
-            cipher.final()
-        ]);
-        return {
-            iv: iv.toString("hex"),
-            content: encrypted.toString("hex")
-        };
-    };
-    const decrypt = (hash)=>{
-        const decipher = crypto__WEBPACK_IMPORTED_MODULE_4___default().createDecipheriv("aes-256-ctr", props.chatKey, Buffer.from(hash.iv, "hex"));
-        const decrypted = Buffer.concat([
-            decipher.update(Buffer.from(hash.content, "hex")),
-            decipher.final()
-        ]);
-        return decrypted.toString();
-    };
-    // Functions
-    const sendMessage = (e)=>{
-        document.querySelector("#message-input").focus();
-        let messageContent = document.querySelector("#message-input").value;
-        if (!messageContent) return;
-        document.querySelector("#message-input").value = "";
-        addMessage({
-            author: props.user.username,
-            recipient: props.contact,
-            timestamp: Date.now(),
-            content: messageContent
-        });
-        socket.emit("message", {
-            author: props.user.username,
-            recipient: props.contact,
-            timestamp: Date.now(),
-            content: encrypt(messageContent)
-        });
-    };
-    const addMessage = (data, fromSaved)=>{
-        if (data.author !== props.user.username && fromSaved == false) data.content = decrypt(data.content);
-        let newMessageList = [
-            ...messageList,
-            data
-        ];
-        setMessageList(newMessageList);
-        // Store message
-        let storedChatRaw = localStorage.getItem(`chat_${props.contact}`);
-        if (!storedChatRaw) storedChatRaw = "[]";
-        if (fromSaved == true) return;
-        let storedChat = JSON.parse(storedChatRaw);
-        storedChat.push(data);
-        localStorage.setItem(`chat_${props.contact}`, JSON.stringify(storedChat));
-    };
-    const goBack = ()=>window.location.href = "/home";
-    const clear = ()=>localStorage.clear();
-    // Listeners
-    react__WEBPACK_IMPORTED_MODULE_1___default().useEffect(()=>{
-        socket.on("connect", ()=>{
-            socket.emit("join-chat", {
-                user: props.user.username,
-                contact: props.contact
-            });
-        });
-        if (true) {
-            let storedChatRaw = localStorage.getItem(`chat_${props.contact}`);
-            if (!storedChatRaw) return;
-            let storedChat = JSON.parse(storedChatRaw);
-            setMessageList(storedChat);
-        }
-    }, []);
-    react__WEBPACK_IMPORTED_MODULE_1___default().useEffect(()=>{
-        // @ts-ignore
-        if (pendingMessage.author == undefined) return;
-        // @ts-ignore
-        if (pendingMessage.fromStored == true) return addMessage(pendingMessage, true);
-        else addMessage(pendingMessage, false);
-    }, [
-        pendingMessage
-    ]);
-    return /*#__PURE__*/ (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)("div", {
-        className: (_styles_chat_module_scss__WEBPACK_IMPORTED_MODULE_11___default().page),
-        children: [
-            /*#__PURE__*/ react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx(_components_chatNavbar__WEBPACK_IMPORTED_MODULE_6__/* ["default"] */ .Z, {
-                return: goBack,
-                contactUsername: props.contact,
-                contactUserID: props.contactUserID
-            }),
-            /*#__PURE__*/ react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx((next_head__WEBPACK_IMPORTED_MODULE_5___default()), {
-                children: /*#__PURE__*/ react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx("title", {
-                    children: props.lang.pageTitle
-                })
-            }),
-            /*#__PURE__*/ (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)(react_bootstrap__WEBPACK_IMPORTED_MODULE_9__.Container, {
-                className: (_styles_chat_module_scss__WEBPACK_IMPORTED_MODULE_11___default().messages),
-                children: [
-                    /*#__PURE__*/ react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx("br", {}),
-                    /*#__PURE__*/ react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx("p", {
-                        className: (_styles_chat_module_scss__WEBPACK_IMPORTED_MODULE_11___default().intro),
-                        children: "This is the start of your chat"
-                    }),
-                    /*#__PURE__*/ react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx("br", {}),
-                    messageList.map((message)=>{
-                        return /*#__PURE__*/ react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx(_components_message__WEBPACK_IMPORTED_MODULE_7__/* ["default"] */ .Z, {
-                            timestamp: message.timestamp,
-                            sentByMe: message.author == props.user.username,
-                            content: message.content,
-                            type: "text"
-                        }, `${Math.random() * 1000} ${message.author}`);
-                    }),
-                    /*#__PURE__*/ react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx("br", {}),
-                    /*#__PURE__*/ react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx("br", {}),
-                    /*#__PURE__*/ react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx("br", {})
-                ]
-            }),
-            /*#__PURE__*/ (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)(react_bootstrap__WEBPACK_IMPORTED_MODULE_9__.Container, {
-                fluid: true,
-                className: (_styles_chat_module_scss__WEBPACK_IMPORTED_MODULE_11___default()["chat-bar"]),
-                children: [
-                    /*#__PURE__*/ react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx(_mui_material__WEBPACK_IMPORTED_MODULE_8__.TextareaAutosize, {
-                        className: (_styles_chat_module_scss__WEBPACK_IMPORTED_MODULE_11___default()["message-input"]),
-                        id: "message-input",
-                        maxRows: 3,
-                        placeholder: "Message..."
-                    }),
-                    /*#__PURE__*/ react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx(_mui_material__WEBPACK_IMPORTED_MODULE_8__.IconButton, {
-                        onClick: sendMessage,
-                        children: /*#__PURE__*/ react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx(_mui_icons_material__WEBPACK_IMPORTED_MODULE_10__.Send, {})
-                    }),
-                    /*#__PURE__*/ react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx(_mui_material__WEBPACK_IMPORTED_MODULE_8__.IconButton, {
-                        onClick: clear,
-                        children: /*#__PURE__*/ react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx(_mui_icons_material__WEBPACK_IMPORTED_MODULE_10__.Send, {})
-                    })
-                ]
-            })
-        ]
-    });
-};
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (Chat);
-
-__webpack_async_result__();
-} catch(e) { __webpack_async_result__(e); } });
+eval("__webpack_require__.a(module, async (__webpack_handle_async_dependencies__, __webpack_async_result__) => { try {\n__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   \"default\": () => (__WEBPACK_DEFAULT_EXPORT__),\n/* harmony export */   \"getServerSideProps\": () => (/* binding */ getServerSideProps)\n/* harmony export */ });\n/* harmony import */ var react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react/jsx-dev-runtime */ \"react/jsx-dev-runtime\");\n/* harmony import */ var react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__);\n/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react */ \"react\");\n/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_1__);\n/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! axios */ \"axios\");\n/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_2__);\n/* harmony import */ var socket_io_client__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! socket.io-client */ \"socket.io-client\");\n/* harmony import */ var crypto__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! crypto */ \"crypto\");\n/* harmony import */ var crypto__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(crypto__WEBPACK_IMPORTED_MODULE_4__);\n/* harmony import */ var next_head__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! next/head */ \"next/head\");\n/* harmony import */ var next_head__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(next_head__WEBPACK_IMPORTED_MODULE_5__);\n/* harmony import */ var _components_chatNavbar__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../components/chatNavbar */ \"./src/components/chatNavbar.tsx\");\n/* harmony import */ var _components_message__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../../components/message */ \"./src/components/message.tsx\");\n/* harmony import */ var _mui_material__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! @mui/material */ \"@mui/material\");\n/* harmony import */ var _mui_material__WEBPACK_IMPORTED_MODULE_8___default = /*#__PURE__*/__webpack_require__.n(_mui_material__WEBPACK_IMPORTED_MODULE_8__);\n/* harmony import */ var react_bootstrap__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! react-bootstrap */ \"react-bootstrap\");\n/* harmony import */ var react_bootstrap__WEBPACK_IMPORTED_MODULE_9___default = /*#__PURE__*/__webpack_require__.n(react_bootstrap__WEBPACK_IMPORTED_MODULE_9__);\n/* harmony import */ var _mui_icons_material__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! @mui/icons-material */ \"@mui/icons-material\");\n/* harmony import */ var _mui_icons_material__WEBPACK_IMPORTED_MODULE_10___default = /*#__PURE__*/__webpack_require__.n(_mui_icons_material__WEBPACK_IMPORTED_MODULE_10__);\n/* harmony import */ var _styles_chat_module_scss__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ../../styles/chat.module.scss */ \"./src/styles/chat.module.scss\");\n/* harmony import */ var _styles_chat_module_scss__WEBPACK_IMPORTED_MODULE_11___default = /*#__PURE__*/__webpack_require__.n(_styles_chat_module_scss__WEBPACK_IMPORTED_MODULE_11__);\nvar __webpack_async_dependencies__ = __webpack_handle_async_dependencies__([socket_io_client__WEBPACK_IMPORTED_MODULE_3__]);\nsocket_io_client__WEBPACK_IMPORTED_MODULE_3__ = (__webpack_async_dependencies__.then ? (await __webpack_async_dependencies__)() : __webpack_async_dependencies__)[0];\n\n\n\n\n\n\n\n\n\n\n\n\nconst getServerSideProps = async (context)=>{\n    if (!context.req.isAuthenticated()) return {\n        redirect: {\n            destination: \"/login\",\n            permanent: false\n        }\n    };\n    if (!context.params.user) return {\n        redirect: {\n            destination: \"/home\",\n            permanent: false\n        }\n    };\n    try {\n        let keyResponse = await axios__WEBPACK_IMPORTED_MODULE_2___default()({\n            method: \"post\",\n            url: `${process.env.HOST}/api/messages/get-key`,\n            headers: context.req.headers,\n            data: {\n                contact: context.params.user,\n                user: context.req.user.username\n            }\n        });\n        if (keyResponse.data.message == \"user-not-found\") {\n            return {\n                redirect: {\n                    destination: \"/home\",\n                    permanent: false\n                }\n            };\n        }\n        let newMessagesResponse = await axios__WEBPACK_IMPORTED_MODULE_2___default()({\n            method: \"post\",\n            url: `${process.env.HOST}/api/messages/get-pending-messages`,\n            headers: context.req.headers\n        });\n        let languageResponse = await axios__WEBPACK_IMPORTED_MODULE_2___default()({\n            method: \"post\",\n            url: `${process.env.HOST}/api/content/language/`,\n            data: {\n                lang: context.req.user.preferredLanguage == \"\" ? context.req.headers[\"accept-language\"].split(\",\")[0] : context.req.user.preferredLanguage,\n                category: \"main\",\n                page: \"home\"\n            }\n        });\n        if (languageResponse.data.status !== 200) {\n            return {\n                redirect: {\n                    destination: `/error?code=${languageResponse.data.status}`,\n                    permanent: false\n                }\n            };\n        }\n        return {\n            props: {\n                lang: languageResponse.data.content,\n                user: context.req.user,\n                host: process.env.HOST,\n                contact: context.params.user,\n                contactUserID: context.query.id,\n                chatKey: keyResponse.data.message,\n                newMessages: newMessagesResponse.data.content\n            }\n        };\n    } catch (err) {\n        return {\n            redirect: {\n                destination: `/error?code=${err.response.status}`,\n                permanent: false\n            }\n        };\n    }\n};\nconst Chat = (props)=>{\n    const [messageList, setMessageList] = react__WEBPACK_IMPORTED_MODULE_1___default().useState(new Array());\n    const [pendingMessage, setPendingMessage] = react__WEBPACK_IMPORTED_MODULE_1___default().useState({});\n    const [contactProfileDialogOpen, setContactProfileDialogOpen] = react__WEBPACK_IMPORTED_MODULE_1___default().useState(false);\n    // Socket.io\n    const socket = (0,socket_io_client__WEBPACK_IMPORTED_MODULE_3__.io)(props.host);\n    socket.on(\"message\", (data)=>{\n        if (data.author == props.user.username) return;\n        setPendingMessage(data);\n    });\n    const encrypt = (text)=>{\n        const iv = crypto__WEBPACK_IMPORTED_MODULE_4___default().randomBytes(16);\n        const cipher = crypto__WEBPACK_IMPORTED_MODULE_4___default().createCipheriv(\"aes-256-ctr\", props.chatKey, iv);\n        const encrypted = Buffer.concat([\n            cipher.update(text),\n            cipher.final()\n        ]);\n        return {\n            iv: iv.toString(\"hex\"),\n            content: encrypted.toString(\"hex\")\n        };\n    };\n    const decrypt = (hash)=>{\n        const decipher = crypto__WEBPACK_IMPORTED_MODULE_4___default().createDecipheriv(\"aes-256-ctr\", props.chatKey, Buffer.from(hash.iv, \"hex\"));\n        const decrypted = Buffer.concat([\n            decipher.update(Buffer.from(hash.content, \"hex\")),\n            decipher.final()\n        ]);\n        return decrypted.toString();\n    };\n    // Functions\n    const sendMessage = (e)=>{\n        document.querySelector(\"#message-input\").focus();\n        let messageContent = document.querySelector(\"#message-input\").value;\n        if (!messageContent) return;\n        document.querySelector(\"#message-input\").value = \"\";\n        addMessage({\n            author: props.user.username,\n            recipient: props.contact,\n            timestamp: Date.now(),\n            content: messageContent\n        });\n        socket.emit(\"message\", {\n            author: props.user.username,\n            recipient: props.contact,\n            timestamp: Date.now(),\n            content: encrypt(messageContent)\n        });\n    };\n    const addMessage = (data, fromSaved)=>{\n        if (data.author !== props.user.username && fromSaved == false) data.content = decrypt(data.content);\n        let newMessageList = [\n            ...messageList,\n            data\n        ];\n        setMessageList(newMessageList);\n        // Store message\n        let storedChatRaw = localStorage.getItem(`chat_${props.contact}`);\n        if (!storedChatRaw) storedChatRaw = \"[]\";\n        if (fromSaved == true) return;\n        let storedChat = JSON.parse(storedChatRaw);\n        storedChat.push(data);\n        localStorage.setItem(`chat_${props.contact}`, JSON.stringify(storedChat));\n    };\n    // Buttons and all\n    const goBack = ()=>window.location.href = \"/home\";\n    const openContactDialog = ()=>setContactProfileDialogOpen(true);\n    const deleteChat = ()=>{\n        localStorage.setItem(`chat_${props.contact}`, \"[]\");\n        return window.location.reload();\n    };\n    const blockContact = async (event, username)=>{\n        let response = await axios__WEBPACK_IMPORTED_MODULE_2___default()({\n            method: \"post\",\n            url: `${props.host}/api/users/block-contact`,\n            data: {\n                contact: username\n            }\n        });\n        if (response.data.code == 500) return window.location.href = `/error?id=${response.data.id}`;\n        if (response.data.message == \"success\") {\n            return window.location.href = \"/home\";\n        }\n    };\n    // Listeners\n    react__WEBPACK_IMPORTED_MODULE_1___default().useEffect(()=>{\n        socket.on(\"connect\", ()=>{\n            socket.emit(\"join-chat\", {\n                user: props.user.username,\n                contact: props.contact\n            });\n        });\n        // Load previous chat\n        if (true) {\n            (async ()=>{\n                // Load previous chats\n                let storedChatRaw = localStorage.getItem(`chat_${props.contact}`);\n                if (!storedChatRaw) storedChatRaw = \"[]\";\n                let storedChat = JSON.parse(storedChatRaw);\n                setMessageList(storedChat);\n                // Load new chats\n                if (!props.newMessages.length) return;\n                props.newMessages.forEach((newMessage)=>{\n                    if (newMessage.content.iv == undefined) return;\n                    addMessage(newMessage, false);\n                });\n            })();\n        }\n    }, []);\n    react__WEBPACK_IMPORTED_MODULE_1___default().useEffect(()=>{\n        // @ts-ignore\n        if (pendingMessage.author == undefined) return;\n        // @ts-ignore\n        if (pendingMessage.fromStored == true) return addMessage(pendingMessage, true);\n        else addMessage(pendingMessage, false);\n    }, [\n        pendingMessage\n    ]);\n    react__WEBPACK_IMPORTED_MODULE_1___default().useEffect(()=>{\n        let chatBottom = document.querySelector(\"#chat-bottom\");\n        chatBottom.scrollIntoView();\n    }, [\n        messageList\n    ]);\n    return /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxDEV)(\"div\", {\n        className: (_styles_chat_module_scss__WEBPACK_IMPORTED_MODULE_11___default().page),\n        children: [\n            /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxDEV)(_components_chatNavbar__WEBPACK_IMPORTED_MODULE_6__[\"default\"], {\n                return: goBack,\n                openContactDialog: openContactDialog,\n                contactUsername: props.contact,\n                contactUserID: props.contactUserID\n            }, void 0, false, {\n                fileName: \"/home/asterki/Documents/Programation/dimlim/src/pages/chat/[user].tsx\",\n                lineNumber: 239,\n                columnNumber: 13\n            }, undefined),\n            /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxDEV)((next_head__WEBPACK_IMPORTED_MODULE_5___default()), {\n                children: /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxDEV)(\"title\", {\n                    children: props.lang.pageTitle\n                }, void 0, false, {\n                    fileName: \"/home/asterki/Documents/Programation/dimlim/src/pages/chat/[user].tsx\",\n                    lineNumber: 241,\n                    columnNumber: 17\n                }, undefined)\n            }, void 0, false, {\n                fileName: \"/home/asterki/Documents/Programation/dimlim/src/pages/chat/[user].tsx\",\n                lineNumber: 240,\n                columnNumber: 13\n            }, undefined),\n            /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxDEV)(_mui_material__WEBPACK_IMPORTED_MODULE_8__.Dialog, {\n                open: contactProfileDialogOpen,\n                className: (_styles_chat_module_scss__WEBPACK_IMPORTED_MODULE_11___default()[\"dialog-container\"]),\n                sx: {\n                    backgroundColor: \"none\"\n                },\n                children: /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxDEV)(react_bootstrap__WEBPACK_IMPORTED_MODULE_9__.Container, {\n                    fluid: true,\n                    className: (_styles_chat_module_scss__WEBPACK_IMPORTED_MODULE_11___default().dialog),\n                    children: [\n                        /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxDEV)(_mui_material__WEBPACK_IMPORTED_MODULE_8__.DialogTitle, {\n                            children: props.contact\n                        }, void 0, false, {\n                            fileName: \"/home/asterki/Documents/Programation/dimlim/src/pages/chat/[user].tsx\",\n                            lineNumber: 246,\n                            columnNumber: 21\n                        }, undefined),\n                        /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxDEV)(_mui_material__WEBPACK_IMPORTED_MODULE_8__.Button, {\n                            onClick: deleteChat,\n                            children: \"Delete Chat\"\n                        }, void 0, false, {\n                            fileName: \"/home/asterki/Documents/Programation/dimlim/src/pages/chat/[user].tsx\",\n                            lineNumber: 248,\n                            columnNumber: 21\n                        }, undefined),\n                        /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxDEV)(\"br\", {}, void 0, false, {\n                            fileName: \"/home/asterki/Documents/Programation/dimlim/src/pages/chat/[user].tsx\",\n                            lineNumber: 249,\n                            columnNumber: 21\n                        }, undefined),\n                        /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxDEV)(_mui_material__WEBPACK_IMPORTED_MODULE_8__.Button, {\n                            onClick: (e)=>{\n                                blockContact(e, props.contact);\n                            },\n                            children: \"Block User\"\n                        }, void 0, false, {\n                            fileName: \"/home/asterki/Documents/Programation/dimlim/src/pages/chat/[user].tsx\",\n                            lineNumber: 251,\n                            columnNumber: 21\n                        }, undefined),\n                        /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxDEV)(\"br\", {}, void 0, false, {\n                            fileName: \"/home/asterki/Documents/Programation/dimlim/src/pages/chat/[user].tsx\",\n                            lineNumber: 258,\n                            columnNumber: 21\n                        }, undefined),\n                        /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxDEV)(_mui_material__WEBPACK_IMPORTED_MODULE_8__.Button, {\n                            onClick: (event)=>{\n                                setContactProfileDialogOpen(false);\n                            },\n                            children: \"Cancel\"\n                        }, void 0, false, {\n                            fileName: \"/home/asterki/Documents/Programation/dimlim/src/pages/chat/[user].tsx\",\n                            lineNumber: 260,\n                            columnNumber: 21\n                        }, undefined),\n                        /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxDEV)(\"br\", {}, void 0, false, {\n                            fileName: \"/home/asterki/Documents/Programation/dimlim/src/pages/chat/[user].tsx\",\n                            lineNumber: 267,\n                            columnNumber: 21\n                        }, undefined)\n                    ]\n                }, void 0, true, {\n                    fileName: \"/home/asterki/Documents/Programation/dimlim/src/pages/chat/[user].tsx\",\n                    lineNumber: 245,\n                    columnNumber: 17\n                }, undefined)\n            }, void 0, false, {\n                fileName: \"/home/asterki/Documents/Programation/dimlim/src/pages/chat/[user].tsx\",\n                lineNumber: 244,\n                columnNumber: 13\n            }, undefined),\n            /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxDEV)(react_bootstrap__WEBPACK_IMPORTED_MODULE_9__.Container, {\n                className: (_styles_chat_module_scss__WEBPACK_IMPORTED_MODULE_11___default().messages),\n                id: \"chat\",\n                children: [\n                    /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxDEV)(\"br\", {}, void 0, false, {\n                        fileName: \"/home/asterki/Documents/Programation/dimlim/src/pages/chat/[user].tsx\",\n                        lineNumber: 272,\n                        columnNumber: 17\n                    }, undefined),\n                    /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxDEV)(\"p\", {\n                        className: (_styles_chat_module_scss__WEBPACK_IMPORTED_MODULE_11___default().intro),\n                        children: \"This is the start of your chat\"\n                    }, void 0, false, {\n                        fileName: \"/home/asterki/Documents/Programation/dimlim/src/pages/chat/[user].tsx\",\n                        lineNumber: 273,\n                        columnNumber: 17\n                    }, undefined),\n                    /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxDEV)(\"br\", {}, void 0, false, {\n                        fileName: \"/home/asterki/Documents/Programation/dimlim/src/pages/chat/[user].tsx\",\n                        lineNumber: 274,\n                        columnNumber: 17\n                    }, undefined),\n                    messageList.map((message)=>{\n                        return /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxDEV)(_components_message__WEBPACK_IMPORTED_MODULE_7__[\"default\"], {\n                            timestamp: message.timestamp,\n                            sentByMe: message.author == props.user.username,\n                            content: message.content,\n                            type: \"text\"\n                        }, `${Math.random() * 1000} ${message.author}`, false, {\n                            fileName: \"/home/asterki/Documents/Programation/dimlim/src/pages/chat/[user].tsx\",\n                            lineNumber: 277,\n                            columnNumber: 25\n                        }, undefined);\n                    }),\n                    /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxDEV)(\"br\", {}, void 0, false, {\n                        fileName: \"/home/asterki/Documents/Programation/dimlim/src/pages/chat/[user].tsx\",\n                        lineNumber: 286,\n                        columnNumber: 17\n                    }, undefined),\n                    /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxDEV)(\"br\", {}, void 0, false, {\n                        fileName: \"/home/asterki/Documents/Programation/dimlim/src/pages/chat/[user].tsx\",\n                        lineNumber: 287,\n                        columnNumber: 17\n                    }, undefined),\n                    /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxDEV)(\"br\", {}, void 0, false, {\n                        fileName: \"/home/asterki/Documents/Programation/dimlim/src/pages/chat/[user].tsx\",\n                        lineNumber: 288,\n                        columnNumber: 17\n                    }, undefined),\n                    /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxDEV)(\"div\", {\n                        id: \"chat-bottom\"\n                    }, void 0, false, {\n                        fileName: \"/home/asterki/Documents/Programation/dimlim/src/pages/chat/[user].tsx\",\n                        lineNumber: 289,\n                        columnNumber: 17\n                    }, undefined)\n                ]\n            }, void 0, true, {\n                fileName: \"/home/asterki/Documents/Programation/dimlim/src/pages/chat/[user].tsx\",\n                lineNumber: 271,\n                columnNumber: 13\n            }, undefined),\n            /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxDEV)(react_bootstrap__WEBPACK_IMPORTED_MODULE_9__.Container, {\n                fluid: true,\n                className: (_styles_chat_module_scss__WEBPACK_IMPORTED_MODULE_11___default()[\"chat-bar\"]),\n                children: [\n                    /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxDEV)(_mui_material__WEBPACK_IMPORTED_MODULE_8__.TextareaAutosize, {\n                        className: (_styles_chat_module_scss__WEBPACK_IMPORTED_MODULE_11___default()[\"message-input\"]),\n                        id: \"message-input\",\n                        maxRows: 3,\n                        placeholder: \"Message...\",\n                        disabled: true\n                    }, void 0, false, {\n                        fileName: \"/home/asterki/Documents/Programation/dimlim/src/pages/chat/[user].tsx\",\n                        lineNumber: 292,\n                        columnNumber: 17\n                    }, undefined),\n                    /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxDEV)(_mui_material__WEBPACK_IMPORTED_MODULE_8__.IconButton, {\n                        onClick: sendMessage,\n                        children: /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxDEV)(_mui_icons_material__WEBPACK_IMPORTED_MODULE_10__.Send, {}, void 0, false, {\n                            fileName: \"/home/asterki/Documents/Programation/dimlim/src/pages/chat/[user].tsx\",\n                            lineNumber: 294,\n                            columnNumber: 21\n                        }, undefined)\n                    }, void 0, false, {\n                        fileName: \"/home/asterki/Documents/Programation/dimlim/src/pages/chat/[user].tsx\",\n                        lineNumber: 293,\n                        columnNumber: 17\n                    }, undefined)\n                ]\n            }, void 0, true, {\n                fileName: \"/home/asterki/Documents/Programation/dimlim/src/pages/chat/[user].tsx\",\n                lineNumber: 291,\n                columnNumber: 13\n            }, undefined)\n        ]\n    }, void 0, true, {\n        fileName: \"/home/asterki/Documents/Programation/dimlim/src/pages/chat/[user].tsx\",\n        lineNumber: 238,\n        columnNumber: 9\n    }, undefined);\n};\n/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (Chat);\n\n__webpack_async_result__();\n} catch(e) { __webpack_async_result__(e); } });//# sourceURL=[module]\n//# sourceMappingURL=data:application/json;charset=utf-8;base64,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QUN0RSxzREFBSTs7OztxQ0FBRzs7Ozs7aUNBQ0M7Ozs7Ozt5QkFDTDs7Ozs7O2lCQUNWLENBQ1I7Q0FDTDtBQUVELGlFQUFld0MsSUFBSSxFQUFDIiwic291cmNlcyI6WyJ3ZWJwYWNrOi8vZGltbGltLy4vc3JjL3BhZ2VzL2NoYXQvW3VzZXJdLnRzeD81MzlhIl0sInNvdXJjZXNDb250ZW50IjpbImltcG9ydCBSZWFjdCBmcm9tIFwicmVhY3RcIjtcbmltcG9ydCBheGlvcywgeyBBeGlvc1Jlc3BvbnNlIH0gZnJvbSBcImF4aW9zXCI7XG5pbXBvcnQgeyBpbyB9IGZyb20gXCJzb2NrZXQuaW8tY2xpZW50XCI7XG5pbXBvcnQgY3J5cHRvIGZyb20gXCJjcnlwdG9cIjtcblxuaW1wb3J0IEhlYWQgZnJvbSBcIm5leHQvaGVhZFwiO1xuaW1wb3J0IENoYXROYXZiYXIgZnJvbSBcIi4uLy4uL2NvbXBvbmVudHMvY2hhdE5hdmJhclwiO1xuaW1wb3J0IE1lc3NhZ2UgZnJvbSBcIi4uLy4uL2NvbXBvbmVudHMvbWVzc2FnZVwiO1xuXG5pbXBvcnQgeyBBdmF0YXIsIEJ1dHRvbiwgRGlhbG9nLCBEaWFsb2dBY3Rpb25zLCBEaWFsb2dUaXRsZSwgSWNvbkJ1dHRvbiwgVGV4dGFyZWFBdXRvc2l6ZSB9IGZyb20gXCJAbXVpL21hdGVyaWFsXCI7XG5pbXBvcnQgeyBDb250YWluZXIgfSBmcm9tIFwicmVhY3QtYm9vdHN0cmFwXCI7XG5pbXBvcnQgeyBTZW5kIH0gZnJvbSBcIkBtdWkvaWNvbnMtbWF0ZXJpYWxcIjtcblxuaW1wb3J0IHN0eWxlcyBmcm9tIFwiLi4vLi4vc3R5bGVzL2NoYXQubW9kdWxlLnNjc3NcIjtcbmltcG9ydCB7IEdldFNlcnZlclNpZGVQcm9wcywgTmV4dFBhZ2UgfSBmcm9tIFwibmV4dFwiO1xuXG5leHBvcnQgY29uc3QgZ2V0U2VydmVyU2lkZVByb3BzOiBHZXRTZXJ2ZXJTaWRlUHJvcHMgPSBhc3luYyAoY29udGV4dDogYW55KSA9PiB7XG4gICAgaWYgKCFjb250ZXh0LnJlcS5pc0F1dGhlbnRpY2F0ZWQoKSlcbiAgICAgICAgcmV0dXJuIHtcbiAgICAgICAgICAgIHJlZGlyZWN0OiB7XG4gICAgICAgICAgICAgICAgZGVzdGluYXRpb246IFwiL2xvZ2luXCIsXG4gICAgICAgICAgICAgICAgcGVybWFuZW50OiBmYWxzZSxcbiAgICAgICAgICAgIH0sXG4gICAgICAgIH07XG5cbiAgICBpZiAoIWNvbnRleHQucGFyYW1zLnVzZXIpXG4gICAgICAgIHJldHVybiB7XG4gICAgICAgICAgICByZWRpcmVjdDoge1xuICAgICAgICAgICAgICAgIGRlc3RpbmF0aW9uOiBcIi9ob21lXCIsXG4gICAgICAgICAgICAgICAgcGVybWFuZW50OiBmYWxzZSxcbiAgICAgICAgICAgIH0sXG4gICAgICAgIH07XG5cbiAgICB0cnkge1xuICAgICAgICBsZXQga2V5UmVzcG9uc2U6IEF4aW9zUmVzcG9uc2UgPSBhd2FpdCBheGlvcyh7XG4gICAgICAgICAgICBtZXRob2Q6IFwicG9zdFwiLFxuICAgICAgICAgICAgdXJsOiBgJHtwcm9jZXNzLmVudi5IT1NUfS9hcGkvbWVzc2FnZXMvZ2V0LWtleWAsXG4gICAgICAgICAgICBoZWFkZXJzOiBjb250ZXh0LnJlcS5oZWFkZXJzLFxuICAgICAgICAgICAgZGF0YToge1xuICAgICAgICAgICAgICAgIGNvbnRhY3Q6IGNvbnRleHQucGFyYW1zLnVzZXIsXG4gICAgICAgICAgICAgICAgdXNlcjogY29udGV4dC5yZXEudXNlci51c2VybmFtZSxcbiAgICAgICAgICAgIH0sXG4gICAgICAgIH0pO1xuXG4gICAgICAgIGlmIChrZXlSZXNwb25zZS5kYXRhLm1lc3NhZ2UgPT0gXCJ1c2VyLW5vdC1mb3VuZFwiKSB7XG4gICAgICAgICAgICByZXR1cm4ge1xuICAgICAgICAgICAgICAgIHJlZGlyZWN0OiB7XG4gICAgICAgICAgICAgICAgICAgIGRlc3RpbmF0aW9uOiBcIi9ob21lXCIsXG4gICAgICAgICAgICAgICAgICAgIHBlcm1hbmVudDogZmFsc2UsXG4gICAgICAgICAgICAgICAgfSxcbiAgICAgICAgICAgIH07XG4gICAgICAgIH1cblxuICAgICAgICBsZXQgbmV3TWVzc2FnZXNSZXNwb25zZTogQXhpb3NSZXNwb25zZSA9IGF3YWl0IGF4aW9zKHtcbiAgICAgICAgICAgIG1ldGhvZDogXCJwb3N0XCIsXG4gICAgICAgICAgICB1cmw6IGAke3Byb2Nlc3MuZW52LkhPU1R9L2FwaS9tZXNzYWdlcy9nZXQtcGVuZGluZy1tZXNzYWdlc2AsXG4gICAgICAgICAgICBoZWFkZXJzOiBjb250ZXh0LnJlcS5oZWFkZXJzLFxuICAgICAgICB9KTtcblxuICAgICAgICBsZXQgbGFuZ3VhZ2VSZXNwb25zZTogQXhpb3NSZXNwb25zZSA9IGF3YWl0IGF4aW9zKHtcbiAgICAgICAgICAgIG1ldGhvZDogXCJwb3N0XCIsXG4gICAgICAgICAgICB1cmw6IGAke3Byb2Nlc3MuZW52LkhPU1R9L2FwaS9jb250ZW50L2xhbmd1YWdlL2AsXG4gICAgICAgICAgICBkYXRhOiB7XG4gICAgICAgICAgICAgICAgbGFuZzogY29udGV4dC5yZXEudXNlci5wcmVmZXJyZWRMYW5ndWFnZSA9PSBcIlwiID8gY29udGV4dC5yZXEuaGVhZGVyc1tcImFjY2VwdC1sYW5ndWFnZVwiXS5zcGxpdChcIixcIilbMF0gOiBjb250ZXh0LnJlcS51c2VyLnByZWZlcnJlZExhbmd1YWdlLFxuICAgICAgICAgICAgICAgIGNhdGVnb3J5OiBcIm1haW5cIixcbiAgICAgICAgICAgICAgICBwYWdlOiBcImhvbWVcIixcbiAgICAgICAgICAgIH0sXG4gICAgICAgIH0pO1xuXG4gICAgICAgIGlmIChsYW5ndWFnZVJlc3BvbnNlLmRhdGEuc3RhdHVzICE9PSAyMDApIHtcbiAgICAgICAgICAgIHJldHVybiB7XG4gICAgICAgICAgICAgICAgcmVkaXJlY3Q6IHtcbiAgICAgICAgICAgICAgICAgICAgZGVzdGluYXRpb246IGAvZXJyb3I/Y29kZT0ke2xhbmd1YWdlUmVzcG9uc2UuZGF0YS5zdGF0dXN9YCxcbiAgICAgICAgICAgICAgICAgICAgcGVybWFuZW50OiBmYWxzZSxcbiAgICAgICAgICAgICAgICB9LFxuICAgICAgICAgICAgfTtcbiAgICAgICAgfVxuXG4gICAgICAgIHJldHVybiB7XG4gICAgICAgICAgICBwcm9wczoge1xuICAgICAgICAgICAgICAgIGxhbmc6IGxhbmd1YWdlUmVzcG9uc2UuZGF0YS5jb250ZW50LFxuICAgICAgICAgICAgICAgIHVzZXI6IGNvbnRleHQucmVxLnVzZXIsXG4gICAgICAgICAgICAgICAgaG9zdDogcHJvY2Vzcy5lbnYuSE9TVCxcbiAgICAgICAgICAgICAgICBjb250YWN0OiBjb250ZXh0LnBhcmFtcy51c2VyLFxuICAgICAgICAgICAgICAgIGNvbnRhY3RVc2VySUQ6IGNvbnRleHQucXVlcnkuaWQsXG4gICAgICAgICAgICAgICAgY2hhdEtleToga2V5UmVzcG9uc2UuZGF0YS5tZXNzYWdlLFxuICAgICAgICAgICAgICAgIG5ld01lc3NhZ2VzOiBuZXdNZXNzYWdlc1Jlc3BvbnNlLmRhdGEuY29udGVudCxcbiAgICAgICAgICAgIH0sXG4gICAgICAgIH07XG4gICAgfSBjYXRjaCAoZXJyOiBhbnkpIHtcbiAgICAgICAgcmV0dXJuIHtcbiAgICAgICAgICAgIHJlZGlyZWN0OiB7XG4gICAgICAgICAgICAgICAgZGVzdGluYXRpb246IGAvZXJyb3I/Y29kZT0ke2Vyci5yZXNwb25zZS5zdGF0dXN9YCxcbiAgICAgICAgICAgICAgICBwZXJtYW5lbnQ6IGZhbHNlLFxuICAgICAgICAgICAgfSxcbiAgICAgICAgfTtcbiAgICB9XG59O1xuXG5pbnRlcmZhY2UgTWVzc2FnZSB7XG4gICAgYXV0aG9yOiBzdHJpbmc7XG4gICAgcmVjaXBpZW50OiBzdHJpbmc7XG4gICAgdGltZXN0YW1wOiBudW1iZXI7XG4gICAgY29udGVudDogYW55O1xuICAgIG5ldzogYm9vbGVhbiB8IHVuZGVmaW5lZDtcbn1cblxuY29uc3QgQ2hhdDogTmV4dFBhZ2UgPSAocHJvcHM6IGFueSkgPT4ge1xuICAgIGNvbnN0IFttZXNzYWdlTGlzdCwgc2V0TWVzc2FnZUxpc3RdID0gUmVhY3QudXNlU3RhdGUobmV3IEFycmF5KCkpO1xuICAgIGNvbnN0IFtwZW5kaW5nTWVzc2FnZSwgc2V0UGVuZGluZ01lc3NhZ2VdID0gUmVhY3QudXNlU3RhdGUoe30pO1xuICAgIGNvbnN0IFtjb250YWN0UHJvZmlsZURpYWxvZ09wZW4sIHNldENvbnRhY3RQcm9maWxlRGlhbG9nT3Blbl0gPSBSZWFjdC51c2VTdGF0ZShmYWxzZSk7XG5cbiAgICAvLyBTb2NrZXQuaW9cbiAgICBjb25zdCBzb2NrZXQgPSBpbyhwcm9wcy5ob3N0KTtcblxuICAgIHNvY2tldC5vbihcIm1lc3NhZ2VcIiwgKGRhdGE6IGFueSkgPT4ge1xuICAgICAgICBpZiAoZGF0YS5hdXRob3IgPT0gcHJvcHMudXNlci51c2VybmFtZSkgcmV0dXJuO1xuICAgICAgICBzZXRQZW5kaW5nTWVzc2FnZShkYXRhKTtcbiAgICB9KTtcblxuICAgIGNvbnN0IGVuY3J5cHQgPSAodGV4dDogYW55KSA9PiB7XG4gICAgICAgIGNvbnN0IGl2ID0gY3J5cHRvLnJhbmRvbUJ5dGVzKDE2KTtcbiAgICAgICAgY29uc3QgY2lwaGVyID0gY3J5cHRvLmNyZWF0ZUNpcGhlcml2KFwiYWVzLTI1Ni1jdHJcIiwgcHJvcHMuY2hhdEtleSwgaXYpO1xuICAgICAgICBjb25zdCBlbmNyeXB0ZWQgPSBCdWZmZXIuY29uY2F0KFtjaXBoZXIudXBkYXRlKHRleHQpLCBjaXBoZXIuZmluYWwoKV0pO1xuXG4gICAgICAgIHJldHVybiB7XG4gICAgICAgICAgICBpdjogaXYudG9TdHJpbmcoXCJoZXhcIiksXG4gICAgICAgICAgICBjb250ZW50OiBlbmNyeXB0ZWQudG9TdHJpbmcoXCJoZXhcIiksXG4gICAgICAgIH07XG4gICAgfTtcblxuICAgIGNvbnN0IGRlY3J5cHQgPSAoaGFzaDogYW55KSA9PiB7XG4gICAgICAgIGNvbnN0IGRlY2lwaGVyID0gY3J5cHRvLmNyZWF0ZURlY2lwaGVyaXYoXCJhZXMtMjU2LWN0clwiLCBwcm9wcy5jaGF0S2V5LCBCdWZmZXIuZnJvbShoYXNoLml2LCBcImhleFwiKSk7XG4gICAgICAgIGNvbnN0IGRlY3J5cHRlZCA9IEJ1ZmZlci5jb25jYXQoW2RlY2lwaGVyLnVwZGF0ZShCdWZmZXIuZnJvbShoYXNoLmNvbnRlbnQsIFwiaGV4XCIpKSwgZGVjaXBoZXIuZmluYWwoKV0pO1xuICAgICAgICByZXR1cm4gZGVjcnlwdGVkLnRvU3RyaW5nKCk7XG4gICAgfTtcblxuICAgIC8vIEZ1bmN0aW9uc1xuICAgIGNvbnN0IHNlbmRNZXNzYWdlID0gKGU6IGFueSkgPT4ge1xuICAgICAgICAoZG9jdW1lbnQucXVlcnlTZWxlY3RvcihcIiNtZXNzYWdlLWlucHV0XCIpIGFzIEhUTUxJbnB1dEVsZW1lbnQpLmZvY3VzKCk7XG4gICAgICAgIGxldCBtZXNzYWdlQ29udGVudCA9IChkb2N1bWVudC5xdWVyeVNlbGVjdG9yKFwiI21lc3NhZ2UtaW5wdXRcIikgYXMgSFRNTFRleHRBcmVhRWxlbWVudCkudmFsdWU7XG4gICAgICAgIGlmICghbWVzc2FnZUNvbnRlbnQpIHJldHVybjtcblxuICAgICAgICAoZG9jdW1lbnQucXVlcnlTZWxlY3RvcihcIiNtZXNzYWdlLWlucHV0XCIpIGFzIEhUTUxJbnB1dEVsZW1lbnQpLnZhbHVlID0gXCJcIjtcbiAgICAgICAgYWRkTWVzc2FnZSh7XG4gICAgICAgICAgICBhdXRob3I6IHByb3BzLnVzZXIudXNlcm5hbWUsXG4gICAgICAgICAgICByZWNpcGllbnQ6IHByb3BzLmNvbnRhY3QsXG4gICAgICAgICAgICB0aW1lc3RhbXA6IERhdGUubm93KCksXG4gICAgICAgICAgICBjb250ZW50OiBtZXNzYWdlQ29udGVudCxcbiAgICAgICAgfSk7XG5cbiAgICAgICAgc29ja2V0LmVtaXQoXCJtZXNzYWdlXCIsIHtcbiAgICAgICAgICAgIGF1dGhvcjogcHJvcHMudXNlci51c2VybmFtZSxcbiAgICAgICAgICAgIHJlY2lwaWVudDogcHJvcHMuY29udGFjdCxcbiAgICAgICAgICAgIHRpbWVzdGFtcDogRGF0ZS5ub3coKSxcbiAgICAgICAgICAgIGNvbnRlbnQ6IGVuY3J5cHQobWVzc2FnZUNvbnRlbnQpLFxuICAgICAgICB9KTtcbiAgICB9O1xuXG4gICAgY29uc3QgYWRkTWVzc2FnZTogRnVuY3Rpb24gPSAoZGF0YTogYW55LCBmcm9tU2F2ZWQ6IGJvb2xlYW4gfCB1bmRlZmluZWQpID0+IHtcbiAgICAgICAgaWYgKGRhdGEuYXV0aG9yICE9PSBwcm9wcy51c2VyLnVzZXJuYW1lICYmIGZyb21TYXZlZCA9PSBmYWxzZSkgZGF0YS5jb250ZW50ID0gZGVjcnlwdChkYXRhLmNvbnRlbnQpO1xuICAgICAgICBsZXQgbmV3TWVzc2FnZUxpc3Q6IEFycmF5PE1lc3NhZ2U+ID0gWy4uLm1lc3NhZ2VMaXN0LCBkYXRhXTtcbiAgICAgICAgc2V0TWVzc2FnZUxpc3QobmV3TWVzc2FnZUxpc3QpO1xuXG4gICAgICAgIC8vIFN0b3JlIG1lc3NhZ2VcbiAgICAgICAgbGV0IHN0b3JlZENoYXRSYXcgPSBsb2NhbFN0b3JhZ2UuZ2V0SXRlbShgY2hhdF8ke3Byb3BzLmNvbnRhY3R9YCk7XG4gICAgICAgIGlmICghc3RvcmVkQ2hhdFJhdykgc3RvcmVkQ2hhdFJhdyA9IFwiW11cIjtcblxuICAgICAgICBpZiAoZnJvbVNhdmVkID09IHRydWUpIHJldHVybjtcblxuICAgICAgICBsZXQgc3RvcmVkQ2hhdCA9IEpTT04ucGFyc2Uoc3RvcmVkQ2hhdFJhdyk7XG4gICAgICAgIHN0b3JlZENoYXQucHVzaChkYXRhKTtcbiAgICAgICAgbG9jYWxTdG9yYWdlLnNldEl0ZW0oYGNoYXRfJHtwcm9wcy5jb250YWN0fWAsIEpTT04uc3RyaW5naWZ5KHN0b3JlZENoYXQpKTtcbiAgICB9O1xuXG4gICAgLy8gQnV0dG9ucyBhbmQgYWxsXG4gICAgY29uc3QgZ29CYWNrID0gKCkgPT4gKHdpbmRvdy5sb2NhdGlvbi5ocmVmID0gXCIvaG9tZVwiKTtcbiAgICBjb25zdCBvcGVuQ29udGFjdERpYWxvZyA9ICgpID0+IHNldENvbnRhY3RQcm9maWxlRGlhbG9nT3Blbih0cnVlKTtcbiAgICBjb25zdCBkZWxldGVDaGF0ID0gKCkgPT4ge1xuICAgICAgICBsb2NhbFN0b3JhZ2Uuc2V0SXRlbShgY2hhdF8ke3Byb3BzLmNvbnRhY3R9YCwgXCJbXVwiKTtcbiAgICAgICAgcmV0dXJuIHdpbmRvdy5sb2NhdGlvbi5yZWxvYWQoKTtcbiAgICB9O1xuICAgIGNvbnN0IGJsb2NrQ29udGFjdCA9IGFzeW5jIChldmVudDogYW55LCB1c2VybmFtZTogc3RyaW5nKSA9PiB7XG4gICAgICAgIGxldCByZXNwb25zZSA9IGF3YWl0IGF4aW9zKHtcbiAgICAgICAgICAgIG1ldGhvZDogXCJwb3N0XCIsXG4gICAgICAgICAgICB1cmw6IGAke3Byb3BzLmhvc3R9L2FwaS91c2Vycy9ibG9jay1jb250YWN0YCxcbiAgICAgICAgICAgIGRhdGE6IHtcbiAgICAgICAgICAgICAgICBjb250YWN0OiB1c2VybmFtZSxcbiAgICAgICAgICAgIH0sXG4gICAgICAgIH0pO1xuXG4gICAgICAgIGlmIChyZXNwb25zZS5kYXRhLmNvZGUgPT0gNTAwKSByZXR1cm4gKHdpbmRvdy5sb2NhdGlvbi5ocmVmID0gYC9lcnJvcj9pZD0ke3Jlc3BvbnNlLmRhdGEuaWR9YCk7XG5cbiAgICAgICAgaWYgKHJlc3BvbnNlLmRhdGEubWVzc2FnZSA9PSBcInN1Y2Nlc3NcIikge1xuICAgICAgICAgICAgcmV0dXJuICh3aW5kb3cubG9jYXRpb24uaHJlZiA9IFwiL2hvbWVcIik7XG4gICAgICAgIH1cbiAgICB9O1xuXG4gICAgLy8gTGlzdGVuZXJzXG4gICAgUmVhY3QudXNlRWZmZWN0KCgpID0+IHtcbiAgICAgICAgc29ja2V0Lm9uKFwiY29ubmVjdFwiLCAoKSA9PiB7XG4gICAgICAgICAgICBzb2NrZXQuZW1pdChcImpvaW4tY2hhdFwiLCB7IHVzZXI6IHByb3BzLnVzZXIudXNlcm5hbWUsIGNvbnRhY3Q6IHByb3BzLmNvbnRhY3QgfSk7XG4gICAgICAgIH0pO1xuXG4gICAgICAgIC8vIExvYWQgcHJldmlvdXMgY2hhdFxuICAgICAgICBpZiAodHlwZW9mIHdpbmRvdyAhPT0gdW5kZWZpbmVkKSB7XG4gICAgICAgICAgICAoYXN5bmMgKCkgPT4ge1xuICAgICAgICAgICAgICAgIC8vIExvYWQgcHJldmlvdXMgY2hhdHNcbiAgICAgICAgICAgICAgICBsZXQgc3RvcmVkQ2hhdFJhdyA9IGxvY2FsU3RvcmFnZS5nZXRJdGVtKGBjaGF0XyR7cHJvcHMuY29udGFjdH1gKTtcbiAgICAgICAgICAgICAgICBpZiAoIXN0b3JlZENoYXRSYXcpIHN0b3JlZENoYXRSYXcgPSBcIltdXCI7XG4gICAgICAgICAgICAgICAgbGV0IHN0b3JlZENoYXQ6IEFycmF5PGFueT4gPSBKU09OLnBhcnNlKHN0b3JlZENoYXRSYXcpO1xuICAgICAgICAgICAgICAgIHNldE1lc3NhZ2VMaXN0KHN0b3JlZENoYXQpO1xuXG4gICAgICAgICAgICAgICAgLy8gTG9hZCBuZXcgY2hhdHNcbiAgICAgICAgICAgICAgICBpZiAoIXByb3BzLm5ld01lc3NhZ2VzLmxlbmd0aCkgcmV0dXJuO1xuICAgICAgICAgICAgICAgIHByb3BzLm5ld01lc3NhZ2VzLmZvckVhY2goKG5ld01lc3NhZ2U6IE1lc3NhZ2UpID0+IHtcbiAgICAgICAgICAgICAgICAgICAgaWYgKG5ld01lc3NhZ2UuY29udGVudC5pdiA9PSB1bmRlZmluZWQpIHJldHVybjtcbiAgICAgICAgICAgICAgICAgICAgYWRkTWVzc2FnZShuZXdNZXNzYWdlLCBmYWxzZSk7XG4gICAgICAgICAgICAgICAgfSk7XG4gICAgICAgICAgICB9KSgpO1xuICAgICAgICB9XG4gICAgfSwgW10pO1xuXG4gICAgUmVhY3QudXNlRWZmZWN0KCgpID0+IHtcbiAgICAgICAgLy8gQHRzLWlnbm9yZVxuICAgICAgICBpZiAocGVuZGluZ01lc3NhZ2UuYXV0aG9yID09IHVuZGVmaW5lZCkgcmV0dXJuO1xuICAgICAgICAvLyBAdHMtaWdub3JlXG4gICAgICAgIGlmIChwZW5kaW5nTWVzc2FnZS5mcm9tU3RvcmVkID09IHRydWUpIHJldHVybiBhZGRNZXNzYWdlKHBlbmRpbmdNZXNzYWdlLCB0cnVlKTtcbiAgICAgICAgZWxzZSBhZGRNZXNzYWdlKHBlbmRpbmdNZXNzYWdlLCBmYWxzZSk7XG4gICAgfSwgW3BlbmRpbmdNZXNzYWdlXSk7XG5cbiAgICBSZWFjdC51c2VFZmZlY3QoKCkgPT4ge1xuICAgICAgICBsZXQgY2hhdEJvdHRvbSA9IGRvY3VtZW50LnF1ZXJ5U2VsZWN0b3IoXCIjY2hhdC1ib3R0b21cIikgYXMgSFRNTERpdkVsZW1lbnQ7XG4gICAgICAgIGNoYXRCb3R0b20uc2Nyb2xsSW50b1ZpZXcoKTtcbiAgICB9LCBbbWVzc2FnZUxpc3RdKTtcblxuICAgIHJldHVybiAoXG4gICAgICAgIDxkaXYgY2xhc3NOYW1lPXtzdHlsZXNbXCJwYWdlXCJdfT5cbiAgICAgICAgICAgIDxDaGF0TmF2YmFyIHJldHVybj17Z29CYWNrfSBvcGVuQ29udGFjdERpYWxvZz17b3BlbkNvbnRhY3REaWFsb2d9IGNvbnRhY3RVc2VybmFtZT17cHJvcHMuY29udGFjdH0gY29udGFjdFVzZXJJRD17cHJvcHMuY29udGFjdFVzZXJJRH0gLz5cbiAgICAgICAgICAgIDxIZWFkPlxuICAgICAgICAgICAgICAgIDx0aXRsZT57cHJvcHMubGFuZy5wYWdlVGl0bGV9PC90aXRsZT5cbiAgICAgICAgICAgIDwvSGVhZD5cblxuICAgICAgICAgICAgPERpYWxvZyBvcGVuPXtjb250YWN0UHJvZmlsZURpYWxvZ09wZW59IGNsYXNzTmFtZT17c3R5bGVzW1wiZGlhbG9nLWNvbnRhaW5lclwiXX0gc3g9e3sgYmFja2dyb3VuZENvbG9yOiBcIm5vbmVcIiB9fT5cbiAgICAgICAgICAgICAgICA8Q29udGFpbmVyIGZsdWlkIGNsYXNzTmFtZT17c3R5bGVzW1wiZGlhbG9nXCJdfT5cbiAgICAgICAgICAgICAgICAgICAgPERpYWxvZ1RpdGxlPntwcm9wcy5jb250YWN0fTwvRGlhbG9nVGl0bGU+XG5cbiAgICAgICAgICAgICAgICAgICAgPEJ1dHRvbiBvbkNsaWNrPXtkZWxldGVDaGF0fT5EZWxldGUgQ2hhdDwvQnV0dG9uPlxuICAgICAgICAgICAgICAgICAgICA8YnIgLz5cblxuICAgICAgICAgICAgICAgICAgICA8QnV0dG9uXG4gICAgICAgICAgICAgICAgICAgICAgICBvbkNsaWNrPXsoZTogYW55KSA9PiB7XG4gICAgICAgICAgICAgICAgICAgICAgICAgICAgYmxvY2tDb250YWN0KGUsIHByb3BzLmNvbnRhY3QpO1xuICAgICAgICAgICAgICAgICAgICAgICAgfX1cbiAgICAgICAgICAgICAgICAgICAgPlxuICAgICAgICAgICAgICAgICAgICAgICAgQmxvY2sgVXNlclxuICAgICAgICAgICAgICAgICAgICA8L0J1dHRvbj5cbiAgICAgICAgICAgICAgICAgICAgPGJyIC8+XG5cbiAgICAgICAgICAgICAgICAgICAgPEJ1dHRvblxuICAgICAgICAgICAgICAgICAgICAgICAgb25DbGljaz17KGV2ZW50OiBhbnkpID0+IHtcbiAgICAgICAgICAgICAgICAgICAgICAgICAgICBzZXRDb250YWN0UHJvZmlsZURpYWxvZ09wZW4oZmFsc2UpO1xuICAgICAgICAgICAgICAgICAgICAgICAgfX1cbiAgICAgICAgICAgICAgICAgICAgPlxuICAgICAgICAgICAgICAgICAgICAgICAgQ2FuY2VsXG4gICAgICAgICAgICAgICAgICAgIDwvQnV0dG9uPlxuICAgICAgICAgICAgICAgICAgICA8YnIgLz5cbiAgICAgICAgICAgICAgICA8L0NvbnRhaW5lcj5cbiAgICAgICAgICAgIDwvRGlhbG9nPlxuXG4gICAgICAgICAgICA8Q29udGFpbmVyIGNsYXNzTmFtZT17c3R5bGVzW1wibWVzc2FnZXNcIl19IGlkPVwiY2hhdFwiPlxuICAgICAgICAgICAgICAgIDxiciAvPlxuICAgICAgICAgICAgICAgIDxwIGNsYXNzTmFtZT17c3R5bGVzW1wiaW50cm9cIl19PlRoaXMgaXMgdGhlIHN0YXJ0IG9mIHlvdXIgY2hhdDwvcD5cbiAgICAgICAgICAgICAgICA8YnIgLz5cbiAgICAgICAgICAgICAgICB7bWVzc2FnZUxpc3QubWFwKChtZXNzYWdlOiBhbnkpID0+IHtcbiAgICAgICAgICAgICAgICAgICAgcmV0dXJuIChcbiAgICAgICAgICAgICAgICAgICAgICAgIDxNZXNzYWdlXG4gICAgICAgICAgICAgICAgICAgICAgICAgICAga2V5PXtgJHtNYXRoLnJhbmRvbSgpICogMTAwMH0gJHttZXNzYWdlLmF1dGhvcn1gfVxuICAgICAgICAgICAgICAgICAgICAgICAgICAgIHRpbWVzdGFtcD17bWVzc2FnZS50aW1lc3RhbXB9XG4gICAgICAgICAgICAgICAgICAgICAgICAgICAgc2VudEJ5TWU9e21lc3NhZ2UuYXV0aG9yID09IHByb3BzLnVzZXIudXNlcm5hbWV9XG4gICAgICAgICAgICAgICAgICAgICAgICAgICAgY29udGVudD17bWVzc2FnZS5jb250ZW50fVxuICAgICAgICAgICAgICAgICAgICAgICAgICAgIHR5cGU9XCJ0ZXh0XCJcbiAgICAgICAgICAgICAgICAgICAgICAgIC8+XG4gICAgICAgICAgICAgICAgICAgICk7XG4gICAgICAgICAgICAgICAgfSl9XG4gICAgICAgICAgICAgICAgPGJyIC8+XG4gICAgICAgICAgICAgICAgPGJyIC8+XG4gICAgICAgICAgICAgICAgPGJyIC8+XG4gICAgICAgICAgICAgICAgPGRpdiBpZD1cImNoYXQtYm90dG9tXCIgLz5cbiAgICAgICAgICAgIDwvQ29udGFpbmVyPlxuICAgICAgICAgICAgPENvbnRhaW5lciBmbHVpZCBjbGFzc05hbWU9e3N0eWxlc1tcImNoYXQtYmFyXCJdfT5cbiAgICAgICAgICAgICAgICA8VGV4dGFyZWFBdXRvc2l6ZSBjbGFzc05hbWU9e3N0eWxlc1tcIm1lc3NhZ2UtaW5wdXRcIl19IGlkPVwibWVzc2FnZS1pbnB1dFwiIG1heFJvd3M9ezN9IHBsYWNlaG9sZGVyPVwiTWVzc2FnZS4uLlwiIGRpc2FibGVkPXt0cnVlfSAvPlxuICAgICAgICAgICAgICAgIDxJY29uQnV0dG9uIG9uQ2xpY2s9e3NlbmRNZXNzYWdlfT5cbiAgICAgICAgICAgICAgICAgICAgPFNlbmQgLz5cbiAgICAgICAgICAgICAgICA8L0ljb25CdXR0b24+XG4gICAgICAgICAgICA8L0NvbnRhaW5lcj5cbiAgICAgICAgPC9kaXY+XG4gICAgKTtcbn07XG5cbmV4cG9ydCBkZWZhdWx0IENoYXQ7XG4iXSwibmFtZXMiOlsiUmVhY3QiLCJheGlvcyIsImlvIiwiY3J5cHRvIiwiSGVhZCIsIkNoYXROYXZiYXIiLCJNZXNzYWdlIiwiQnV0dG9uIiwiRGlhbG9nIiwiRGlhbG9nVGl0bGUiLCJJY29uQnV0dG9uIiwiVGV4dGFyZWFBdXRvc2l6ZSIsIkNvbnRhaW5lciIsIlNlbmQiLCJzdHlsZXMiLCJnZXRTZXJ2ZXJTaWRlUHJvcHMiLCJjb250ZXh0IiwicmVxIiwiaXNBdXRoZW50aWNhdGVkIiwicmVkaXJlY3QiLCJkZXN0aW5hdGlvbiIsInBlcm1hbmVudCIsInBhcmFtcyIsInVzZXIiLCJrZXlSZXNwb25zZSIsIm1ldGhvZCIsInVybCIsInByb2Nlc3MiLCJlbnYiLCJIT1NUIiwiaGVhZGVycyIsImRhdGEiLCJjb250YWN0IiwidXNlcm5hbWUiLCJtZXNzYWdlIiwibmV3TWVzc2FnZXNSZXNwb25zZSIsImxhbmd1YWdlUmVzcG9uc2UiLCJsYW5nIiwicHJlZmVycmVkTGFuZ3VhZ2UiLCJzcGxpdCIsImNhdGVnb3J5IiwicGFnZSIsInN0YXR1cyIsInByb3BzIiwiY29udGVudCIsImhvc3QiLCJjb250YWN0VXNlcklEIiwicXVlcnkiLCJpZCIsImNoYXRLZXkiLCJuZXdNZXNzYWdlcyIsImVyciIsInJlc3BvbnNlIiwiQ2hhdCIsIm1lc3NhZ2VMaXN0Iiwic2V0TWVzc2FnZUxpc3QiLCJ1c2VTdGF0ZSIsIkFycmF5IiwicGVuZGluZ01lc3NhZ2UiLCJzZXRQZW5kaW5nTWVzc2FnZSIsImNvbnRhY3RQcm9maWxlRGlhbG9nT3BlbiIsInNldENvbnRhY3RQcm9maWxlRGlhbG9nT3BlbiIsInNvY2tldCIsIm9uIiwiYXV0aG9yIiwiZW5jcnlwdCIsInRleHQiLCJpdiIsInJhbmRvbUJ5dGVzIiwiY2lwaGVyIiwiY3JlYXRlQ2lwaGVyaXYiLCJlbmNyeXB0ZWQiLCJCdWZmZXIiLCJjb25jYXQiLCJ1cGRhdGUiLCJmaW5hbCIsInRvU3RyaW5nIiwiZGVjcnlwdCIsImhhc2giLCJkZWNpcGhlciIsImNyZWF0ZURlY2lwaGVyaXYiLCJmcm9tIiwiZGVjcnlwdGVkIiwic2VuZE1lc3NhZ2UiLCJlIiwiZG9jdW1lbnQiLCJxdWVyeVNlbGVjdG9yIiwiZm9jdXMiLCJtZXNzYWdlQ29udGVudCIsInZhbHVlIiwiYWRkTWVzc2FnZSIsInJlY2lwaWVudCIsInRpbWVzdGFtcCIsIkRhdGUiLCJub3ciLCJlbWl0IiwiZnJvbVNhdmVkIiwibmV3TWVzc2FnZUxpc3QiLCJzdG9yZWRDaGF0UmF3IiwibG9jYWxTdG9yYWdlIiwiZ2V0SXRlbSIsInN0b3JlZENoYXQiLCJKU09OIiwicGFyc2UiLCJwdXNoIiwic2V0SXRlbSIsInN0cmluZ2lmeSIsImdvQmFjayIsIndpbmRvdyIsImxvY2F0aW9uIiwiaHJlZiIsIm9wZW5Db250YWN0RGlhbG9nIiwiZGVsZXRlQ2hhdCIsInJlbG9hZCIsImJsb2NrQ29udGFjdCIsImV2ZW50IiwiY29kZSIsInVzZUVmZmVjdCIsInVuZGVmaW5lZCIsImxlbmd0aCIsImZvckVhY2giLCJuZXdNZXNzYWdlIiwiZnJvbVN0b3JlZCIsImNoYXRCb3R0b20iLCJzY3JvbGxJbnRvVmlldyIsImRpdiIsImNsYXNzTmFtZSIsInJldHVybiIsImNvbnRhY3RVc2VybmFtZSIsInRpdGxlIiwicGFnZVRpdGxlIiwib3BlbiIsInN4IiwiYmFja2dyb3VuZENvbG9yIiwiZmx1aWQiLCJvbkNsaWNrIiwiYnIiLCJwIiwibWFwIiwic2VudEJ5TWUiLCJ0eXBlIiwiTWF0aCIsInJhbmRvbSIsIm1heFJvd3MiLCJwbGFjZWhvbGRlciIsImRpc2FibGVkIl0sInNvdXJjZVJvb3QiOiIifQ==\n//# sourceURL=webpack-internal:///./src/pages/chat/[user].tsx\n");
 
 /***/ }),
 
-/***/ 7915:
+/***/ "@mui/icons-material":
+/*!**************************************!*\
+  !*** external "@mui/icons-material" ***!
+  \**************************************/
 /***/ ((module) => {
 
 "use strict";
@@ -418,7 +86,10 @@ module.exports = require("@mui/icons-material");
 
 /***/ }),
 
-/***/ 5692:
+/***/ "@mui/material":
+/*!********************************!*\
+  !*** external "@mui/material" ***!
+  \********************************/
 /***/ ((module) => {
 
 "use strict";
@@ -426,7 +97,10 @@ module.exports = require("@mui/material");
 
 /***/ }),
 
-/***/ 2167:
+/***/ "axios":
+/*!************************!*\
+  !*** external "axios" ***!
+  \************************/
 /***/ ((module) => {
 
 "use strict";
@@ -434,7 +108,10 @@ module.exports = require("axios");
 
 /***/ }),
 
-/***/ 968:
+/***/ "next/head":
+/*!****************************!*\
+  !*** external "next/head" ***!
+  \****************************/
 /***/ ((module) => {
 
 "use strict";
@@ -442,7 +119,10 @@ module.exports = require("next/head");
 
 /***/ }),
 
-/***/ 6689:
+/***/ "react":
+/*!************************!*\
+  !*** external "react" ***!
+  \************************/
 /***/ ((module) => {
 
 "use strict";
@@ -450,7 +130,10 @@ module.exports = require("react");
 
 /***/ }),
 
-/***/ 358:
+/***/ "react-bootstrap":
+/*!**********************************!*\
+  !*** external "react-bootstrap" ***!
+  \**********************************/
 /***/ ((module) => {
 
 "use strict";
@@ -458,15 +141,21 @@ module.exports = require("react-bootstrap");
 
 /***/ }),
 
-/***/ 997:
+/***/ "react/jsx-dev-runtime":
+/*!****************************************!*\
+  !*** external "react/jsx-dev-runtime" ***!
+  \****************************************/
 /***/ ((module) => {
 
 "use strict";
-module.exports = require("react/jsx-runtime");
+module.exports = require("react/jsx-dev-runtime");
 
 /***/ }),
 
-/***/ 4612:
+/***/ "socket.io-client":
+/*!***********************************!*\
+  !*** external "socket.io-client" ***!
+  \***********************************/
 /***/ ((module) => {
 
 "use strict";
@@ -474,7 +163,10 @@ module.exports = import("socket.io-client");;
 
 /***/ }),
 
-/***/ 6113:
+/***/ "crypto":
+/*!*************************!*\
+  !*** external "crypto" ***!
+  \*************************/
 /***/ ((module) => {
 
 "use strict";
@@ -489,7 +181,7 @@ module.exports = require("crypto");
 var __webpack_require__ = require("../../webpack-runtime.js");
 __webpack_require__.C(exports);
 var __webpack_exec__ = (moduleId) => (__webpack_require__(__webpack_require__.s = moduleId))
-var __webpack_exports__ = (__webpack_exec__(8763));
+var __webpack_exports__ = (__webpack_exec__("./src/pages/chat/[user].tsx"));
 module.exports = __webpack_exports__;
 
 })();

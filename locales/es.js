@@ -283,8 +283,9 @@ const es = {
                 dialogs: {
                     verifyEmail: {
                         title: "Verifica tu correo electrónico",
-                        subTitle: "Verifique su correo electrónico para activar TFA y recibir actualizaciones de seguridad, directamente en su correo electrónico.",
-                
+                        subTitle:
+                            "Verifique su correo electrónico para activar TFA y recibir actualizaciones de seguridad, directamente en su correo electrónico.",
+
                         verify: "Verificar",
                         cancel: "Cancelar",
                     },
@@ -301,18 +302,30 @@ const es = {
                     deleteAccount: {
                         title: "Eliminar cuenta",
                         warning: "No podrá recuperar su cuenta después de esto, proceda con precaución.",
-                
+
                         password: "Contraseña",
                         tfaCode: "Código TFA/Código de respaldo",
-                
+
                         cancel: "Cancelar",
-                
+
                         "missing-parameters": "Por favor complete todas las entradas.",
                         "rate-limit-exceeded": "Intentaste eliminar tu cuenta demasiadas veces, vuelve a intentarlo más tarde.",
                         "invalid-tfa-code": "Código TFA no válido",
                         unauthorized: "Contraseña no válida",
                     },
                 },
+            },
+        },
+    },
+    chat: {
+        index: {
+            intro: "Este es el comienzo de tu chat",
+            placeholder: "Mensaje...",
+
+            dialog: {
+                delete: "Eliminar chat",
+                block: "Bloquear usuario",
+                cancel: "Cancelar",
             },
         },
     },

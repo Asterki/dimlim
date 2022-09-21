@@ -316,6 +316,18 @@ const en = {
             },
         },
     },
+    chat: {
+        index: {
+            intro: "This is the start of your chat",
+            placeholder: "Message...",
+
+            dialog: {
+                delete: "Delete Chat",
+                block: "Block User",
+                cancel: "Cancel",
+            },
+        },
+    },
 };
 
 module.exports = en;

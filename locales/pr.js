@@ -317,6 +317,18 @@ const pr = {
             },
         },
     },
+    chat: {
+        index: {
+            intro: "Este é o início do seu chat",
+            placeholder: "Mensagem...",
+
+            dialog: {
+                delete: "Excluir bate-papo",
+                block: "Bloquear usuário",
+                cancel: "Cancelar",
+            },
+        },
+    },
 };
 
 module.exports = pr;

@@ -318,6 +318,18 @@ const fr = {
             },
         },
     },
+    chat: {
+        index: {
+            intro: "C'est le début de votre chat",
+            placeholder: "Message...",
+
+            dialog: {
+                delete: "Supprimer le chat",
+                block: "Bloquer l'utilisateur",
+                cancel: "Annuler",
+            },
+        },
+    },
 };
 
 module.exports = fr;

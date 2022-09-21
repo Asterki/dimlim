@@ -27,7 +27,6 @@ io.sockets.on("connection", (socket: any) => {
 
         // Checks
         if (room && Array.from(room.entries()).length > 2) return;
-
         return socket.join(roomName);
     });
 
@@ -43,7 +42,18 @@ io.sockets.on("connection", (socket: any) => {
         // Check if the user is blocked
         if (recipient.blockedContacts.find((listUser: User) => listUser.userID == author?.userID) !== undefined) return;
 
+        // If the other user isn't in the chat room
         const roomName = [author.chatSecret, recipient.chatSecret].sort().join("&");
+        const room: any = io.sockets.adapter.rooms.get(roomName);
+
+        if (Array.from(room.entries()).length == 1) {
+            let pendingMessages = await db.get(`${recipient.userID}_pending`);
+            if (!pendingMessages) pendingMessages = [];
+
+            data.new = true;
+            pendingMessages.push(data);
+            await db.set(`${recipient.userID}_pending`, pendingMessages);
+        }
         socket.to(roomName).emit("message", data);
     });
 });

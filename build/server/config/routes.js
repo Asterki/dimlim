@@ -12,6 +12,7 @@ try {
     index_1.app.use("/api/content", require("../api/content"));
     index_1.app.use("/api/accounts", require("../api/accounts"));
     index_1.app.use("/api/users", require("../api/users"));
+    index_1.app.use("/api/messages", require("../api/messages"));
     index_1.app.use("/api/upload", require("../api/upload"));
     console.log(`${chalk_1.default.cyanBright("info ")} - Routes loaded`);
 }

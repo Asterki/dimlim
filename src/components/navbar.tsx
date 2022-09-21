@@ -65,7 +65,7 @@ const NavbarComponent = (props: { lang: any; user: any | null }) => {
                             <Dropdown.Menu variant="dark" className={`container ${styles.dropdown}`} align="end">
                                 <Dropdown.Item href="/settings">{props.lang.settings}</Dropdown.Item>
                                 <Dropdown.Divider />
-                                <Dropdown.Item href="/api/accounts/logout" className={styles["logout"]}>
+                                <Dropdown.Item href="/settings?logout=true" className={styles["logout"]}>
                                     {props.lang.logout}
                                 </Dropdown.Item>
                             </Dropdown.Menu>

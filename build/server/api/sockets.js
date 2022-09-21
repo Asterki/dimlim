@@ -48,7 +48,17 @@ __1.io.sockets.on("connection", (socket) => {
         // Check if the user is blocked
         if (recipient.blockedContacts.find((listUser) => listUser.userID == (author === null || author === void 0 ? void 0 : author.userID)) !== undefined)
             return;
+        // If the other user isn't in the chat room
         const roomName = [author.chatSecret, recipient.chatSecret].sort().join("&");
+        const room = __1.io.sockets.adapter.rooms.get(roomName);
+        if (Array.from(room.entries()).length == 1) {
+            let pendingMessages = yield databases_1.default.get(`${recipient.userID}_pending`);
+            if (!pendingMessages)
+                pendingMessages = [];
+            data.new = true;
+            pendingMessages.push(data);
+            yield databases_1.default.set(`${recipient.userID}_pending`, pendingMessages);
+        }
         socket.to(roomName).emit("message", data);
     }));
 });

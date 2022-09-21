@@ -1,13 +1,5 @@
 {
   "/_app": "pages/_app.js",
   "/_error": "pages/_error.js",
-  "/_document": "pages/_document.js",
-  "/accounts/login": "pages/accounts/login.js",
-  "/accounts/register": "pages/accounts/register.js",
-  "/accounts/verify-email": "pages/accounts/verify-email.js",
-  "/settings": "pages/settings.js",
-  "/chat/[user]": "pages/chat/[user].js",
-  "/main/home": "pages/main/home.js",
-  "/main": "pages/main.js",
-  "/404": "pages/404.html"
+  "/_document": "pages/_document.js"
 }

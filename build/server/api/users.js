@@ -296,24 +296,4 @@ router.post("/unblock-contact", (req, res) => __awaiter(void 0, void 0, void 0, 
         return res.send({ status: 500, message: "server-error", id: errorID });
     }
 }));
-router.post("/get-key", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    if (!req.isAuthenticated())
-        return res.send({ status: 403, message: "unauthorized" });
-    if (!req.body.contact || !req.body.user)
-        return res.send({ status: 400, message: "missing-parameters" });
-    if (typeof req.body.contact !== "string" || typeof req.body.user !== "string")
-        return res.send({ status: 400, message: "invalid-parameters" });
-    try {
-        const users = yield databases_1.default.get("users");
-        const user = users.find((listUser) => listUser.username == req.body.user);
-        const userToFind = users.find((listUser) => listUser.username == req.body.contact);
-        if (!userToFind || !user)
-            return res.send({ status: 400, message: "user-not-found" });
-        res.send({ status: 200, message: [userToFind.encSecret, user.encSecret].sort().join("") });
-    }
-    catch (err) {
-        const errorID = (0, error_1.reportError)(err);
-        return res.send({ status: 500, message: "server-error", id: errorID });
-    }
-}));
 module.exports = router;

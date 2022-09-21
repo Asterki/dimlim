@@ -7,12 +7,12 @@ import Head from "next/head";
 import ChatNavbar from "../../components/chatNavbar";
 import Message from "../../components/message";
 
-import { IconButton, TextareaAutosize } from "@mui/material";
+import { Button, Dialog, DialogTitle, IconButton, TextareaAutosize } from "@mui/material";
 import { Container } from "react-bootstrap";
 import { Send } from "@mui/icons-material";
 
 import styles from "../../styles/chat.module.scss";
-import { GetServerSideProps, NextPage, NextPageContext } from "next";
+import { GetServerSideProps, NextPage } from "next";
 
 export const getServerSideProps: GetServerSideProps = async (context: any) => {
     if (!context.req.isAuthenticated())
@@ -34,7 +34,7 @@ export const getServerSideProps: GetServerSideProps = async (context: any) => {
     try {
         let keyResponse: AxiosResponse = await axios({
             method: "post",
-            url: `${process.env.HOST}/api/users/get-key`,
+            url: `${process.env.HOST}/api/messages/get-key`,
             headers: context.req.headers,
             data: {
                 contact: context.params.user,
@@ -51,13 +51,19 @@ export const getServerSideProps: GetServerSideProps = async (context: any) => {
             };
         }
 
+        let newMessagesResponse: AxiosResponse = await axios({
+            method: "post",
+            url: `${process.env.HOST}/api/messages/get-pending-messages`,
+            headers: context.req.headers,
+        });
+
         let languageResponse: AxiosResponse = await axios({
             method: "post",
             url: `${process.env.HOST}/api/content/language/`,
             data: {
                 lang: context.req.user.preferredLanguage == "" ? context.req.headers["accept-language"].split(",")[0] : context.req.user.preferredLanguage,
-                category: "main",
-                page: "home",
+                category: "chat",
+                page: "index",
             },
         });
 
@@ -78,6 +84,7 @@ export const getServerSideProps: GetServerSideProps = async (context: any) => {
                 contact: context.params.user,
                 contactUserID: context.query.id,
                 chatKey: keyResponse.data.message,
+                newMessages: newMessagesResponse.data.content,
             },
         };
     } catch (err: any) {
@@ -94,12 +101,14 @@ interface Message {
     author: string;
     recipient: string;
     timestamp: number;
-    content: string;
+    content: any;
+    new: boolean | undefined;
 }
 
 const Chat: NextPage = (props: any) => {
     const [messageList, setMessageList] = React.useState(new Array());
     const [pendingMessage, setPendingMessage] = React.useState({});
+    const [contactProfileDialogOpen, setContactProfileDialogOpen] = React.useState(false);
 
     // Socket.io
     const socket = io(props.host);
@@ -133,7 +142,6 @@ const Chat: NextPage = (props: any) => {
         if (!messageContent) return;
 
         (document.querySelector("#message-input") as HTMLInputElement).value = "";
-
         addMessage({
             author: props.user.username,
             recipient: props.contact,
@@ -165,8 +173,28 @@ const Chat: NextPage = (props: any) => {
         localStorage.setItem(`chat_${props.contact}`, JSON.stringify(storedChat));
     };
 
+    // Buttons and all
     const goBack = () => (window.location.href = "/home");
-    const clear = () => localStorage.clear();
+    const openContactDialog = () => setContactProfileDialogOpen(true);
+    const deleteChat = () => {
+        localStorage.setItem(`chat_${props.contact}`, "[]");
+        return window.location.reload();
+    };
+    const blockContact = async (event: any, username: string) => {
+        let response = await axios({
+            method: "post",
+            url: `${props.host}/api/users/block-contact`,
+            data: {
+                contact: username,
+            },
+        });
+
+        if (response.data.code == 500) return (window.location.href = `/error?id=${response.data.id}`);
+
+        if (response.data.message == "success") {
+            return (window.location.href = "/home");
+        }
+    };
 
     // Listeners
     React.useEffect(() => {
@@ -174,12 +202,22 @@ const Chat: NextPage = (props: any) => {
             socket.emit("join-chat", { user: props.user.username, contact: props.contact });
         });
 
+        // Load previous chat
         if (typeof window !== undefined) {
-            let storedChatRaw = localStorage.getItem(`chat_${props.contact}`);
-            if (!storedChatRaw) return;
+            (async () => {
+                // Load previous chats
+                let storedChatRaw = localStorage.getItem(`chat_${props.contact}`);
+                if (!storedChatRaw) storedChatRaw = "[]";
+                let storedChat: Array<any> = JSON.parse(storedChatRaw);
+                setMessageList(storedChat);
 
-            let storedChat = JSON.parse(storedChatRaw);
-            setMessageList(storedChat);
+                // Load new chats
+                if (!props.newMessages.length) return;
+                props.newMessages.forEach((newMessage: Message) => {
+                    if (newMessage.content.iv == undefined) return;
+                    addMessage(newMessage, false);
+                });
+            })();
         }
     }, []);
 
@@ -191,16 +229,48 @@ const Chat: NextPage = (props: any) => {
         else addMessage(pendingMessage, false);
     }, [pendingMessage]);
 
+    React.useEffect(() => {
+        let chatBottom = document.querySelector("#chat-bottom") as HTMLDivElement;
+        chatBottom.scrollIntoView();
+    }, [messageList]);
+
     return (
         <div className={styles["page"]}>
-            <ChatNavbar return={goBack} contactUsername={props.contact} contactUserID={props.contactUserID} />
+            <ChatNavbar return={goBack} openContactDialog={openContactDialog} contactUsername={props.contact} contactUserID={props.contactUserID} />
             <Head>
-                <title>{props.lang.pageTitle}</title>
+                <title>DIMLIM | {props.contact}</title>
             </Head>
 
-            <Container className={styles["messages"]}>
+            <Dialog open={contactProfileDialogOpen} className={styles["dialog-container"]} sx={{ backgroundColor: "none" }}>
+                <Container fluid className={styles["dialog"]}>
+                    <DialogTitle>{props.contact}</DialogTitle>
+
+                    <Button onClick={deleteChat}>{props.lang.dialog.delete}</Button>
+                    <br />
+
+                    <Button
+                        onClick={(e: any) => {
+                            blockContact(e, props.contact);
+                        }}
+                    >
+                        {props.lang.dialog.block}
+                    </Button>
+                    <br />
+
+                    <Button
+                        onClick={(event: any) => {
+                            setContactProfileDialogOpen(false);
+                        }}
+                    >
+                        {props.lang.dialog.cancel}
+                    </Button>
+                    <br />
+                </Container>
+            </Dialog>
+
+            <Container className={styles["messages"]} id="chat">
                 <br />
-                <p className={styles["intro"]}>This is the start of your chat</p>
+                <p className={styles["intro"]}>{props.lang.intro}</p>
                 <br />
                 {messageList.map((message: any) => {
                     return (
@@ -216,13 +286,11 @@ const Chat: NextPage = (props: any) => {
                 <br />
                 <br />
                 <br />
+                <div id="chat-bottom" />
             </Container>
             <Container fluid className={styles["chat-bar"]}>
-                <TextareaAutosize className={styles["message-input"]} id="message-input" maxRows={3} placeholder="Message..." />
+                <TextareaAutosize className={styles["message-input"]} id="message-input" maxRows={3} placeholder={props.lang.placeholder} disabled={true} />
                 <IconButton onClick={sendMessage}>
-                    <Send />
-                </IconButton>
-                <IconButton onClick={clear}>
                     <Send />
                 </IconButton>
             </Container>

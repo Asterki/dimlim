@@ -63,7 +63,7 @@ export const getServerSideProps: GetServerSideProps = async (context: any) => {
                 lang: languageResponse.data.content,
                 user: context.req.user,
                 host: process.env.HOST,
-                logout: context.query.logout,
+                logout: context.query.logout ? context.query.logout : null,
             },
         };
     } catch (err: any) {
@@ -116,7 +116,7 @@ const Settings: NextPage = (props: any) => {
     const [verificationEmailSentDialogOpen, setVerificationEmailSentDialogOpen] = React.useState(false);
 
     // Logout
-    const [logoutDialogOpen, setLogoutDialogOpen] = React.useState(props.logout == undefined ? false : true);
+    const [logoutDialogOpen, setLogoutDialogOpen] = React.useState(props.logout == null ? false : true);
 
     // Delete account
     const [deleteAccountDialogOpen, setDeleteAccountDialogOpen] = React.useState(false);

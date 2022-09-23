@@ -4,42 +4,39 @@ import bcrypt from "bcrypt";
 
 import { reportError } from "../utils/error";
 import db from "../config/databases";
-import { User } from "../types";
+import { User, Contact } from "../types";
 import { io } from "..";
 import { checkTFA } from "../utils/tfa";
 
 const router: express.Router = express.Router();
 
 // Settings
-router.post(
-    "/change-email",
-    async (req: any, res: any) => {
-        if (!req.isAuthenticated()) return res.send("unauthorized");
-        if (!req.body.password || !req.body.newEmail) return res.send({ status: 400, message: "missing-parameters" });
-        if (typeof req.body.password !== "string" || typeof req.body.newEmail !== "string" || !validator.isEmail(req.body.newEmail))
-            return res.send({ status: 400, message: "invalid-parameters" });
+router.post("/change-email", async (req: any, res: any) => {
+    if (!req.isAuthenticated()) return res.send("unauthorized");
+    if (!req.body.password || !req.body.newEmail) return res.send({ status: 400, message: "missing-parameters" });
+    if (typeof req.body.password !== "string" || typeof req.body.newEmail !== "string" || !validator.isEmail(req.body.newEmail))
+        return res.send({ status: 400, message: "invalid-parameters" });
 
-        try {
-            const users = await db.get("users");
-            const user: User | undefined = users.find((user: User) => user.userID == req.user.userID);
+    try {
+        const users = await db.get("users");
+        const user: User | undefined = users.find((user: User) => user.userID == req.user.userID);
 
-            if (!user) return res.send({ status: 400, message: "user-not-found" });
-            if (users.find((user: any) => user.email.value == req.body.email)) return res.send({ status: 200, message: "email-already-in-use" });
+        if (!user) return res.send({ status: 400, message: "user-not-found" });
+        if (users.find((user: any) => user.email.value == req.body.email)) return res.send({ status: 200, message: "email-already-in-use" });
 
-            // Replace the user
-            const newUserList = users.filter((listUser: User) => listUser.userID !== user?.userID);
-            user.email = { value: req.body.newEmail, verified: false };
+        // Replace the user
+        const newUserList = users.filter((listUser: User) => listUser.userID !== user?.userID);
+        user.email = { value: req.body.newEmail, verified: false };
 
-            newUserList.push(user);
+        newUserList.push(user);
 
-            await db.set("users", newUserList);
-            return res.send({ status: 200, message: "success" });
-        } catch (err) {
-            const errorID = reportError(err);
-            return res.send({ status: 500, message: "server-error", id: errorID });
-        }
+        await db.set("users", newUserList);
+        return res.send({ status: 200, message: "success" });
+    } catch (err) {
+        const errorID = reportError(err);
+        return res.send({ status: 500, message: "server-error", id: errorID });
     }
-);
+});
 
 router.post("/set-language", async (req: any, res: any) => {
     if (!req.isAuthenticated()) return res.send({ status: 403, message: "unauthorized" });
@@ -93,55 +90,52 @@ router.post("/set-bio", async (req: any, res: any) => {
     }
 });
 
-router.post(
-    "/change-password",
-    async (req: any, res: any) => {
-        if (!req.isAuthenticated) return res.send({ status: 403, message: "unauthorized" });
-        if (!req.body.oldPassword || !req.body.newPassword) return res.send({ status: 400, message: "missing-parameters" });
-        if (
-            typeof req.body.oldPassword !== "string" ||
-            typeof req.body.newPassword !== "string" ||
-            req.body.newPassword.length < 8 ||
-            req.body.newPassword.length > 256
-        )
-            return res.send({ status: 400, message: "invalid-parameters" });
+router.post("/change-password", async (req: any, res: any) => {
+    if (!req.isAuthenticated) return res.send({ status: 403, message: "unauthorized" });
+    if (!req.body.oldPassword || !req.body.newPassword) return res.send({ status: 400, message: "missing-parameters" });
+    if (
+        typeof req.body.oldPassword !== "string" ||
+        typeof req.body.newPassword !== "string" ||
+        req.body.newPassword.length < 8 ||
+        req.body.newPassword.length > 256
+    )
+        return res.send({ status: 400, message: "invalid-parameters" });
 
-        try {
-            const users = await db.get("users");
-            const user: User | undefined = users.find((user: any) => user.email.value == req.user.email.value);
+    try {
+        const users = await db.get("users");
+        const user: User | undefined = users.find((user: any) => user.email.value == req.user.email.value);
 
-            if (!user) return res.send({ status: 400, message: "user-not-found" });
+        if (!user) return res.send({ status: 400, message: "user-not-found" });
 
-            // Check if the user exists, and also if password is right
-            if (!user) return res.send({ status: 400, message: "user-not-found" });
-            if (!bcrypt.compareSync(req.body.oldPassword, user.password)) return res.send({ status: 403, message: "unauthorized" });
+        // Check if the user exists, and also if password is right
+        if (!user) return res.send({ status: 400, message: "user-not-found" });
+        if (!bcrypt.compareSync(req.body.oldPassword, user.password)) return res.send({ status: 403, message: "unauthorized" });
 
-            // Check tfa is provided
-            if (user.tfa.secret !== "") {
-                if (!req.body.tfaCode) return res.send({ status: 200, message: "requires-tfa" });
-                if (typeof req.body.tfaCode !== "string") return res.send({ status: 200, message: "invalid-tfa-code" });
+        // Check tfa is provided
+        if (user.tfa.secret !== "") {
+            if (!req.body.tfaCode) return res.send({ status: 200, message: "requires-tfa" });
+            if (typeof req.body.tfaCode !== "string") return res.send({ status: 200, message: "invalid-tfa-code" });
 
-                const tfaResult = checkTFA(req.body.tfaCode, user, users);
-                if (tfaResult == "invalid-tfa-code") return res.send({ status: 200, message: "invalid-tfa-code" });
-            }
-
-            // Checks
-
-            // Replace the user with the user with the new password
-            const newUserList = users.filter((listUser: User) => listUser.userID !== user?.userID);
-            user.password = bcrypt.hashSync(req.body.newPassword, 10);
-
-            // Push to db
-            newUserList.push(user);
-            await db.set("users", newUserList);
-
-            return res.send({ status: 200, message: "success" });
-        } catch (err) {
-            const errorID = reportError(err);
-            return res.send({ status: 500, message: "server-error", id: errorID });
+            const tfaResult = checkTFA(req.body.tfaCode, user, users);
+            if (tfaResult == "invalid-tfa-code") return res.send({ status: 200, message: "invalid-tfa-code" });
         }
+
+        // Checks
+
+        // Replace the user with the user with the new password
+        const newUserList = users.filter((listUser: User) => listUser.userID !== user?.userID);
+        user.password = bcrypt.hashSync(req.body.newPassword, 10);
+
+        // Push to db
+        newUserList.push(user);
+        await db.set("users", newUserList);
+
+        return res.send({ status: 200, message: "success" });
+    } catch (err) {
+        const errorID = reportError(err);
+        return res.send({ status: 500, message: "server-error", id: errorID });
     }
-);
+});
 
 // Contacts
 router.post("/add-contact", async (req: any, res: any) => {
@@ -171,11 +165,11 @@ router.post("/add-contact", async (req: any, res: any) => {
         newUserList.filter((user: User) => user.userID !== userToAdd?.userID);
 
         // Remove old users
-        user?.contacts.push({ username: userToAdd.username, userID: userToAdd.userID });
-        userToAdd?.contacts.push({ username: user?.username, userID: user?.userID });
+        user?.contacts.push({ username: userToAdd.username, userID: userToAdd.userID, muted: false });
+        userToAdd?.contacts.push({ username: user?.username, userID: user?.userID, muted: false });
 
         // Reload the main page to the other user if they're online
-        io.sockets.to(userToAdd.userID).emit("reload");
+        io.sockets.to(`notification listener ${userToAdd.userID}`).emit("reload");
 
         newUserList.push(user as User);
         newUserList.push(userToAdd as User);
@@ -203,10 +197,10 @@ router.post("/remove-contact", async (req: any, res: any) => {
         const newUserList: Array<User> = users.filter((user: User) => user.userID !== req.user.userID);
         newUserList.filter((user: User) => user.userID !== userToRemove?.userID);
 
-        const newUserContactList = user?.contacts.filter((listUser: User) => {
+        const newUserContactList = user?.contacts.filter((listUser: Contact) => {
             return listUser.userID !== userToRemove?.userID;
         });
-        const newUserToRemoveContactList = userToRemove?.contacts.filter((listUser: User) => {
+        const newUserToRemoveContactList = userToRemove?.contacts.filter((listUser: Contact) => {
             return listUser.userID !== user?.userID;
         });
 
@@ -241,11 +235,11 @@ router.post("/block-contact", async (req: any, res: any) => {
 
         const newUserList: Array<User> = users.filter((user: User) => user.userID !== req.user.userID);
         if (!user) return; // To make typescript happy
-        user.contacts = user?.contacts.filter((listUser: User) => {
+        user.contacts = user?.contacts.filter((listUser: Contact) => {
             return listUser.username !== req.body.contact;
         });
 
-        user?.blockedContacts.push({ username: userToAdd?.username, userID: userToAdd?.userID });
+        user?.blockedContacts.push({ username: userToAdd?.username, userID: userToAdd?.userID, muted: true });
 
         newUserList.push(user as User);
         db.set("users", newUserList);
@@ -270,11 +264,11 @@ router.post("/unblock-contact", async (req: any, res: any) => {
 
         const newUserList: Array<User> = users.filter((user: User) => user.userID !== req.user.userID);
         if (!user) return; // To make typescript happy
-        user.blockedContacts = user?.contacts.filter((listUser: User) => {
+        user.blockedContacts = user?.contacts.filter((listUser: Contact) => {
             return listUser.username !== req.body.contact;
         });
 
-        user?.contacts.push({ username: userToAdd?.username, userID: userToAdd?.userID });
+        user?.contacts.push({ username: userToAdd?.username, userID: userToAdd?.userID, muted: false });
 
         newUserList.push(user as User);
         db.set("users", newUserList);

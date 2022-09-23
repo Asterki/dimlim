@@ -9,10 +9,10 @@ import Navbar from "../../components/navbar";
 import { Row, Col, Container } from "react-bootstrap";
 import { TabContext, TabList, TabPanel } from "@mui/lab";
 import { Avatar, Box, IconButton, Tab, Button, Dialog, DialogTitle, DialogActions } from "@mui/material";
-import { Delete, Chat, DoDisturbOn, DoDisturbOff } from "@mui/icons-material";
 
 import styles from "../../styles/main/home.module.scss";
 import { GetServerSideProps, NextPage } from "next";
+import { Delete, Chat, DoDisturbOn, DoDisturbOff } from "@mui/icons-material";
 
 export const getServerSideProps: GetServerSideProps = async (context: any) => {
     if (!context.req.isAuthenticated())
@@ -88,6 +88,7 @@ const Home: NextPage = (props: any) => {
                         icon: "/icon.png",
                         timeout: 4000,
                         onClick: () => {
+                            window.focus();
                             window.location.href = data.url;
                         },
                     });

@@ -8,9 +8,9 @@ import Head from "next/head";
 import ChatNavbar from "../../components/chatNavbar";
 import Message from "../../components/message";
 
-import { Button, Dialog, DialogTitle, IconButton, TextareaAutosize } from "@mui/material";
+import { Avatar, Button, Dialog, DialogTitle, IconButton, Menu, MenuItem, TextareaAutosize } from "@mui/material";
 import { Container } from "react-bootstrap";
-import { Send } from "@mui/icons-material";
+import { Send, Attachment } from "@mui/icons-material";
 
 import styles from "../../styles/chat.module.scss";
 import { GetServerSideProps, NextPage } from "next";
@@ -24,7 +24,7 @@ export const getServerSideProps: GetServerSideProps = async (context: any) => {
             },
         };
 
-    if (!context.params.user)
+    if (!context.params.user || context.params.id)
         return {
             redirect: {
                 destination: "/home",
@@ -56,6 +56,9 @@ export const getServerSideProps: GetServerSideProps = async (context: any) => {
             method: "post",
             url: `${process.env.HOST}/api/messages/get-pending-messages`,
             headers: context.req.headers,
+            data: {
+                chatName: [context.query.id, context.req.user.userID].sort().join("&"),
+            },
         });
 
         let languageResponse: AxiosResponse = await axios({
@@ -109,11 +112,14 @@ interface Message {
 const Chat: NextPage = (props: any) => {
     const [messageList, setMessageList] = React.useState(new Array());
     const [pendingMessage, setPendingMessage] = React.useState({});
-    const [contactProfileDialogOpen, setContactProfileDialogOpen] = React.useState(false);
 
-    // Socket.io
+    // Dialogs
+    const [contactInfoDialogOpen, setContactInfoDialogOpen] = React.useState(false);
+    const [blockContactDialogOpen, setBlockContactDialogOpen] = React.useState(false);
+    const [deleteChatDialogOpen, setDeleteChatDialogOpen] = React.useState(false);
+
+    // Messaging
     const socket = io(props.host);
-
     socket.on("message", (data: any) => {
         if (data.author == props.user.username) return;
         setPendingMessage(data);
@@ -136,7 +142,6 @@ const Chat: NextPage = (props: any) => {
         return decrypted.toString();
     };
 
-    // Functions
     const sendMessage = (e: any) => {
         (document.querySelector("#message-input") as HTMLInputElement).focus();
         let messageContent = (document.querySelector("#message-input") as HTMLTextAreaElement).value;
@@ -174,9 +179,16 @@ const Chat: NextPage = (props: any) => {
         localStorage.setItem(`chat_${props.contact}`, JSON.stringify(storedChat));
     };
 
-    // Buttons and all
+    // Other actions
+    const selectAttachment = (e: any) => (document.querySelector("#attachment-input") as HTMLInputElement).click();
+
+    // Navbar Actions
     const goBack = () => (window.location.href = "/home");
-    const openContactDialog = () => setContactProfileDialogOpen(true);
+
+    const contactInfo = () => setContactInfoDialogOpen(true);
+
+    const muteContact = () => {};
+
     const deleteChat = () => {
         localStorage.setItem(`chat_${props.contact}`, "[]");
         return window.location.reload();
@@ -210,6 +222,7 @@ const Chat: NextPage = (props: any) => {
                         icon: "/icon.png",
                         timeout: 4000,
                         onClick: () => {
+                            window.focus();
                             window.location.href = data.url;
                         },
                     });
@@ -251,33 +264,56 @@ const Chat: NextPage = (props: any) => {
 
     return (
         <div className={styles["page"]}>
-            <ChatNavbar return={goBack} openContactDialog={openContactDialog} contactUsername={props.contact} contactUserID={props.contactUserID} />
             <Head>
                 <title>DIMLIM | Chat</title>
             </Head>
 
-            <Dialog open={contactProfileDialogOpen} className={styles["dialog-container"]} sx={{ backgroundColor: "none" }}>
+            <ChatNavbar
+                returnAction={goBack}
+                blockAction={blockContact}
+                deleteAction={deleteChat}
+                infoAction={contactInfo}
+                muteAction={muteContact}
+                contactUsername={props.contact}
+                contactUserID={props.contactUserID}
+            />
+
+            <Dialog
+                open={contactInfoDialogOpen}
+                onClose={() => {
+                    setContactInfoDialogOpen(false);
+                }}
+                className={styles["dialog-container"]}
+                sx={{ backgroundColor: "none" }}
+            >
                 <Container fluid className={styles["dialog"]}>
                     <DialogTitle>{props.contact}</DialogTitle>
 
-                    <Button onClick={deleteChat}>{props.lang.dialog.delete}</Button>
-                    <br />
+                    <Avatar sx={{ width: 200, height: 200 }} src={`/avatars/${props.contactUserID}.png`} />
 
-                    <Button
-                        onClick={(e: any) => {
-                            blockContact(e, props.contact);
-                        }}
-                    >
-                        {props.lang.dialog.block}
-                    </Button>
                     <br />
 
                     <Button
                         onClick={(event: any) => {
-                            setContactProfileDialogOpen(false);
+                            setContactInfoDialogOpen(false);
                         }}
                     >
-                        {props.lang.dialog.cancel}
+                        Done
+                    </Button>
+                    <br />
+                </Container>
+            </Dialog>
+
+            <Dialog open={blockContactDialogOpen} className={styles["dialog-container"]} sx={{ backgroundColor: "none" }}>
+                <Container fluid className={styles["dialog"]}>
+                    <DialogTitle>{props.contact}</DialogTitle>
+
+                    <Button
+                        onClick={(event: any) => {
+                            setBlockContactDialogOpen(false);
+                        }}
+                    >
+                        Done
                     </Button>
                     <br />
                 </Container>
@@ -305,10 +341,17 @@ const Chat: NextPage = (props: any) => {
             </Container>
             <Container fluid className={styles["chat-bar"]}>
                 <TextareaAutosize className={styles["message-input"]} id="message-input" maxRows={3} placeholder={props.lang.placeholder} />
+                <IconButton onClick={selectAttachment}>
+                    <Attachment />
+                </IconButton>
                 <IconButton onClick={sendMessage}>
                     <Send />
                 </IconButton>
             </Container>
+
+            <form action="" hidden>
+                <input type="file" name="" id="attachment-input" />
+            </form>
         </div>
     );
 };

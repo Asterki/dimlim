@@ -39,13 +39,16 @@ router.post("/register", async (req, res) => {
         if (users.find((user: any) => user.username == username)) return res.send({ status: 200, message: "username-already-in-use" });
 
         const makeId = (length: number) => {
-            let result = "";
-            const characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-            const charactersLength = characters.length;
-            for (let i = 0; i < length; i++) {
-                result += characters.charAt(Math.floor(Math.random() * charactersLength));
+            let str = "";
+            for (let counter = 0; counter <= length; counter++) {
+                const randomNum = 0 + parseInt((Math.random() * 127) as any);
+                if (randomNum > 33) {
+                    str += String.fromCharCode(randomNum);
+                } else {
+                    counter--;
+                }
             }
-            return result;
+            return str;
         };
 
         // Create and push the user to the db

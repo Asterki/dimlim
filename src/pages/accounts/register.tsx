@@ -111,7 +111,7 @@ const Register: NextPage = (props: any) => {
             return setButtonLoading(false);
         }
 
-        if (password.length < 3 || password.length > 64) {
+        if (password.length < 8 || password.length > 64) {
             setPasswordError(props.lang.passwordLength);
             return setButtonLoading(false);
         }

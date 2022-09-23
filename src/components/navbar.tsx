@@ -4,11 +4,21 @@ import * as React from "react";
 
 import { Navbar, Nav, NavDropdown, Container, Dropdown } from "react-bootstrap";
 import { NextPage } from "next";
-import { Avatar } from "@mui/material";
+import { Avatar, Menu, MenuItem } from "@mui/material";
 
 import styles from "./navbar.module.scss";
 
 const NavbarComponent = (props: { lang: any; user: any | null }) => {
+    const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+    const open = Boolean(anchorEl);
+
+    const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+        setAnchorEl(event.currentTarget);
+    };
+    const handleClose = () => {
+        setAnchorEl(null);
+    };
+
     if (props.user == null) {
         return (
             <Navbar className={styles["component"]} sticky="top" collapseOnSelect variant="dark" expand="lg">
@@ -54,22 +64,43 @@ const NavbarComponent = (props: { lang: any; user: any | null }) => {
                     </Navbar.Brand>
 
                     <Nav>
-                        <Dropdown>
-                            <Dropdown.Toggle variant="none" className="shadow-none" id="dropdown-basic">
-                                <Avatar src={props.user.avatar == "" ? "" : `/avatars/${props.user.avatar}`} sx={{ width: 30, height: 30 }}></Avatar>
-                                <p>
-                                    <b>{props.user.username}</b>
-                                </p>
-                            </Dropdown.Toggle>
+                        <Dropdown.Toggle onClick={handleClick} variant="none" className="shadow-none" id="dropdown-basic">
+                            <Avatar src={props.user.avatar == "" ? "" : `/avatars/${props.user.avatar}`} sx={{ width: 30, height: 30 }}></Avatar>
+                            <p>
+                                <b>{props.user.username}</b>
+                            </p>
+                        </Dropdown.Toggle>
 
-                            <Dropdown.Menu variant="dark" className={`container ${styles.dropdown}`} align="end">
-                                <Dropdown.Item href="/settings">{props.lang.settings}</Dropdown.Item>
-                                <Dropdown.Divider />
-                                <Dropdown.Item href="/settings?logout=true" className={styles["logout"]}>
-                                    {props.lang.logout}
-                                </Dropdown.Item>
-                            </Dropdown.Menu>
-                        </Dropdown>
+                        <Menu
+                            id="basic-menu"
+                            anchorEl={anchorEl}
+                            onClose={handleClose}
+                            anchorOrigin={{
+                                vertical: "bottom",
+                                horizontal: "right",
+                            }}
+                            transformOrigin={{
+                                vertical: "top",
+                                horizontal: "right",
+                            }}
+                            open={open}
+                        >
+                            <MenuItem
+                                onClick={() => {
+                                    window.location.href = "/settings";
+                                }}
+                            >
+                                {props.lang.settings}
+                            </MenuItem>
+                            <MenuItem
+                                onClick={() => {
+                                    window.location.href = "/settings?logout=true";
+                                }}
+                                className={styles["logout"]}
+                            >
+                                {props.lang.logout}
+                            </MenuItem>
+                        </Menu>
                     </Nav>
                 </Container>
             </Navbar>

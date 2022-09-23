@@ -1,3 +1,9 @@
+interface Contact {
+    userID: string;
+    username: string;
+    muted: boolean;
+}
+
 interface User {
     userID: string;
     created: number;
@@ -9,11 +15,11 @@ interface User {
     };
 
     avatar: string;
-    bio: string
-    preferredLanguage: string,
+    bio: string;
+    preferredLanguage: string;
 
-    contacts: Array;
-    blockedContacts: Array;
+    contacts: Array<Contact>;
+    blockedContacts: Array<Contact>;
 
     password: string;
     chatSecret: string;
@@ -32,4 +38,4 @@ interface EmailVerificationCode {
     expires: number;
 }
 
-export type { User, EmailVerificationCode };
+export type { User, EmailVerificationCode, Contact };

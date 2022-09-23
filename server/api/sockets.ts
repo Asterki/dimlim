@@ -1,7 +1,7 @@
 import { io } from "../";
 import db from "../config/databases";
 
-import { User } from "../types";
+import { User, Contact } from "../types";
 
 io.sockets.on("connection", (socket: any) => {
     socket.on("join-home-page-listener", (userID: string) => {
@@ -22,7 +22,7 @@ io.sockets.on("connection", (socket: any) => {
         if (!user || !contact) return;
 
         // Find the room using the secrets
-        const roomName = [user.chatSecret, contact.chatSecret].sort().join("&");
+        const roomName = [user.userID, contact.userID].sort().join("&");
         const room: any = io.sockets.adapter.rooms.get(roomName);
 
         // Checks
@@ -40,10 +40,10 @@ io.sockets.on("connection", (socket: any) => {
         if (!author || !recipient) return;
 
         // Check if the user is blocked
-        if (recipient.blockedContacts.find((listUser: User) => listUser.userID == author?.userID) !== undefined) return;
+        if (recipient.blockedContacts.find((listUser: Contact) => listUser.userID == author?.userID) !== undefined) return;
 
         // If the other user isn't in the chat room
-        const roomName = [author.chatSecret, recipient.chatSecret].sort().join("&");
+        const roomName = [author.userID, recipient.userID].sort().join("&");
         const room: any = io.sockets.adapter.rooms.get(roomName);
 
         // If the recipient isn't in the room
@@ -56,16 +56,21 @@ io.sockets.on("connection", (socket: any) => {
                 fr: "Vous avez un nouveau message de",
             };
 
-            let pendingMessages = await db.get(`${recipient.userID}_pending`);
+            let pendingMessages = await db.get(`${author.userID}_${recipient.userID}_pending`);
             if (!pendingMessages) pendingMessages = [];
 
+            // Save to pending messages
             data.new = true;
             pendingMessages.push(data);
-            await db.set(`${recipient.userID}_pending`, pendingMessages);
+            await db.set(`${roomName}_pending`, pendingMessages);
+
+            // Check if the user is muted
+            const recipientContact = recipient.contacts.find((listUser: Contact) => listUser.userID == author?.userID);
+            if (recipientContact?.muted) return;
 
             socket.to(`notification listener ${recipient.userID}`).emit("notification", {
                 content: `${messageNotifications[recipient.preferredLanguage]} ${author.username}`,
-                url: `/chat/${author.username}?id=${recipient.userID}`,
+                url: `/chat/${author.username}?id=${author.userID}`,
             });
         }
         socket.to(roomName).emit("message", data);

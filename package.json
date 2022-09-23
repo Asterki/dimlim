@@ -36,7 +36,7 @@
         "@types/passport": "^1.0.11",
         "@types/passport-local": "^1.0.34",
         "@types/qrcode": "^1.5.0",
-        "@types/react": "^18.0.20",
+        "@types/react": "^18.0.21",
         "@types/react-dom": "^18.0.6",
         "@types/serve-favicon": "^2.5.3",
         "@types/speakeasy": "^2.0.7",

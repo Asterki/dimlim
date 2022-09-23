@@ -2,6 +2,7 @@
 import React from "react";
 import axios, { AxiosResponse } from "axios";
 import { io } from "socket.io-client";
+import Push from "push.js";
 
 import Head from "next/head";
 import Navbar from "../../components/navbar";
@@ -71,11 +72,26 @@ const Home: NextPage = (props: any) => {
     const socket = io(props.host);
 
     React.useEffect(() => {
+        Push.Permission.request();
+
         socket.on("connect", () => {
             socket.emit("join-home-page-listener", props.user.userID);
 
             socket.on("reload", (data) => {
                 return setReload(true);
+            });
+
+            socket.on("notification", (data) => {
+                if (Push.Permission.has()) {
+                    Push.create(props.lang.newMessageNotification, {
+                        body: data.content,
+                        icon: "/icon.png",
+                        timeout: 4000,
+                        onClick: () => {
+                            window.location.href = data.url;
+                        },
+                    });
+                }
             });
         });
     });

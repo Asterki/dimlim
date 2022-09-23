@@ -2,6 +2,7 @@ import React from "react";
 import axios, { AxiosResponse } from "axios";
 import { io } from "socket.io-client";
 import crypto from "crypto";
+import Push from "push.js";
 
 import Head from "next/head";
 import ChatNavbar from "../../components/chatNavbar";
@@ -200,6 +201,20 @@ const Chat: NextPage = (props: any) => {
     React.useEffect(() => {
         socket.on("connect", () => {
             socket.emit("join-chat", { user: props.user.username, contact: props.contact });
+
+            // Other chat's notifications
+            socket.on("notification", (data) => {
+                if (Push.Permission.has()) {
+                    Push.create(props.lang.newMessageNotification, {
+                        body: data.content,
+                        icon: "/icon.png",
+                        timeout: 4000,
+                        onClick: () => {
+                            window.location.href = data.url;
+                        },
+                    });
+                }
+            });
         });
 
         // Load previous chat
@@ -238,7 +253,7 @@ const Chat: NextPage = (props: any) => {
         <div className={styles["page"]}>
             <ChatNavbar return={goBack} openContactDialog={openContactDialog} contactUsername={props.contact} contactUserID={props.contactUserID} />
             <Head>
-                <title>DIMLIM | {props.contact}</title>
+                <title>DIMLIM | Chat</title>
             </Head>
 
             <Dialog open={contactProfileDialogOpen} className={styles["dialog-container"]} sx={{ backgroundColor: "none" }}>
@@ -289,7 +304,7 @@ const Chat: NextPage = (props: any) => {
                 <div id="chat-bottom" />
             </Container>
             <Container fluid className={styles["chat-bar"]}>
-                <TextareaAutosize className={styles["message-input"]} id="message-input" maxRows={3} placeholder={props.lang.placeholder} disabled={true} />
+                <TextareaAutosize className={styles["message-input"]} id="message-input" maxRows={3} placeholder={props.lang.placeholder} />
                 <IconButton onClick={sendMessage}>
                     <Send />
                 </IconButton>

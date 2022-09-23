@@ -31,6 +31,8 @@ const en = {
             blockedContacts: "Blocked Contacts",
             noBlockedContacts: "You don't have any blocked contacts yet",
 
+            newMessageNotification: "New Message",
+
             dialogs: {
                 addContact: {
                     title: "Add Contact",

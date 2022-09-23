@@ -31,6 +31,8 @@ const pr = {
             blockedContacts: "Contatos bloqueados",
             noBlockedContacts: "Você ainda não tem nenhum contato bloqueado",
 
+            newMessageNotification: "Nova mensagem",
+
             dialogs: {
                 addContact: {
                     title: "Adicionar contato",

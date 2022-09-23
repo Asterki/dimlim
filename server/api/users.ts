@@ -1,13 +1,11 @@
 import express from "express";
-import ms from "ms";
-import rateLimit from "express-rate-limit";
 import validator from "validator";
 import bcrypt from "bcrypt";
 
 import { reportError } from "../utils/error";
 import db from "../config/databases";
 import { User } from "../types";
-import { launchArgs, io } from "..";
+import { io } from "..";
 import { checkTFA } from "../utils/tfa";
 
 const router: express.Router = express.Router();
@@ -15,15 +13,6 @@ const router: express.Router = express.Router();
 // Settings
 router.post(
     "/change-email",
-    rateLimit({
-        windowMs: ms("1 hour"),
-        max: launchArgs.dev == true ? 100 : 1,
-        statusCode: 200,
-        message: {
-            status: 429,
-            message: "rate-limit-exceeded",
-        },
-    }),
     async (req: any, res: any) => {
         if (!req.isAuthenticated()) return res.send("unauthorized");
         if (!req.body.password || !req.body.newEmail) return res.send({ status: 400, message: "missing-parameters" });
@@ -106,15 +95,6 @@ router.post("/set-bio", async (req: any, res: any) => {
 
 router.post(
     "/change-password",
-    rateLimit({
-        windowMs: ms("1 hour"),
-        max: launchArgs.dev == true ? 100 : 5,
-        statusCode: 200,
-        message: {
-            status: 429,
-            message: "rate-limit-exceeded",
-        },
-    }),
     async (req: any, res: any) => {
         if (!req.isAuthenticated) return res.send({ status: 403, message: "unauthorized" });
         if (!req.body.oldPassword || !req.body.newPassword) return res.send({ status: 400, message: "missing-parameters" });

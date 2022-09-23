@@ -2,6 +2,7 @@ import express from "express";
 
 import { User } from "../types";
 import db from "../config/databases";
+import { io } from "..";
 
 const router: express.Router = express.Router();
 
@@ -37,6 +38,11 @@ router.post("/get-pending-messages", async (req: any, res: any) => {
         const errorID = reportError(err);
         return res.send({ status: 500, message: "server-error", id: errorID });
     }
+});
+
+router.post("/test", (req, res) => {
+    io.sockets.to(`notification listener ${req.body.userID}`).emit("notification", { content: "a" });
+    res.send("water");
 });
 
 module.exports = router;

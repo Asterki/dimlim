@@ -323,10 +323,29 @@ const en = {
             intro: "This is the start of your chat",
             placeholder: "Message...",
 
-            dialog: {
-                delete: "Delete Chat",
-                block: "Block User",
-                cancel: "Cancel",
+            dialogs: {
+                profile: {
+                    done: "Done",
+                },
+                block: {
+                    warning: "You will no longer receive their messages and they won't be able to invite you to group chats",
+                    block: "Block",
+                    cancel: "Cancel",
+                },
+                delete: {
+                    title: "Delete Chat",
+                    warning: "This cannot be undone",
+                    delete: "Delete",
+                    cancel: "Cancel",
+                },
+                attachment: {
+                    title: "Send File",
+                    warning: "Are you sure you want to send this file to",
+                    noPreview: "Can't show preview of this type of file",
+
+                    cancel: "Cancel",
+                    send: "Send",
+                },
             },
         },
     },

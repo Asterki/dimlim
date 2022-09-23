@@ -49,9 +49,30 @@ const ChatNavarComponent = (props: any) => {
                     }}
                     open={open}
                 >
-                    <MenuItem onClick={props.muteAction}>Mute Chat</MenuItem>
-                    <MenuItem onClick={props.blockAction}>Block</MenuItem>
-                    <MenuItem onClick={props.deleteAction}>Delete Chat</MenuItem>
+                    <MenuItem
+                        onClick={() => {
+                            props.muteAction();
+                            handleClose();
+                        }}
+                    >
+                        Mute Chat
+                    </MenuItem>
+                    <MenuItem
+                        onClick={() => {
+                            props.blockAction();
+                            handleClose();
+                        }}
+                    >
+                        Block
+                    </MenuItem>
+                    <MenuItem
+                        onClick={() => {
+                            props.deleteAction();
+                            handleClose();
+                        }}
+                    >
+                        Delete Chat
+                    </MenuItem>
                 </Menu>
             </div>
         </div>

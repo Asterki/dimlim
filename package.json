@@ -12,7 +12,7 @@
         "start:run-server": "node ./build/server/index.js --dev false",
         "build": "next build",
         "lint": "next lint && npx eslint",
-        "setup": "mkdir data && cd data && mkdir avatars && mkdir files && cd .. && npm i -y && mkdir ./server/logs/ && touch ./server/logs/errors.log && ts-node ./server/index.ts --setup"
+        "setup": "mkdir data && cd data && mkdir avatars && mkdir sessions && cd .. && npm i -y && mkdir ./server/logs/ && touch ./server/logs/errors.log && ts-node ./server/index.ts --setup"
     },
     "dependencies": {
         "-": "^0.0.1",

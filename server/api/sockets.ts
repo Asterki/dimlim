@@ -31,7 +31,7 @@ io.sockets.on("connection", (socket: any) => {
     });
 
     socket.on("message", async (data: any) => {
-        if (!data.recipient || !data.author || !data.timestamp) return;
+        if (!data.recipient || !data.author || !data.timestamp || !data.message) return;
 
         const users = await db.get("users");
         const author: User | undefined = users.find((user: User) => user.username == data.author);
@@ -56,13 +56,9 @@ io.sockets.on("connection", (socket: any) => {
                 fr: "Vous avez un nouveau message de",
             };
 
-            let pendingMessages = await db.get(`${author.userID}_${recipient.userID}_pending`);
-            if (!pendingMessages) pendingMessages = [];
-
             // Save to pending messages
             data.new = true;
-            pendingMessages.push(data);
-            await db.set(`${roomName}_pending`, pendingMessages);
+            await db.push(`${roomName}_pending`, data);
 
             // Check if the user is muted
             const recipientContact = recipient.contacts.find((listUser: Contact) => listUser.userID == author?.userID);

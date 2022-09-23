@@ -324,10 +324,29 @@ const pr = {
             intro: "Este é o início do seu chat",
             placeholder: "Mensagem...",
 
-            dialog: {
-                delete: "Excluir bate-papo",
-                block: "Bloquear usuário",
-                cancel: "Cancelar",
+            dialogs: {
+                profile: {
+                    done: "Pronto",
+                },
+                block: {
+                    warning: "Você não receberá mais as mensagens deles e eles não poderão convidá-lo para bate-papos em grupo",
+                    block: "Bloquear",
+                    cancel: "Cancelar",
+                },
+                delete: {
+                    title: "Excluir bate-papo",
+                    warning: "Isso não pode ser desfeito",
+                    delete: "Excluir",
+                    cancel: "Cancelar",
+                },
+                attachment: {
+                    title: "Enviar arquivo",
+                    warning: "Tem certeza de que deseja enviar este arquivo para",
+                    noPreview: "Não é possível mostrar a visualização deste tipo de arquivo",
+
+                    cancel: "Cancelar",
+                    send: "Enviar",
+                },
             },
         },
     },

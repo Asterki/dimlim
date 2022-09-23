@@ -325,10 +325,29 @@ const de = {
             intro: "Dies ist der Beginn Ihres Chats",
             placeholder: "Nachricht...",
 
-            dialog: {
-                delete: "Chat löschen",
-                block: "Benutzer blockieren",
-                cancel: "Abbrechen",
+            dialogs: {
+                profile: {
+                    done: "Fertig",
+                },
+                block: {
+                    warning: "Sie werden ihre Nachrichten nicht mehr erhalten und sie können Sie nicht zu Gruppenchats einladen",
+                    block: "blockieren",
+                    cancel: "Abbrechen",
+                },
+                delete: {
+                    title: "Chat löschen",
+                    warning: "Dies kann nicht rückgängig gemacht werden",
+                    delete: "Löschen",
+                    cancel: "Abbrechen",
+                },
+                attachment: {
+                    title: "Datei senden",
+                    warning: "Sind Sie sicher, dass Sie diese Datei senden möchten",
+                    noPreview: "Vorschau dieses Dateityps kann nicht angezeigt werden",
+
+                    cancel: "Abbrechen",
+                    send: "Senden",
+                },
             },
         },
     },

@@ -1,10 +1,25 @@
 .component {
     color: white;
 
+    img,
+    video {
+        max-width: 250px !important;
+        border-radius: 5px;
+    }
+
     .by-me {
         width: 100%;
         display: flex;
         justify-content: flex-end;
+
+        .file {
+            color: #c5c5c5 !important;
+            text-decoration: none;
+
+            svg {
+                color: white !important;
+            }
+        }
 
         .content {
             background-color: #5294e2;
@@ -35,13 +50,22 @@
         display: flex;
         justify-content: flex-start;
 
+        .file {
+            color: #5294e2 !important;
+            text-decoration: none;
+
+            svg {
+                color: white !important;
+            }
+        }
+
         .content {
             background-color: #383e4d;
             box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
 
             padding: 10px;
             border-radius: 5px;
-            
+
             overflow-wrap: break-word;
             text-align: left;
             margin-bottom: 10px;

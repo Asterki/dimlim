@@ -324,10 +324,29 @@ const es = {
             intro: "Este es el comienzo de tu chat",
             placeholder: "Mensaje...",
 
-            dialog: {
-                delete: "Eliminar chat",
-                block: "Bloquear usuario",
-                cancel: "Cancelar",
+            dialogs: {
+                profile: {
+                    done: "Listo",
+                },
+                block: {
+                    warning: "No vas a recivir sus mensajes y no van a poder invitarte a grupos de chat",
+                    block: "Bloquear",
+                    cancel: "Cancelar",
+                },
+                delete: {
+                    title: "Borrar Chat",
+                    warning: "Esto no es reversible",
+                    delete: "Borrar",
+                    cancel: "Cancelar",
+                },
+                attachment: {
+                    title: "Enviar Archivo",
+                    warning: "Quieres enviar este archivo a",
+                    noPreview: "No se puede mostrar la previsualización de este tipo de archivo",
+
+                    cancel: "Cancelar",
+                    send: "Enviar",
+                },
             },
         },
     },

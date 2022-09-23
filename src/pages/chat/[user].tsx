@@ -8,7 +8,7 @@ import Head from "next/head";
 import ChatNavbar from "../../components/chatNavbar";
 import Message from "../../components/message";
 
-import { Avatar, Button, Dialog, DialogTitle, IconButton, Menu, MenuItem, TextareaAutosize } from "@mui/material";
+import { Avatar, Button, Dialog, DialogActions, DialogTitle, IconButton, Menu, MenuItem, TextareaAutosize } from "@mui/material";
 import { Container } from "react-bootstrap";
 import { Send, Attachment } from "@mui/icons-material";
 
@@ -117,6 +117,15 @@ const Chat: NextPage = (props: any) => {
     const [contactInfoDialogOpen, setContactInfoDialogOpen] = React.useState(false);
     const [blockContactDialogOpen, setBlockContactDialogOpen] = React.useState(false);
     const [deleteChatDialogOpen, setDeleteChatDialogOpen] = React.useState(false);
+    const [attachmentDialogOpen, setAttachmentDialogOpen] = React.useState(false);
+    const [fileTooBigDialogOpen, setFileTooBigDialogOpen] = React.useState(false);
+
+    // Attachments
+    const [attachmentPreviewFile, setAttachmentPreviewFile] = React.useState({
+        type: "",
+        content: "",
+        name: "",
+    });
 
     // Messaging
     const socket = io(props.host);
@@ -128,7 +137,7 @@ const Chat: NextPage = (props: any) => {
     const encrypt = (text: any) => {
         const iv = crypto.randomBytes(16);
         const cipher = crypto.createCipheriv("aes-256-ctr", props.chatKey, iv);
-        const encrypted = Buffer.concat([cipher.update(text), cipher.final()]);
+        const encrypted = Buffer.concat([cipher.update(JSON.stringify(text)), cipher.final()]);
 
         return {
             iv: iv.toString("hex"),
@@ -139,75 +148,47 @@ const Chat: NextPage = (props: any) => {
     const decrypt = (hash: any) => {
         const decipher = crypto.createDecipheriv("aes-256-ctr", props.chatKey, Buffer.from(hash.iv, "hex"));
         const decrypted = Buffer.concat([decipher.update(Buffer.from(hash.content, "hex")), decipher.final()]);
-        return decrypted.toString();
+        return JSON.parse(decrypted.toString());
     };
 
-    const sendMessage = (e: any) => {
-        (document.querySelector("#message-input") as HTMLInputElement).focus();
-        let messageContent = (document.querySelector("#message-input") as HTMLTextAreaElement).value;
-        if (!messageContent) return;
-
-        (document.querySelector("#message-input") as HTMLInputElement).value = "";
-        addMessage({
-            author: props.user.username,
-            recipient: props.contact,
-            timestamp: Date.now(),
-            content: messageContent,
-        });
+    const sendMessage = (data: any) => {
+        addMessage(data, false);
 
         socket.emit("message", {
             author: props.user.username,
             recipient: props.contact,
             timestamp: Date.now(),
-            content: encrypt(messageContent),
+            message: encrypt(data.message),
         });
     };
 
     const addMessage: Function = (data: any, fromSaved: boolean | undefined) => {
-        if (data.author !== props.user.username && fromSaved == false) data.content = decrypt(data.content);
+        // If the message comes from the other person
+        if (data.author !== props.user.username && fromSaved == false) data.message = decrypt(data.message);
+
+        // Add the message
         let newMessageList: Array<Message> = [...messageList, data];
         setMessageList(newMessageList);
 
         // Store message
+        if (fromSaved == true) return;
+
         let storedChatRaw = localStorage.getItem(`chat_${props.contact}`);
         if (!storedChatRaw) storedChatRaw = "[]";
-
-        if (fromSaved == true) return;
 
         let storedChat = JSON.parse(storedChatRaw);
         storedChat.push(data);
         localStorage.setItem(`chat_${props.contact}`, JSON.stringify(storedChat));
     };
 
-    // Other actions
-    const selectAttachment = (e: any) => (document.querySelector("#attachment-input") as HTMLInputElement).click();
-
     // Navbar Actions
+    const openContactInfoDialog = () => setContactInfoDialogOpen(true);
+    const openBlockContactDialog = () => setBlockContactDialogOpen(true);
+    const openDeleteChatDialog = () => setDeleteChatDialogOpen(true);
+
     const goBack = () => (window.location.href = "/home");
 
-    const contactInfo = () => setContactInfoDialogOpen(true);
-
     const muteContact = () => {};
-
-    const deleteChat = () => {
-        localStorage.setItem(`chat_${props.contact}`, "[]");
-        return window.location.reload();
-    };
-    const blockContact = async (event: any, username: string) => {
-        let response = await axios({
-            method: "post",
-            url: `${props.host}/api/users/block-contact`,
-            data: {
-                contact: username,
-            },
-        });
-
-        if (response.data.code == 500) return (window.location.href = `/error?id=${response.data.id}`);
-
-        if (response.data.message == "success") {
-            return (window.location.href = "/home");
-        }
-    };
 
     // Listeners
     React.useEffect(() => {
@@ -241,8 +222,8 @@ const Chat: NextPage = (props: any) => {
 
                 // Load new chats
                 if (!props.newMessages.length) return;
-                props.newMessages.forEach((newMessage: Message) => {
-                    if (newMessage.content.iv == undefined) return;
+                props.newMessages.forEach((newMessage: any) => {
+                    if (newMessage.message.iv == undefined) return;
                     addMessage(newMessage, false);
                 });
             })();
@@ -259,7 +240,11 @@ const Chat: NextPage = (props: any) => {
 
     React.useEffect(() => {
         let chatBottom = document.querySelector("#chat-bottom") as HTMLDivElement;
-        chatBottom.scrollIntoView();
+
+        // Load video views
+        setTimeout(() => {
+            chatBottom.scrollIntoView();
+        }, 500);
     }, [messageList]);
 
     return (
@@ -270,9 +255,9 @@ const Chat: NextPage = (props: any) => {
 
             <ChatNavbar
                 returnAction={goBack}
-                blockAction={blockContact}
-                deleteAction={deleteChat}
-                infoAction={contactInfo}
+                blockAction={openBlockContactDialog}
+                deleteAction={openDeleteChatDialog}
+                infoAction={openContactInfoDialog}
                 muteAction={muteContact}
                 contactUsername={props.contact}
                 contactUserID={props.contactUserID}
@@ -298,24 +283,172 @@ const Chat: NextPage = (props: any) => {
                             setContactInfoDialogOpen(false);
                         }}
                     >
-                        Done
+                        {props.lang.dialogs.profile.done}
                     </Button>
                     <br />
                 </Container>
             </Dialog>
 
-            <Dialog open={blockContactDialogOpen} className={styles["dialog-container"]} sx={{ backgroundColor: "none" }}>
+            <Dialog
+                open={blockContactDialogOpen}
+                onClose={() => {
+                    setBlockContactDialogOpen(false);
+                }}
+                className={styles["dialog-container"]}
+            >
                 <Container fluid className={styles["dialog"]}>
                     <DialogTitle>{props.contact}</DialogTitle>
+                    <p>{props.lang.dialogs.block.warning}</p>
+
+                    <DialogActions>
+                        <Button
+                            onClick={async (event: any) => {
+                                setBlockContactDialogOpen(false);
+                                let response = await axios({
+                                    method: "post",
+                                    url: `${props.host}/api/users/block-contact`,
+                                    data: {
+                                        contact: props.contact,
+                                    },
+                                });
+
+                                if (response.data.code == 500) return (window.location.href = `/error?id=${response.data.id}`);
+
+                                if (response.data.message == "success") {
+                                    return (window.location.href = "/home");
+                                }
+                            }}
+                        >
+                            {props.lang.dialogs.block.block}
+                        </Button>
+                        <Button
+                            onClick={(event: any) => {
+                                setBlockContactDialogOpen(false);
+                            }}
+                        >
+                            {props.lang.dialogs.block.cancel}
+                        </Button>
+                    </DialogActions>
+                </Container>
+            </Dialog>
+
+            <Dialog
+                open={deleteChatDialogOpen}
+                onClose={() => {
+                    setDeleteChatDialogOpen(false);
+                }}
+                className={styles["dialog-container"]}
+                sx={{ backgroundColor: "none" }}
+            >
+                <Container fluid className={styles["dialog"]}>
+                    <DialogTitle>{props.lang.dialogs.delete.title}</DialogTitle>
+
+                    <p>{props.lang.dialogs.delete.warning}</p>
+
+                    <DialogActions>
+                        <Button
+                            onClick={(event: any) => {
+                                setDeleteChatDialogOpen(false);
+                                localStorage.setItem(`chat_${props.contact}`, "[]");
+                                return window.location.reload();
+                            }}
+                        >
+                            {props.lang.dialogs.delete.delete}
+                        </Button>
+                        <Button
+                            onClick={(event: any) => {
+                                setDeleteChatDialogOpen(false);
+                            }}
+                        >
+                            {props.lang.dialogs.delete.cancel}
+                        </Button>
+                    </DialogActions>
+                </Container>
+            </Dialog>
+
+            <Dialog
+                open={attachmentDialogOpen}
+                onClose={() => {
+                    setDeleteChatDialogOpen(false);
+                }}
+                className={styles["dialog-container"]}
+                sx={{ backgroundColor: "none" }}
+            >
+                <Container fluid className={styles["dialog"]}>
+                    <DialogTitle>{props.lang.dialogs.attachment.title}</DialogTitle>
+
+                    <p>
+                        {props.lang.dialogs.attachment.warning} {props.contact}
+                    </p>
+
+                    {attachmentPreviewFile.type == "image" && <img className={styles["attachment-image"]} src={attachmentPreviewFile.content} alt="image" />}
+                    {attachmentPreviewFile.type == "video" && <video controls className={styles["attachment-image"]} src={attachmentPreviewFile.content} />}
+                    {attachmentPreviewFile.type !== "video" && attachmentPreviewFile.type !== "image" && (
+                        <p className={styles["no-file-preview"]}>{props.lang.dialogs.attachment.noPreview}</p>
+                    )}
+
+                    <br />
+
+                    <TextareaAutosize className={styles["message-input"]} id="attachment-caption" maxRows={3} placeholder={props.lang.placeholder} />
+
+                    <DialogActions>
+                        <Button
+                            onClick={(event: any) => {
+                                setAttachmentDialogOpen(false);
+                                setAttachmentPreviewFile({
+                                    type: "",
+                                    content: "",
+                                    name: "",
+                                });
+                            }}
+                        >
+                            {props.lang.dialogs.attachment.cancel}
+                        </Button>
+                        <Button
+                            onClick={(event: any) => {
+                                let fileType = attachmentPreviewFile.type;
+                                if (attachmentPreviewFile.type !== "video" && attachmentPreviewFile.type !== "image") fileType = "file";
+
+                                sendMessage({
+                                    author: props.user.username,
+                                    recipient: props.contact,
+                                    timestamp: Date.now(),
+                                    message: {
+                                        type: fileType,
+                                        content: attachmentPreviewFile.content,
+                                        name: attachmentPreviewFile.name,
+                                        caption: (document.querySelector("#attachment-caption") as HTMLInputElement).value,
+                                    },
+                                });
+                                setAttachmentDialogOpen(false);
+                            }}
+                        >
+                            {props.lang.dialogs.attachment.send}
+                        </Button>
+                    </DialogActions>
+                </Container>
+            </Dialog>
+
+            <Dialog
+                open={fileTooBigDialogOpen}
+                onClose={() => {
+                    setDeleteChatDialogOpen(false);
+                }}
+                className={styles["dialog-container"]}
+                sx={{ backgroundColor: "none" }}
+            >
+                <Container fluid className={styles["dialog"]}>
+                    <DialogTitle>Send Image</DialogTitle>
+
+                    <p>The image you selected is too big, it must be under 5mb</p>
 
                     <Button
                         onClick={(event: any) => {
-                            setBlockContactDialogOpen(false);
+                            setFileTooBigDialogOpen(false);
                         }}
                     >
-                        Done
+                        Ok
                     </Button>
-                    <br />
                 </Container>
             </Dialog>
 
@@ -323,14 +456,16 @@ const Chat: NextPage = (props: any) => {
                 <br />
                 <p className={styles["intro"]}>{props.lang.intro}</p>
                 <br />
-                {messageList.map((message: any) => {
+                {messageList.map((data: any) => {
                     return (
                         <Message
-                            key={`${Math.random() * 1000} ${message.author}`}
-                            timestamp={message.timestamp}
-                            sentByMe={message.author == props.user.username}
-                            content={message.content}
-                            type="text"
+                            key={`${Math.random() * 1000} ${data.timestamp}`}
+                            timestamp={data.timestamp}
+                            sentByMe={data.author == props.user.username}
+                            content={data.message.content}
+                            name={data.message.name ? data.message.name : undefined}
+                            caption={data.message.caption ? data.message.caption : undefined}
+                            type={data.message.type}
                         />
                     );
                 })}
@@ -341,16 +476,67 @@ const Chat: NextPage = (props: any) => {
             </Container>
             <Container fluid className={styles["chat-bar"]}>
                 <TextareaAutosize className={styles["message-input"]} id="message-input" maxRows={3} placeholder={props.lang.placeholder} />
-                <IconButton onClick={selectAttachment}>
+                <IconButton
+                    onClick={() => {
+                        (document.querySelector("#attachment-input") as HTMLInputElement).click();
+                    }}
+                >
                     <Attachment />
                 </IconButton>
-                <IconButton onClick={sendMessage}>
+                <IconButton
+                    onClick={() => {
+                        (document.querySelector("#message-input") as HTMLInputElement).focus();
+                        let messageContent = (document.querySelector("#message-input") as HTMLTextAreaElement).value;
+                        if (!messageContent) return;
+                        (document.querySelector("#message-input") as HTMLInputElement).value = "";
+
+                        sendMessage({
+                            author: props.user.username,
+                            recipient: props.contact,
+                            timestamp: Date.now(),
+                            message: {
+                                type: "text",
+                                content: messageContent,
+                            },
+                        });
+                    }}
+                >
                     <Send />
                 </IconButton>
             </Container>
 
             <form action="" hidden>
-                <input type="file" name="" id="attachment-input" />
+                <input
+                    onChange={(event: any) => {
+                        let file = (document.querySelector("#attachment-input") as any).files[0];
+                        if (file.size > 20000000) return setFileTooBigDialogOpen(false);
+
+                        let reader = new FileReader();
+
+                        reader.onloadend = () => {
+                            setAttachmentPreviewFile({
+                                type: file.type.split("/")[0] as string,
+                                content: reader.result as string,
+                                name: file.name,
+                            });
+                        };
+
+                        if (file) {
+                            setAttachmentDialogOpen(true);
+                            reader.readAsDataURL(file);
+                        } else {
+                            setAttachmentDialogOpen(false);
+                            setAttachmentPreviewFile({
+                                type: "",
+                                content: "",
+                                name: "",
+                            });
+                        }
+                    }}
+                    id="attachment-input"
+                    name="file"
+                    type="file"
+                />
             </form>
         </div>
     );

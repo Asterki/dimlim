@@ -325,10 +325,29 @@ const fr = {
             intro: "C'est le début de votre chat",
             placeholder: "Message...",
 
-            dialog: {
-                delete: "Supprimer le chat",
-                block: "Bloquer l'utilisateur",
-                cancel: "Annuler",
+            dialogs: {
+                profile: {
+                    done: "Fait",
+                },
+                block: {
+                    warning: "Vous ne recevrez plus leurs messages et ils ne pourront pas vous inviter à des discussions de groupe",
+                    block: "Bloquer",
+                    cancel: "Annuler",
+                },
+                delete: {
+                    title: "Supprimer le chat",
+                    warning: "Ceci ne peut pas être annulé",
+                    delete: "Supprimer",
+                    cancel: "Annuler",
+                },
+                attachment: {
+                    title: "Envoyer le fichier",
+                    warning: "Êtes-vous sûr de vouloir envoyer ce fichier à",
+                    noPreview: "Impossible d'afficher l'aperçu de ce type de fichier",
+
+                    cancel: "Annuler",
+                    send: "Envoyer",
+                },
             },
         },
     },

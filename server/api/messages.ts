@@ -29,15 +29,19 @@ router.post("/get-pending-messages", async (req: any, res: any) => {
     if (!req.isAuthenticated()) return res.send({ status: 403, message: "unauthorized" });
 
     try {
-        const messages = await db.get(`${req.user.chatName}_pending`);
+        const messages = await db.get(`${req.body.chatName}_pending`);
         if (!messages) return res.send({ status: 200, content: [] });
 
-        await db.set(`${req.user.userID}_pending`, []);
+        await db.set(`${req.body.chatName}_pending`, []);
         return res.send({ status: 200, content: messages });
     } catch (err) {
         const errorID = reportError(err);
         return res.send({ status: 500, message: "server-error", id: errorID });
     }
+});
+
+router.post("/create-group", (req, res) => {
+    res.send("water");
 });
 
 router.post("/test", (req, res) => {

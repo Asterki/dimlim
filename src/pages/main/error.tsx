@@ -46,8 +46,6 @@ export const getServerSideProps: GetServerSideProps = async (context: any) => {
             },
         };
     } catch (err: any) {
-        console.log(err);
-
         return {
             redirect: {
                 destination: `/error?code=${err.response.status}`,
@@ -57,7 +55,7 @@ export const getServerSideProps: GetServerSideProps = async (context: any) => {
     }
 };
 
-const IndexPage: NextPage = (props: any) => {
+const ErrorPage: NextPage = (props: any) => {
     return (
         <div className={styles["page"]}>
             <Navbar lang={props.lang.navbar} user={null} />
@@ -99,4 +97,4 @@ const IndexPage: NextPage = (props: any) => {
     );
 };
 
-export default IndexPage;
+export default ErrorPage;

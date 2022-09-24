@@ -348,7 +348,17 @@ const de = {
                     cancel: "Abbrechen",
                     send: "Senden",
                 },
+                attachmentTooBig: {
+                    title: "Datei senden",
+                    message: "Die ausgewählte Datei ist zu groß, sie muss kleiner als 10MB sein",
+                    ok: "Ok",
+                },
             },
+
+            navbar: {
+                block: "blockieren",
+                delete: "Chat löschen"
+            }
         },
     },
 };

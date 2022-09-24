@@ -181,19 +181,19 @@ const Home: NextPage = (props: any) => {
                 <Container fluid className={styles["contact"]}>
                     <Row>
                         <Col className={styles["contact-info"]}>
-                            <Avatar src={`/avatars/${contact.userID}.png`} />
+                            <Avatar src={`/avatars/${contact.userID}.png`} alt={`${contact.username} avatar`} />
                             <div className={styles["contact-general"]}>
                                 <p className={styles["contact-username"]}>{contact.username}</p>
                             </div>
                         </Col>
                         <Col className={styles["actions-icon"]}>
-                            <IconButton onClick={(event: any) => blockContact(event, contact.username)}>
+                            <IconButton aria-label="Block Contact"  onClick={(event: any) => blockContact(event, contact.username)}>
                                 <DoDisturbOn />
                             </IconButton>
-                            <IconButton onClick={(event: any) => removeContact(event, contact.username)}>
+                            <IconButton aria-label="Remove Contact" onClick={(event: any) => removeContact(event, contact.username)}>
                                 <Delete />
                             </IconButton>
-                            <IconButton onClick={(event: any) => (window.location.href = `/chat/${contact.username}?id=${contact.userID}`)}>
+                            <IconButton aria-label="Open Chat" onClick={(event: any) => (window.location.href = `/chat/${contact.username}?id=${contact.userID}`)}>
                                 <Chat />
                             </IconButton>
                         </Col>
@@ -210,7 +210,7 @@ const Home: NextPage = (props: any) => {
                 <Container fluid className={styles["contact"]}>
                     <Row>
                         <Col className={styles["contact-info"]}>
-                            <Avatar src={`/avatars/${contact.userID}.png`} />
+                            <Avatar src={`/avatars/${contact.userID}.png`} alt={`${contact.username} avatar`} />
                             <div className={styles["contact-general"]}>
                                 <p className={styles["contact-username"]}>{contact.username}</p>
                             </div>

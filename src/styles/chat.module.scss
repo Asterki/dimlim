@@ -82,7 +82,7 @@
         textarea {
             width: 100%;
             border-radius: 5px;
-            padding: 5px;
+            padding: 7px;
             resize: none;
 
             background-color: #222630;
@@ -111,6 +111,33 @@
             max-width: 100%;
         }
     }
+}
+
+.typing-indicator {
+    width: 100%;
+    display: flex;
+    justify-content: flex-start;
+
+    .file {
+        color: #5294e2 !important;
+        text-decoration: none;
+
+        svg {
+            color: white !important;
+        }
+    }
+
+    background-color: #383e4d;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+
+    padding: 10px;
+    border-radius: 5px;
+
+    overflow-wrap: break-word;
+    text-align: left;
+    margin-bottom: 10px;
+
+    width: max-content;
 }
 
 .no-file-preview {

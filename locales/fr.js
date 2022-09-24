@@ -348,6 +348,16 @@ const fr = {
                     cancel: "Annuler",
                     send: "Envoyer",
                 },
+                attachmentTooBig: {
+                    title: "Envoyer le fichier",
+                    message: "Le fichier que vous avez sélectionné est trop volumineux, il doit faire moins de 10MB",
+                    ok: "Ok",
+                },
+            },
+
+            navbar: {
+                block: "Bloquer",
+                delete: "Supprimer le chat",
             },
         },
     },

@@ -5,7 +5,7 @@ import validator from "validator";
 import { clear } from "idb-keyval";
 
 import Head from "next/head";
-import Navbar from "../components/navbar";
+import Navbar from "../../components/navbar";
 
 import { Col, Container, Row } from "react-bootstrap";
 import {
@@ -27,7 +27,7 @@ import {
 import { TabContext, TabList, TabPanel } from "@mui/lab";
 import { AddAPhoto, Create, SecurityUpdateGood, Email, Logout, DeleteForever } from "@mui/icons-material";
 
-import styles from "../styles/settings.module.scss";
+import styles from "../../styles/settings.module.scss";
 import { GetServerSideProps, NextPage } from "next/types";
 
 export const getServerSideProps: GetServerSideProps = async (context: any) => {

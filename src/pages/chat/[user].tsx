@@ -9,7 +9,7 @@ import Head from "next/head";
 import ChatNavbar from "../../components/chatNavbar";
 import Message from "../../components/message";
 
-import { Avatar, Button, Dialog, DialogActions, DialogTitle, IconButton, Menu, MenuItem, TextareaAutosize } from "@mui/material";
+import { Avatar, Button, Dialog, DialogActions, DialogTitle, IconButton, TextareaAutosize } from "@mui/material";
 import { Container } from "react-bootstrap";
 import { Send, Attachment } from "@mui/icons-material";
 
@@ -132,7 +132,9 @@ const Chat: NextPage = (props: any) => {
     const socket = io(props.host);
     socket.on("message", (data: any) => {
         if (data.author == props.user.username) return;
-        setPendingMessage(data);
+        setTimeout(() => {
+            setPendingMessage(data);
+        }, 300);
     });
 
     const encrypt = (text: any) => {
@@ -190,7 +192,22 @@ const Chat: NextPage = (props: any) => {
             return window.location.reload();
         });
     };
-    const muteContact = () => {};
+
+    const blockContact = async (event: any, username: string) => {
+        let response = await axios({
+            method: "post",
+            url: `${props.host}/api/users/block-contact`,
+            data: {
+                contact: username,
+            },
+        });
+
+        if (response.data.code == 500) return (window.location.href = `/error?id=${response.data.id}`);
+
+        if (response.data.message == "success") {
+            return window.location.reload();
+        }
+    };
 
     // Navbar Actions
     const openContactInfoDialog = () => setContactInfoDialogOpen(true);
@@ -253,9 +270,7 @@ const Chat: NextPage = (props: any) => {
         let chatBottom = document.querySelector("#chat-bottom") as HTMLDivElement;
 
         // Load video views
-        setTimeout(() => {
-            chatBottom.scrollIntoView();
-        }, 500);
+        chatBottom.scrollIntoView();
     }, [messageList]);
 
     return (
@@ -269,9 +284,9 @@ const Chat: NextPage = (props: any) => {
                 blockAction={openBlockContactDialog}
                 deleteAction={openDeleteChatDialog}
                 infoAction={openContactInfoDialog}
-                muteAction={muteContact}
                 contactUsername={props.contact}
                 contactUserID={props.contactUserID}
+                lang={props.lang.navbar}
             />
 
             <Dialog
@@ -313,21 +328,8 @@ const Chat: NextPage = (props: any) => {
 
                     <DialogActions>
                         <Button
-                            onClick={async (event: any) => {
-                                setBlockContactDialogOpen(false);
-                                let response = await axios({
-                                    method: "post",
-                                    url: `${props.host}/api/users/block-contact`,
-                                    data: {
-                                        contact: props.contact,
-                                    },
-                                });
-
-                                if (response.data.code == 500) return (window.location.href = `/error?id=${response.data.id}`);
-
-                                if (response.data.message == "success") {
-                                    return (window.location.href = "/home");
-                                }
+                            onClick={(event: any) => {
+                                blockContact(event, props.contact);
                             }}
                         >
                             {props.lang.dialogs.block.block}
@@ -386,7 +388,8 @@ const Chat: NextPage = (props: any) => {
 
                     {attachmentPreviewFile.type == "image" && <img className={styles["attachment-image"]} src={attachmentPreviewFile.content} alt="image" />}
                     {attachmentPreviewFile.type == "video" && <video controls className={styles["attachment-image"]} src={attachmentPreviewFile.content} />}
-                    {attachmentPreviewFile.type !== "video" && attachmentPreviewFile.type !== "image" && (
+                    {attachmentPreviewFile.type == "audio" && <audio src={attachmentPreviewFile.content} controls />}
+                    {attachmentPreviewFile.type !== "video" && attachmentPreviewFile.type !== "image" && attachmentPreviewFile.type !== "audio" && (
                         <p className={styles["no-file-preview"]}>{props.lang.dialogs.attachment.noPreview}</p>
                     )}
 
@@ -410,7 +413,8 @@ const Chat: NextPage = (props: any) => {
                         <Button
                             onClick={(event: any) => {
                                 let fileType = attachmentPreviewFile.type;
-                                if (attachmentPreviewFile.type !== "video" && attachmentPreviewFile.type !== "image") fileType = "file";
+                                if (attachmentPreviewFile.type !== "video" && attachmentPreviewFile.type !== "image" && attachmentPreviewFile.type !== "audio")
+                                    fileType = "file";
 
                                 sendMessage({
                                     author: props.user.username,
@@ -441,16 +445,16 @@ const Chat: NextPage = (props: any) => {
                 sx={{ backgroundColor: "none" }}
             >
                 <Container fluid className={styles["dialog"]}>
-                    <DialogTitle>Send Image</DialogTitle>
+                    <DialogTitle>{props.lang.dialogs.attachmentTooBig.title}</DialogTitle>
 
-                    <p>The image you selected is too big, it must be under 5mb</p>
+                    <p>{props.lang.dialogs.attachmentTooBig.message}</p>
 
                     <Button
                         onClick={(event: any) => {
                             setFileTooBigDialogOpen(false);
                         }}
                     >
-                        Ok
+                        {props.lang.dialogs.attachmentTooBig.ok}
                     </Button>
                 </Container>
             </Dialog>
@@ -512,7 +516,7 @@ const Chat: NextPage = (props: any) => {
                 <input
                     onChange={(event: any) => {
                         let file = (document.querySelector("#attachment-input") as any).files[0];
-                        if (file.size > 20000000) return setFileTooBigDialogOpen(false);
+                        if (file.size > 10000000) return setFileTooBigDialogOpen(false);
 
                         let reader = new FileReader();
 
@@ -522,6 +526,8 @@ const Chat: NextPage = (props: any) => {
                                 content: reader.result as string,
                                 name: file.name,
                             });
+
+                            (document.querySelector("#attachment-input") as any).value = "";
                         };
 
                         if (file) {
@@ -534,6 +540,8 @@ const Chat: NextPage = (props: any) => {
                                 content: "",
                                 name: "",
                             });
+
+                            (document.querySelector("#attachment-input") as any).value = "";
                         }
                     }}
                     id="attachment-input"

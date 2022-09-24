@@ -48,6 +48,9 @@ const en = {
                 },
             },
         },
+        error: {
+            
+        }
     },
     accounts: {
         login: {
@@ -346,7 +349,17 @@ const en = {
                     cancel: "Cancel",
                     send: "Send",
                 },
+                attachmentTooBig: {
+                    title: "Send File",
+                    message: "The file you selected is too big, it must be under 10mb",
+                    ok: "Ok",
+                },
             },
+
+            navbar: {
+                block: "Block",
+                delete: "Delete Chat"
+            }
         },
     },
 };

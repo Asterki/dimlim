@@ -51,19 +51,11 @@ const ChatNavarComponent = (props: any) => {
                 >
                     <MenuItem
                         onClick={() => {
-                            props.muteAction();
-                            handleClose();
-                        }}
-                    >
-                        Mute Chat
-                    </MenuItem>
-                    <MenuItem
-                        onClick={() => {
                             props.blockAction();
                             handleClose();
                         }}
                     >
-                        Block
+                        {props.lang.block}
                     </MenuItem>
                     <MenuItem
                         onClick={() => {
@@ -71,7 +63,7 @@ const ChatNavarComponent = (props: any) => {
                             handleClose();
                         }}
                     >
-                        Delete Chat
+                        {props.lang.delete}
                     </MenuItem>
                 </Menu>
             </div>

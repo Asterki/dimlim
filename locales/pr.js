@@ -347,7 +347,17 @@ const pr = {
                     cancel: "Cancelar",
                     send: "Enviar",
                 },
+                attachmentTooBig: {
+                    title: "Enviar arquivo",
+                    message: "O arquivo que você selecionou é muito grande, deve ter menos de 10mb",
+                    ok: "Ok",
+                },
             },
+
+            navbar: {
+                block: "Bloquear",
+                delete: "Excluir bate-papo"
+            }
         },
     },
 };

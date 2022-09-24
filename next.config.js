@@ -16,6 +16,10 @@ const nextConfig = {
                 source: "/",
                 destination: "/main",
             },
+            {
+                source: "/error",
+                destination: "/main/error",
+            },
 
             // Accounts
             {
@@ -25,6 +29,10 @@ const nextConfig = {
             {
                 source: "/register",
                 destination: "/accounts/register",
+            },
+            {
+                source: "/settings",
+                destination: "/accounts/settings",
             },
         ];
     },

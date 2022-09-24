@@ -347,6 +347,16 @@ const es = {
                     cancel: "Cancelar",
                     send: "Enviar",
                 },
+                attachmentTooBig: {
+                    title: "Enviar Archivo",
+                    message: "El archivo que seleccionaste es muy pesado, tiene que pesar menos de 10MB",
+                    ok: "Ok",
+                },
+            },
+
+            navbar: {
+                block: "Bloquear",
+                delete: "Borrar Chat",
             },
         },
     },

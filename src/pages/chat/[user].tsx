@@ -3,6 +3,7 @@ import axios, { AxiosResponse } from "axios";
 import { io } from "socket.io-client";
 import crypto from "crypto";
 import Push from "push.js";
+import { get, set } from "idb-keyval";
 
 import Head from "next/head";
 import ChatNavbar from "../../components/chatNavbar";
@@ -88,7 +89,7 @@ export const getServerSideProps: GetServerSideProps = async (context: any) => {
                 contact: context.params.user,
                 contactUserID: context.query.id,
                 chatKey: keyResponse.data.message,
-                newMessages: newMessagesResponse.data.content,
+                newMessages: JSON.stringify(newMessagesResponse.data.content),
             },
         };
     } catch (err: any) {
@@ -162,7 +163,7 @@ const Chat: NextPage = (props: any) => {
         });
     };
 
-    const addMessage: Function = (data: any, fromSaved: boolean | undefined) => {
+    const addMessage: Function = async (data: any, fromSaved: boolean | undefined) => {
         // If the message comes from the other person
         if (data.author !== props.user.username && fromSaved == false) data.message = decrypt(data.message);
 
@@ -172,14 +173,24 @@ const Chat: NextPage = (props: any) => {
 
         // Store message
         if (fromSaved == true) return;
+        get(`chat_${props.contact}`).then((storedChatRaw: any) => {
+            if (!storedChatRaw) storedChatRaw = "[]";
 
-        let storedChatRaw = localStorage.getItem(`chat_${props.contact}`);
-        if (!storedChatRaw) storedChatRaw = "[]";
-
-        let storedChat = JSON.parse(storedChatRaw);
-        storedChat.push(data);
-        localStorage.setItem(`chat_${props.contact}`, JSON.stringify(storedChat));
+            let storedChat = JSON.parse(storedChatRaw);
+            storedChat.push(data);
+            set(`chat_${props.contact}`, JSON.stringify(storedChat));
+        });
     };
+
+    // Menu Actions
+    const deleteChat = async () => {
+        setDeleteChatDialogOpen(false);
+
+        set(`chat_${props.contact}`, "[]").then(() => {
+            return window.location.reload();
+        });
+    };
+    const muteContact = () => {};
 
     // Navbar Actions
     const openContactInfoDialog = () => setContactInfoDialogOpen(true);
@@ -187,8 +198,6 @@ const Chat: NextPage = (props: any) => {
     const openDeleteChatDialog = () => setDeleteChatDialogOpen(true);
 
     const goBack = () => (window.location.href = "/home");
-
-    const muteContact = () => {};
 
     // Listeners
     React.useEffect(() => {
@@ -215,16 +224,18 @@ const Chat: NextPage = (props: any) => {
         if (typeof window !== undefined) {
             (async () => {
                 // Load previous chats
-                let storedChatRaw = localStorage.getItem(`chat_${props.contact}`);
-                if (!storedChatRaw) storedChatRaw = "[]";
-                let storedChat: Array<any> = JSON.parse(storedChatRaw);
-                setMessageList(storedChat);
+                await get(`chat_${props.contact}`).then((storedChatRaw: any) => {
+                    if (!storedChatRaw) storedChatRaw = "[]";
+                    let storedChat: Array<any> = JSON.parse(storedChatRaw);
 
-                // Load new chats
-                if (!props.newMessages.length) return;
-                props.newMessages.forEach((newMessage: any) => {
-                    if (newMessage.message.iv == undefined) return;
-                    addMessage(newMessage, false);
+                    // Load new chats
+                    let parsedNewMessages = JSON.parse(props.newMessages);
+                    parsedNewMessages.forEach((newMessage: any) => {
+                        newMessage.message = decrypt(newMessage.message);
+                        storedChat.push(newMessage);
+                    });
+
+                    setMessageList(storedChat);
                 });
             })();
         }
@@ -346,15 +357,7 @@ const Chat: NextPage = (props: any) => {
                     <p>{props.lang.dialogs.delete.warning}</p>
 
                     <DialogActions>
-                        <Button
-                            onClick={(event: any) => {
-                                setDeleteChatDialogOpen(false);
-                                localStorage.setItem(`chat_${props.contact}`, "[]");
-                                return window.location.reload();
-                            }}
-                        >
-                            {props.lang.dialogs.delete.delete}
-                        </Button>
+                        <Button onClick={deleteChat}>{props.lang.dialogs.delete.delete}</Button>
                         <Button
                             onClick={(event: any) => {
                                 setDeleteChatDialogOpen(false);

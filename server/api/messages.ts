@@ -29,10 +29,10 @@ router.post("/get-pending-messages", async (req: any, res: any) => {
     if (!req.isAuthenticated()) return res.send({ status: 403, message: "unauthorized" });
 
     try {
-        const messages = await db.get(`${req.body.chatName}_pending`);
+        const messages = await db.get(`${req.user.username}_${req.body.chatName}_pending`);
         if (!messages) return res.send({ status: 200, content: [] });
 
-        await db.set(`${req.body.chatName}_pending`, []);
+        await db.set(`${req.user.username}_${req.body.chatName}_pending`, []);
         return res.send({ status: 200, content: messages });
     } catch (err) {
         const errorID = reportError(err);

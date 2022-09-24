@@ -2,6 +2,7 @@
 import * as React from "react";
 import axios, { AxiosResponse } from "axios";
 import validator from "validator";
+import { clear } from "idb-keyval";
 
 import Head from "next/head";
 import Navbar from "../components/navbar";
@@ -295,7 +296,7 @@ const Settings: NextPage = (props: any) => {
         if (response.data.code == 500) return (window.location.href = `/error?id=${response.data.id}`);
 
         if (response.data.message == "success") {
-            localStorage.clear();
+            clear();
             return window.location.reload();
         } else setDeleteAccountError(props.lang.account.dialogs.deleteAccount[response.data.message]);
     };
@@ -675,7 +676,7 @@ const Settings: NextPage = (props: any) => {
                         <Button
                             onClick={(event: any) => {
                                 setLogoutDialogOpen(false);
-                                localStorage.clear();
+                                clear();
                                 window.location.href = "/api/accounts/logout";
                             }}
                         >

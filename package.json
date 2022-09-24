@@ -58,6 +58,7 @@
         "helmet": "^6.0.0",
         "http": "^0.0.1-security",
         "https": "^1.0.0",
+        "idb-keyval": "^6.2.0",
         "locale": "^0.1.0",
         "minimist": "^1.2.6",
         "ms": "^2.1.3",

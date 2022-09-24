@@ -58,7 +58,7 @@ io.sockets.on("connection", (socket: any) => {
 
             // Save to pending messages
             data.new = true;
-            await db.push(`${roomName}_pending`, data);
+            await db.push(`${recipient.username}_${roomName}_pending`, data);
 
             // Check if the user is muted
             const recipientContact = recipient.contacts.find((listUser: Contact) => listUser.userID == author?.userID);

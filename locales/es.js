@@ -42,7 +42,7 @@ const es = {
                     add: "Añadir",
 
                     "missing-parameters": "Complete todas las entradas.",
-                    "self-add": "You can't add yourself as contactNo puedes agregarte como contacto.",
+                    "self-add": "No puedes agregarte como contacto.",
                     "already-on-list": "Ese usuario ya está en tus contactos.",
                     "user-not-found": "No hay ningún usuario con ese nombre de usuario",
                 },

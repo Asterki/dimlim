@@ -41,11 +41,8 @@ const nextApp = next({ dev: JSON.parse(launchArgs.dev) });
 const server = http.createServer(app);
 const io = new socketIo.Server(server);
 
-console.log(launchArgs)
-
 nextApp.prepare().then(() => {
     const handle = nextApp.getRequestHandler();
-
 
     // Load all the configuration
     require("./config/middleware");

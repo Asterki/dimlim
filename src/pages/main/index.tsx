@@ -2,10 +2,9 @@
 import React from "react";
 import axios, { AxiosResponse } from "axios";
 
-import { Row, Col } from "react-bootstrap";
-import { Button, Container } from "@mui/material";
+import { Container } from "react-bootstrap";
+import { Button } from "@mui/material";
 import Navbar from "../../components/navbar";
-import Head from "next/head";
 
 import { GetServerSideProps, NextPage } from "next";
 import styles from "../../styles/main/index.module.scss";
@@ -67,32 +66,56 @@ const IndexPage: NextPage = (props: any) => {
                     <br />
                     <h1>DIMLIM</h1>
                     <br />
-                    <p>
-                        DIMLIM is an application made according to the different situations and comforts of the <br />
-                        users of the different social networks that this would provide a very appropriate way to <br />
-                        send your messages without worrying about security, privacy and trust.
-                    </p>
-                    <br />
-                    <Row xs="1" sm="1" md="2" className={styles["header-buttons"]}>
-                        <Col>
-                            <Button variant="contained" href="/login" className={styles["header-button"]}>
-                                Login
-                            </Button>
-                        </Col>
-                        <Col>
-                            <Button variant="contained" href="/register" className={styles["header-button"]}>
-                                Register
-                            </Button>
-                        </Col>
-                    </Row>
+
+                    <img src="/icon.png" alt="Icon png" />
                 </div>
 
                 <br />
                 <br />
                 <br />
 
-                <div className={styles["main-content"]}>
-                    <h1>DIMLIM</h1>
+                <Container className={styles["main-content"]}>
+                    <img src="../../assets/images/shield-line.png" alt="Shield" />
+                    <h1>{props.lang.security}</h1>
+                    <p> {props.lang.securityDesc}</p>
+
+                    <br />
+                    <br />
+
+                    <img src="../../assets/images/user-box-line.png" alt="Privacy" />
+                    <h1>{props.lang.privacy}</h1>
+                    <p>
+                        {props.lang.privacyDesc.split("&")[0]}
+                        <a href="https://github.com/Asterki/dimlim">{props.lang.privacyDesc.split("&")[1]}</a>
+                        {props.lang.privacyDesc.split("&")[2]}
+                    </p>
+
+                    <br />
+                    <br />
+
+                    <img src="../../assets/images/airplane-flight-2-line.png" alt="Velocity" />
+                    <h1>{props.lang.velocity}</h1>
+                    <p>{props.lang.velocityDesc}</p>
+                </Container>
+
+                <br />
+                <br />
+                <br />
+
+                <div className={styles["footer"]}>
+                    <Button variant="contained" href="/register">
+                        {props.lang.navbar.register}
+                    </Button>
+                    <br />
+                    <br />
+                    <Button variant="contained" href="/login">
+                        {props.lang.navbar.login}
+                    </Button>
+
+                    <br />
+                    <br />
+                    <br />
+                    <p>Copyright© 2022 DIMLIM Team</p>
                 </div>
             </div>
         </div>

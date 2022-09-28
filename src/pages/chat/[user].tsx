@@ -13,7 +13,7 @@ import { Avatar, Button, Dialog, DialogActions, DialogTitle, IconButton, Textare
 import { Container } from "react-bootstrap";
 import { Send, Attachment } from "@mui/icons-material";
 
-import styles from "../../styles/chat.module.scss";
+import styles from "../../styles/chat/index.module.scss";
 import { GetServerSideProps, NextPage } from "next";
 
 export const getServerSideProps: GetServerSideProps = async (context: any) => {
@@ -132,9 +132,7 @@ const Chat: NextPage = (props: any) => {
     const socket = io(props.host);
     socket.on("message", (data: any) => {
         if (data.author == props.user.username) return;
-        setTimeout(() => {
-            setPendingMessage(data);
-        }, 300);
+        setPendingMessage(data);
     });
 
     const encrypt = (text: any) => {

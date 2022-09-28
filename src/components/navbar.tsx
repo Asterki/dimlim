@@ -39,15 +39,6 @@ const NavbarComponent = (props: { lang: any; user: any | null }) => {
                             <Nav.Link className={styles["link"]} href="/register">
                                 {props.lang.register}
                             </Nav.Link>
-                            <Nav.Link className={styles["link"]} href="/about">
-                                {props.lang.about}
-                            </Nav.Link>
-                            <Nav.Link className={styles["link"]} href="/support">
-                                {props.lang.support}
-                            </Nav.Link>
-                            <Nav.Link className={styles["link"]} href="/download">
-                                {props.lang.download}
-                            </Nav.Link>
                         </Nav>
                     </Navbar.Collapse>
                 </Container>

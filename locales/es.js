@@ -1,14 +1,21 @@
 const es = {
     main: {
         welcome: {
-            title: "Bienvenido a la app!",
+            title: "¡Bienvenido a la aplicación!",
+
+            security: "Seguridad",
+            securityDesc: "DIMLIM utiliza cifrado de extremo a extremo para enviar mensajes y archivos",
+
+            privacy: "Privacidad",
+            privacyDesc:
+                "DIMLIM no recopila ningún dato de usuario o mensaje, nuestro código es de código abierto, por lo que puede consultarlo en cualquier momento",
+
+            velocity: "Velocidad",
+            velocityDesc: "DIMLIM utiliza el marco Next.js, que ofrece una navegación rápida",
 
             navbar: {
                 login: "Iniciar sesión",
                 register: "Registrarse",
-                about: "Acerca de",
-                support: "Soporte",
-                download: "Descarga",
             },
         },
         home: {

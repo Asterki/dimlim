@@ -1,14 +1,21 @@
 const fr = {
     main: {
         welcome: {
-            title: "Bienvenue sur l'application!",
+            title: "Bienvenue dans l'application!",
+
+            security: "Sécurité",
+            securityDesc: "DIMLIM utilise un chiffrement de bout en bout pour envoyer des messages et des fichiers",
+
+            privacy: "Confidentialité",
+            privacyDesc:
+                "DIMLIM ne collecte aucune donnée d'utilisateur ou de message, notre code est & Open Source &, vous pouvez donc le vérifier à tout moment",
+
+            velocity: "Vitesse",
+            VelocityDesc: "DIMLIM utilise le framework Next.js, offrant une navigation rapide",
 
             navbar: {
                 login: "Connexion",
                 register: "S'inscrire",
-                about: "À propos de",
-                support: "Soutien",
-                download: "Télécharger",
             },
         },
         home: {

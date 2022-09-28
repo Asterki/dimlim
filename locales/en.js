@@ -3,12 +3,18 @@ const en = {
         welcome: {
             title: "Welcome to the app!",
 
+            security: "Security",
+            securityDesc: "DIMLIM Uses end-to-end encryption to send messages and files",
+
+            privacy: "Privacy",
+            privacyDesc: "DIMLIM Doesn't collect any user or message data, our code is & Open Source &, so you can check it any time",
+
+            velocity: "Velocity",
+            velocityDesc: "DIMLIM Uses the Next.js framework, offering fast navigation",
+
             navbar: {
                 login: "Login",
                 register: "Register",
-                about: "About",
-                support: "Support",
-                download: "Download",
             },
         },
         home: {
@@ -48,9 +54,7 @@ const en = {
                 },
             },
         },
-        error: {
-            
-        }
+        error: {},
     },
     accounts: {
         login: {
@@ -358,8 +362,8 @@ const en = {
 
             navbar: {
                 block: "Block",
-                delete: "Delete Chat"
-            }
+                delete: "Delete Chat",
+            },
         },
     },
 };

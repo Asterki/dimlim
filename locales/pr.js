@@ -3,12 +3,18 @@ const pr = {
         welcome: {
             title: "Bem-vindo ao aplicativo!",
 
+            security: "Segurança",
+            securityDesc: "DIMLIM usa criptografia de ponta a ponta para enviar mensagens e arquivos",
+
+            privacy: "Privacidade",
+            privacyDesc: "DIMLIM não coleta dados de usuários ou mensagens, nosso código é & Open Source &, então você pode verificá-lo a qualquer momento",
+
+            velocity: "Velocidade",
+            velocityDesc: "DIMLIM usa o framework Next.js, oferecendo navegação rápida",
+
             navbar: {
                 login: "Entrar",
                 register: "Registrar",
-                about: "Acerca",
-                support: "Suporte",
-                download: "Baixar",
             },
         },
         home: {
@@ -356,8 +362,8 @@ const pr = {
 
             navbar: {
                 block: "Bloquear",
-                delete: "Excluir bate-papo"
-            }
+                delete: "Excluir bate-papo",
+            },
         },
     },
 };

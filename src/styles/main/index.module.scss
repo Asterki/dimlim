@@ -1,6 +1,6 @@
 .page {
     height: 100vh;
-    background-color: #4b5162;
+    background-color: #252a34;
     color: white;
 
     .content {
@@ -26,7 +26,7 @@
             background-size: cover;
             margin: 0;
             border-radius: 0 0 10% 10%;
-            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.20) !important;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2) !important;
 
             h1 {
                 margin: 0 auto;
@@ -38,6 +38,10 @@
                 text-align: center;
             }
 
+            img {
+                max-width: 100px;
+            }
+
             .header-buttons {
                 width: 40%;
                 text-align: center;
@@ -47,7 +51,7 @@
                     width: 80%;
                     border: none;
                     padding: 5px 50px 5px 50px;
-                    
+
                     text-align: center;
                     background-color: #5294e2;
                     color: white !important;
@@ -55,9 +59,35 @@
                 }
             }
         }
+    }
 
-        .main-content {
-            text-align: center;
+    .main-content {
+        text-align: center;
+
+        img {
+            max-width: 100px;
+        }
+
+        a,
+        a:link,
+        a:visited {
+            color: #5294e2;
+            text-decoration: none !important;
+        }
+    }
+
+    .footer {
+        text-align: center;
+        background-color: #2a2f3a;
+        padding: 40px;
+        border-radius: 10% 10% 0 0;
+
+        button {
+            color: white !important;
+
+            min-width: 70%;
+            max-width: 70%;
+            font-size: 30px;
         }
     }
 }
@@ -71,7 +101,7 @@
 
             .header-buttons {
                 width: 90% !important;
-                
+
                 .header-button {
                     width: 90%;
                     padding: 5px 50px 5px 50px;
@@ -82,7 +112,6 @@
                     font-size: 20px;
                 }
             }
-
         }
     }
 }

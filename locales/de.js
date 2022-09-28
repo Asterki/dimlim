@@ -1,14 +1,20 @@
 const de = {
     main: {
         welcome: {
-            title: "Welcome to the app!",
+            title: "Willkommen in der App!",
+
+            secuirty: "Sicherheit",
+            securityDesc: "DIMLIM verwendet Ende-zu-Ende-Verschlüsselung zum Senden von Nachrichten und Dateien",
+
+            privacy: "Datenschutz",
+            privacyDesc: "DIMLIM sammelt keine Benutzer- oder Nachrichtendaten, unser Code ist & Open Source &, sodass Sie ihn jederzeit überprüfen können",
+
+            velocity: "Geschwindigkeit",
+            velocityDesc: "DIMLIM verwendet das Next.js-Framework und bietet eine schnelle Navigation",
 
             navbar: {
-                login: "Login",
-                register: "Register",
-                about: "About",
-                support: "Support",
-                download: "Download",
+                login: "Einloggen",
+                register: "Registrieren",
             },
         },
         home: {
@@ -357,8 +363,8 @@ const de = {
 
             navbar: {
                 block: "blockieren",
-                delete: "Chat löschen"
-            }
+                delete: "Chat löschen",
+            },
         },
     },
 };

@@ -187,13 +187,16 @@ const Home: NextPage = (props: any) => {
                             </div>
                         </Col>
                         <Col className={styles["actions-icon"]}>
-                            <IconButton aria-label="Block Contact"  onClick={(event: any) => blockContact(event, contact.username)}>
+                            <IconButton aria-label="Block Contact" onClick={(event: any) => blockContact(event, contact.username)}>
                                 <DoDisturbOn />
                             </IconButton>
                             <IconButton aria-label="Remove Contact" onClick={(event: any) => removeContact(event, contact.username)}>
                                 <Delete />
                             </IconButton>
-                            <IconButton aria-label="Open Chat" onClick={(event: any) => (window.location.href = `/chat/${contact.username}?id=${contact.userID}`)}>
+                            <IconButton
+                                aria-label="Open Chat"
+                                onClick={(event: any) => (window.location.href = `/chat/${contact.username}?id=${contact.userID}`)}
+                            >
                                 <Chat />
                             </IconButton>
                         </Col>

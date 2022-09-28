@@ -9,18 +9,18 @@ import type { AppProps } from "next/app";
 
 const App = ({ Component, pageProps }: AppProps) => {
     React.useEffect(() => {
-        navigator.serviceWorker
-            .register("/serviceWorker.js")
-            .then((reg) => console.log("Success: ", reg.scope))
-            .catch((err) => console.log("Failure: ", err));
         if ("serviceWorker" in navigator) {
+            navigator.serviceWorker
+                .register("/serviceWorker.js")
+                .then((reg) => console.log("Registered service worker"))
+                .catch((err) => console.log("Failure: ", err));
         }
     }, []);
 
     return (
         <SSRProvider>
             <Head>
-                <meta name="viewport" content="width=device-width, initial-scale=1; user-scalable=1" />
+                <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=1" />
                 <meta name="theme-color" content="#5294e2" />
 
                 {/* PWA Stuff */}

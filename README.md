@@ -1,81 +1,147 @@
 # DIMLIM
 
-Open source code for the chat application: DIMLIM
+DIMLIM is an end-to-end encryption chat app currently in progress. With DIMLIM, you can securely chat with your friends and family without worrying about your conversations being intercepted by third parties.
 
-<br />
+## Features
 
-## Setup
+- End-to-end encryption to ensure secure messaging
+- Ability to send text messages, images, and videos
+- Push notifications to ensure you never miss a message
+- User profile customization options to make your account unique
+- Ability to block unwanted contacts to prevent them from messaging you
 
-#### Prerequisites
+## In Progress
 
--   An operating system capable of running UNIX commands, such as Linux, macOS, or WSL on Windows
--   A connection to the internet
--   Node.js v16.17.0 or higher
--   Typescript support (tsc and ts-node)
+- Option to delete messages from both sender and receiver's device
+- Group chat functionality to easily communicate with multiple people
+- Voice and video call functionality
+- GIF support for more expressive messaging
+- Integration with other encrypted messaging apps
+- Ability to share documents and other file types
 
-<br />
+**We regret to inform that the current code of our app may not accurately reflect the features that were previously mentioned. The app is currently being refactored to improve its performance and security.**
 
-#### Installing
+## Table of Contents
+- [DIMLIM](#dimlim)
+  - [Features](#features)
+  - [In Progress](#in-progress)
+  - [Table of Contents](#table-of-contents)
+- [Setup](#setup)
+  - [Requirements](#requirements)
+  - [Environment Variables](#environment-variables)
+  - [Running on development mode](#running-on-development-mode)
+  - [Running on production mode](#running-on-production-mode)
+- [Technologies Used](#technologies-used)
+  - [Frontend](#frontend)
+  - [Backend](#backend)
+- [Extra information](#extra-information)
+  - [Borwsers tested in](#borwsers-tested-in)
+  - [Operative systems tested in](#operative-systems-tested-in)
+- [About the author](#about-the-author)
+- [License](#license)
 
-First we need to clone the project into the machine:
+<br>
+<br>
 
+# Setup
+
+Ensure that you have the requirements, installed dependencies, and have set the environment variables before you run the code
+
+## Requirements
+- Node >v18.13.0
+- MongoDB >4.4 
+- Linux, macOS or WSL (Recommended)
+- NPM >8.19.3 
+
+<br>
+
+## Environment Variables
+The following variables msut be stored in a file named `.env.local`
+| Variable             | Description                                             | Required | Default              |
+|----------------------|---------------------------------------------------------|----------|----------------------|
+| MONGODB_URI          | MongoDB URI String                                      | false    | mongodb://127.0.0.1/ |
+| PORT                 | The port client will listen to in production mode       | false    | 8080                 |
+| SESSION_SECRET       | The secret the sessions will be encrypted with          | true     | No Default           |
+| COOKIE_SECURE        | Wether the cookie is under HTTPS or not                 | false    | false                |
+| COOKIE_MAX_AGE       | How long the sessions will last (in milliseconds)       | false    | 604800000            |
+| SERVER_PORT          | The port the server will listen to on dev and prod mode | false    | 3030                 |
+| REACT_APP_SERVER_URL | The URL of the server, so the client can send requests  | true     | No Default           |
+
+<br>
+
+## Running on development mode
+
+On a terminal, run the following command
 ```bash
-git clone https://github.com/Asterki/dimlim.git
-```
+$ npm run dev
+``` 
 
-Get into the folder
+Then you can access the site at the specified port
 
+<br>
+
+## Running on production mode
+
+On a console, run the following command:
 ```bash
-cd dimlim
-```
+$ npm run start
+``` 
 
-Run the next command, which will automatically set up _most_ of the app:
+This will automatically build and run the server on production mode
 
-```bash
-npm run setup
-```
+<br>
+<br>
 
-<br />
+# Technologies Used
+If you want to edit the code, you may want to be familiar with the following programming languages and libraries
 
-#### Environment Variables
+## Frontend
+- TSX
+- Next.js
+- Redux
+- SCSS
 
-The environment variables should be saved in a `.env` file, and will need to contain the following keys:
+<br>
 
-| Key            | Type    | Description                                       | Default    | Required                           | Example                        |
-| -------------- | ------- | ------------------------------------------------- | ---------- | ---------------------------------- | ------------------------------ |
-| PORT           | Number  | The port our server will listen to                | 8080       | False                              | 80                             |
-| HOST           | String  | The URL of our server, without the / at the end   | None       | True                               | <http://example.com>           |
-| SESSION_SECRET | String  | The key that will be used to encrypt the sessions | An UUID v4 | False, but recommendable to change | DK2h2vBb771PL57E7PejhIwZWSY1sL |
-| COOKIE_SECURE  | Boolean | If the cookie will work under SSL                 | false      | False                              | true                           |
-| COOKIE_MAX_AGE | Number  | How long the session will last (in miliseconds)   | 604800000  | False                              | 2419200000                     |
-| EMAIL_HOST     | string  | The host of your email service                    | None       | True                               | smtp.gmail.com                 |
-| EMAIL_PORT     | number  | The port of your email service                    | None       | True                               | 465                            |
-| EMAIL_SECURE   | boolean | If your email service works over SSL              | None       | True                               | true                           |
-| EMAIL_USER     | string  | The email account                                 | None       | True                               | email@example.com              |
-| EMAIL_PASS     | string  | The email account's password                      | None       | True                               | keyboardcat                    |
+## Backend
+- TypeScript
+- Node.js
+- Express.js
+- Mongoose
+- Passport.js
 
-<br /><br />
+<br>
+<br>
 
-## Screenshots
+# Extra information
 
-![Register Page](https://www.imgbly.com/ib/plKEO0l67F.png)
+## Borwsers tested in
+![Brave](https://img.shields.io/badge/Brave-FB542B?style=for-the-badge&logo=Brave&logoColor=white) ![Edge](https://img.shields.io/badge/Edge-0078D7?style=for-the-badge&logo=Microsoft-edge&logoColor=white) ![Firefox](https://img.shields.io/badge/Firefox-FF7139?style=for-the-badge&logo=Firefox-Browser&logoColor=white) ![Google Chrome](https://img.shields.io/badge/Google%20Chrome-4285F4?style=for-the-badge&logo=GoogleChrome&logoColor=white) ![Opera](https://img.shields.io/badge/Opera-FF1B2D?style=for-the-badge&logo=Opera&logoColor=white) ![Tor](https://img.shields.io/badge/Tor-7D4698?style=for-the-badge&logo=Tor-Browser&logoColor=white)
 
-![Main Page](https://www.imgbly.com/ib/KG1MH3AA05.png)
+<br>
 
-![2FA Page](https://www.imgbly.com/ib/L9CLE4KMfJ.png)
+## Operative systems tested in
 
-<https://streamable.com/6eca20>
+![Debian](https://img.shields.io/badge/Debian-D70A53?style=for-the-badge&logo=debian&logoColor=white) ![Windows](https://img.shields.io/badge/Windows-0078D6?style=for-the-badge&logo=windows&logoColor=white) ![Android](https://img.shields.io/badge/Android-3DDC84?style=for-the-badge&logo=android&logoColor=white) ![Kali](https://img.shields.io/badge/Kali-268BEE?style=for-the-badge&logo=kalilinux&logoColor=white) ![iOS](https://img.shields.io/badge/iOS-000000?style=for-the-badge&logo=ios&logoColor=white)
 
-<br />
-<br />
+<br>
+<br>
 
-## Important
+# About the author
 
-This app was made with the purpose of running in the same server, servers as ngnix are not yet supported
+Hello, I'm Fernando, Full Stack Web Developer, and this is one of my big projects, which was born by the thought of: "What if there was an app like Duolingo, but instead of teaching you languages, it helped you study"
 
-<br />
-<br />
+And this is how this app was born, to help me, and others, train for exams.
 
-## Contact
+<br>
+<br>
 
-asterki.dev@proton.me
+# License
+
+Copyright 2023 Fernando Rivera
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.

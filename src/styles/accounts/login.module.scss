@@ -1,82 +1,127 @@
 .page {
-    height: 100%;
-    background-color: #252a34;
-    background-size: cover;
+	// min-height: 100vh;
+	background-color: #252a34;
 
-    .login-form,
-    .tfa-form {
-        color: #d8d8d8;
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
+	.error-dialog {
+		position: absolute;
+		background-color: rgba(0, 0, 0, 0.452);
+		width: 100vw;
+		height: 100vh;
 
-        width: 90%;
-        margin: 0 auto;
-        padding: 20px;
-        border-radius: 10px;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		justify-content: center;
 
-        background-color: #2a2f3a;
-        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+		.dialog-content {
+			background-color: #2a2f3a;
+			padding: 20px;
+			min-width: 300px;
+			border-radius: 10px;
+		}
 
-        a {
-            color: #5294e2;
-            text-decoration: none;
-        }
+		button {
+			border-radius: 5px;
+			padding: 10px;
+			border: none;
+			outline: none !important;
 
-        button {
-            background-color: #5294e2 !important;
-        }
+			width: 100%;
 
-        p {
-            margin: 0;
-            padding: 0;
-        }
+			font-weight: bold;
+			cursor: pointer;
 
-        input {
-            width: 100%;
-            border-radius: 5px;
-            padding: 5px;
+			background-color: #2196f3;
+			color: white;
+		}
+	}
 
-            background-color: #222630;
-            border: 1px solid #212530;
-            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-            color: white;
-            outline: none !important;
+	main {
+		min-height: 100vh;
 
-            transition: all 0.1s ease-in-out;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		flex-direction: column;
 
-            &:focus {
-                border: 1px solid #5294e2;
-            }
-        }
+		.login-form,
+		.tfa-form {
+			width: 30%;
+			padding: 20px;
+			border-radius: 10px;
 
-        button {
-            border-radius: 5px;
-            padding: 5px;
-            width: 100%;
-            border: none;
-            outline: none !important;
+			background-color: #2a2f3a;
+			box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
 
-            background-color: #2196f3;
-            color: white;
+			label {
+				margin: 0 0 10px 0;
+			}
 
-            font-weight: bold;
-            cursor: pointer;
-        }
+			input {
+				width: 100%;
+				border-radius: 5px;
+				padding: 10px;
 
-        .reset-password {
-            display: flex;
-            align-items: center;
-            text-align: right;
-            justify-content: flex-start !important;
+				background-color: #222630;
+				border: 1px solid #212530;
+				box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+				color: white;
+				outline: none !important;
 
-            margin-top: 20px;
-            margin-bottom: -20px;
-        }
+				transition: all 0.1s ease-in-out;
 
-        .error-label {
-            color: #ed4245;
-        }
-    }
+				&:focus {
+					border: 1px solid #5294e2;
+				}
+			}
+
+			.buttons {
+				display: flex;
+				justify-content: space-between;
+
+				button,
+				a {
+					border-radius: 5px;
+					padding: 5px;
+					border: none;
+					outline: none !important;
+
+					width: 100%;
+
+					font-weight: bold;
+					cursor: pointer;
+				}
+
+				.login-button {
+					background-color: #2196f3;
+					color: white;
+				}
+
+				.no-account-button {
+					color: #2196f3;
+					background-color: transparent;
+				}
+			}
+		}
+	}
+}
+
+@media screen and (max-width: 1100px) {
+	.page,
+	.tfa-form {
+		main {
+			.login-form, .tfa-form {
+				width: 90%;
+
+                .buttons {
+                    flex-direction: column;
+                    // margin-bottom: 5px;
+
+                    a, button {
+                        padding: 10px;
+                    }
+                }
+			}
+		}
+	}
 }

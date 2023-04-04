@@ -1,97 +1,82 @@
 .page {
-    height: 100%;
-    background-color: #252a34;
-    background-size: cover;
+	min-height: 100vh;
+	background-color: #252a34;
 
-    .navbar * {
-        color: white;
-    }
+	main {
+		min-height: 100vh;
 
-    .register-form {
-        color: white;
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		flex-direction: column;
 
-        width: 90%;
-        margin: 0 auto;
-        padding: 20px;
-        border-radius: 10px;
+		.register-form {
+			width: 30%;
+			padding: 20px;
+			border-radius: 10px;
 
-        background-color: #2a2f3a;
-        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+			background-color: #2a2f3a;
+			box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
 
-        a {
-            color: #5294e2;
-            text-decoration: none;
-        }
+			label {
+				margin: 0 0 10px 0;
+			}
 
-        button {
-            background-color: #5294e2 !important;
-        }
+			input {
+				width: 100%;
+				border-radius: 5px;
+				padding: 10px;
 
-        p {
-            margin: 0 !important;
-            padding: 0 !important;
-        }
+				background-color: #222630;
+				border: 1px solid #212530;
+				box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+				color: white;
+				outline: none !important;
 
-        .already-a-user {
-            display: flex;
-            align-items: center;
-            justify-content: flex-start;
+				transition: all 0.1s ease-in-out;
 
-            text-align: right;
-            margin-top: 30px;
-            margin-bottom: 10px;
-        }
+				&:focus {
+					border: 1px solid #5294e2;
+				}
+			}
 
-        .error-label {
-            color: #ed4245;
-        }
+			.buttons {
+				display: flex;
+				justify-content: space-between;
 
-        input {
-            width: 100%;
-            border-radius: 5px;
-            padding: 5px;
+				button,
+				a {
+					border-radius: 5px;
+					padding: 5px;
+					border: none;
+					outline: none !important;
 
-            background-color: #222630;
-            border: 1px solid #212530;
-            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-            color: white;
-            outline: none !important;
+					width: 100%;
 
-            &:focus {
-                border: 1px solid #2196f3;
-            }
-        }
+					font-weight: bold;
+					cursor: pointer;
+				}
 
-        button {
-            border-radius: 5px;
-            padding: 5px;
-            width: 100%;
-            border: none;
-            outline: none !important;
+				.login-button {
+					background-color: #2196f3;
+					color: white;
+				}
 
-            background-color: #2196f3;
-            color: white;
-
-            font-weight: bold;
-            cursor: pointer;
-        }
-    }
+				.no-account-button {
+					color: #2196f3;
+					background-color: transparent;
+				}
+			}
+		}
+	}
 }
 
-@media only screen and (max-width: 992px) {
-    .page {
-        .register-form {
-            width: 90%;
-
-            .already-a-user {
-                margin-top: 30px;
-                margin-bottom: 10px;
-                justify-content: flex-start !important;
-            }
-        }
-    }
+@media only screen and (max-width: 1100px) {
+	.page {
+		main {
+			.register-form {
+				width: 90%;
+			}
+		}
+	}
 }

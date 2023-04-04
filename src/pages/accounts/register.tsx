@@ -1,251 +1,176 @@
 import * as React from "react";
-import axios, { AxiosResponse } from "axios";
-import validator from "validator";
-
-import { Row, Col, Spinner } from "react-bootstrap";
-import { Container, Button, Link } from "@mui/material";
-
 import Head from "next/head";
-import Navbar from "../../components/navbar";
+
+import axios, { AxiosResponse } from "axios";
+
+import validator from "validator";
+import { z } from "zod";
+
+import Footer from "../../components/footer";
+import Dialog from "@/components/dialog";
 
 import styles from "../../styles/accounts/register.module.scss";
+
 import { GetServerSideProps, NextPage } from "next";
+import { RegisterRequestBody, RegisterResponse } from "shared/types/api/accounts";
+import { useSelector } from "react-redux";
+import { RootState } from "@/store";
+
+import LangPack from "shared/types/lang";
 
 export const getServerSideProps: GetServerSideProps = async (context: any) => {
-    if (context.req.isAuthenticated())
-        return {
-            redirect: {
-                destination: "/home",
-                permanent: false,
-            },
-        };
+	if (context.req.isAuthenticated())
+		return {
+			redirect: {
+				destination: "/home",
+				permanent: false,
+			},
+		};
 
-    try {
-        let languageResponse: AxiosResponse = await axios({
-            method: "post",
-            url: `${process.env.HOST}/api/content/language/`,
-            data: {
-                lang: context.req.headers["accept-language"].split(",")[0],
-                category: "accounts",
-                page: "register",
-            },
-        });
-
-        if (languageResponse.data.status !== 200) {
-            return {
-                redirect: {
-                    destination: `/error?code=${languageResponse.data.status}`,
-                    permanent: false,
-                },
-            };
-        }
-
-        return {
-            props: {
-                lang: languageResponse.data.content,
-                langCode: context.req.headers["accept-language"].split(",")[0],
-                host: process.env.HOST,
-            },
-        };
-    } catch (err: any) {
-        return {
-            redirect: {
-                destination: `/error?code=${err.response.status}`,
-                permanent: false,
-            },
-        };
-    }
+	return {
+		props: {},
+	};
 };
 
-const Register: NextPage = (props: any) => {
-    const [buttonLoading, setButtonLoading] = React.useState(false);
-    const [emailError, setEmailError] = React.useState<string | null>(null);
-    const [usernameError, setUsernameError] = React.useState<string | null>(null);
-    const [passwordError, setPasswordError] = React.useState<string | null>(null);
+const Register: NextPage = () => {
+	const appState = useSelector((state: RootState) => state);
+	const lang = appState.page.lang.accounts.register;
 
-    const handleRegister = (e: any) => {
-        e.preventDefault();
-        setButtonLoading(true);
+	const emailInput = React.useRef<HTMLInputElement>(null);
+	const usernameInput = React.useRef<HTMLInputElement>(null);
+	const passwordInput = React.useRef<HTMLInputElement>(null);
+	const confirmPasswordInput = React.useRef<HTMLInputElement>(null);
 
-        setEmailError(null);
-        setUsernameError(null);
-        setPasswordError(null);
+	const [showingErrorDialog, setShowingErrorDialog] = React.useState(false);
+	const [error, setError] = React.useState("no-errors" as keyof typeof LangPack.accounts.register.errors);
 
-        let email: string = (document.querySelector("#email") as HTMLInputElement).value;
-        let username: string = (document.querySelector("#username") as HTMLInputElement).value;
-        let password: string = (document.querySelector("#password") as HTMLInputElement).value;
-        let confirmPassword: string = (document.querySelector("#confirm-password") as HTMLInputElement).value;
+	const handleRegister = async (event: React.MouseEvent) => {
+		event.preventDefault();
+		setError("no-errors");
 
-        // Check if inputs are filled in
-        if (!email) {
-            setEmailError(props.lang.emailRequired);
-            return setButtonLoading(false);
-        }
-        if (!username) {
-            setUsernameError(props.lang.emailRequired);
-            return setButtonLoading(false);
-        }
+		// Verify inputs
+		const parsedBody = z
+			.object({
+				username: z
+					.string()
+					.min(3, {
+						message: "invalid-username-length",
+					})
+					.max(16, {
+						message: "invalid-username-length",
+					})
+					.refine(
+						(username) => {
+							return validator.isAlphanumeric(username, "en-GB", { ignore: "._" });
+						},
+						{ message: "invalid-username" }
+					),
+				email: z.string().refine(validator.isEmail, {
+					message: "invalid-email",
+				}),
+				password: z.string().min(6, { message: "invalid-password-length" }).max(256, { message: "invalid-password-length" }),
+				confirmPassword: z.string().refine(
+					(password) => {
+						return validator.equals(passwordInput.current!.value, password);
+					},
+					{ message: "password-match" }
+				),
+			})
+			.required()
+			.safeParse({
+				username: usernameInput.current!.value,
+				email: emailInput.current!.value,
+				password: passwordInput.current!.value,
+				confirmPassword: confirmPasswordInput.current!.value,
+			});
 
-        if (!password) {
-            setPasswordError(props.lang.passwordRequired);
-            return setButtonLoading(false);
-        }
-        if (!confirmPassword) {
-            setPasswordError(props.lang.confirmPasswordRequired);
-            return setButtonLoading(false);
-        }
+		if (!parsedBody.success) {
+			setError(
+				parsedBody.error.errors[0].message as
+					| "invalid-username-length"
+					| "invalid-username"
+					| "invalid-email"
+					| "invalid-password-length"
+					| "password-match"
+			);
+			return setShowingErrorDialog(true);
+		}
 
-        // Validate each input
-        if (!validator.isEmail(email)) {
-            setEmailError(props.lang.emailInvalid);
-            return setButtonLoading(false);
-        }
+		const response: AxiosResponse<RegisterResponse> = await axios({
+			method: "POST",
+			url: `${appState.page.hostURL}/api/accounts/register`,
+			data: {
+				email: parsedBody.data.email,
+				username: parsedBody.data.username,
+				password: parsedBody.data.password,
+			} as RegisterRequestBody,
+		});
 
-        if (!validator.isAlphanumeric(username, "en-US", { ignore: "." })) {
-            setUsernameError(props.lang.usernameInvalid);
-            return setButtonLoading(false);
-        }
+		if (response.data == "username-email-in-use") {
+			setError(response.data);
+			return setShowingErrorDialog(true);
+		}
 
-        if (username.length < 3 || username.length > 32) {
-            setUsernameError(props.lang.usernameLength);
-            return setButtonLoading(false);
-        }
+		if (response.data == "done") return (window.location.href = "/home");
+	};
 
-        if (password.length < 8 || password.length > 64) {
-            setPasswordError(props.lang.passwordLength);
-            return setButtonLoading(false);
-        }
+	return (
+		<div>
+			<div className={styles["page"]}>
+				<Head>
+					<title>{lang.pageTitle}</title>
+				</Head>
 
-        (async () => {
-            try {
-                let testResults: AxiosResponse = await axios({
-                    method: "POST",
-                    url: `${props.host}/api/accounts/check-use`,
-                    data: {
-                        email: email,
-                        username: username,
-                    },
-                });
+				<Dialog dialogOpen={showingErrorDialog}>
+					<p>{lang.errors[error]}</p>
 
-                if (testResults.data.message == "all-good") {
-                    let response: AxiosResponse = await axios({
-                        method: "POST",
-                        url: `${props.host}/api/accounts/register`,
-                        data: {
-                            email: email,
-                            username: username,
-                            password: password,
-                            lang: props.langCode,
-                        },
-                    });
+					<button onClick={() => setShowingErrorDialog(false)}>{lang.close}</button>
+				</Dialog>
 
-                    switch (response.data.message) {
-                        case "success":
-                            window.location.href = "/home";
-                            break;
+				<main>
+					<div className={styles["register-form"]}>
+						<h3>{lang.title}</h3>
+						<br />
 
-                        case "try-again":
-                            let newResponse = await axios({
-                                method: "POST",
-                                url: `${props.host}/api/accounts/register`,
-                                data: {
-                                    email: email,
-                                    username: username,
-                                    password: password,
-                                    lang: props.langCode,
-                                },
-                            });
+						<label htmlFor="email">{lang.email}</label>
+						<input type="email" name="email" ref={emailInput} placeholder="john@example.com" />
 
-                            if (newResponse.data.message == "success") return (window.location.href = "/home");
-                            break;
+						<br />
+						<br />
 
-                        case "rate-limit-exceeded":
-                            (document.querySelector("#password") as HTMLInputElement).value = "";
+						<label htmlFor="username">{lang.username}</label>
+						<input type="text" name="username" ref={usernameInput} placeholder="john" />
 
-                            setButtonLoading(false);
-                            setEmailError(props.lang.rateLimitExceeded);
-                            break;
+						<br />
+						<br />
 
-                        default:
-                            window.location.href = `/error?code=${response.data.status}&message=${response.data.message}`;
-                            break;
-                    }
-                } else {
-                    if (testResults.data.message == "email-already-in-use") {
-                        (document.querySelector("#email") as HTMLInputElement).value = "";
-                        setButtonLoading(false);
-                        return setEmailError(props.lang.emailInUse);
-                    }
+						<label htmlFor="password">{lang.password}</label>
+						<input type="password" name="password" ref={passwordInput} placeholder="••••••••" />
 
-                    if (testResults.data.message == "username-already-in-use") {
-                        (document.querySelector("#username") as HTMLInputElement).value = "";
-                        setButtonLoading(false);
-                        return setUsernameError(props.lang.usernameInUse);
-                    }
+						<br />
+						<br />
 
-                    return (window.location.href = `/error?code=${testResults.data.status}&message=${testResults.data.message}`);
-                }
-            } catch (err: any) {
-                return (window.location.href = `/error?code=${err.response.status}`);
-            }
-        })();
-    };
+						<label htmlFor="confirm-password">{lang.confirmPassword}</label>
+						<input type="password" name="confirm-password" ref={confirmPasswordInput} placeholder="••••••••" />
 
-    return (
-        <div>
-            <div className={styles["page"]}>
-                <Navbar lang={props.lang.navbar} user={null} />
+						<br />
+						<br />
 
-                <Head>
-                    <title>{props.lang.pageTitle}</title>
-                </Head>
+						<div className={styles["buttons"]}>
+							<button className={styles["login-button"]} onClick={(event) => handleRegister(event)}>
+								{lang.register}
+							</button>
+							<a href="/login">
+								<button className={styles["no-account-button"]}>{lang.alreadyHaveAnAccount}</button>
+							</a>
+						</div>
+					</div>
+				</main>
 
-                <Container className={styles["register-form"]}>
-                    <h3>{props.lang.title}</h3>
-                    <br />
-
-                    <label htmlFor="email">{props.lang.email}</label>
-                    <input type="text" name="email" id="email" placeholder="john@example.com" />
-                    <p className={styles["error-label"]}>{emailError}</p>
-
-                    <br />
-
-                    <label htmlFor="username">{props.lang.username}</label>
-                    <input type="text" name="username" id="username" placeholder="john" />
-                    <p className={styles["error-label"]}>{usernameError}</p>
-
-                    <br />
-
-                    <label htmlFor="password">{props.lang.password}</label>
-                    <input type="password" name="password" id="password" placeholder="••••••••" />
-                    <p className={styles["error-label"]}>{passwordError}</p>
-
-                    <br />
-
-                    <label htmlFor="confirm-password">{props.lang.confirmPassword}</label>
-                    <input type="password" name="confirm-password" id="confirm-password" placeholder="••••••••" />
-
-                    <br />
-                    <br />
-                    <br />
-
-                    <Row xs="1" sm="1" md="2">
-                        <Col>
-                            <Button onClick={handleRegister} disabled={buttonLoading} type="submit">
-                                <p hidden={buttonLoading}>{props.lang.register}</p>
-                                <Spinner size="sm" hidden={!buttonLoading} animation="border" />
-                            </Button>
-                        </Col>
-                        <Col className={`${styles["already-a-user"]} align-middle`}>
-                            <p>
-                                {props.lang.alreadyHaveAnAccount.split("&")[0]} <Link href="/login">{props.lang.alreadyHaveAnAccount.split("&")[1]}</Link>
-                            </p>
-                        </Col>
-                    </Row>
-                </Container>
-            </div>
-        </div>
-    );
+				<Footer />
+			</div>
+		</div>
+	);
 };
 
 export default Register;

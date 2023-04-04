@@ -1,213 +1,182 @@
 import * as React from "react";
-import axios, { AxiosResponse } from "axios";
-import validator from "validator";
+import { motion } from "framer-motion";
 
-import { Row, Col, Spinner } from "react-bootstrap";
-import { Container, Button, Link } from "@mui/material";
+import axios, { AxiosResponse } from "axios";
+
+import validator from "validator";
+import { z } from "zod";
 
 import Head from "next/head";
-import Navbar from "../../components/navbar";
+import Footer from "@/components/footer";
+import Dialog from "@/components/dialog";
 
 import styles from "../../styles/accounts/login.module.scss";
+
 import { GetServerSideProps, NextPage } from "next";
+import type { LoginRequestBody, LoginResponse } from "shared/types/api/accounts";
+import { useSelector } from "react-redux";
+import { RootState } from "@/store";
+
+import LangPack from "shared/types/lang";
 
 export const getServerSideProps: GetServerSideProps = async (context: any) => {
-    // If the user is already logged in, it will redirect to the main page instead
-    if (context.req.isAuthenticated())
-        return {
-            redirect: {
-                destination: "/home",
-                permanent: false,
-            },
-        };
+	if (context.req.isAuthenticated())
+		return {
+			redirect: {
+				destination: "/home",
+				permanent: false,
+			},
+		};
 
-    try {
-        // Get the language pack
-        let languageResponse: AxiosResponse = await axios({
-            method: "post",
-            url: `${process.env.HOST}/api/content/language/`,
-            data: {
-                lang: context.req.headers["accept-language"].split(",")[0],
-                category: "accounts",
-                page: "login",
-            },
-        });
-
-        if (languageResponse.data.status !== 200) {
-            return {
-                redirect: {
-                    destination: `/error?code=${languageResponse.data.status}`,
-                    permanent: false,
-                },
-            };
-        }
-
-        return {
-            props: {
-                lang: languageResponse.data.content,
-                host: process.env.HOST,
-            },
-        };
-    } catch (err: any) {
-        return {
-            redirect: {
-                destination: `/error?code=${err.response.status}`,
-                permanent: false,
-            },
-        };
-    }
+	return {
+		props: {},
+	};
 };
 
-const Login: NextPage = (props: any) => {
-    // Error states
-    const [buttonLoading, setButtonLoading] = React.useState(false);
-    const [emailError, setEmailError] = React.useState<string | null>(null);
-    const [passwordError, setPasswordError] = React.useState<string | null>(null);
-    const [tfaError, setTfaError] = React.useState<string | null>(null);
+const Login: NextPage = () => {
+	const appState = useSelector((state: RootState) => state);
+	const lang = appState.page.lang.accounts.login;
 
-    // Page that is showing
-    const [pageShowing, setPageShowing] = React.useState("login-form");
+	// Inputs
+	const emailInput = React.useRef<HTMLInputElement>(null);
+	const passwordInput = React.useRef<HTMLInputElement>(null);
 
-    // When login button clicked
-    const handleLogin = async (e: any) => {
-        // Reset errors, and set the button to load
+	// Page that is showing
+	const [currentPage, setCurrentPage] = React.useState("login-form");
+	const [showingErrorDialog, setShowingErrorDialog] = React.useState(false);
+	const [error, setError] = React.useState("no-errors" as keyof typeof LangPack.accounts.login.errors);
 
-        e.preventDefault();
-        setButtonLoading(true);
-        setEmailError(null);
-        setPasswordError(null);
+	// When login button clicked
+	const handleLogin = async (event: React.MouseEvent) => {
+		event.preventDefault();
+		setError("no-errors");
 
-        // Check for validity of inputs
-        let email: string = (document.querySelector("#email") as HTMLInputElement).value;
-        let password: string = (document.querySelector("#password") as HTMLInputElement).value;
-        let tfa: string = (document.querySelector("#tfa") as HTMLInputElement).value;
+		const parsedBody = z
+			.object({
+				email: z.string().refine(validator.isEmail, {
+					message: "invalid-email",
+				}),
+				password: z.string().nonempty({ message: "invalid-password" }),
+			})
+			.required()
+			.safeParse({
+				email: emailInput.current!.value,
+				password: passwordInput.current!.value,
+			});
 
-        if (!email) {
-            setEmailError(props.lang.emailRequired);
-            return setButtonLoading(false);
-        }
-        if (!password) {
-            setPasswordError(props.lang.passwordRequired);
-            return setButtonLoading(false);
-        }
-        if (!validator.isEmail(email)) {
-            setEmailError(props.lang.emailInvalid);
-            return setButtonLoading(false);
-        }
+		if (!parsedBody.success) {
+			setError(parsedBody.error.errors[0].message as "invalid-email" | "invalid-password");
+			return setShowingErrorDialog(true);
+		}
 
-        (async () => {
-            try {
-                // Send the request to the login api
-                let response: any = await axios({
-                    method: "POST",
-                    url: `${props.host}/api/accounts/login`,
-                    data: {
-                        password: password,
-                        email: email,
-                        tfaCode: tfa,
-                    },
-                });
+		// Send the request to the login api
+		const response: AxiosResponse<LoginResponse> = await axios({
+			method: "POST",
+			url: `${appState.page.hostURL}/api/accounts/login`,
+			data: {
+				email: emailInput.current!.value,
+				password: passwordInput.current!.value,
+				tfaCode: "",
+			} as LoginRequestBody,
+		});
 
-                // If the login was successful, redirect to the main window
-                if (response.data.message == "success") return (window.location.href = "/home");
+		// If the login was successful, redirect to the main window
+		if (response.data == "done") return (window.location.href = "/home");
+		if (response.data == "requires-tfa") return setCurrentPage("tfa-form");
 
-                // If the response was a "requires-tfa" show the tfa page
-                if (response.data.message == "requires-tfa") {
-                    setButtonLoading(false);
-                    return setPageShowing("tfa-form");
-                }
+		// If not, show the dialog and the error
+		setError(response.data);
+		setShowingErrorDialog(true);
+	};
 
-                // If not, reset inputs and show error
-                if (response.data.message == "invalid-credentials") {
-                    (document.querySelector("#password") as HTMLInputElement).value = "";
+	return (
+		<div className={styles["page"]}>
+			<Head>
+				<title>{lang.pageTitle}</title>
+			</Head>
 
-                    setButtonLoading(false);
-                    return setEmailError(props.lang.emailOrPasswordIncorrect);
-                }
+			<Dialog dialogOpen={showingErrorDialog}>
+				<p>{lang.errors[error]}</p>
 
-                // If the tfa code is invalid
-                if (response.data.message == "invalid-tfa-code") {
-                    (document.querySelector("#tfa") as HTMLInputElement).value = "";
+				<button onClick={() => setShowingErrorDialog(false)}>{lang.close}</button>
+			</Dialog>
 
-                    setButtonLoading(false);
-                    return setTfaError(props.lang.invalidTfa);
-                }
+			<main>
+				<motion.div
+					variants={{
+						visible: {
+							opacity: 1,
+							transition: { duration: 0.3 },
+							display: "block",
+						},
+						hidden: {
+							opacity: 0,
+							transition: { duration: 0.3 },
+							transitionEnd: {
+								display: "none",
+							},
+						},
+					}}
+					initial="hidden"
+					animate={currentPage == "login-form" ? "visible" : "hidden"}
+					className={styles["login-form"]}
+				>
+					<h3>{lang.title}</h3>
 
-                // If the user exceeded the login rate
-                if (response.data.message == "rate-limit-exceeded") {
-                    (document.querySelector("#password") as HTMLInputElement).value = "";
+					<br />
 
-                    setButtonLoading(false);
-                    return setEmailError(props.lang.rateLimitExceeded);
-                }
+					<label htmlFor="email">{lang.email}</label>
+					<input type="email" name="email" ref={emailInput} placeholder="john@example.com" />
 
-                return (window.location.href = `/error?code=${response.data.status}&message=${response.data.message}`);
-            } catch (err: any) {
-                return (window.location.href = `/error?code=${err.response.status}`);
-            }
-        })();
-    };
+					<br />
+					<br />
 
-    return (
-        <div className={styles["page"]}>
-            <Navbar lang={props.lang.navbar} user={null} />
+					<label htmlFor="password">{lang.password}</label>
+					<input type="password" name="password" ref={passwordInput} placeholder="••••••••" />
 
-            <Head>
-                <title>{props.lang.pageTitle}</title>
-            </Head>
+					<br />
+					<br />
+					<br />
 
-            <Container hidden={pageShowing !== "login-form"} className={styles["login-form"]}>
-                <h3>{props.lang.title}</h3>
-                <br />
+					<div className={styles["buttons"]}>
+						<button className={styles["login-button"]} onClick={(event) => handleLogin(event)}>
+							{lang.login}
+						</button>
+						<a href="/register">
+							<button className={styles["no-account-button"]}>{lang.doNotHaveAnAccount}</button>
+						</a>
+					</div>
+				</motion.div>
 
-                <label htmlFor="email">{props.lang.email}</label>
-                <input type="text" name="email" id="email" placeholder="john@example.com" />
-                <p className={styles["error-label"]}>{emailError}</p>
+				<motion.div
+					variants={{
+						visible: {
+							opacity: 1,
+							y: 0,
+							transition: { duration: 0.5 },
+						},
+						hidden: {
+							opacity: 0,
+							y: 50,
+							transition: { duration: 0.5 },
+						},
+						hiddenAndGone: {
+							opacity: 0,
+							y: 50,
+							transition: { duration: 0.5 },
+							display: "none",
+						},
+					}}
+					initial="hidden"
+					animate={currentPage == "tfa-form" ? "visible" : "hiddenAndGone"}
+					exit="hiddenAndGone"
+					className={styles["tfa-form"]}
+				></motion.div>
 
-                <br />
-
-                <label htmlFor="password">{props.lang.password}</label>
-                <input type="password" name="password" id="password" placeholder="••••••••" />
-                <p className={styles["error-label"]}>{passwordError}</p>
-
-                <br />
-                <br />
-
-                <Row xs="1" sm="1" md="2">
-                    <Col>
-                        <Button onClick={handleLogin} disabled={buttonLoading} type="submit">
-                            <p hidden={buttonLoading}>{props.lang.login}</p>
-                            <Spinner size="sm" hidden={!buttonLoading} animation="border" />
-                        </Button>
-                    </Col>
-                </Row>
-                <br />
-                <p>
-                    {props.lang.doNotHaveAnAccount.split("&")[0]} <Link href="/register">{props.lang.doNotHaveAnAccount.split("&")[1]}</Link>
-                </p>
-            </Container>
-
-            <Container hidden={pageShowing !== "tfa-form"} className={styles["tfa-form"]}>
-                <h3>{props.lang.title}</h3>
-                <br />
-
-                <label htmlFor="tfa">
-                    {props.lang.tfa}: {props.lang.tfaHelp}
-                </label>
-                <br />
-                <input type="text" name="tfa" id="tfa" placeholder="••••••" />
-                <sub className={styles["error-label"]}>{tfaError}</sub>
-
-                <br />
-                <br />
-
-                <Button onClick={handleLogin} disabled={buttonLoading} type="submit">
-                    <p hidden={buttonLoading}>{props.lang.submit}</p>
-                    <Spinner size="sm" hidden={!buttonLoading} animation="border" />
-                </Button>
-            </Container>
-        </div>
-    );
+				<Footer />
+			</main>
+		</div>
+	);
 };
 
 export default Login;

@@ -1,54 +1,76 @@
-import "../styles/globals.scss";
-import "bootstrap/dist/css/bootstrap.min.css";
+import * as React from "react";
+import locale from "locale";
 
 import Head from "next/head";
-import SSRProvider from "react-bootstrap/SSRProvider";
-import * as React from "react";
 
+import { store } from "@/store";
+import { Provider } from "react-redux";
+import { setLanguage } from "../store/pageSlice";
+
+import "@/styles/globals.scss";
 import type { AppProps } from "next/app";
+import LangPack from "shared/types/lang";
 
-const App = ({ Component, pageProps }: AppProps) => {
-    React.useEffect(() => {
-        if ("serviceWorker" in navigator) {
-            navigator.serviceWorker
-                .register("/serviceWorker.js")
-                .then((reg) => console.log("Registered service worker"))
-                .catch((err) => console.log("Failure: ", err));
-        }
-    }, []);
+const CustomApp = ({ Component, pageProps }: AppProps) => {
+	React.useEffect(() => {
+		if ("language" in navigator) {
+			const languages = {
+				// de: require("../../shared/locales/de").default as LangPack,
+				en: require("../../shared/locales/en").default as typeof LangPack,
+				// es: require("../../shared/locales/es").default as LangPack,
+				// fr: require("../../shared/locales/fr").default as LangPack,
+				// pr: require("../../shared/locales/pr").default as LangPack,
+			};
 
-    return (
-        <SSRProvider>
-            <Head>
-                <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=1" />
-                <meta name="theme-color" content="#5294e2" />
+			// Get the supported language files and the languages that the browser supports
+			const supported = new locale.Locales("en".split(","));
+			const locales = new locale.Locales(navigator.language);
 
-                {/* PWA Stuff */}
-                <link rel="apple-touch-icon" href="/apple-touch-icon.png"></link>
-                <link rel="manifest" href="manifest.json" />
+			// Get the language file using the best match, then load it into the state
+			const language: string = locales.best(supported).language;
+			store.dispatch(setLanguage(languages[language as "en"]));
+		}
 
-                {/* <!-- Primary Meta Tags --> */}
-                <title>DIMLIM</title>
-                <meta name="title" content="DIMLIM" />
-                <meta name="description" content="DIMLIM is a private chat app that offers end-to-end encryption, file transfer and much more" />
+		if ("serviceWorker" in navigator) {
+			navigator.serviceWorker
+				.register("/serviceWorker.js")
+				.then((reg) => console.log("Registered service worker"))
+				.catch((err) => console.log("Failure: ", err));
+		}
+	}, []);
 
-                {/* <!-- Open Graph / Facebook --> */}
-                <meta property="og:type" content="website" />
-                <meta property="og:url" content="https://dimlim.ml/" />
-                <meta property="og:title" content="DIMLIM" />
-                <meta property="og:description" content="DIMLIM is a private chat app that offers end-to-end encryption, file transfer and much more" />
-                <meta property="og:image" content="/banner.png" />
+	return (
+		<Provider store={store}>
+			<Head>
+				<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=1" />
+				<meta name="theme-color" content="#5294e2" />
 
-                {/* <!-- Twitter --> */}
-                <meta property="twitter:card" content="summary_large_image" />
-                <meta property="twitter:url" content="https://dimlim.ml/" />
-                <meta property="twitter:title" content="DIMLIM" />
-                <meta property="twitter:description" content="DIMLIM is a private chat app that offers end-to-end encryption, file transfer and much more" />
-                <meta property="twitter:image" content="/banner.png" />
-            </Head>
-            <Component {...pageProps} />
-        </SSRProvider>
-    );
+				{/* PWA Stuff */}
+				<link rel="apple-touch-icon" href="/apple-touch-icon.png"></link>
+				<link rel="manifest" href="manifest.json" />
+
+				{/* <!-- Primary Meta Tags --> */}
+				<title>DIMLIM</title>
+				<meta name="title" content="DIMLIM" />
+				<meta name="description" content="DIMLIM is a private chat app that offers end-to-end encryption, file transfer and much more" />
+
+				{/* <!-- Open Graph / Facebook --> */}
+				<meta property="og:type" content="website" />
+				<meta property="og:url" content="https://dimlim.ml/" />
+				<meta property="og:title" content="DIMLIM" />
+				<meta property="og:description" content="DIMLIM is a private chat app that offers end-to-end encryption, file transfer and much more" />
+				<meta property="og:image" content="/banner.png" />
+
+				{/* <!-- Twitter --> */}
+				<meta property="twitter:card" content="summary_large_image" />
+				<meta property="twitter:url" content="https://dimlim.ml/" />
+				<meta property="twitter:title" content="DIMLIM" />
+				<meta property="twitter:description" content="DIMLIM is a private chat app that offers end-to-end encryption, file transfer and much more" />
+				<meta property="twitter:image" content="/banner.png" />
+			</Head>
+			<Component {...pageProps} />
+		</Provider>
+	);
 };
 
-export default App;
+export default CustomApp;

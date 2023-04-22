@@ -1,0 +1,96 @@
+.page {
+	main {
+		padding-left: 25%;
+		padding-right: 25%;
+
+		.tab-triggers {
+			display: flex;
+
+			.tab-trigger {
+				background-color: #252a34;
+				padding: 20px;
+				width: 100%;
+
+				user-select: none;
+				cursor: pointer;
+
+				border: none;
+				border-bottom: 2px solid #383d4b;
+
+				transition: all 0.1 ease-in-out;
+				&:hover:not(.tab-trigger-active) {
+					filter: brightness(1.07);
+				}
+			}
+
+			.tab-trigger-active {
+				transition: all 0.1s ease-in-out;
+				filter: brightness(1.2);
+				border-bottom: 2px solid #5294e2;
+			}
+		}
+
+		.tab-content {
+			h1 {
+				text-align: center;
+			}
+
+			h3,
+			p {
+				margin: 0;
+				font-weight: 100;
+			}
+
+			p {
+				color: rgb(182, 182, 182);
+			}
+
+			.tab-action {
+				transition: all 0.1s ease-in-out;
+
+				display: flex;
+				align-items: center;
+
+				padding: 10px;
+
+				user-select: none;
+				cursor: pointer;
+
+				.tab-action-icon {
+					padding: 10px;
+				}
+
+				&:hover {
+					backdrop-filter: brightness(1.15);
+				}
+			}
+
+			.profile-overview {
+				width: 100%;
+				flex-direction: column;
+				display: flex;
+				align-items: center;
+
+				img {
+					width: 30%;
+					border-radius: 100%;
+				}
+			}
+		}
+	}
+}
+
+@media only screen and (max-width: 992px) {
+	.page {
+		main {
+			padding-left: 0;
+			padding-right: 0;
+
+			.profile-overview {
+				img {
+					width: 90%;
+				}
+			}
+		}
+	}
+}

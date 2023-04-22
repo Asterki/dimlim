@@ -1,9 +1,20 @@
-//Register
-interface GetContactNamesRequestBody {
-	contacts: Array<string>
+// Contacts
+interface AddContactRequestBody {
+	contactUsername: string;
 }
 
-type RegisterResponse = "bad-request" | "username-email-in-use" | "done";
+type AddContactResponse = "unauthorized" | "invalid-parameters" | "user-not-found" | "success";
+
+interface RemoveContactRequestBody {
+	contactUsername: string;
+}
+
+type RemoveContactResponse = "unauthorized" | "invalid-parameters" | "user-not-found" | "success";
 
 // Export types
-export type { RegisterRequestBody, RegisterResponse };
+export type {
+	AddContactRequestBody,
+	AddContactResponse,
+	RemoveContactRequestBody,
+	RemoveContactResponse,
+};

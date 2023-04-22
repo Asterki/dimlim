@@ -6,12 +6,14 @@ import cookieParser from "cookie-parser";
 import passportLocal from "passport-local";
 import passport from "passport";
 import express from "express";
+import speakeasy from "speakeasy";
 
 import { app } from "../";
 
 import UserModel from "../models/user";
 
 import type { User } from "../../shared/types/models";
+import { Document } from "mongoose";
 
 // Cookie session
 app.use(
@@ -42,18 +44,29 @@ passport.use(
 			passReqToCallback: true,
 			session: true,
 		},
-		async (req: express.Request, email: string, password: string, done: any) => {
+		async (req: express.Request, _email: string, _password: string, done) => {
 			try {
-				const user: User | null = await UserModel.findOne({
+				const user: (User & Document) | null = await UserModel.findOne({
 					$or: [{ "email.value": req.body.email }, { username: req.body.email }],
 				});
+				if (!user) return done(null, false, { message: "invalid-credentials" });
 
-				if (!user) return done(null, false, "invalid-credentials");
+				// Verify password and TFA code
+				if (!bcrypt.compareSync(req.body.password, user.password)) return done(null, false, { message: "invalid-credentials" });
+				if (user.tfa.secret !== "") {
+					if (!req.body.tfaCode) return done(null, false, { message: "requires-tfa" });
 
-				if (!bcrypt.compareSync(req.body.password, user.password)) return done(null, false, "invalid-credentials");
+					const verified = speakeasy.totp.verify({
+						secret: user.tfa.secret,
+						encoding: "base32",
+						token: req.body.tfaCode,
+					});
+
+					if (verified == false) return done(null, false, { message: "invalid-tfa-code" });
+				}
 
 				return done(null, user);
-			} catch (err) {
+			} catch (err: unknown) {
 				return done(err);
 			}
 		}
@@ -65,7 +78,7 @@ passport.serializeUser(UserModel.serializeUser());
 passport.deserializeUser(UserModel.deserializeUser());
 
 const accountsServiceRegisterUser = async (username: string, email: string, password: string): Promise<User | "username-email-in-use"> => {
-	const userFound = await UserModel.findOne({ $or: [{ username: username }, { email: email }] });
+	const userFound: (User & Document) | null = await UserModel.findOne({ $or: [{ username: username }, { email: email }] });
 	if (userFound) return "username-email-in-use";
 
 	const makeId = (length: number) => {
@@ -98,4 +111,29 @@ const accountsServiceRegisterUser = async (username: string, email: string, pass
 	return user;
 };
 
-export { accountsServiceRegisterUser };
+const accountsServiceDeleteUser = async (
+	user: User,
+	password: string,
+	tfaCode: string
+): Promise<"requires-tfa" | "invalid-password" | "invalid-tfa" | "done"> => {
+	// Comparing password and tfa
+	if (!bcrypt.compareSync(password, user.password)) return "invalid-password";
+
+	// TODO: REFACTOR THIS PROCESS
+	if (user.tfa.secret !== "") {
+		if (!tfaCode) return "requires-tfa";
+
+		const verified = speakeasy.totp.verify({
+			secret: user.tfa.secret,
+			encoding: "base32",
+			token: tfaCode,
+		});
+
+		if (verified == false) return "invalid-tfa";
+	}
+
+	await UserModel.deleteOne({ userID: user.userID });
+	return "done";
+};
+
+export { accountsServiceRegisterUser, accountsServiceDeleteUser };

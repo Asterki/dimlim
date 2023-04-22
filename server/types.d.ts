@@ -1,41 +1,24 @@
+import { User as IUser } from "../shared/types/models";
+
 interface Contact {
-    userID: string;
-    username: string;
-    muted: boolean;
-}
-
-interface User {
-    userID: string;
-    created: number;
-
-    username: string;
-    email: {
-        value: string;
-        verified: boolean;
-    };
-
-    avatar: string;
-    bio: string;
-    preferredLanguage: string;
-
-    contacts: Array<Contact>;
-    blockedContacts: Array<Contact>;
-
-    password: string;
-    chatSecret: string;
-    encSecret: string;
-
-    tfa: {
-        secret: string;
-        backupCodes: Array<string>;
-        seenBackupCodes: boolean;
-    };
+	userID: string;
+	username: string;
+	muted: boolean;
 }
 
 interface EmailVerificationCode {
-    code: string;
-    email: string;
-    expires: number;
+	code: string;
+	email: string;
+	expires: number;
 }
 
-export type { User, EmailVerificationCode, Contact };
+declare global {
+	// eslint-disable-next-line @typescript-eslint/no-namespace
+	namespace Express {
+		interface Request {
+			user?: IUser;
+		}
+	}
+}
+
+export type { EmailVerificationCode, Contact };

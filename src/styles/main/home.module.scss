@@ -13,8 +13,20 @@
 
 		padding: 0 15px 0 15px;
 
+		.branding {
+			display: flex;
+			justify-content: center;
+			align-items: center;
+
+			img {
+				width: 50px;
+				height: 50px;
+			}
+		}
+
 		.navbar-trigger {
 			user-select: none;
+			cursor: pointer;
 
 			background-color: #383c4a;
 			border: none;
@@ -38,8 +50,8 @@
 				border-radius: 50%;
 			}
 
-			h4 {
-				margin: 0 10px 0 0;
+			p {
+				margin: 0 0 0 10px;
 			}
 		}
 	}
@@ -87,13 +99,16 @@
 	}
 
 	.navbar-option {
-		padding: 10px;
+		padding: 15px;
 		width: 100%;
 
 		text-align: right;
-	}
+		cursor: pointer;
 
-	.logout-option {
-		color: #f23f43;
-	}
+		transition: all 0.1s ease-in-out;
+
+		&:hover {
+			backdrop-filter: brightness(1.1);
+		}
+    }
 }

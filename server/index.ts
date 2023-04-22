@@ -19,12 +19,12 @@ nextApp.prepare().then(() => {
 	const handle = nextApp.getRequestHandler();
 
 	// Load all the configuration
-	require("./routes/router");
 	require("./services/databases");
 	require("./services/accounts");
 	require("./services/upload");
 	require("./services/messages");
 	require("./services/users");
+	require("./routes/router");
 
 	app.get("*", (req, res) => {
 		handle(req, res);

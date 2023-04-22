@@ -155,6 +155,7 @@ const Register: NextPage = () => {
 
 						<br />
 						<br />
+                        <br />
 
 						<div className={styles["buttons"]}>
 							<button className={styles["login-button"]} onClick={(event) => handleRegister(event)}>

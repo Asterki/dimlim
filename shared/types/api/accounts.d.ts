@@ -13,7 +13,7 @@ interface DeleteAccountRequestBody {
 	tfaCode: string;
 }
 
-type DeleteAccountResponse = "unauthorized" | "bad-request" | "requires-tfa" | "done";
+type DeleteAccountResponse = "invalid-tfa" | "invalid-password" | "bad-request" | "requires-tfa" | "done" | "unauthorized";
 
 // Login
 interface LoginRequestBody {
@@ -24,5 +24,9 @@ interface LoginRequestBody {
 
 type LoginResponse = "bad-request" | "invalid-tfa-code" | "requires-tfa" | "invalid-credentials" | "done";
 
+// Logout
+// * No request body for this API
+type LogoutResponse = "ok";
+
 // Export types
-export type { RegisterRequestBody, RegisterResponse, DeleteAccountRequestBody, DeleteAccountResponse, LoginRequestBody, LoginResponse };
+export type { RegisterRequestBody, RegisterResponse, DeleteAccountRequestBody, DeleteAccountResponse, LoginRequestBody, LoginResponse, LogoutResponse };

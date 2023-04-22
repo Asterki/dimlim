@@ -31,12 +31,12 @@ const CustomApp = ({ Component, pageProps }: AppProps) => {
 			store.dispatch(setLanguage(languages[language as "en"]));
 		}
 
-		if ("serviceWorker" in navigator) {
-			navigator.serviceWorker
-				.register("/serviceWorker.js")
-				.then((reg) => console.log("Registered service worker"))
-				.catch((err) => console.log("Failure: ", err));
-		}
+		// if ("serviceWorker" in navigator) {
+		// 	navigator.serviceWorker
+		// 		.register("/serviceWorker.js")
+		// 		.then((reg) => console.log("Registered service worker"))
+		// 		.catch((err) => console.log("Failure: ", err));
+		// }
 	}, []);
 
 	return (
@@ -46,27 +46,28 @@ const CustomApp = ({ Component, pageProps }: AppProps) => {
 				<meta name="theme-color" content="#5294e2" />
 
 				{/* PWA Stuff */}
-				<link rel="apple-touch-icon" href="/apple-touch-icon.png"></link>
-				<link rel="manifest" href="manifest.json" />
+				{/* <link rel="apple-touch-icon" href="/apple-touch-icon.png"></link> */}
+				{/* <link rel="manifest" href="manifest.json" /> */}
 
 				{/* <!-- Primary Meta Tags --> */}
 				<title>DIMLIM</title>
 				<meta name="title" content="DIMLIM" />
 				<meta name="description" content="DIMLIM is a private chat app that offers end-to-end encryption, file transfer and much more" />
+                <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
 
 				{/* <!-- Open Graph / Facebook --> */}
 				<meta property="og:type" content="website" />
 				<meta property="og:url" content="https://dimlim.ml/" />
 				<meta property="og:title" content="DIMLIM" />
 				<meta property="og:description" content="DIMLIM is a private chat app that offers end-to-end encryption, file transfer and much more" />
-				<meta property="og:image" content="/banner.png" />
+				<meta property="og:image" content="/assets/images/banner.png" />
 
 				{/* <!-- Twitter --> */}
 				<meta property="twitter:card" content="summary_large_image" />
 				<meta property="twitter:url" content="https://dimlim.ml/" />
 				<meta property="twitter:title" content="DIMLIM" />
 				<meta property="twitter:description" content="DIMLIM is a private chat app that offers end-to-end encryption, file transfer and much more" />
-				<meta property="twitter:image" content="/banner.png" />
+				<meta property="twitter:image" content="/assets/images/banner.png" />
 			</Head>
 			<Component {...pageProps} />
 		</Provider>

@@ -3,6 +3,8 @@ import React from "react";
 import axios, { AxiosResponse } from "axios";
 
 import Navbar from "../../components/navbar";
+import Link from "next/link";
+import Head from "next/head";
 
 import { GetServerSideProps, NextPage } from "next";
 import styles from "../../styles/main/index.module.scss";
@@ -29,66 +31,54 @@ const IndexPage: NextPage = (props: any) => {
 	const lang = appState.page.lang.main.welcome;
 
 	return (
-		<div className={styles["page"]}>
-			<Navbar lang={lang.navbar} user={null} />
+		<div className={styles["main-index-page"]}>
+            <Head>
+                <title>{lang.title}</title>
+            </Head>
 
-			<div className={styles["content"]}>
+			<main>
 				<div className={styles["header"]}>
-					<br />
 					<h1>DIMLIM</h1>
-					<br />
+                    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Veritatis voluptatum ea beatae, odit modi</p>
 
-					<img src="/icon.png" alt="Icon png" />
+					<img src="/assets/svg/logo-no-background.svg" alt="Icon png" />
 				</div>
 
-				<br />
-				<br />
-				<br />
+				<div className={styles["features"]}>
+					<div>
+						<img src="/assets/svg/shield.svg" alt="Shield" />
+						<h1>{lang.security}</h1>
+						<p> {lang.securityDesc}</p>
+					</div>
 
-				<div className={styles["main-content"]}>
-					<img src="../../assets/images/shield-line.png" alt="Shield" />
-					<h1>{lang.security}</h1>
-					<p> {lang.securityDesc}</p>
+					<div>
+						<img src="/assets/svg/lock.svg" alt="Privacy" />
+						<h1>{lang.privacy}</h1>
+						<p>
+							{lang.privacyDesc.split("&")[0]}
+							<a href="https://github.com/Asterki/dimlim">{lang.privacyDesc.split("&")[1]}</a>
+							{lang.privacyDesc.split("&")[2]}
+						</p>
+					</div>
 
-					<br />
-					<br />
-
-					<img src="../../assets/images/user-box-line.png" alt="Privacy" />
-					<h1>{lang.privacy}</h1>
-					<p>
-						{lang.privacyDesc.split("&")[0]}
-						<a href="https://github.com/Asterki/dimlim">{lang.privacyDesc.split("&")[1]}</a>
-						{lang.privacyDesc.split("&")[2]}
-					</p>
-
-					<br />
-					<br />
-
-					<img src="../../assets/images/airplane-flight-2-line.png" alt="Velocity" />
-					<h1>{lang.velocity}</h1>
-					<p>{lang.velocityDesc}</p>
+					<div>
+						<img src="/assets/svg/airplane-flight.svg" alt="Velocity" />
+						<h1>{lang.velocity}</h1>
+						<p>{lang.velocityDesc}</p>
+					</div>
 				</div>
-
-				<br />
-				<br />
-				<br />
 
 				<div className={styles["footer"]}>
-					<a href="/register">
+					<Link href="/register">
 						<button>{lang.navbar.register}</button>
-					</a>
+					</Link>
 					<br />
 					<br />
-					<a href="/login">
+					<Link href="/login">
 						<button>{lang.navbar.login}</button>
-					</a>
-
-					<br />
-					<br />
-					<br />
-					<p>Copyright© 2022 DIMLIM Team</p>
+					</Link>
 				</div>
-			</div>
+			</main>
 		</div>
 	);
 };

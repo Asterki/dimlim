@@ -22,10 +22,7 @@ const router: express.Router = express.Router();
 // Account creation and deletion
 router.post(
 	"/register",
-	async (
-		req: express.Request<unknown, RegisterResponse, RegisterRequestBody>,
-		res: express.Response<RegisterResponse>
-	) => {
+	async (req: express.Request<unknown, RegisterResponse, RegisterRequestBody>, res: express.Response<RegisterResponse>) => {
 		try {
 			// Validate fields
 			const parsedBody = z
@@ -59,7 +56,7 @@ router.post(
 				.required()
 				.safeParse(req.body);
 
-			if (!parsedBody.success) return res.status(400).send("bad-request");
+			if (!parsedBody.success) return res.status(400).send("invalid-parameters");
 
 			// Register the user
 			const user = await accountsServiceRegisterUser(
@@ -86,8 +83,7 @@ router.post(
 		req: express.Request<unknown, DeleteAccountResponse, DeleteAccountRequestBody>,
 		res: express.Response<DeleteAccountResponse>
 	) => {
-		if (!req.isAuthenticated() || req.user == undefined)
-			return res.status(403).send("unauthorized");
+		if (!req.isAuthenticated() || req.user == undefined) return res.status(403).send("unauthorized");
 
 		try {
 			const parsedBody = z
@@ -98,13 +94,9 @@ router.post(
 				.required()
 				.safeParse(req.body);
 
-			if (!parsedBody.success) return res.status(400).send("bad-request");
+			if (!parsedBody.success) return res.status(400).send("invalid-parameters");
 
-			const result = await accountsServiceDeleteUser(
-				req.user as User,
-				parsedBody.data.password,
-				parsedBody.data.tfaCode
-			);
+			const result = await accountsServiceDeleteUser(req.user as User, parsedBody.data.password, parsedBody.data.tfaCode);
 			if (result !== "done") return res.send(result);
 
 			req.logout(async (err: unknown) => {
@@ -120,11 +112,7 @@ router.post(
 // Account access
 router.post(
 	"/login",
-	(
-		req: express.Request<unknown, LoginResponse, LoginRequestBody>,
-		res: express.Response<LoginResponse>,
-		next
-	) => {
+	(req: express.Request<unknown, LoginResponse, LoginRequestBody>, res: express.Response<LoginResponse>, next) => {
 		try {
 			const parsedBody = z
 				.object({
@@ -135,7 +123,7 @@ router.post(
 				.required()
 				.safeParse(req.body);
 
-			if (!parsedBody.success) return res.status(400).send("bad-request" as LoginResponse);
+			if (!parsedBody.success) return res.status(400).send("invalid-parameters" as LoginResponse);
 
 			passport.authenticate(
 				"local",
@@ -159,24 +147,18 @@ router.post(
 	}
 );
 
-router.post(
-	"/logout",
-	(
-		req: express.Request<unknown, LogoutResponse, unknown>,
-		res: express.Response<LogoutResponse>
-	) => {
-		try {
-			if (!req.isAuthenticated()) return res.send("ok");
+router.post("/logout", (req: express.Request<unknown, LogoutResponse, unknown>, res: express.Response<LogoutResponse>) => {
+	try {
+		if (!req.isAuthenticated()) return res.send("ok");
 
-			// Logout
-			req.logout((err: unknown) => {
-				if (err) throw err;
-				res.send("ok");
-			});
-		} catch (err: unknown) {
-			res.status(500);
-		}
+		// Logout
+		req.logout((err: unknown) => {
+			if (err) throw err;
+			res.send("ok");
+		});
+	} catch (err: unknown) {
+		res.status(500);
 	}
-);
+});
 
 module.exports = router;

@@ -2,12 +2,16 @@ declare const LangPack: {
 	main: {
 		welcome: {
 			title: string;
+
 			security: string;
 			securityDesc: string;
+
 			privacy: string;
 			privacyDesc: string;
+
 			velocity: string;
 			velocityDesc: string;
+
 			navbar: {
 				login: string;
 				register: string;
@@ -16,30 +20,125 @@ declare const LangPack: {
 		home: {
 			pageTitle: string;
 			title: string;
-			navbar: {
-				profile: string;
+
+			profileMenu: {
+				addContact: string;
+				blockedContacts: string;
 				settings: string;
-				logout: string;
 			};
-			contacts: string;
-			blocked: string;
-			addContact: string;
-			noContacts: string;
-			blockedContacts: string;
-			noBlockedContacts: string;
-			newMessageNotification: string;
-			dialogs: {
-				addContact: {
+		};
+		settings: {
+			pageTitle: string;
+
+			tabs: {
+				profile: {
+					tabLabel: string;
 					title: string;
-					label: string;
-					cancel: string;
-					add: string;
-					"missing-parameters": string;
-					"self-add": string;
-					"already-on-list": string;
-					"user-not-found": string;
+
+					userID: string;
+					emailVerified: string;
+					tfaActive: string;
+
+					yes: string;
+					no: string;
+				};
+				security: {
+					tabLabel: string;
+					title: string;
+
+					tfa: {
+						activateTitle: string;
+						deactivateTitle: string;
+						description: string;
+					};
+
+					changePassword: {
+						title: string;
+						description: string;
+					};
+				};
+				messages: {
+					tabLabel: string;
+					title: string;
+
+					seeContacts: {
+						title: string;
+						description: string;
+					};
+					seeBlockedContacts: {
+						title: string;
+						description: string;
+					};
+					deleteAllMessages: {
+						title: string;
+						description: string;
+					};
+				};
+				account: {
+					tabLabel: string;
+					title: string;
+
+					changeEmail: {
+						title: string;
+						description: string;
+					};
+					logout: {
+						title: string;
+						description: string;
+					};
+					deleteAccount: {
+						title: string;
+						description: string;
+					};
 				};
 			};
+
+			dialogs: {
+                account: {
+                    logout: {
+                        title: string;
+                        description: string;
+
+                        logout: string;
+                        cancel: string;
+                    };
+                    changeEmail: {
+                        title: string;
+
+                        newEmailLabel: string;
+                        currentPasswordLabel: string;
+
+                        submit: string;
+                        cancel: string;
+
+                        errors: {
+                            "no-errors": "";
+                            "unauthorized": string;
+                            "invalid-parameters": string;
+                            "email-in-use": string;
+                        }
+                    },
+                    deleteAccount: {
+                        title: string;
+                        warning: string;
+
+                        passwordLabel: string;
+                        tfaLabel: string;
+
+                        submit: string;
+                        cancel: string;
+
+                        errors: {
+                            "no-errors": "";
+                            "invalid-password": string;
+                            "invalid-tfa": string;
+                            "invalid-parameters": string;
+                            "requires-tfa": string;
+                            "unauthorized": string;
+                        }
+                    }
+                }
+            };
 		};
 	};
 	accounts: {
@@ -59,7 +158,7 @@ declare const LangPack: {
 				"invalid-email": string;
 				"invalid-password": string;
 
-				"bad-request": string;
+				"invalid-parameters": string;
 				"invalid-credentials": string;
 				"invalid-tfa-code": string;
 

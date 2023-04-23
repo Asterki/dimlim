@@ -9,7 +9,8 @@ const en: typeof LangPack = {
 			securityDesc: "DIMLIM Uses end-to-end encryption to send messages and files",
 
 			privacy: "Privacy",
-			privacyDesc: "DIMLIM Doesn't collect any user or message data, our code is & Open Source &, so you can check it any time",
+			privacyDesc:
+				"DIMLIM Doesn't collect any user or message data, our code is & Open Source &, so you can check it any time",
 
 			velocity: "Velocity",
 			velocityDesc: "DIMLIM Uses the Next.js framework, offering fast navigation",
@@ -23,36 +24,132 @@ const en: typeof LangPack = {
 			pageTitle: "DIMLIM | Home",
 			title: "Home",
 
-			navbar: {
-				profile: "Profile",
+			profileMenu: {
+				addContact: "Add Contact",
+				blockedContacts: "Blocked Contacts",
 				settings: "Settings",
+			},
+		},
+		settings: {
+			pageTitle: "DIMLIM | Settings",
 
-				logout: "Logout",
+			tabs: {
+				profile: {
+					tabLabel: "Profile",
+					title: "Profile Overview",
+
+					userID: "User ID:",
+					emailVerified: "Email verified:",
+					tfaActive: "TFA Active:",
+
+					yes: "Yes",
+					no: "No",
+				},
+
+				security: {
+					tabLabel: "Security",
+					title: "Security Settings",
+
+					tfa: {
+						activateTitle: "Activate TFA",
+						deactivateTitle: "Disable TFA",
+						description: "Add an extra layer of security by adding TFA to your account",
+					},
+
+					changePassword: {
+						title: "Change password",
+						description: "Change your current password",
+					},
+				},
+
+				messages: {
+					tabLabel: "Messages",
+					title: "Message Settings",
+
+					deleteAllMessages: {
+						title: "Delete all messages",
+						description: "Delete all messages stored on your device",
+					},
+
+					seeBlockedContacts: {
+						title: "See blocked contacts",
+						description: "See the accounts that you've blocked",
+					},
+
+					seeContacts: {
+						title: "See contacts",
+						description: "See the people you've added to your contacts",
+					},
+				},
+
+				account: {
+					tabLabel: "Account",
+					title: "Account Settings",
+
+					changeEmail: {
+						title: "Change email",
+						description: "Change the email you log in with",
+					},
+
+					deleteAccount: {
+						title: "Delete account",
+						description: "Delete your DIMLIM account",
+					},
+
+					logout: {
+						title: "Logout",
+						description: "Logout of your account and delete all messages stored on your device",
+					},
+				},
 			},
 
-			contacts: "Contacts",
-			blocked: "Blocked",
-
-			addContact: "Add Contact",
-			noContacts: "You don't have any contacts yet, begin by pressing Add Contact",
-
-			blockedContacts: "Blocked Contacts",
-			noBlockedContacts: "You don't have any blocked contacts yet",
-
-			newMessageNotification: "New Message",
-
 			dialogs: {
-				addContact: {
-					title: "Add Contact",
-					label: "Please insert the person's username",
+				account: {
+					logout: {
+						title: "Logout",
+						description:
+							"Do you want to log out of your account? al of your messages stored on your device will be deleted",
 
-					cancel: "Cancel",
-					add: "Add",
+						logout: "Logout",
+						cancel: "Cancel",
+					},
 
-					"missing-parameters": "Please fill all inputs.",
-					"self-add": "You can't add yourself as contact",
-					"already-on-list": "That user is already in your contacts.",
-					"user-not-found": "There's no user with that username",
+					changeEmail: {
+						title: "Change Email",
+
+						newEmailLabel: "Your new email:",
+						currentPasswordLabel: "Your current password:",
+
+						submit: "Submit",
+						cancel: "Cancel",
+
+						errors: {
+							"no-errors": "",
+							"email-in-use": "That email is already in use, please try again",
+							"invalid-parameters": "Please enter a valid email",
+							unauthorized: "Incorrect password, please try again",
+						},
+					},
+					deleteAccount: {
+						title: "Delete Account",
+						warning: "This cannot be undone",
+
+						passwordLabel: "Your current password",
+						tfaLabel: "TFA code provided by your app",
+
+						submit: "Delete my account",
+						cancel: "Cancel",
+
+						errors: {
+							"no-errors": "",
+							"invalid-password": "Invalid password, please try again",
+							"invalid-tfa": "Invalid TFA code, please try again",
+							"invalid-parameters": "Please fill out all fields",
+							"requires-tfa":
+								"Somehow you tricked the app to not send the TFA code, very funny, but you still need it",
+							unauthorized: "Your session has expired, please login again",
+						},
+					},
 				},
 			},
 		},
@@ -80,7 +177,7 @@ const en: typeof LangPack = {
 
 				"invalid-credentials": "Incorrect email or password, please try again",
 				"invalid-tfa-code": "Incorrect TFA code, please try again",
-				"bad-request": "Please fill out all fiends",
+				"invalid-parameters": "Please fill out all fiends",
 
 				"no-errors": "",
 			},
@@ -182,7 +279,8 @@ const en: typeof LangPack = {
 					},
 					email: {
 						title: "Please insert your new email",
-						subTitle: "This email will be unverified and you'll have to go through the process of re-verifying your email",
+						subTitle:
+							"This email will be unverified and you'll have to go through the process of re-verifying your email",
 
 						newEmail: "Your new email",
 						password: "Your current password",
@@ -252,7 +350,8 @@ const en: typeof LangPack = {
 					},
 					activateTfa: {
 						title: "Two Factor Authentication",
-						warning: "MAKE SURE YOU ENTER THE CODE TO YOUR TFA APP, YOU WILL NOT SEE THIS CODE AGAIN, IF YOU LOSE IT, YOU LOSE YOUR ACCOUNT",
+						warning:
+							"MAKE SURE YOU ENTER THE CODE TO YOUR TFA APP, YOU WILL NOT SEE THIS CODE AGAIN, IF YOU LOSE IT, YOU LOSE YOUR ACCOUNT",
 						done: "Done",
 					},
 					backupTfa: {

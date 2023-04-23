@@ -1,10 +1,12 @@
 import * as React from "react";
-import Head from "next/head";
-
 import axios, { AxiosResponse } from "axios";
 
 import validator from "validator";
 import { z } from "zod";
+
+import Head from "next/head";
+import Link from "next/link";
+import { useRouter } from "next/router";
 
 import Footer from "../../components/footer";
 import Dialog from "@/components/dialog";
@@ -35,14 +37,15 @@ export const getServerSideProps: GetServerSideProps = async (context: any) => {
 const Register: NextPage = () => {
 	const appState = useSelector((state: RootState) => state);
 	const lang = appState.page.lang.accounts.register;
+	const router = useRouter();
 
 	const emailInput = React.useRef<HTMLInputElement>(null);
 	const usernameInput = React.useRef<HTMLInputElement>(null);
 	const passwordInput = React.useRef<HTMLInputElement>(null);
 	const confirmPasswordInput = React.useRef<HTMLInputElement>(null);
 
-	const [showingErrorDialog, setShowingErrorDialog] = React.useState(false);
-	const [error, setError] = React.useState("no-errors" as keyof typeof LangPack.accounts.register.errors);
+	const [showingErrorDialog, setShowingErrorDialog] = React.useState<boolean>(false);
+	const [error, setError] = React.useState<keyof typeof LangPack.accounts.register.errors>("no-errors");
 
 	const handleRegister = async (event: React.MouseEvent) => {
 		event.preventDefault();
@@ -68,7 +71,10 @@ const Register: NextPage = () => {
 				email: z.string().refine(validator.isEmail, {
 					message: "invalid-email",
 				}),
-				password: z.string().min(6, { message: "invalid-password-length" }).max(256, { message: "invalid-password-length" }),
+				password: z
+					.string()
+					.min(6, { message: "invalid-password-length" })
+					.max(256, { message: "invalid-password-length" }),
 				confirmPassword: z.string().refine(
 					(password) => {
 						return validator.equals(passwordInput.current!.value, password);
@@ -111,7 +117,7 @@ const Register: NextPage = () => {
 			return setShowingErrorDialog(true);
 		}
 
-		if (response.data == "done") return (window.location.href = "/home");
+		if (response.data == "done") return router.push("/home");
 	};
 
 	return (
@@ -133,13 +139,13 @@ const Register: NextPage = () => {
 						<br />
 
 						<label htmlFor="email">{lang.email}</label>
-						<input type="email" name="email" ref={emailInput} placeholder="john@example.com" />
+						<input type="email" name="email" ref={emailInput} placeholder="user@example.com" />
 
 						<br />
 						<br />
 
 						<label htmlFor="username">{lang.username}</label>
-						<input type="text" name="username" ref={usernameInput} placeholder="john" />
+						<input type="text" name="username" ref={usernameInput} placeholder="user" />
 
 						<br />
 						<br />
@@ -155,15 +161,15 @@ const Register: NextPage = () => {
 
 						<br />
 						<br />
-                        <br />
+						<br />
 
 						<div className={styles["buttons"]}>
 							<button className={styles["login-button"]} onClick={(event) => handleRegister(event)}>
 								{lang.register}
 							</button>
-							<a href="/login">
+							<Link href="/login">
 								<button className={styles["no-account-button"]}>{lang.alreadyHaveAnAccount}</button>
-							</a>
+							</Link>
 						</div>
 					</div>
 				</main>

@@ -5,7 +5,7 @@ interface RegisterRequestBody {
 	password: string;
 }
 
-type RegisterResponse = "bad-request" | "username-email-in-use" | "done";
+type RegisterResponse = "invalid-parameters" | "username-email-in-use" | "done";
 
 // Delete account
 interface DeleteAccountRequestBody {
@@ -13,7 +13,7 @@ interface DeleteAccountRequestBody {
 	tfaCode: string;
 }
 
-type DeleteAccountResponse = "invalid-tfa" | "invalid-password" | "bad-request" | "requires-tfa" | "done" | "unauthorized";
+type DeleteAccountResponse = "invalid-tfa" | "invalid-password" | "invalid-parameters" | "requires-tfa" | "done" | "unauthorized";
 
 // Login
 interface LoginRequestBody {
@@ -22,7 +22,7 @@ interface LoginRequestBody {
 	tfaCode: string;
 }
 
-type LoginResponse = "bad-request" | "invalid-tfa-code" | "requires-tfa" | "invalid-credentials" | "done";
+type LoginResponse = "invalid-parameters" | "invalid-tfa-code" | "requires-tfa" | "invalid-credentials" | "done";
 
 // Logout
 // * No request body for this API

@@ -7,6 +7,9 @@ import validator from "validator";
 import { z } from "zod";
 
 import Head from "next/head";
+import Link from "next/link";
+import { useRouter } from "next/router";
+
 import Footer from "@/components/footer";
 import Dialog from "@/components/dialog";
 
@@ -36,6 +39,7 @@ export const getServerSideProps: GetServerSideProps = async (context: any) => {
 const Login: NextPage = () => {
 	const appState = useSelector((state: RootState) => state);
 	const lang = appState.page.lang.accounts.login;
+    const router = useRouter()
 
 	// Inputs
 	const emailInput = React.useRef<HTMLInputElement>(null);
@@ -44,7 +48,7 @@ const Login: NextPage = () => {
 	// Page that is showing
 	const [currentPage, setCurrentPage] = React.useState("login-form");
 	const [showingErrorDialog, setShowingErrorDialog] = React.useState(false);
-	const [error, setError] = React.useState("no-errors" as keyof typeof LangPack.accounts.login.errors);
+	const [error, setError] = React.useState<keyof typeof LangPack.accounts.login.errors>("no-errors");
 
 	// When login button clicked
 	const handleLogin = async (event: React.MouseEvent) => {
@@ -81,7 +85,7 @@ const Login: NextPage = () => {
 		});
 
 		// If the login was successful, redirect to the main window
-		if (response.data == "done") return (window.location.href = "/home");
+		if (response.data == "done") return router.push("/home");
 		if (response.data == "requires-tfa") return setCurrentPage("tfa-form");
 
 		// If not, show the dialog and the error
@@ -126,7 +130,7 @@ const Login: NextPage = () => {
 					<br />
 
 					<label htmlFor="email">{lang.email}</label>
-					<input type="email" name="email" ref={emailInput} placeholder="john@example.com" />
+					<input type="email" name="email" ref={emailInput} placeholder="user@example.com" />
 
 					<br />
 					<br />
@@ -142,9 +146,9 @@ const Login: NextPage = () => {
 						<button className={styles["login-button"]} onClick={(event) => handleLogin(event)}>
 							{lang.login}
 						</button>
-						<a href="/register">
+						<Link href="/register">
 							<button className={styles["no-account-button"]}>{lang.doNotHaveAnAccount}</button>
-						</a>
+						</Link>
 					</div>
 				</motion.div>
 

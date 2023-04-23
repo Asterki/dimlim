@@ -4,7 +4,7 @@
 	width: 100vw;
 	height: 100vh;
 
-    z-index: 20;
+	z-index: 20;
 
 	display: flex;
 	flex-direction: column;
@@ -25,11 +25,29 @@
 		outline: none !important;
 
 		width: 100%;
+        margin-top: 10px;
 
-		font-weight: bold;
 		cursor: pointer;
 
 		background-color: #2196f3;
 		color: white;
+	}
+
+	input {
+		width: 100%;
+		border-radius: 5px;
+		padding: 10px;
+
+		background-color: #222630;
+		border: 1px solid #212530;
+		box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+		color: white;
+		outline: none !important;
+
+		transition: all 0.1s ease-in-out;
+
+		&:focus {
+			border: 1px solid #5294e2;
+		}
 	}
 }

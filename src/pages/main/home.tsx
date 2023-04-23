@@ -74,7 +74,10 @@ const Home: NextPage<PageProps> = (props) => {
 					<DropdownMenu.Root onOpenChange={(state: boolean) => setNavbarOpen(state)}>
 						<DropdownMenu.Trigger className={styles["navbar-trigger"]}>
 							<div className={styles["contact-information"]}>
-								<img src={props.user.avatar !== "" ? props.user.avatar : "/assets/images/default-avatar.png"} alt="user avatar" />
+								<img
+									src={props.user.avatar !== "" ? props.user.avatar : "/assets/images/default-avatar.png"}
+									alt="user avatar"
+								/>
 								<p>{props.user.username}</p>
 							</div>
 
@@ -95,10 +98,17 @@ const Home: NextPage<PageProps> = (props) => {
 						</DropdownMenu.Trigger>
 						<DropdownMenu.Portal>
 							<DropdownMenu.Content align="end" className={styles["navbar-options"]}>
-								<DropdownMenu.Item className={styles["navbar-option"]}>Add Contact</DropdownMenu.Item>
-								<DropdownMenu.Item className={styles["navbar-option"]}>Blocked Contacts</DropdownMenu.Item>
-								<DropdownMenu.Item className={styles["navbar-option"]} onClick={() => router.push("/main/settings")}>
-									Settings
+								<DropdownMenu.Item className={styles["navbar-option"]}>
+									{lang.profileMenu.addContact}
+								</DropdownMenu.Item>
+								<DropdownMenu.Item className={styles["navbar-option"]}>
+									{lang.profileMenu.blockedContacts}
+								</DropdownMenu.Item>
+								<DropdownMenu.Item
+									className={styles["navbar-option"]}
+									onClick={() => router.push("/main/settings")}
+								>
+									{lang.profileMenu.settings}
 								</DropdownMenu.Item>
 							</DropdownMenu.Content>
 						</DropdownMenu.Portal>

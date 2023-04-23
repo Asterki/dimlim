@@ -2,15 +2,13 @@ import express from "express";
 import { z } from "zod";
 import validator from "validator";
 
-import {
-	changeEmail,
-	usersServiceAddContact,
-	usersServiceRemoveContact,
-} from "../../services/users";
+import { changeEmail, usersServiceAddContact, usersServiceRemoveContact } from "../../services/users";
 
 import {
 	AddContactRequestBody,
 	AddContactResponse,
+	ChangeEmailRequestBody,
+	ChangeEmailResponse,
 	RemoveContactRequestBody,
 	RemoveContactResponse,
 } from "../../../shared/types/api/users";
@@ -36,10 +34,7 @@ router.post(
 
 			if (!parsedBody.success) return res.status(400).send("invalid-parameters");
 
-			const result = await usersServiceAddContact(
-				(req.user as User).userID,
-				parsedBody.data.contactUsername
-			);
+			const result = await usersServiceAddContact((req.user as User).userID, parsedBody.data.contactUsername);
 			return res.send(result);
 		} catch (err: unknown) {
 			res.status(500);
@@ -65,10 +60,7 @@ router.post(
 
 			if (!parsedBody.success) return res.status(400).send("invalid-parameters");
 
-			const result = await usersServiceRemoveContact(
-				(req.user as User).userID,
-				parsedBody.data.contactUsername
-			);
+			const result = await usersServiceRemoveContact((req.user as User).userID, parsedBody.data.contactUsername);
 			return res.send(result);
 		} catch (err: unknown) {
 			res.status(500);
@@ -76,23 +68,23 @@ router.post(
 	}
 );
 
-router.post("/change-email", async (req: any, res: any) => {
-	if (!req.isAuthenticated() || req.user == undefined)
-		return res.status(403).send("unauthorized");
+router.post("/change-email", async (req: express.Request<unknown, ChangeEmailResponse, ChangeEmailRequestBody>, res: express.Response<ChangeEmailResponse>) => {
+	if (!req.isAuthenticated() || req.user == undefined) return res.status(403).send("unauthorized");
 
 	try {
 		const parsedBody = z
 			.object({
-				email: z.string().refine(validator.isEmail, {
+				newEmail: z.string().refine(validator.isEmail, {
 					message: "invalid-email",
 				}),
+                password: z.string()
 			})
 			.required()
 			.safeParse(req.body);
 
 		if (!parsedBody.success) return res.status(400).send("invalid-parameters");
 
-		const result = await changeEmail(parsedBody.data.email, req.user.userID);
+		const result = await changeEmail(parsedBody.data.password, parsedBody.data.newEmail, (req.user as User).userID);
 		return res.status(200).send(result);
 	} catch (err: unknown) {
 		res.status(500);

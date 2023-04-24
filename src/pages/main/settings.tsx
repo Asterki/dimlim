@@ -1,7 +1,8 @@
-import React from "react";
+import React, { HTMLInputTypeAttribute } from "react";
 import axios, { AxiosResponse } from "axios";
-import { motion } from "framer-motion";
 import validator from "validator";
+import QRCode from "qrcode";
+import speakeasy from "speakeasy";
 
 import { useRouter } from "next/router";
 import Head from "next/head";
@@ -16,7 +17,16 @@ import { RootState } from "@/store";
 import { GetServerSideProps, NextPage } from "next";
 import { User } from "shared/types/models";
 
-import { ChangeEmailRequestBody, ChangeEmailResponse } from "shared/types/api/users";
+import {
+	ActivateTFARequestBody,
+	ActivateTFAResponse,
+	ChangeEmailRequestBody,
+	ChangeEmailResponse,
+	ChangePasswordRequestBody,
+	ChangePasswordResponse,
+	DeactivateTFARequestBody,
+	DeactivateTFAResponse,
+} from "shared/types/api/users";
 import { DeleteAccountRequestBody, DeleteAccountResponse } from "shared/types/api/accounts";
 import LangPack from "shared/types/lang";
 
@@ -47,6 +57,11 @@ const Settings: NextPage<PageProps> = (props) => {
 
 	const [currentTab, setCurrentTab] = React.useState<string>("profile");
 
+	// Security dialogs
+	const [securityActivateTFADialogOpen, setSecurityActivateTFADialogOpen] = React.useState<boolean>(false);
+	const [securityDeactivateTFADialogOpen, setSecurityDeactivateTFADialogOpen] = React.useState<boolean>(false);
+	const [securityChangePasswordDialogOpen, setSecurityChangePasswordDialogOpen] = React.useState<boolean>(false);
+
 	// Account dialogs
 	const [accountChangeEmailDialogOpen, setAccountChangeEmailDialogOpen] = React.useState<boolean>(false);
 	const [accountLogoutDialogOpen, setAccountLogoutDialogOpen] = React.useState<boolean>(false);
@@ -59,13 +74,87 @@ const Settings: NextPage<PageProps> = (props) => {
 	const accountDeleteAccountPasswordInput = React.useRef<HTMLInputElement>(null);
 	const accountDeleteAccountTFAInput = React.useRef<HTMLInputElement>(null);
 
+	// Security refs
+	const securityChangePasswordPasswordInput = React.useRef<HTMLInputElement>(null);
+	const securityChangePasswordNewPasswordInput = React.useRef<HTMLInputElement>(null);
+	const securityChangePasswordConfirmPasswordInput = React.useRef<HTMLInputElement>(null);
+
+	const securityActivateTFACodeInput = React.useRef<HTMLInputElement>(null);
+
+	const securityDeactivateTFACodeInput = React.useRef<HTMLInputElement>(null);
+
 	// Errors on dialogs
 	const [accountChangeEmailError, setAccountChangeEmailError] =
 		React.useState<keyof typeof LangPack.main.settings.dialogs.account.changeEmail.errors>("no-errors");
 	const [accountDeleteAccountError, setAccountDeleteAccountError] =
 		React.useState<keyof typeof LangPack.main.settings.dialogs.account.deleteAccount.errors>("no-errors");
 
+	const [securityChangePasswordError, setSecurityChangePasswordError] =
+		React.useState<keyof typeof LangPack.main.settings.dialogs.security.changePassword.errors>("no-errors");
+	const [securityActivateTFAError, setSecurityActivateTFAError] =
+		React.useState<keyof typeof LangPack.main.settings.dialogs.security.activateTFA.errors>("no-errors");
+	const [securityDeactivateTFAError, setSecurityDeactivateTFAError] =
+		React.useState<keyof typeof LangPack.main.settings.dialogs.security.deactivateTFA.errors>("no-errors");
+
+	// Extras
+	const [securityActivateTFAImage, setSecurityActivateTFAImage] = React.useState<string>("");
+	const [securityActivateTFACode, setSecurityActivateTFACode] = React.useState<string>("");
+
 	// Options related to the account menu
+	const securityActions = {
+		activateTFA: async () => {
+			setSecurityActivateTFAError("no-errors");
+
+			const response: AxiosResponse<ActivateTFAResponse> = await axios({
+				method: "POST",
+				url: `${appState.page.hostURL}/api/users/activate-tfa`,
+				data: {
+					tfaCode: securityActivateTFACodeInput.current!.value,
+					tfaSecret: securityActivateTFACode,
+				} as ActivateTFARequestBody,
+			});
+
+			if (response.data !== "done") return setSecurityActivateTFAError(response.data);
+			return router.push("/home");
+		},
+		deactivateTFA: async () => {
+			setSecurityDeactivateTFAError("no-errors");
+
+			const response: AxiosResponse<DeactivateTFAResponse> = await axios({
+				method: "POST",
+				url: `${appState.page.hostURL}/api/users/deactivate-tfa`,
+				data: {
+					password: securityActivateTFACodeInput.current!.value,
+				} as DeactivateTFARequestBody,
+			});
+
+			if (response.data !== "done") return setSecurityDeactivateTFAError(response.data);
+			return router.push("/home");
+		},
+		changePassword: async () => {
+			setSecurityChangePasswordError("no-errors");
+
+			// Checks before sending the request
+			if (
+				securityChangePasswordNewPasswordInput.current!.value !==
+				securityChangePasswordConfirmPasswordInput.current!.value
+			)
+				return setSecurityChangePasswordError("invalid-password");
+
+			const response: AxiosResponse<ChangePasswordResponse> = await axios({
+				method: "POST",
+				url: `${appState.page.hostURL}/api/users/change-password`,
+				data: {
+					password: securityChangePasswordPasswordInput.current!.value,
+					newPassword: securityChangePasswordConfirmPasswordInput.current!.value,
+				} as ChangePasswordRequestBody,
+			});
+
+			if (response.data !== "done") return setSecurityChangePasswordError(response.data);
+			router.push("/home");
+		},
+	};
+
 	const accountActions = {
 		logout: async () => {
 			// Logout the account
@@ -80,6 +169,8 @@ const Settings: NextPage<PageProps> = (props) => {
 			if (response.data == "ok") return router.push("/");
 		},
 		changeEmail: async () => {
+			setAccountChangeEmailError("no-errors");
+
 			// Check that the provided email is indeed a valid email before sending it to the server
 			if (!validator.isEmail(accountChangeEmailEmailInput.current!.value))
 				return setAccountChangeEmailError("invalid-parameters");
@@ -100,6 +191,8 @@ const Settings: NextPage<PageProps> = (props) => {
 			else router.push("/home");
 		},
 		deleteAccount: async () => {
+			setAccountDeleteAccountError("no-errors");
+
 			// Send the request
 			const response: AxiosResponse<DeleteAccountResponse> = await axios({
 				method: "POST",
@@ -120,13 +213,129 @@ const Settings: NextPage<PageProps> = (props) => {
 		},
 	};
 
+	// Generate a TFA code when the dialog is opened
+	React.useEffect(() => {
+		const secret = speakeasy.generateSecret({ issuer: "DIMLIM", name: `${props.user.username} DIMLIM`, otpauth_url: true });
+
+		QRCode.toDataURL(secret.otpauth_url as string, (err: unknown, url: string) => {
+			setSecurityActivateTFAImage(url);
+			setSecurityActivateTFACode(secret.base32);
+		});
+	}, [securityActivateTFADialogOpen]);
+
 	return (
 		<div className={styles["page"]}>
 			<Head>
 				<title>{lang.pageTitle}</title>
 			</Head>
 
-			{/* Account */}
+			{/* Security Dialogs */}
+			<div>
+				{/* Activate TFA */}
+				<Dialog dialogOpen={securityActivateTFADialogOpen}>
+					<h1>{lang.dialogs.security.activateTFA.title}</h1>
+					<p>{lang.dialogs.security.activateTFA.instructions}</p>
+
+					<img src={securityActivateTFAImage} alt="qr code" />
+
+					<br />
+					<br />
+
+					<label htmlFor="security-activate-tfa-code-input">{lang.dialogs.security.activateTFA.label}</label>
+					<input
+						type="text"
+						ref={securityActivateTFACodeInput}
+						placeholder="••••••"
+						id="security-activate-tfa-code-input"
+					/>
+
+					<p className={styles["error"]}>{lang.dialogs.security.activateTFA.errors[securityActivateTFAError]}</p>
+
+					<button onClick={() => securityActions.activateTFA()}>{lang.dialogs.security.activateTFA.activate}</button>
+					<br />
+					<button onClick={() => setSecurityActivateTFADialogOpen(false)}>
+						{lang.dialogs.security.activateTFA.cancel}
+					</button>
+				</Dialog>
+
+				{/* Deactivate TFA */}
+				<Dialog dialogOpen={securityDeactivateTFADialogOpen}>
+					<h1>{lang.dialogs.security.deactivateTFA.title}</h1>
+
+					<label htmlFor="security-deactivate-tfa-password-input">{lang.dialogs.security.deactivateTFA.label}</label>
+					<input
+						type="password"
+						ref={securityDeactivateTFACodeInput}
+						placeholder="••••••••"
+						id="security-deactivate-tfa-password-input"
+					/>
+
+					<br />
+					<p className={styles["error"]}>{lang.dialogs.security.deactivateTFA.errors[securityDeactivateTFAError]}</p>
+
+					<button onClick={() => securityActions.deactivateTFA()}>
+						{lang.dialogs.security.deactivateTFA.deactivate}
+					</button>
+					<br />
+					<button onClick={() => setSecurityDeactivateTFADialogOpen(false)}>
+						{lang.dialogs.security.deactivateTFA.cancel}
+					</button>
+				</Dialog>
+
+				{/* Change password */}
+				<Dialog dialogOpen={securityChangePasswordDialogOpen}>
+					<h1>{lang.dialogs.security.changePassword.title}</h1>
+
+					<label htmlFor="security-change-password-password-input">
+						{lang.dialogs.security.changePassword.passwordLabel}
+					</label>
+					<input
+						type="password"
+						ref={securityChangePasswordPasswordInput}
+						placeholder="••••••••"
+						id="security-change-password-password-input"
+					/>
+
+					<br />
+					<br />
+
+					<label htmlFor="security-change-password-new-password-input">
+						{lang.dialogs.security.changePassword.newPasswordLabel}
+					</label>
+					<input
+						type="password"
+						ref={securityChangePasswordNewPasswordInput}
+						placeholder="••••••••"
+						id="security-change-password-new-password-input"
+					/>
+
+					<br />
+					<br />
+
+					<label htmlFor="security-change-password-confirm-password-input">
+						{lang.dialogs.security.changePassword.newPasswordConfirmLabel}
+					</label>
+					<input
+						type="password"
+						ref={securityChangePasswordConfirmPasswordInput}
+						placeholder="••••••••"
+						id="security-change-password-confirm-password-input"
+					/>
+
+					<br />
+					<p className={styles["error"]}>{lang.dialogs.security.changePassword.errors[securityChangePasswordError]}</p>
+
+					<button onClick={() => securityActions.changePassword()}>
+						{lang.dialogs.security.changePassword.submit}
+					</button>
+					<br />
+					<button onClick={() => setSecurityChangePasswordDialogOpen(false)}>
+						{lang.dialogs.security.changePassword.cancel}
+					</button>
+				</Dialog>
+			</div>
+
+			{/* Account Dialogs */}
 			<div>
 				{/* Logout */}
 				<Dialog dialogOpen={accountLogoutDialogOpen}>
@@ -139,7 +348,7 @@ const Settings: NextPage<PageProps> = (props) => {
 					<button onClick={() => setAccountLogoutDialogOpen(false)}>{lang.dialogs.account.logout.cancel}</button>
 				</Dialog>
 
-				{/* Change Email */}
+				{/* Change email */}
 				<Dialog dialogOpen={accountChangeEmailDialogOpen}>
 					<h1>{lang.dialogs.account.changeEmail.title}</h1>
 
@@ -294,7 +503,16 @@ const Settings: NextPage<PageProps> = (props) => {
 						<br />
 
 						{/* Activate TFA */}
-						<div className={styles["tab-action"]}>
+						<div
+							className={styles["tab-action"]}
+							onClick={() => {
+								if (props.user.tfa.secret !== "") {
+									setSecurityDeactivateTFADialogOpen(true);
+								} else {
+									setSecurityActivateTFADialogOpen(true);
+								}
+							}}
+						>
 							<div className={styles["tab-action-icon"]}>
 								<img src="/assets/svg/settings-cog-check.svg" alt="settings-cog-check Icon" />
 							</div>
@@ -310,7 +528,12 @@ const Settings: NextPage<PageProps> = (props) => {
 						</div>
 
 						{/* Change Password */}
-						<div className={styles["tab-action"]}>
+						<div
+							className={styles["tab-action"]}
+							onClick={() => {
+								setSecurityChangePasswordDialogOpen(true);
+							}}
+						>
 							<div className={styles["tab-action-icon"]}>
 								<img src="/assets/svg/password.svg" alt="password Icon" />
 							</div>

@@ -94,51 +94,100 @@ declare const LangPack: {
 			};
 
 			dialogs: {
-                account: {
-                    logout: {
-                        title: string;
-                        description: string;
+				security: {
+					changePassword: {
+						title: string;
 
-                        logout: string;
-                        cancel: string;
-                    };
-                    changeEmail: {
-                        title: string;
+						passwordLabel: string;
+						newPasswordLabel: string;
+						newPasswordConfirmLabel: string;
 
-                        newEmailLabel: string;
-                        currentPasswordLabel: string;
+						submit: string;
+						cancel: string;
 
-                        submit: string;
-                        cancel: string;
+						errors: {
+							"no-errors": "";
+							unauthorized: string;
+							"invalid-parameters": string;
+							"invalid-password": string;
+						};
+					};
+					activateTFA: {
+						title: string;
+						instructions: string;
 
-                        errors: {
-                            "no-errors": "";
-                            "unauthorized": string;
-                            "invalid-parameters": string;
-                            "email-in-use": string;
-                        }
-                    },
-                    deleteAccount: {
-                        title: string;
-                        warning: string;
+						label: string;
+						activate: string;
+						cancel: string;
 
-                        passwordLabel: string;
-                        tfaLabel: string;
+						errors: {
+							"no-errors": "";
+							"invalid-parameters": string;
+							"invalid-code": string;
+							unauthorized: string;
+						};
+					};
 
-                        submit: string;
-                        cancel: string;
+					deactivateTFA: {
+						title: string;
+						label: string;
 
-                        errors: {
-                            "no-errors": "";
-                            "invalid-password": string;
-                            "invalid-tfa": string;
-                            "invalid-parameters": string;
-                            "requires-tfa": string;
-                            "unauthorized": string;
-                        }
-                    }
-                }
-            };
+						deactivate: string;
+						cancel: string;
+
+						errors: {
+							"no-errors": "";
+							"invalid-parameters": string;
+							"invalid-password": string;
+							unauthorized: string;
+						};
+					};
+				};
+				account: {
+					logout: {
+						title: string;
+						description: string;
+
+						logout: string;
+						cancel: string;
+					};
+					changeEmail: {
+						title: string;
+
+						newEmailLabel: string;
+						currentPasswordLabel: string;
+
+						submit: string;
+						cancel: string;
+
+						errors: {
+							"no-errors": "";
+							unauthorized: string;
+							"invalid-parameters": string;
+							"email-in-use": string;
+						};
+					};
+					deleteAccount: {
+						title: string;
+						warning: string;
+
+						passwordLabel: string;
+						tfaLabel: string;
+
+						submit: string;
+						cancel: string;
+
+						errors: {
+							"no-errors": "";
+							"invalid-password": string;
+							"invalid-tfa": string;
+							"invalid-parameters": string;
+							"requires-tfa": string;
+							unauthorized: string;
+						};
+					};
+				};
+			};
 		};
 	};
 	accounts: {

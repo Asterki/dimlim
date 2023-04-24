@@ -26,8 +26,6 @@ interface User {
 
 	tfa: {
 		secret: string;
-		backupCodes: Array<string>;
-		seenBackupCodes: boolean;
 	};
 }
 

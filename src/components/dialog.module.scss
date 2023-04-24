@@ -18,6 +18,10 @@
 		border-radius: 10px;
 	}
 
+	img {
+		width: 200px;
+	}
+
 	button {
 		border-radius: 5px;
 		padding: 10px;
@@ -25,12 +29,17 @@
 		outline: none !important;
 
 		width: 100%;
-        margin-top: 10px;
+		margin-top: 10px;
 
 		cursor: pointer;
 
 		background-color: #2196f3;
 		color: white;
+
+		transition: all 0.1s ease-in-out;
+		&:hover {
+			filter: brightness(1.1);
+		}
 	}
 
 	input {

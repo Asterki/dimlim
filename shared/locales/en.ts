@@ -151,6 +151,60 @@ const en: typeof LangPack = {
 						},
 					},
 				},
+				security: {
+					changePassword: {
+						title: "Change your password",
+
+						passwordLabel: "Your current password",
+						newPasswordLabel: "Your new password",
+						newPasswordConfirmLabel: "Confirm your new password",
+
+						cancel: "Cancel",
+						submit: "Submit",
+
+						errors: {
+							"no-errors": "",
+							"invalid-parameters": "",
+							"invalid-password":
+								"Please check that both passwords match and that they're between 6 and 256 characters",
+							unauthorized: "Your session has expired, please login again",
+						},
+					},
+
+					activateTFA: {
+						title: "Activate TFA",
+						instructions:
+							"Open your authenticator app, scan this code, then enter the generated code in the box below",
+
+						label: "Generated TFA code",
+
+						activate: "Activate",
+						cancel: "Cancel",
+
+                        errors: {
+                            "no-errors": "",
+                            "invalid-parameters": "Please fill out all fields",
+                            "invalid-code": "Invalid code, please try again",
+                            "unauthorized": "Your session has expired, please login again"
+                        }
+					},
+
+                    deactivateTFA: {
+                        title: "Deactivate TFA",
+
+                        deactivate: "Deactivate",
+                        cancel: "Cancel",
+
+                        label: "Your current password",
+
+                        errors: {
+                            "no-errors": "",
+                            "invalid-parameters": "",
+                            "invalid-password": "Invalid password, please try again",
+                            unauthorized: "Your session has expired, please login again"
+                        }
+                    }
+				},
 			},
 		},
 	},

@@ -29,29 +29,15 @@ router.post(
 				.object({
 					username: z
 						.string()
-						.min(3, {
-							message: "invalid-username-length",
-						})
-						.max(16, {
-							message: "invalid-username-length",
-						})
-						.refine(
-							(username) => {
-								return validator.isAlphanumeric(username, "en-GB", {
-									ignore: "._",
-								});
-							},
-							{
-								message: "invalid-username",
-							}
-						),
-					email: z.string().refine(validator.isEmail, {
-						message: "invalid-email",
-					}),
-					password: z
-						.string()
-						.min(6, { message: "invalid-password-length" })
-						.max(256, { message: "invalid-password-length" }),
+						.min(3)
+						.max(16)
+						.refine((username) => {
+							return validator.isAlphanumeric(username, "en-GB", {
+								ignore: "._",
+							});
+						}),
+					email: z.string().refine(validator.isEmail),
+					password: z.string().min(6).max(256),
 				})
 				.required()
 				.safeParse(req.body);

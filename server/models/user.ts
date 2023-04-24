@@ -68,14 +68,6 @@ const User = new Schema({
 			type: String,
             default: ""
 		},
-		backupCodes: {
-			type: Array,
-            default: []
-		},
-		seenBackupCodes: {
-			type: Boolean,
-            default: false
-		},
 	},
 });
 

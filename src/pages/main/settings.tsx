@@ -518,6 +518,32 @@ const Settings: NextPage<PageProps> = (props) => {
 								alt="user avatar"
 							/>
 
+							<form id="avatar-form" action="/api/upload/avatar" encType="multipart/form-data" method="POST">
+								<input
+									// onChange={(event: any) => {
+									// 	let file = (document.querySelector("#avatar-input") as any).files[0];
+									// 	let reader = new FileReader();
+
+									// 	// reader.onloadend = () => {
+									// 	// 	setAvatarPreviewFile(reader.result as string);
+									// 	// };
+
+									// 	// if (file) {
+									// 	// 	setAvatarDialogOpen(true);
+									// 	// 	reader.readAsDataURL(file);
+									// 	// } else {
+									// 	// 	setAvatarDialogOpen(false);
+									// 	// 	setAvatarPreviewFile("");
+									// 	// }
+									// }}
+									id="avatar-input"
+									accept=".jpg, .png, .jpeg"
+									name="avatar"
+									type="file"
+                                    
+								/>
+							</form>
+
 							<br />
 
 							<h3>{props.user.username}</h3>

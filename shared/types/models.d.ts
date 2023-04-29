@@ -1,32 +1,38 @@
 interface User {
-	userID: string;
-	created: number;
+    userID: string;
+    created: number;
 
-	username: string;
-	email: {
-		value: string;
-		verified: boolean;
-	};
+    username: string;
+    email: {
+        value: string;
+        verified: boolean;
+    };
 
-	avatar: string;
-	locale: string;
+    avatar: string;
+    locale: string;
 
-	contacts: Array<{
-		userID: string;
-		username: string;
-	}>;
-	blockedContacts: Array<{
-		userID: string;
-		username: string;
-	}>;
+    contacts: Array<{
+        userID: string;
+        username: string;
+    }>;
+    blockedContacts: Array<{
+        userID: string;
+        username: string;
+    }>;
 
-	password: string;
-	chatSecret: string;
-	encSecret: string;
+    password: string;
+    chatSecret: string;
+    encSecret: string;
 
-	tfa: {
-		secret: string;
-	};
+    tfa: {
+        secret: string;
+    };
 }
 
-export type { User };
+interface EmailVerificationCode {
+    code: string;
+    userID: string;
+    expires: number;
+}
+
+export type { User, EmailVerificationCode };

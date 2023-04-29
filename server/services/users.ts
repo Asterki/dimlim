@@ -1,10 +1,17 @@
+import { emailTransporter } from "../";
+
 import bcrypt from "bcrypt";
 import speakeasy from "speakeasy";
+import { v4 as uuidv4 } from "uuid";
 
 import UserModel from "../models/user";
+import EmailVerificationCodeModel from "../models/emailverificationcode";
 
 import { Document } from "mongoose";
-import { User } from "../../shared/types/models";
+import { User, EmailVerificationCode } from "../../shared/types/models";
+import { getEmailContent } from "../utils/emails";
+
+import { AvailableLocales } from "../../shared/types";
 
 const usersServiceAddContact = async (userID: string, contactUsername: string): Promise<"done" | "user-not-found"> => {
 	// Find the users
@@ -43,7 +50,7 @@ const usersServiceRemoveContact = async (userID: string, contactUsername: string
 	return "done";
 };
 
-const changeEmail = async (
+const usersServiceChangeEmail = async (
 	password: string,
 	newEmail: string,
 	userID: string
@@ -68,7 +75,7 @@ const changeEmail = async (
 	return "done";
 };
 
-const changePassword = async (
+const usersServiceChangePassword = async (
 	password: string,
 	newPassword: string,
 	userID: string
@@ -88,7 +95,11 @@ const changePassword = async (
 	return "done";
 };
 
-const activateTFA = async (secret: string, code: string, userID: string): Promise<"done" | "invalid-code" | "unauthorized"> => {
+const usersServiceActivateTFA = async (
+	secret: string,
+	code: string,
+	userID: string
+): Promise<"done" | "invalid-code" | "unauthorized"> => {
 	const user: (User & Document) | null = await UserModel.findOne({ userID: userID });
 	if (!user) return "unauthorized";
 
@@ -109,7 +120,10 @@ const activateTFA = async (secret: string, code: string, userID: string): Promis
 	return "done";
 };
 
-const deactivateTFA = async (password: string, userID: string): Promise<"done" | "invalid-password" | "unauthorized"> => {
+const usersServiceDeactivateTFA = async (
+	password: string,
+	userID: string
+): Promise<"done" | "invalid-password" | "unauthorized"> => {
 	const user: (User & Document) | null = await UserModel.findOne({ userID: userID });
 	if (!user) return "unauthorized";
 
@@ -122,4 +136,67 @@ const deactivateTFA = async (password: string, userID: string): Promise<"done" |
 	return "done";
 };
 
-export { usersServiceAddContact, usersServiceRemoveContact, changeEmail, changePassword, activateTFA, deactivateTFA };
+const usersServiceSendEmailVerificationEmail = async (
+	user: User,
+	locale: AvailableLocales
+): Promise<"done" | "unauthorized" | "already-verified"> => {
+	if (user.email.verified) return "already-verified";
+
+	// Delete old codes
+	await EmailVerificationCodeModel.deleteMany({ userID: user.userID });
+
+	// Generate a code
+	const code = uuidv4();
+	const emailVerificationCode = new EmailVerificationCodeModel({
+		code: code,
+		userID: user.userID,
+		expires: Date.now() + 1000 * 60 * 5, // 5 minutes
+	});
+
+	emailVerificationCode.save();
+
+	// Send the email
+	const { content, subject } = await getEmailContent("verify-email", locale);
+
+	await emailTransporter.sendMail({
+		from: process.env.EMAIL_AUTH_USER,
+		to: user.email.value,
+		subject: subject,
+		html: content
+			.replace(/{username}/g, user.username)
+			.replace(/{verification-link}/g, `${process.env.NEXT_PUBLIC_SERVER_URL}/api/users/verify-email?code=${code}`),
+	});
+
+	return "done";
+};
+
+const usersServiceVerifyEmail = async (code: string): Promise<"invalid-code" | "expired" | "done"> => {
+	// Find and check codes
+	const result: (EmailVerificationCode & Document) | null = await EmailVerificationCodeModel.findOne({ code: code });
+	if (!result) return "invalid-code";
+	if (result.expires > Date.now()) return "expired";
+
+	// Find the user using the code
+	const user: (User & Document) | null = await UserModel.findOne({ userID: result.userID });
+	if (!user) return "invalid-code";
+
+    // Delete all the codes belonging to that account
+	await EmailVerificationCodeModel.deleteMany({ userID: user.userID });
+
+	// Update values
+	user.email.verified = true;
+	user.save();
+
+	return "done";
+};
+
+export {
+	usersServiceAddContact,
+	usersServiceRemoveContact,
+	usersServiceChangeEmail,
+	usersServiceChangePassword,
+	usersServiceActivateTFA,
+	usersServiceDeactivateTFA,
+	usersServiceSendEmailVerificationEmail,
+	usersServiceVerifyEmail,
+};

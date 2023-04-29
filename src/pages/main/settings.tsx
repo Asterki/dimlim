@@ -26,6 +26,8 @@ import {
 	ChangePasswordResponse,
 	DeactivateTFARequestBody,
 	DeactivateTFAResponse,
+	SendVerifyEmailRequestBody,
+	SendVerifyEmailResponse,
 } from "shared/types/api/users";
 import { DeleteAccountRequestBody, DeleteAccountResponse } from "shared/types/api/accounts";
 import LangPack from "shared/types/lang";
@@ -63,6 +65,8 @@ const Settings: NextPage<PageProps> = (props) => {
 	const [securityChangePasswordDialogOpen, setSecurityChangePasswordDialogOpen] = React.useState<boolean>(false);
 
 	// Account dialogs
+	const [accountVerifyEmailDialogOpen, setAccountVerifyEmailDialogOpen] = React.useState<boolean>(false);
+	const [accountVerifyEmailSentDialogOpen, setAccountVerifyEmailSentDialogOpen] = React.useState<boolean>(false);
 	const [accountChangeEmailDialogOpen, setAccountChangeEmailDialogOpen] = React.useState<boolean>(false);
 	const [accountLogoutDialogOpen, setAccountLogoutDialogOpen] = React.useState<boolean>(false);
 	const [accountDeleteAccountDialogOpen, setAccountDeleteAccountDialogOpen] = React.useState<boolean>(false);
@@ -211,6 +215,20 @@ const Settings: NextPage<PageProps> = (props) => {
 			if (response.data !== "done") return setAccountDeleteAccountError(response.data);
 			else router.push("/home");
 		},
+		verifyEmail: async () => {
+			// Send the request
+			const response: AxiosResponse<SendVerifyEmailResponse> = await axios({
+				method: "POST",
+				withCredentials: true,
+				url: `${appState.page.hostURL}/api/users/send-email-verification-email`,
+				data: {
+					locale: lang.dialogs.account.verifyEmail.currentLocale,
+				} as SendVerifyEmailRequestBody,
+			});
+
+			setAccountVerifyEmailSentDialogOpen(true);
+			setAccountVerifyEmailDialogOpen(false);
+		},
 	};
 
 	// Generate a TFA code when the dialog is opened
@@ -346,6 +364,30 @@ const Settings: NextPage<PageProps> = (props) => {
 					<button onClick={() => accountActions.logout()}>{lang.dialogs.account.logout.logout}</button>
 					<br />
 					<button onClick={() => setAccountLogoutDialogOpen(false)}>{lang.dialogs.account.logout.cancel}</button>
+				</Dialog>
+
+				{/* Verify Email */}
+				<Dialog dialogOpen={accountVerifyEmailDialogOpen}>
+					<h1>{lang.dialogs.account.verifyEmail.title}</h1>
+					<p>{lang.dialogs.account.verifyEmail.description}</p>
+					<br />
+
+					<button onClick={() => accountActions.verifyEmail()}>{lang.dialogs.account.verifyEmail.submit}</button>
+					<br />
+					<button onClick={() => setAccountVerifyEmailDialogOpen(false)}>
+						{lang.dialogs.account.verifyEmail.cancel}
+					</button>
+				</Dialog>
+
+				{/* Verify Email Sent */}
+				<Dialog dialogOpen={accountVerifyEmailSentDialogOpen}>
+					<h1>{lang.dialogs.account.verifyEmailSent.title}</h1>
+					<p>{lang.dialogs.account.verifyEmailSent.description.replace("{email}", props.user.email.value)}</p>
+					<br />
+
+					<button onClick={() => setAccountVerifyEmailSentDialogOpen(false)}>
+						{lang.dialogs.account.verifyEmailSent.close}
+					</button>
 				</Dialog>
 
 				{/* Change email */}
@@ -591,6 +633,19 @@ const Settings: NextPage<PageProps> = (props) => {
 						<br />
 						<h1>{lang.tabs.account.title}</h1>
 						<br />
+
+						{props.user.email.verified == false && (
+							<div className={styles["tab-action"]} onClick={() => setAccountVerifyEmailDialogOpen(true)}>
+								<div className={styles["tab-action-icon"]}>
+									<img src="/assets/svg/mail.svg" alt="mail Icon" />
+								</div>
+
+								<div className={styles["tab-action-text"]}>
+									<h3>{lang.tabs.account.verifyEmail.title}</h3>
+									<p>{lang.tabs.account.verifyEmail.description}</p>
+								</div>
+							</div>
+						)}
 
 						<div className={styles["tab-action"]} onClick={() => setAccountChangeEmailDialogOpen(true)}>
 							<div className={styles["tab-action-icon"]}>

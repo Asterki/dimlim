@@ -2,6 +2,7 @@ import express from "express";
 import next from "next";
 import http from "http";
 import socketIo from "socket.io";
+import nodemailer from "nodemailer"
 
 import chalk from "chalk";
 import path from "path";
@@ -16,26 +17,37 @@ const server = http.createServer(app);
 const io = new socketIo.Server(server);
 
 nextApp.prepare().then(() => {
-	const handle = nextApp.getRequestHandler();
+    const handle = nextApp.getRequestHandler();
 
-	// Load all the configuration
-	require("./services/databases");
-	require("./services/accounts");
-	require("./services/upload");
-	require("./services/messages");
-	require("./services/users");
-	require("./routes/router");
+    // Load all the configuration
+    require("./services/databases");
+    require("./services/accounts");
+    require("./services/upload");
+    require("./services/messages");
+    require("./services/users");
+    require("./routes/router");
 
-	app.get("*", (req, res) => {
-		handle(req, res);
-	});
+    app.get("*", (req: express.Request, res: express.Response) => {
+        handle(req, res);
+    });
 
-	// Start the main server
-	server.listen(process.env.PORT, () => {
-		console.log(
-			`${chalk.magenta("event")} - Server running in ${process.env.NODE_ENV == "development" ? "development" : "production"} mode at ${process.env.PORT}`
-		);
-	});
+    // Start the main server
+    server.listen(process.env.PORT, () => {
+        console.log(
+            `${chalk.magenta("event")} - Server running in ${process.env.NODE_ENV == "development" ? "development" : "production"} mode at ${process.env.PORT}`
+        );
+    });
 });
 
-export { app, nextApp, server, io };
+const emailTransporter = nodemailer.createTransport({
+    host: process.env.EMAIL_HOST || 'smtp.gmail.com',
+    port: process.env.EMAIL_PORT ? parseInt(process.env.EMAIL_PORT, 10) : 587,
+    secure: process.env.EMAIL_SECURE === 'true',
+    auth: {
+        user: process.env.EMAIL_AUTH_USER,
+        pass: process.env.EMAIL_AUTH_PASS
+    }
+});
+
+
+export { app, nextApp, server, io, emailTransporter };

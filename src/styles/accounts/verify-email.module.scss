@@ -1,28 +1,40 @@
 .page {
-    height: 100%;
-    background-color: #252a34;
-    background-size: cover;
-    color: white;
+	main {
+		min-height: 100vh;
 
-    .message {
-        text-align: center;
-        color: #d8d8d8;
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
+		display: flex;
+		align-items: center;
+		justify-content: center;
 
-        width: 90%;
-        margin: 0 auto;
-        padding: 20px;
-        border-radius: 10px;
+		div {
+			background-color: #2a2f3a;
+			padding: 20px;
+			border-radius: 10px;
+			text-align: center;
 
-        background-color: #2a2f3a;
-        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            p {
+                font-size: 25px;
+            }
 
-        a {
-            color: #5294e2;
-            text-decoration: none;
-        }
-    }
+			a {
+				border-radius: 5px;
+				padding: 10px;
+				border: none;
+				outline: none !important;
+
+				width: 100%;
+				margin-top: 10px;
+
+				cursor: pointer;
+
+				background-color: #2196f3;
+				color: white;
+
+				transition: all 0.1s ease-in-out;
+				&:hover {
+					filter: brightness(1.1);
+				}
+			}
+		}
+	}
 }

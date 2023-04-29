@@ -1,75 +1,82 @@
 import * as React from "react";
-import axios, { AxiosResponse } from "axios";
 
-import { Container } from "react-bootstrap";
-
-import Navbar from "../../components/navbar";
 import Head from "next/head";
+import Link from "next/link";
 
 import styles from "../../styles/accounts/verify-email.module.scss";
+
+import { useSelector } from "react-redux";
+import { RootState } from "@/store";
+
 import { GetServerSideProps, NextPage } from "next";
+import { User } from "shared/types/models";
 
 export const getServerSideProps: GetServerSideProps = async (context: any) => {
-    try {
-        // Get the language pack
-        let languageResponse: AxiosResponse = await axios({
-            method: "post",
-            url: `${process.env.HOST}/api/content/language/`,
-            data: {
-                lang: context.req.headers["accept-language"].split(",")[0],
-                category: "accounts",
-                page: "verifyEmail",
-            },
-        });
+	if (!context.req.query.success && !context.req.query.error)
+		return {
+			redirect: {
+				destination: "/",
+				permanent: false,
+			},
+		};
 
-        if (languageResponse.data.status !== 200) {
-            return {
-                redirect: {
-                    destination: `/error?code=${languageResponse.data.status}`,
-                    permanent: false,
-                },
-            };
-        }
+	// Check the error messages
+	if (context.req.query.success == false && context.req.query.error) {
+		if (context.req.query.error == "invalid-code" || context.req.query.error == "expired")
+			return {
+				redirect: {
+					destination: "/",
+					permanent: false,
+				},
+			};
+	}
 
-        let message = languageResponse.data.content.invalid;
-        if (context.query.expired == "true") message = languageResponse.data.content.expired;
-        if (context.query.invalid == "true") message = languageResponse.data.content.invalid;
-        if (context.query.success == "true")
-            message = context.req.isAuthenticated() == true ? languageResponse.data.content.successLoggedIn : languageResponse.data.content.successNotLoggedIn;
-
-        return {
-            props: {
-                lang: languageResponse.data.content,
-                user: context.req.isAuthenticated() == true ? context.req.user : null,
-                message: message,
-            },
-        };
-    } catch (err: any) {
-        return {
-            redirect: {
-                destination: `/error?code=${err.response.status}`,
-                permanent: false,
-            },
-        };
-    }
+	return {
+		props: {
+			user: context.req.isAuthenticated() ? JSON.parse(JSON.stringify(context.req.user)) : null,
+			success: context.req.query.success == "true",
+			error: context.req.query.error !== undefined ? context.req.query.error : null,
+		},
+	};
 };
 
-const VerifyEmail: NextPage = (props: any) => {
-    return (
-        <div className={styles["page"]}>
-            <Navbar lang={props.lang.navbar} user={props.user} />
+interface PageProps {
+	user: User | null;
+	success: boolean;
+	error: "invalid-code" | "expired";
+}
 
-            <Head>
-                <title>{props.lang.pageTitle}</title>
-            </Head>
+const VerifyEmail: NextPage<PageProps> = (props) => {
+	const appState = useSelector((state: RootState) => state);
+	const lang = appState.page.lang.accounts.verifyEmail;
 
-            <Container fluid className={styles["message"]}>
-                <p>{props.message}</p>
+	return (
+		<div className={styles["page"]}>
+			<Head>
+				<title>{lang.pageTitle}</title>
+			</Head>
 
-                <a href={props.user == null ? "/login" : "/home"}>{props.user == null ? props.lang.login : props.lang.goHome}</a>
-            </Container>
-        </div>
-    );
+			<main>
+				<div>
+					{props.success == false && (
+						<div>
+							<p>{lang[props.error]}</p>
+						</div>
+					)}
+
+					{props.success == true && (
+						<div>
+							<p>{lang.success}</p>
+						</div>
+					)}
+
+					<Link href={props.user == undefined ? "/login" : "/home"}>
+						{props.user == undefined ? lang.login : lang.goHome}
+					</Link>
+				</div>
+			</main>
+		</div>
+	);
 };
 
 export default VerifyEmail;

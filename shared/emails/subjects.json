@@ -1,0 +1,8 @@
+{
+	"verify-email": {
+		"en": "DIMLIM Email Verification"
+	},
+    "new-login": {
+        "en": "New Login Detected In Your DIMLIM Account"
+    }
+}

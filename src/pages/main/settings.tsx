@@ -130,7 +130,7 @@ const Settings: NextPage<PageProps> = (props) => {
 					context.drawImage(baseImage, 0, 0, 500, 500);
 
 					const response: AxiosResponse<UploadAvatarResponse> = await axios({
-						url: `${appState.page.hostURL}/api/upload/avatar`,
+						url: `/api/upload/avatar`,
 						method: "POST",
 						data: {
 							image: canvas.toDataURL("image/jpeg", 0.7),
@@ -143,7 +143,7 @@ const Settings: NextPage<PageProps> = (props) => {
 		},
 		removeAvatar: async () => {
 			const response: AxiosResponse<RemoveAvatarResponse> = await axios({
-				url: `${appState.page.hostURL}/api/users/remove-avatar`,
+				url: `/api/users/remove-avatar`,
 				method: "POST",
 			});
 
@@ -158,7 +158,7 @@ const Settings: NextPage<PageProps> = (props) => {
 
 			const response: AxiosResponse<ActivateTFAResponse> = await axios({
 				method: "POST",
-				url: `${appState.page.hostURL}/api/users/activate-tfa`,
+				url: `/api/users/activate-tfa`,
 				data: {
 					tfaCode: securityActivateTFACodeInput.current!.value,
 					tfaSecret: securityActivateTFACode,
@@ -173,7 +173,7 @@ const Settings: NextPage<PageProps> = (props) => {
 
 			const response: AxiosResponse<DeactivateTFAResponse> = await axios({
 				method: "POST",
-				url: `${appState.page.hostURL}/api/users/deactivate-tfa`,
+				url: `/api/users/deactivate-tfa`,
 				data: {
 					password: securityActivateTFACodeInput.current!.value,
 				} as DeactivateTFARequestBody,
@@ -194,7 +194,7 @@ const Settings: NextPage<PageProps> = (props) => {
 
 			const response: AxiosResponse<ChangePasswordResponse> = await axios({
 				method: "POST",
-				url: `${appState.page.hostURL}/api/users/change-password`,
+				url: `/api/users/change-password`,
 				data: {
 					password: securityChangePasswordPasswordInput.current!.value,
 					newPassword: securityChangePasswordConfirmPasswordInput.current!.value,
@@ -231,7 +231,7 @@ const Settings: NextPage<PageProps> = (props) => {
 			const response: AxiosResponse<ChangeEmailResponse> = await axios({
 				method: "POST",
 				withCredentials: true,
-				url: `${appState.page.hostURL}/api/users/change-email`,
+				url: `/api/users/change-email`,
 				data: {
 					newEmail: accountChangeEmailEmailInput.current?.value,
 					password: accountChangeEmailPasswordInput.current?.value,
@@ -249,7 +249,7 @@ const Settings: NextPage<PageProps> = (props) => {
 			const response: AxiosResponse<DeleteAccountResponse> = await axios({
 				method: "POST",
 				withCredentials: true,
-				url: `${appState.page.hostURL}/api/accounts/delete-account`,
+				url: `/api/accounts/delete-account`,
 				data: {
 					password: accountDeleteAccountPasswordInput.current?.value,
 					tfaCode:
@@ -268,7 +268,7 @@ const Settings: NextPage<PageProps> = (props) => {
 			const response: AxiosResponse<SendVerifyEmailResponse> = await axios({
 				method: "POST",
 				withCredentials: true,
-				url: `${appState.page.hostURL}/api/users/send-email-verification-email`,
+				url: `/api/users/send-email-verification-email`,
 				data: {
 					locale: lang.dialogs.account.verifyEmail.currentLocale,
 				} as SendVerifyEmailRequestBody,

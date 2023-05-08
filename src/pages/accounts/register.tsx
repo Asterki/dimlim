@@ -104,7 +104,7 @@ const Register: NextPage = () => {
 
 		const response: AxiosResponse<RegisterResponse> = await axios({
 			method: "POST",
-			url: `${appState.page.hostURL}/api/accounts/register`,
+			url: `/api/accounts/register`,
 			data: {
 				email: parsedBody.data.email,
 				username: parsedBody.data.username,

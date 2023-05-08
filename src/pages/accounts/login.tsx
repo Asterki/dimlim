@@ -82,7 +82,7 @@ const Login: NextPage = () => {
 		// Send the request to the login api
 		const response: AxiosResponse<LoginResponse> = await axios({
 			method: "POST",
-			url: `${appState.page.hostURL}/api/accounts/login`,
+			baseURL: `/api/accounts/login`,
 			data: {
 				email: emailInput.current!.value,
 				password: passwordInput.current!.value,

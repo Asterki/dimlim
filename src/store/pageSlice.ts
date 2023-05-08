@@ -1,7 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 import type { PayloadAction } from "@reduxjs/toolkit";
-import LangPack from "shared/types/lang";
+import LangPack from "../../shared/types/lang";
 
 const languages = {
 	// de: require("../../shared/locales/de").default as LangPack,

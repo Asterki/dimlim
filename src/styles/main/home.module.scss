@@ -56,29 +56,31 @@
 		}
 	}
 
-	.contact-list {
-		margin-top: 80px;
+	main {
+		.contact-list {
+			margin-top: 80px;
 
-		.contact-card {
-			margin-top: 3px;
-			background-color: #2a2f3a;
+			.contact-card {
+				margin-top: 3px;
+				background-color: #2a2f3a;
 
-			display: flex;
-
-			.contact-information {
 				display: flex;
-				align-items: center;
-				justify-content: center;
 
-				padding: 10px;
+				.contact-information {
+					display: flex;
+					align-items: center;
+					justify-content: center;
 
-				object {
-					border-radius: 50%;
-					width: 50px;
-				}
+					padding: 10px;
 
-				h3 {
-					margin: 0 0 0 5px;
+					object {
+						border-radius: 50%;
+						width: 50px;
+					}
+
+					h3 {
+						margin: 0 0 0 5px;
+					}
 				}
 			}
 		}
@@ -110,5 +112,5 @@
 		&:hover {
 			backdrop-filter: brightness(1.1);
 		}
-    }
+	}
 }

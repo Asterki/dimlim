@@ -1,6 +1,7 @@
+// Message related routes
+// * In progress
+
 import express from "express";
-import { z } from "zod";
-import UserModel from "../../models/user";
 
 const router: express.Router = express.Router();
 

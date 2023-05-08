@@ -1,4 +1,5 @@
 import express from "express";
+import rateLimit from "express-rate-limit";
 
 import { avatarUpload } from "../../services/upload";
 import UserModel from "../../models/user";
@@ -9,8 +10,12 @@ const router: express.Router = express.Router();
 
 router.post(
 	"/avatar",
+	rateLimit({
+		windowMs: 1000 * 60 * 60,
+		max: 5,
+		message: "rate-limit-exceeded",
+	}),
 	(req: any, res) => {
-        console.log(req.avatar)
         if (!req.isAuthenticated()) return res.status(403).send("unauthorized");
 		
         try {

@@ -39,15 +39,14 @@ export const getServerSideProps: GetServerSideProps = async (context: any) => {
 const Login: NextPage = () => {
 	const appState = useSelector((state: RootState) => state);
 	const lang = appState.page.lang.accounts.login;
-	const router = useRouter();
+    const router = useRouter()
 
 	// Inputs
 	const emailInput = React.useRef<HTMLInputElement>(null);
 	const passwordInput = React.useRef<HTMLInputElement>(null);
-	const tfaInput = React.useRef<HTMLInputElement>(null);
 
 	// Page that is showing
-	const [currentPage, setCurrentPage] = React.useState<"login-form" | "tfa-form">("login-form");
+	const [currentPage, setCurrentPage] = React.useState("login-form");
 	const [showingErrorDialog, setShowingErrorDialog] = React.useState(false);
 	const [error, setError] = React.useState<keyof typeof LangPack.accounts.login.errors>("no-errors");
 
@@ -55,11 +54,6 @@ const Login: NextPage = () => {
 	const handleLogin = async (event: React.MouseEvent) => {
 		event.preventDefault();
 		setError("no-errors");
-
-        if (currentPage == "tfa-form" && passwordInput.current!.value == "") {
-			setError("invalid-tfa-code");
-			return setShowingErrorDialog(true);
-        }
 
 		const parsedBody = z
 			.object({
@@ -86,7 +80,7 @@ const Login: NextPage = () => {
 			data: {
 				email: emailInput.current!.value,
 				password: passwordInput.current!.value,
-				tfaCode: tfaInput.current!.value,
+				tfaCode: "",
 			} as LoginRequestBody,
 		});
 
@@ -180,26 +174,8 @@ const Login: NextPage = () => {
 					initial="hidden"
 					animate={currentPage == "tfa-form" ? "visible" : "hiddenAndGone"}
 					exit="hiddenAndGone"
-					className={styles["login-form"]}
-				>
-				<h1>{lang.tfa}</h1>	
-					<label htmlFor="tfa-code">{lang.tfaHelp}</label>
-					<input type="text" id="tfa-code" ref={tfaInput} placeholder="••••••" />
-
-					<br />
-					<br />
-
-					<div className={styles["buttons"]}>
-						<button className={styles["login-button"]} onClick={(event) => handleLogin(event)}>
-							{lang.login}
-						</button>
-
-
-						<button className={styles["login-button"]} onClick={(event) => setCurrentPage("login-form")}>
-							{lang.close}
-						</button>
-					</div>
-				</motion.div>
+					className={styles["tfa-form"]}
+				></motion.div>
 
 				<Footer />
 			</main>

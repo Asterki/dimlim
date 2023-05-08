@@ -38,6 +38,9 @@ const template: typeof LangPack = {
                     tabLabel: "Profile",
                     title: "Profile Overview",
 
+                    removeAvatar: "Remove picture",
+                    uploadAvatar: "Upload picture",
+
                     userID: "User ID:",
                     emailVerified: "Email verified:",
                     tfaActive: "TFA Active:",

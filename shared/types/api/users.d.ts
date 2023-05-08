@@ -14,6 +14,9 @@ interface RemoveContactRequestBody {
 
 type RemoveContactResponse = "unauthorized" | "invalid-parameters" | "user-not-found" | "done";
 
+// Remove avatar
+type RemoveAvatarResponse = "unauthorized" | "user-not-found" | "done"
+
 // Change email
 interface ChangeEmailRequestBody {
     newEmail: string;
@@ -76,5 +79,6 @@ export type {
     SendVerifyEmailRequestBody,
     SendVerifyEmailResponse,
     VerifyEmailRequestQuery,
-    VerifyEmailResponse
+    VerifyEmailResponse,
+    RemoveAvatarResponse
 };

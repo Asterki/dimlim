@@ -1,0 +1,44 @@
+.component {
+    background-color: #2a2f3a !important;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+
+    padding: 0 5px 0 5px;
+
+    * {
+        color: white !important;
+    }
+
+    position: fixed;
+    top: 0px;
+    width: 100vw;
+
+    .contact-info {
+        display: flex;
+        flex-wrap: wrap;
+        align-content: stretch;
+        justify-content: space-between;
+        align-items: center;
+        margin: 0 0 0 0;
+    }
+
+    div {
+        display: flex;
+        flex-wrap: wrap;
+        align-content: stretch;
+        align-items: center;
+        margin: 0 0 0 0;
+        
+        .contact-general {
+            color: white;
+            margin-bottom: 0px !important;
+
+            .contact-username {
+                margin: 0 0 0 5px;
+            }
+        }
+
+        .contact-avatar {
+            margin: 0 0 0 5px;
+        }
+    }
+}

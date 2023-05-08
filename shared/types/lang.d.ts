@@ -35,6 +35,9 @@ declare const LangPack: {
                     tabLabel: string;
                     title: string;
 
+                    uploadAvatar: string;
+                    removeAvatar: string;
+
                     userID: string;
                     emailVerified: string;
                     tfaActive: string;

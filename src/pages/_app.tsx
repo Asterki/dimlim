@@ -9,7 +9,7 @@ import { setLanguage } from "../store/pageSlice";
 
 import "@/styles/globals.scss";
 import type { AppProps } from "next/app";
-import LangPack from "shared/types/lang";
+import LangPack from "../../shared/types/lang";
 
 const CustomApp = ({ Component, pageProps }: AppProps) => {
 	React.useEffect(() => {

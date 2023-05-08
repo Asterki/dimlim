@@ -9,7 +9,7 @@ import { useSelector } from "react-redux";
 import { RootState } from "@/store";
 
 import { GetServerSideProps, NextPage } from "next";
-import { User } from "shared/types/models";
+import { User } from "../../../shared/types/models";
 
 export const getServerSideProps: GetServerSideProps = async (context: any) => {
 	if (!context.req.query.success && !context.req.query.error)

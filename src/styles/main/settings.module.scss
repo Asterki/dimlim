@@ -3,6 +3,21 @@
 		padding-left: 25%;
 		padding-right: 25%;
 
+		.upload-picture-button {
+			border-radius: 5px;
+			padding: 10px;
+			border: none;
+			outline: none !important;
+
+			width: 30%;
+
+			font-weight: bold;
+			cursor: pointer;
+
+			background-color: #2196f3;
+			color: white;
+		}
+
 		.tab-triggers {
 			display: flex;
 
@@ -96,5 +111,5 @@
 }
 
 .error {
-    color: #ed4245;
+	color: #ed4245;
 }

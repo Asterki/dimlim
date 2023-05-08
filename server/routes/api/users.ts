@@ -11,6 +11,7 @@ import {
     usersServiceAddContact,
     usersServiceRemoveContact,
     usersServiceVerifyEmail,
+    usersServiceRemoveAvatar,
 } from "../../services/users";
 
 import {
@@ -23,6 +24,7 @@ import {
     ChangePasswordResponse,
     DeactivateTFARequestBody,
     DeactivateTFAResponse,
+    RemoveAvatarResponse,
     RemoveContactRequestBody,
     RemoveContactResponse,
     SendVerifyEmailRequestBody,
@@ -50,7 +52,7 @@ router.post(
                 .required()
                 .safeParse(req.body);
 
-            if (!parsedBody.success) return res.status(400).send("invalid-parameters");
+            if (!parsedBody.success && 'error' in parsedBody) return res.status(400).send("invalid-parameters");
 
             const result = await usersServiceAddContact((req.user as User).userID, parsedBody.data.contactUsername);
             return res.send(result);
@@ -76,7 +78,7 @@ router.post(
                 .required()
                 .safeParse(req.body);
 
-            if (!parsedBody.success) return res.status(400).send("invalid-parameters");
+            if (!parsedBody.success && 'error' in parsedBody) return res.status(400).send("invalid-parameters");
 
             const result = await usersServiceRemoveContact((req.user as User).userID, parsedBody.data.contactUsername);
             return res.send(result);
@@ -85,6 +87,17 @@ router.post(
         }
     }
 );
+
+router.post("/remove-avatar", async (req: express.Request, res: express.Response<RemoveAvatarResponse>) => {
+    if (!req.isAuthenticated() || req.user == undefined) return res.status(403).send("unauthorized");
+
+    try {
+        const result = await usersServiceRemoveAvatar((req.user as User).userID)
+        return res.status(200).send(result);
+    } catch (err: unknown) {
+        res.status(500);
+    }
+})
 
 router.post(
     "/change-email",
@@ -103,7 +116,7 @@ router.post(
                 .required()
                 .safeParse(req.body);
 
-            if (!parsedBody.success) return res.status(400).send("invalid-parameters");
+            if (!parsedBody.success && 'error' in parsedBody) return res.status(400).send("invalid-parameters");
 
             const result = await usersServiceChangeEmail(
                 parsedBody.data.password,
@@ -134,7 +147,7 @@ router.post(
                 .required()
                 .safeParse(req.body);
 
-            if (!parsedBody.success) return res.status(400).send("invalid-parameters");
+            if (!parsedBody.success && 'error' in parsedBody) return res.status(400).send("invalid-parameters");
 
             const result = await usersServiceChangePassword(
                 parsedBody.data.password,
@@ -165,7 +178,7 @@ router.post(
                 .required()
                 .safeParse(req.body);
 
-            if (!parsedBody.success) return res.status(400).send("invalid-parameters");
+            if (!parsedBody.success && 'error' in parsedBody) return res.status(400).send("invalid-parameters");
 
             const result = await usersServiceActivateTFA(
                 parsedBody.data.tfaSecret,
@@ -195,7 +208,7 @@ router.post(
                 .required()
                 .safeParse(req.body);
 
-            if (!parsedBody.success) return res.status(400).send("invalid-parameters");
+            if (!parsedBody.success && 'error' in parsedBody) return res.status(400).send("invalid-parameters");
 
             const result = await usersServiceDeactivateTFA(parsedBody.data.password, (req.user as User).userID);
             return res.status(200).send(result);
@@ -221,7 +234,7 @@ router.post(
                 .required()
                 .safeParse(req.body);
 
-            if (!parsedBody.success) return res.status(400).send("invalid-parameters");
+            if (!parsedBody.success && 'error' in parsedBody) return res.status(400).send("invalid-parameters");
 
             const result = await usersServiceSendEmailVerificationEmail(req.user as User, parsedBody.data.locale);
             res.send(result);

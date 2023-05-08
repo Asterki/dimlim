@@ -5,12 +5,14 @@
     "scripts": {
         "dev": "cross-env NODE_ENV=development nodemon --config ./nodemon.json ./server/index.ts --dev true",
         "start": "npm-run-all start:*",
-        "start:clean": "rm -rf ./build",
+        "start:clean": "rm -rf ./build/*",
         "start:build-server": "tsc -p ./server/tsconfig.json",
         "start:build-client": "next build",
-        "start:run-server": "cp ./.env.local ./build/.env.local && cd ./build && cross-env NODE_ENV=production node ./server/index.js",
+        "start:move-static": "cp -r ./locales ./build/ && cp ./src/assets -r ./build/src && cp -r ./public ./build/",
+        "start:run-server": "node ./build/server/index.js --dev false",
         "build": "next build",
-        "lint": "next lint && npx eslint"
+        "lint": "next lint && npx eslint",
+        "setup": "mkdir data && cd data && mkdir avatars && mkdir sessions && cd .. && npm i -y && mkdir ./server/logs/ && touch ./server/logs/errors.log && ts-node ./server/index.ts --setup"
     },
     "dependencies": {
         "@radix-ui/react-dropdown-menu": "^2.0.4",
@@ -35,8 +37,8 @@
         "https": "^1.0.0",
         "idb-keyval": "^6.2.0",
         "locale": "^0.1.0",
+        "mkdirp": "^3.0.1",
         "mongoose": "^7.0.1",
-        "multer": "^1.4.5-lts.1",
         "next": "^12.3.1",
         "nodemailer": "^6.7.8",
         "nodemon": "^2.0.19",
@@ -68,7 +70,6 @@
         "@types/express": "^4.17.17",
         "@types/express-session": "^1.17.6",
         "@types/locale": "^0.1.1",
-        "@types/multer": "^1.4.7",
         "@types/node": "^18.15.3",
         "@types/nodemailer": "^6.4.7",
         "@types/passport": "^1.0.12",

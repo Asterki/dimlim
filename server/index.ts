@@ -12,7 +12,7 @@ dotenv.config({ path: path.join(__dirname, "../.env.local") });
 
 // Declare the servers that we're gonna use
 const app = express();
-const nextApp = next({ dev: process.env.NODE_ENV == "development", dir: "../",  });
+const nextApp = next({ dev: process.env.NODE_ENV == "development" });
 const server = http.createServer(app);
 const io = new socketIo.Server(server);
 
@@ -23,7 +23,7 @@ nextApp.prepare().then(() => {
     require("./services/databases");
     require("./services/accounts");
     require("./services/upload");
-    // require("./services/messages");
+    require("./services/messages");
     require("./services/users");
     require("./routes/router");
 

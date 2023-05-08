@@ -14,11 +14,11 @@ import Dialog from "@/components/dialog";
 import styles from "../../styles/accounts/register.module.scss";
 
 import { GetServerSideProps, NextPage } from "next";
-import { RegisterRequestBody, RegisterResponse } from "shared/types/api/accounts";
+import { RegisterRequestBody, RegisterResponse } from "../../../shared/types/api/accounts";
 import { useSelector } from "react-redux";
 import { RootState } from "@/store";
 
-import LangPack from "shared/types/lang";
+import LangPack from "../../../shared/types/lang";
 
 export const getServerSideProps: GetServerSideProps = async (context: any) => {
 	if (context.req.isAuthenticated())
@@ -90,7 +90,7 @@ const Register: NextPage = () => {
 				confirmPassword: confirmPasswordInput.current!.value,
 			});
 
-		if (!parsedBody.success) {
+		if (!parsedBody.success && 'error' in parsedBody && 'error' in parsedBody) {
 			setError(
 				parsedBody.error.errors[0].message as
 					| "invalid-username-length"

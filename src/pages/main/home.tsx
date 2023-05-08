@@ -7,7 +7,7 @@ import Head from "next/head";
 import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
 
 import styles from "../../styles/main/home.module.scss";
-import { User } from "shared/types/models";
+import { User } from "../../../shared/types/models";
 
 import { useSelector } from "react-redux";
 import { RootState } from "@/store";

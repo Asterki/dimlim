@@ -42,7 +42,7 @@ router.post(
 				.required()
 				.safeParse(req.body);
 
-			if (!parsedBody.success) return res.status(400).send("invalid-parameters");
+			if (!parsedBody.success && 'error' in parsedBody) return res.status(400).send("invalid-parameters");
 
 			// Register the user
 			const user = await accountsServiceRegisterUser(
@@ -80,7 +80,7 @@ router.post(
 				.required()
 				.safeParse(req.body);
 
-			if (!parsedBody.success) return res.status(400).send("invalid-parameters");
+			if (!parsedBody.success && 'error' in parsedBody) return res.status(400).send("invalid-parameters");
 
 			const result = await accountsServiceDeleteUser(req.user as User, parsedBody.data.password, parsedBody.data.tfaCode);
 			if (result !== "done") return res.send(result);
@@ -109,7 +109,7 @@ router.post(
 				.required()
 				.safeParse(req.body);
 
-			if (!parsedBody.success) return res.status(400).send("invalid-parameters" as LoginResponse);
+			if (!parsedBody.success && 'error' in parsedBody) return res.status(400).send("invalid-parameters" as LoginResponse);
 
 			passport.authenticate(
 				"local",

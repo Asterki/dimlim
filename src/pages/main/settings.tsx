@@ -15,7 +15,7 @@ import { useSelector } from "react-redux";
 import { RootState } from "@/store";
 
 import { GetServerSideProps, NextPage } from "next";
-import { User } from "shared/types/models";
+import { User } from "../../../shared/types/models";
 
 import {
 	ActivateTFARequestBody,
@@ -28,9 +28,11 @@ import {
 	DeactivateTFAResponse,
 	SendVerifyEmailRequestBody,
 	SendVerifyEmailResponse,
-} from "shared/types/api/users";
-import { DeleteAccountRequestBody, DeleteAccountResponse } from "shared/types/api/accounts";
-import LangPack from "shared/types/lang";
+	RemoveAvatarResponse,
+} from "../../../shared/types/api/users";
+import { UploadAvatarRequestBody, UploadAvatarResponse } from "../../../shared/types/api/upload";
+import { DeleteAccountRequestBody, DeleteAccountResponse } from "../../../shared/types/api/accounts";
+import LangPack from "../../../shared/types/lang";
 
 export const getServerSideProps: GetServerSideProps = async (context: any) => {
 	if (!context.req.isAuthenticated())
@@ -71,6 +73,10 @@ const Settings: NextPage<PageProps> = (props) => {
 	const [accountLogoutDialogOpen, setAccountLogoutDialogOpen] = React.useState<boolean>(false);
 	const [accountDeleteAccountDialogOpen, setAccountDeleteAccountDialogOpen] = React.useState<boolean>(false);
 
+	// Profile refs
+	const profileChangeAvatarInput = React.useRef<HTMLInputElement>(null);
+	const profileChangeAvatarCanvas = React.useRef<HTMLCanvasElement>(null);
+
 	// Account refs
 	const accountChangeEmailEmailInput = React.useRef<HTMLInputElement>(null);
 	const accountChangeEmailPasswordInput = React.useRef<HTMLInputElement>(null);
@@ -104,7 +110,48 @@ const Settings: NextPage<PageProps> = (props) => {
 	const [securityActivateTFAImage, setSecurityActivateTFAImage] = React.useState<string>("");
 	const [securityActivateTFACode, setSecurityActivateTFACode] = React.useState<string>("");
 
-	// Options related to the account menu
+	// Options related to the profile menu
+	const profileActions = {
+		changeAvatar: (event: React.ChangeEvent<HTMLInputElement>) => {
+			if (!event.target.files) return;
+			const file = event.target.files[0];
+
+			let reader = new FileReader();
+			reader.readAsDataURL(file);
+
+			reader.onloadend = () => {
+				const canvas = profileChangeAvatarCanvas.current!;
+
+				let baseImage = new Image();
+				baseImage.src = reader.result as string;
+
+				baseImage.onload = async () => {
+					const context = canvas.getContext("2d")!;
+					context.drawImage(baseImage, 0, 0, 500, 500);
+
+					const response: AxiosResponse<UploadAvatarResponse> = await axios({
+						url: `${appState.page.hostURL}/api/upload/avatar`,
+						method: "POST",
+						data: {
+							image: canvas.toDataURL("image/jpeg", 0.7),
+						},
+					});
+
+					if (response.data == "done") return window.location.reload();
+				};
+			};
+		},
+		removeAvatar: async () => {
+			const response: AxiosResponse<RemoveAvatarResponse> = await axios({
+				url: `${appState.page.hostURL}/api/users/remove-avatar`,
+				method: "POST",
+			});
+
+			if (response.data == "done") return window.location.reload();
+		},
+	};
+
+	// Options related to the security menu
 	const securityActions = {
 		activateTFA: async () => {
 			setSecurityActivateTFAError("no-errors");
@@ -159,6 +206,7 @@ const Settings: NextPage<PageProps> = (props) => {
 		},
 	};
 
+	// Options related to the account menu
 	const accountActions = {
 		logout: async () => {
 			// Logout the account
@@ -514,10 +562,49 @@ const Settings: NextPage<PageProps> = (props) => {
 
 						<div className={styles["profile-overview"]}>
 							<img
-								src={props.user.avatar !== "" ? props.user.avatar : "/assets/images/default-avatar.png"}
+								src={
+									props.user.avatar !== ""
+										? `/avatars/${props.user.userID}/${props.user.avatar}.jpeg`
+										: "/assets/images/default-avatar.png"
+								}
 								alt="user avatar"
 							/>
 
+							{/* Profile picture related */}
+							<input
+								hidden
+								ref={profileChangeAvatarInput}
+								onChange={(event) => {
+									profileActions.changeAvatar(event);
+								}}
+								accept=".jpg, .png, .jpeg"
+								type="file"
+							/>
+
+							<canvas hidden ref={profileChangeAvatarCanvas} width={500} height={500} />
+
+							<br />
+
+							<button
+								className={styles["upload-picture-button"]}
+								onClick={() => {
+									profileChangeAvatarInput.current?.click();
+								}}
+							>
+								{lang.tabs.profile.uploadAvatar}
+							</button>
+
+							<br />
+							{props.user.avatar !== "" && (
+								<button
+									className={styles["upload-picture-button"]}
+									onClick={() => {
+										profileActions.removeAvatar();
+									}}
+								>
+									{lang.tabs.profile.removeAvatar}
+								</button>
+							)}
 							<br />
 
 							<h3>{props.user.username}</h3>

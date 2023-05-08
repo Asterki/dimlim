@@ -2,7 +2,6 @@
 import React from "react";
 import axios, { AxiosResponse } from "axios";
 
-import Navbar from "../../components/navbar";
 import Link from "next/link";
 import Head from "next/head";
 

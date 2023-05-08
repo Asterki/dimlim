@@ -18,6 +18,6 @@ app.use(cors({ origin: "*" }));
 
 // Static content
 app.use(favicon(path.join(__dirname, `${rootPath}/public/favicon.ico`)));
-app.use("/avatars/", express.static(path.join(__dirname, `${rootPath}/assets/data/avatars`)));
+app.use("/avatars/", express.static(path.join(__dirname, `${rootPath}/data/avatars`)));
 
 export {};

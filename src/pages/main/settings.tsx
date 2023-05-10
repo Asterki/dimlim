@@ -211,7 +211,7 @@ const Settings: NextPage<PageProps> = (props) => {
 		logout: async () => {
 			// Logout the account
 			const response: AxiosResponse<"ok"> = await axios({
-				url: `${process.env.NEXT_PUBLIC_SERVER_URL}/api/accounts/logout`,
+				url: `/api/accounts/logout`,
 				method: "POST",
 			});
 

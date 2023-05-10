@@ -12,6 +12,7 @@ import {
     usersServiceRemoveContact,
     usersServiceVerifyEmail,
     usersServiceRemoveAvatar,
+    getContactInformation,
 } from "../../services/users";
 
 import {
@@ -24,6 +25,7 @@ import {
     ChangePasswordResponse,
     DeactivateTFARequestBody,
     DeactivateTFAResponse,
+    GetInformationResponse,
     RemoveAvatarResponse,
     RemoveContactRequestBody,
     RemoveContactResponse,
@@ -266,5 +268,23 @@ router.get("/verify-email", async (req: express.Request<VerifyEmailRequestQuery>
         res.status(500);
     }
 });
+
+router.post("/get-information", async (req: express.Request, res: express.Response<GetInformationResponse>) => {
+    if (!req.isAuthenticated() || req.user == undefined) return res.status(403).send("unauthorized");
+
+    try {
+        const contactsUserID: Array<string> = []
+
+        for (let i = 0; i < (req.user as User).contacts.length; i++) {
+            const contact = (req.user as User).contacts[i];
+            contactsUserID.push(contact.userID)
+        }
+
+        const result = await getContactInformation(contactsUserID)
+        return res.send(result)
+    } catch (err: unknown) {
+        res.status(500)
+    }
+})
 
 module.exports = router;

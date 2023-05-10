@@ -16,8 +16,14 @@ import { AvailableLocales } from "../../shared/types";
 const usersServiceAddContact = async (userID: string, contactUsername: string): Promise<"done" | "user-not-found"> => {
     // Find the users
     const user: (User & Document) | null = await UserModel.findOne({ userID: userID });
-    const userContact: (User & Document) | null = await UserModel.findOne({ username: contactUsername });
+    const userContact: (User & Document) | null = await UserModel.findOne({ username: contactUsername.toLowerCase() });
     if (!user || userContact == null) return "user-not-found";
+
+    const userAlreadyInContacts = user.contacts.find((contact) => {
+        if (contact.userID == userContact.userID) return true;
+    });
+
+    if (userAlreadyInContacts || user.userID == userContact.userID) return "done";
 
     user.contacts.push({ userID: userContact.userID, username: userContact.username }); // Add to current user contacts
     userContact.contacts.push({ userID: user.userID, username: user.username }); // Add to the other person's contact
@@ -32,7 +38,7 @@ const usersServiceAddContact = async (userID: string, contactUsername: string): 
 const usersServiceRemoveContact = async (userID: string, contactUsername: string): Promise<"done" | "user-not-found"> => {
     // Find the users
     const user: (User & Document) | null = await UserModel.findOne({ userID: userID });
-    const userContact: (User & Document) | null = await UserModel.findOne({ username: contactUsername });
+    const userContact: (User & Document) | null = await UserModel.findOne({ username: contactUsername.toLowerCase() });
     if (!user || userContact == null) return "user-not-found";
 
     // Update contacts
@@ -199,6 +205,18 @@ const usersServiceRemoveAvatar = async (userID: string): Promise<"done" | "user-
     return "done"
 }
 
+const getContactInformation = async (contacts: string[]) => {
+    const results: (Array<User & Document>) | null = await UserModel.find({ userID: { $in: contacts } })
+    if (!results) return [];
+
+    const returnResult: Array<{ username: string; userID: string, avatar: string }> = []
+    results.map(user => {
+        returnResult.push({ username: user.username, userID: user.userID, avatar: user.avatar })
+    })
+
+    return returnResult
+}
+
 export {
     usersServiceAddContact,
     usersServiceRemoveContact,
@@ -208,5 +226,6 @@ export {
     usersServiceDeactivateTFA,
     usersServiceSendEmailVerificationEmail,
     usersServiceVerifyEmail,
-    usersServiceRemoveAvatar
+    usersServiceRemoveAvatar,
+    getContactInformation
 };

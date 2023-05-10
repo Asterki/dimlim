@@ -24,6 +24,21 @@ const template: typeof LangPack = {
             pageTitle: "DIMLIM | Home",
             title: "Home",
 
+            addContactDialog: {
+                title: "Add Contact",
+                description: "Enter the username of the person that you want to add",
+
+                addContact: "Add Contact",
+                cancel: "Cancel",
+
+                errors: {
+                    "no-errors": "",
+                    "invalid-parameters": "",
+                    "unauthorized": "Your session has expired, please login again",
+                    "user-not-found": "User not found"
+                }
+            },
+
             profileMenu: {
                 addContact: "Add Contact",
                 blockedContacts: "Blocked Contacts",

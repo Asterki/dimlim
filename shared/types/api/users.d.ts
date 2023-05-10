@@ -62,6 +62,13 @@ interface VerifyEmailRequestQuery {
 
 type VerifyEmailResponse = "invalid-code" | "expired" | "done" | "unauthorized" | "invalid-parameters"
 
+// Get information
+type GetInformationResponse = "unauthorized" | Array<{
+    username: string;
+    userID: string;
+    avatar: string;
+}>
+
 // Export types
 export type {
     AddContactRequestBody,
@@ -80,5 +87,6 @@ export type {
     SendVerifyEmailResponse,
     VerifyEmailRequestQuery,
     VerifyEmailResponse,
-    RemoveAvatarResponse
+    RemoveAvatarResponse,
+    GetInformationResponse
 };

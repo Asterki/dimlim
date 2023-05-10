@@ -57,9 +57,29 @@
 	}
 
 	main {
-		.contact-list {
-			margin-top: 80px;
+		.add-contact-button {
+			width: calc(100% - 20px);
+			margin-top: 90px;
+			margin-left: 10px;
 
+			border-radius: 5px;
+
+			background-color: #5294e2;
+			color: white;
+			border: none;
+			border-radius: 5px;
+
+			padding: 10px;
+			cursor: pointer;
+
+			transition: all 0.1s ease-in-out;
+
+			&:hover {
+				filter: drop-shadow(0px 0px 10px #5293e259);
+			}
+		}
+
+		.contact-list {
 			.contact-card {
 				margin-top: 3px;
 				background-color: #2a2f3a;
@@ -73,7 +93,7 @@
 
 					padding: 10px;
 
-					object {
+					img {
 						border-radius: 50%;
 						width: 50px;
 					}
@@ -113,4 +133,8 @@
 			backdrop-filter: brightness(1.1);
 		}
 	}
+}
+
+.error {
+	color: #ed4245;
 }

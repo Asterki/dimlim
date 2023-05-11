@@ -54,15 +54,7 @@ const User = new Schema({
 		type: String,
 		required: true,
 	},
-	chatSecret: {
-		type: String,
-		required: true,
-	},
-	encSecret: {
-		type: String,
-		required: true,
-	},
-
+    
 	tfa: {
 		secret: {
 			type: String,

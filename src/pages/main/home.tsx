@@ -8,10 +8,11 @@ import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
 import Dialog from "@/components/dialog";
 
 import styles from "../../styles/main/home.module.scss";
-import { User } from "../../../shared/types/models";
 
 import { useSelector } from "react-redux";
 import { RootState } from "@/store";
+
+import { User } from "../../../shared/types/models";
 import { GetServerSideProps, NextPage } from "next";
 
 import { AddContactRequestBody, AddContactResponse, GetInformationResponse } from "../../../shared/types/api/users";
@@ -51,7 +52,7 @@ const Home: NextPage<PageProps> = (props) => {
 
 	const contactListElement = contactList.map((user: { userID: string; username: string; avatar: string }) => {
 		return (
-			<div key={user.userID} className={styles["contact-card"]}>
+			<div key={user.userID} onClick={() => window.location.href = `/chat/${user.username}`} className={styles["contact-card"]}>
 				<div className={styles["contact-information"]}>
 					<img
 						src={
@@ -160,9 +161,6 @@ const Home: NextPage<PageProps> = (props) => {
 						</DropdownMenu.Trigger>
 						<DropdownMenu.Portal>
 							<DropdownMenu.Content align="end" className={styles["navbar-options"]}>
-								<DropdownMenu.Item className={styles["navbar-option"]}>
-									{lang.profileMenu.addContact}
-								</DropdownMenu.Item>
 								<DropdownMenu.Item className={styles["navbar-option"]}>
 									{lang.profileMenu.blockedContacts}
 								</DropdownMenu.Item>

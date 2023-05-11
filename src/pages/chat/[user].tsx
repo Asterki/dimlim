@@ -553,12 +553,130 @@
 
 // export default Chat;
 
-const Chat = () => {
-    return (
-        <div>
-            <p>File under refactoring</p>
-        </div>
-    );
+import React from "react";
+import { Socket, io } from "socket.io-client";
+import axios, { AxiosResponse } from "axios";
+
+import Head from "next/head";
+
+import styles from "../../styles/chat/index.module.scss";
+
+import { useSelector } from "react-redux";
+import { RootState } from "@/store";
+
+import { User } from "../../../shared/types/models";
+import { GetServerSideProps, NextPage } from "next";
+
+export const getServerSideProps: GetServerSideProps = async (context: any) => {
+	if (!context.req.isAuthenticated())
+		return {
+			redirect: {
+				destination: "/login",
+				permanent: false,
+			},
+		};
+
+	// If the requested contact isn't in the user's contact list
+	const contact = context.req.user.contacts.find((contact: { username: string; userID: string }) => {
+		if (contact.username.toLowerCase() == context.query.user) return contact;
+		else return undefined;
+	});
+
+	if (contact == undefined)
+		return {
+			redirect: {
+				destination: "/home",
+				permanent: false,
+			},
+		};
+
+	return {
+		props: {
+			user: JSON.parse(JSON.stringify(context.req.user)),
+			contact: contact,
+		},
+	};
+};
+
+interface PageProps {
+	user: User;
+	contact: {
+		userID: string;
+		username: string;
+	};
 }
- 
+
+const Chat: NextPage<PageProps> = (props) => {
+	const appState = useSelector((state: RootState) => state);
+	const lang = appState.page.lang.main.home;
+
+	const [socket, setSocket] = React.useState<Socket>(null);
+	const [pubKey, setPubKey] = React.useState();
+	const [contactInfo, setContactInfo] = React.useState(null);
+
+	React.useEffect(() => {
+		const socket = io();
+		socket.on("connect", () => {
+			setSocket(socket);
+		});
+	}, []);
+
+	return (
+		<div className={styles["page"]}>
+			<Head>
+				<title>{lang.pageTitle}</title>
+			</Head>
+
+			<main>
+				<div className={styles["chat-navbar"]}>
+					<div className={styles["navbar-left"]}>
+						<div className={styles["go-back-button"]}>
+							<img src="/assets/svg/chevron-left.svg" alt="Go back" />
+						</div>
+						<div className={styles["contact-information"]}>
+							<img
+								src={
+									props.user.avatar !== ""
+										? `/avatars/${props.user.userID}/${props.user.avatar}.jpeg`
+										: "/assets/images/default-avatar.png"
+								}
+								alt="user avatar"
+							/>
+							<p>{props.user.username}</p>
+						</div>
+					</div>
+				</div>
+
+				<div className={styles["chat-content"]}>
+					<h1>jeiqwoej1</h1>
+					<h1>jeiqwoej</h1>
+					<h1>jeiqwoej</h1>
+					<h1>jeiqwoej</h1>
+					<h1>jeiqwoej</h1>
+					<h1>jeiqwoej</h1>
+					<h1>jeiqwoej</h1>
+					<h1>jeiqwoej</h1>
+					<h1>jeiqwoej</h1>
+					<h1>jeiqwoej</h1>
+					<h1>jeiqwoej</h1>
+					<h1>jeiqwoej</h1>
+					<h1>jeiqwoej</h1>
+					<h1>jeiqwoej</h1>
+					<h1>jeiqwoej</h1>
+					<h1>jeiqwoej</h1>
+					<h1>jeiqwoej3</h1>
+				</div>
+
+				<div className={styles["message-bar"]}>
+					<input type="text" className={styles["message-input"]} />
+
+					<div className={styles["message-bar-buttons"]}>
+						<img src="/assets/svg/send.svg" alt="Send" />
+					</div>
+				</div>
+			</main>
+		</div>
+	);
+};
+
 export default Chat;

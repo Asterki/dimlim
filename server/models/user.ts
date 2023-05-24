@@ -3,64 +3,68 @@ import passportLocalMongoose from "passport-local-mongoose";
 const Schema = mongoose.Schema;
 
 const User = new Schema({
-	userID: {
-		type: String,
-		required: true,
-		unique: true,
-	},
-	created: {
-		type: Number,
-		required: true,
-	},
+    userID: {
+        type: String,
+        required: true,
+        unique: true,
+    },
+    created: {
+        type: Number,
+        required: true,
+    },
 
-	username: {
-		type: String,
-		required: true,
-		unique: true,
-	},
+    username: {
+        type: String,
+        required: true,
+        unique: true,
+    },
 
-	email: {
-		value: {
-			type: String,
-			required: true,
-			unique: true,
-		},
-		verified: {
-			type: Boolean,
-			default: false,
-		},
-	},
+    email: {
+        value: {
+            type: String,
+            required: true,
+            unique: true,
+        },
+        verified: {
+            type: Boolean,
+            default: false,
+        },
+    },
 
-	avatar: {
-		type: String,
-		default: "",
-	},
+    avatar: {
+        type: String,
+        default: "",
+    },
 
-	locale: {
-		type: String,
-		default: "en",
-	},
+    locale: {
+        type: String,
+        default: "en",
+    },
 
-	contacts: {
-		type: Array,
-		default: [],
-	},
-	blockedContacts: {
-		type: Array,
-		default: [],
-	},
+    contacts: {
+        type: Array,
+        default: [],
+    },
+    blockedContacts: {
+        type: Array,
+        default: [],
+    },
 
-	password: {
-		type: String,
-		required: true,
-	},
-    
-	tfa: {
-		secret: {
-			type: String,
+    pubKey: {
+        type: Buffer,
+    },
+
+    password: {
+        type: String,
+        required: true,
+    },
+
+    tfa: {
+        secret: {
+            type: String,
             default: ""
-		},
-	},
+        },
+    },
 });
 
 User.plugin(passportLocalMongoose);

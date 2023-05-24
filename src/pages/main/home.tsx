@@ -1,4 +1,5 @@
 import React from "react";
+import { get, set } from "idb-keyval";
 import axios, { AxiosResponse } from "axios";
 import { motion } from "framer-motion";
 import { useRouter } from "next/router";
@@ -52,7 +53,11 @@ const Home: NextPage<PageProps> = (props) => {
 
 	const contactListElement = contactList.map((user: { userID: string; username: string; avatar: string }) => {
 		return (
-			<div key={user.userID} onClick={() => window.location.href = `/chat/${user.username}`} className={styles["contact-card"]}>
+			<div
+				key={user.userID}
+				onClick={() => (window.location.href = `/chat/${user.username}`)}
+				className={styles["contact-card"]}
+			>
 				<div className={styles["contact-information"]}>
 					<img
 						src={
@@ -78,18 +83,56 @@ const Home: NextPage<PageProps> = (props) => {
 			} as AddContactRequestBody,
 		});
 
-        if (response.data == "done") return window.location.reload();
-        return setAddContactDialogError(response.data)
+		if (response.data == "done") return window.location.reload();
+		return setAddContactDialogError(response.data);
 	};
 
 	React.useEffect(() => {
 		(async () => {
-			const response: AxiosResponse<GetInformationResponse> = await axios({
+			// Get the private key, if it's not there, generate one
+			if ((await get("priv-key")) == undefined) {
+				// Generate keyPair
+				const keyPair = await window.crypto.subtle.generateKey(
+					{
+						name: "RSA-OAEP",
+						modulusLength: 2048,
+						publicExponent: new Uint8Array([0x01, 0x00, 0x01]),
+						hash: "SHA-256",
+					},
+					true,
+					["encrypt", "decrypt"]
+				);
+
+				// Export the keys
+				const exportedPrivateKey = await window.crypto.subtle.exportKey("pkcs8", keyPair.privateKey);
+				const privateKeyArray = new Uint8Array(exportedPrivateKey);
+
+				const exportedPublicKey = await window.crypto.subtle.exportKey("spki", keyPair.publicKey);
+				const publicKeyArray = new Uint8Array(exportedPublicKey);
+
+				console.log(publicKeyArray);
+
+				// Update the public key
+				const publicKeyBase64 = Buffer.from(publicKeyArray.buffer).toString("base64");
+				await axios({
+					method: "POST",
+					url: "/api/crypto/update-public-key",
+					data: {
+						pubKey: publicKeyBase64,
+					},
+				});
+
+				// Store the keys locally
+				await set("priv-key", privateKeyArray);
+				await set("pub-key", publicKeyArray);
+			}
+            
+			const contactsResponse: AxiosResponse<GetInformationResponse> = await axios({
 				method: "POST",
 				url: "/api/users/get-information",
 			});
 
-			if (response.data !== "unauthorized") return setContactList(response.data);
+			if (contactsResponse.data !== "unauthorized") return setContactList(contactsResponse.data);
 			window.location.href = "/login";
 		})();
 	}, []);
@@ -106,7 +149,7 @@ const Home: NextPage<PageProps> = (props) => {
 				<input type="text" ref={addContactUsernameInput} id="username-input" />
 				<br />
 
-                <p className={styles["error"]}>{lang.addContactDialog.errors[addContactDialogError]}</p>
+				<p className={styles["error"]}>{lang.addContactDialog.errors[addContactDialogError]}</p>
 
 				<button
 					onClick={() => {

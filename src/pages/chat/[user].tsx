@@ -554,6 +554,7 @@
 // export default Chat;
 
 import React from "react";
+import { get, set } from "idb-keyval";
 import { Socket, io } from "socket.io-client";
 import axios, { AxiosResponse } from "axios";
 
@@ -611,14 +612,100 @@ const Chat: NextPage<PageProps> = (props) => {
 	const lang = appState.page.lang.main.home;
 
 	const [socket, setSocket] = React.useState<Socket>(null);
-	const [pubKey, setPubKey] = React.useState();
 	const [contactInfo, setContactInfo] = React.useState(null);
+
+	const messageInputRef = React.useRef<HTMLInputElement>();
+
+	const [pubKey, setPubKey] = React.useState<CryptoKey>();
+	const [privKey, setPrivKey] = React.useState<CryptoKey>();
+
+	const sendMessage = async () => {
+		const encryptedText = await cryptoMethods.encrypt(messageInputRef.current!.value);
+		console.log(encryptedText);
+
+		const decryptedText = await cryptoMethods.decrypt(encryptedText);
+		console.log(decryptedText);
+	};
+
+	const cryptoMethods = {
+		encrypt: async (text: string) => {
+			const encoder = new TextEncoder();
+			const dataBuffer = encoder.encode(text);
+
+			const encryptedText = await window.crypto.subtle.encrypt(
+				{
+					name: "RSA-OAEP",
+				},
+				pubKey,
+				dataBuffer
+			);
+
+			return encryptedText;
+		},
+		decrypt: async (encryptedText: ArrayBuffer) => {
+			const textDecoder = new TextDecoder("utf-8");
+
+			const decryptedText = await window.crypto.subtle.decrypt(
+				{
+					name: "RSA-OAEP",
+				},
+				privKey,
+				encryptedText
+			);
+
+			return textDecoder.decode(decryptedText);
+		},
+	};
 
 	React.useEffect(() => {
 		const socket = io();
 		socket.on("connect", () => {
 			setSocket(socket);
 		});
+
+		// Retrieve the user's keys
+		(async () => {
+			const privateKeyData = await get("priv-key");
+			const publicKeyData = await get("pub-key"); // TODO THIS KEY IS FROM THE OTHER USER
+			if (!privateKeyData || !publicKeyData) return (window.location.href = "/home");
+
+			const privateKeyBuffer = privateKeyData.buffer.slice(
+				privateKeyData.byteOffset,
+				privateKeyData.byteOffset + privateKeyData.byteLength
+			);
+			const publicKeyBuffer = publicKeyData.buffer.slice(
+				publicKeyData.byteOffset,
+				publicKeyData.byteOffset + publicKeyData.byteLength
+			);
+
+			console.log(props.user.pubKey.data);
+			// console.log(new Uint8Array(props.user.pubKey.data).buffer == publicKeyBuffer);
+
+			const importedPrivateKey = await window.crypto.subtle.importKey(
+				"pkcs8",
+				privateKeyBuffer,
+				{
+					name: "RSA-OAEP",
+					hash: "SHA-256",
+				},
+				true,
+				["decrypt"]
+			);
+
+			const importedPublicKey = await window.crypto.subtle.importKey(
+				"spki",
+				publicKeyBuffer,
+				{
+					name: "RSA-OAEP",
+					hash: "SHA-256",
+				},
+				true,
+				["encrypt"]
+			);
+
+			setPrivKey(importedPrivateKey);
+			setPubKey(importedPublicKey);
+		})();
 	}, []);
 
 	return (
@@ -668,10 +755,10 @@ const Chat: NextPage<PageProps> = (props) => {
 				</div>
 
 				<div className={styles["message-bar"]}>
-					<input type="text" className={styles["message-input"]} />
+					<input ref={messageInputRef} type="text" className={styles["message-input"]} />
 
 					<div className={styles["message-bar-buttons"]}>
-						<img src="/assets/svg/send.svg" alt="Send" />
+						<img src="/assets/svg/send.svg" alt="Send" onClick={sendMessage} />
 					</div>
 				</div>
 			</main>

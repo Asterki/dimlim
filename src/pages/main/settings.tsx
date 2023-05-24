@@ -30,7 +30,7 @@ import {
 	SendVerifyEmailResponse,
 	RemoveAvatarResponse,
 } from "../../../shared/types/api/users";
-import { UploadAvatarRequestBody, UploadAvatarResponse } from "../../../shared/types/api/upload";
+import { UploadAvatarResponse } from "../../../shared/types/api/upload";
 import { DeleteAccountRequestBody, DeleteAccountResponse } from "../../../shared/types/api/accounts";
 import LangPack from "../../../shared/types/lang";
 

@@ -21,8 +21,10 @@ interface User {
     }>;
 
     password: string;
-    chatSecret: string;
-    encSecret: string;
+    pubKey: {
+        type: string;
+        data: ArrayBuffer
+    };
 
     tfa: {
         secret: string;

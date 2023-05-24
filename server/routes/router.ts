@@ -7,6 +7,7 @@ try {
     console.log(`${chalk.cyanBright("info ")} - Middleware loaded`);
 
     app.use("/api/accounts", require("./api/accounts"))
+    app.use("/api/crypto", require("./api/crypto"))
     app.use("/api/messages", require("./api/messages"))
     app.use("/api/upload", require("./api/upload"))
     app.use("/api/users", require("./api/users"))

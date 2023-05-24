@@ -80,7 +80,7 @@
         "@types/serve-favicon": "^2.5.3",
         "@types/speakeasy": "^2.0.7",
         "@types/uuid": "^9.0.1",
-        "@types/validator": "^13.7.14",
+        "@types/validator": "^13.7.17",
         "@typescript-eslint/eslint-plugin": "^5.38.0",
         "@typescript-eslint/parser": "^5.38.0",
         "eslint": "^8.21.0",

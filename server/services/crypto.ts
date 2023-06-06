@@ -12,4 +12,18 @@ const updatePublicKey = async (userID: string, pubKey: any) => {
     return true
 }
 
-export { updatePublicKey }
+const getUserPublicKey = async (contactID: string, userID: string): Promise<string | boolean> => {
+    const contact: (User & Document) | null = await UserModel.findOne({ userID: contactID })
+    const user: (User & Document) | null = await UserModel.findOne({ userID: userID })
+    
+    if (contact == null || user == null) return false;
+
+    const isUserInContacts = contact.contacts.find((contact) => {
+        if (user.userID == contact.userID) return true;
+    });
+    if (!isUserInContacts) return false;
+
+    return Buffer.from(new Uint8Array(contact.pubKey).buffer).toString("base64")
+}
+
+export { updatePublicKey, getUserPublicKey }

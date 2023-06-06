@@ -21,10 +21,7 @@ interface User {
     }>;
 
     password: string;
-    pubKey: {
-        type: string;
-        data: ArrayBuffer
-    };
+    pubKey: ArrayBuffer,
 
     tfa: {
         secret: string;

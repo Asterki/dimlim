@@ -17,6 +17,7 @@ import { User } from "../../../shared/types/models";
 import { GetServerSideProps, NextPage } from "next";
 
 import { AddContactRequestBody, AddContactResponse, GetInformationResponse } from "../../../shared/types/api/users";
+import { UpdatePublicKeyRequestBody } from "../../../shared/types/api/crypto";
 
 export const getServerSideProps: GetServerSideProps = async (context: any) => {
 	if (!context.req.isAuthenticated())
@@ -110,8 +111,6 @@ const Home: NextPage<PageProps> = (props) => {
 				const exportedPublicKey = await window.crypto.subtle.exportKey("spki", keyPair.publicKey);
 				const publicKeyArray = new Uint8Array(exportedPublicKey);
 
-				console.log(publicKeyArray);
-
 				// Update the public key
 				const publicKeyBase64 = Buffer.from(publicKeyArray.buffer).toString("base64");
 				await axios({
@@ -119,14 +118,14 @@ const Home: NextPage<PageProps> = (props) => {
 					url: "/api/crypto/update-public-key",
 					data: {
 						pubKey: publicKeyBase64,
-					},
+					} as UpdatePublicKeyRequestBody,
 				});
 
 				// Store the keys locally
 				await set("priv-key", privateKeyArray);
 				await set("pub-key", publicKeyArray);
 			}
-            
+
 			const contactsResponse: AxiosResponse<GetInformationResponse> = await axios({
 				method: "POST",
 				url: "/api/users/get-information",

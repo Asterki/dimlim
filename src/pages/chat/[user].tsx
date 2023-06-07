@@ -9,6 +9,7 @@ import styles from "../../styles/chat/index.module.scss";
 
 import { useSelector } from "react-redux";
 import { RootState } from "@/store";
+import { socket } from "../../socket";
 
 import { User } from "../../../shared/types/models";
 import { GetPublicKeyResponse, GetPublicKeyRequestBody } from "../../../shared/types/api/crypto";
@@ -57,7 +58,6 @@ const Chat: NextPage<PageProps> = (props) => {
 	const appState = useSelector((state: RootState) => state);
 	const lang = appState.page.lang.main.home;
 
-	const [socket, setSocket] = React.useState<Socket>(null);
 	const [contactInfo, setContactInfo] = React.useState(null);
 
 	const messageInputRef = React.useRef<HTMLInputElement>();
@@ -72,7 +72,7 @@ const Chat: NextPage<PageProps> = (props) => {
 
 			const base64Message = Buffer.from(encryptedText).toString("base64");
 
-            // TODO: Save message to the device in plain text
+			// TODO: Save message to the device in plain text
 
 			socket.emit("message", {
 				content: base64Message,
@@ -114,23 +114,6 @@ const Chat: NextPage<PageProps> = (props) => {
 	};
 
 	React.useEffect(() => {
-		const socket = io();
-		socket.on("connect", () => {
-			setSocket(socket);
-			console.log("Websocket connected!");
-
-			// Connect to the chat
-			socket.emit("join-chat", { userID: props.user.userID, contactID: props.contact.userID });
-
-			socket.on("message", async (data) => {
-				const encryptedBuffer = Uint8Array.from(Buffer.from(data.content, "base64")).buffer;
-				const decryptedText = await cryptoMethods.decrypt(encryptedBuffer);
-
-                // TODO: add a trycatch method, store message in localstorage, show message in chat
-				console.log("Decrypted: ", decryptedText);
-			});
-		});
-
 		// Retrieve the user's keys
 		(async () => {
 			const response: AxiosResponse<GetPublicKeyResponse> = await axios({
@@ -145,7 +128,7 @@ const Chat: NextPage<PageProps> = (props) => {
 			if (typeof response.data == "boolean") return (window.location.href = "/home");
 
 			const privateKeyData = await get("priv-key");
-			const publicKeyData = Buffer.from(response.data, "base64"); // TODO THIS KEY IS FROM THE OTHER USER
+			const publicKeyData = Buffer.from(response.data, "base64");
 
 			if (!privateKeyData || !publicKeyData) return (window.location.href = "/home");
 
@@ -184,6 +167,22 @@ const Chat: NextPage<PageProps> = (props) => {
 			setPubKey(importedPublicKey);
 		})();
 	}, []);
+
+    // This is added here because the private key is not quite updated after it's retrieved from the local storage
+    // So when it updates, it can set the socket's listeners
+	React.useEffect(() => {
+		if (privKey !== undefined) {
+			socket.emit("join-chat", { userID: props.user.userID, contactID: props.contact.userID });
+
+			socket.on("message", async (data) => {
+				const encryptedBuffer = Uint8Array.from(Buffer.from(data.content, "base64")).buffer;
+				const decryptedText = await cryptoMethods.decrypt(encryptedBuffer);
+
+				// TODO: add a trycatch method, store message in localstorage, show message in chat
+				console.log("Decrypted: ", decryptedText);
+			});
+		}
+	}, [privKey]);
 
 	return (
 		<div className={styles["page"]}>

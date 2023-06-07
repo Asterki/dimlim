@@ -287,4 +287,24 @@ router.post("/get-information", async (req: express.Request, res: express.Respon
     }
 })
 
+router.post("/get-contact-information", async (req: express.Request, res: express.Response) => {
+    if (!req.isAuthenticated() || req.user == undefined) return res.status(403).send("unauthorized");
+
+    try {
+        const parsedBody = z
+            .object({
+                contactID: z.string(),
+            })
+            .required()
+            .safeParse(req.body);
+
+        if (!parsedBody.success && 'error' in parsedBody) return res.status(400).send("invalid-parameters");
+
+        const result = await getContactInformation([parsedBody.data.contactID])
+        return res.send(result[0])
+    } catch (err: unknown) {
+        res.status(500)
+    }
+})
+
 module.exports = router;

@@ -1,6 +1,5 @@
 import React from "react";
 import { get, set } from "idb-keyval";
-import { Socket, io } from "socket.io-client";
 import axios, { AxiosResponse } from "axios";
 
 import Head from "next/head";
@@ -14,6 +13,7 @@ import { socket } from "../../socket";
 import { User } from "../../../shared/types/models";
 import { GetPublicKeyResponse, GetPublicKeyRequestBody } from "../../../shared/types/api/crypto";
 import { GetServerSideProps, NextPage } from "next";
+import { v4 } from "uuid";
 
 export const getServerSideProps: GetServerSideProps = async (context: any) => {
 	if (!context.req.isAuthenticated())
@@ -58,7 +58,10 @@ const Chat: NextPage<PageProps> = (props) => {
 	const appState = useSelector((state: RootState) => state);
 	const lang = appState.page.lang.main.home;
 
-	const [contactInfo, setContactInfo] = React.useState(null);
+	const [contactInfo, setContactInfo] = React.useState<{ username: string; userID: string; avatar: string }>(null);
+	const [chatMessages, setChatMessages] = React.useState<
+		Array<{ content: string; timestamp: number; authorID: string; contactID: string; messageID: string }>
+	>([]);
 
 	const messageInputRef = React.useRef<HTMLInputElement>();
 
@@ -74,12 +77,18 @@ const Chat: NextPage<PageProps> = (props) => {
 
 			// TODO: Save message to the device in plain text
 
-			socket.emit("message", {
+			const message = {
 				content: base64Message,
 				timestamp: Date.now(),
 				authorID: props.user.userID,
 				contactID: props.contact.userID,
-			});
+				messageID: v4(),
+			};
+
+			socket.emit("message", message);
+
+			message.content = messageInputRef.current!.value;
+			setChatMessages((chatMessages) => [...chatMessages, message]);
 		}
 	};
 
@@ -116,6 +125,18 @@ const Chat: NextPage<PageProps> = (props) => {
 	React.useEffect(() => {
 		// Retrieve the user's keys
 		(async () => {
+			// Get the user's profile picture
+			const contactsResponse: AxiosResponse = await axios({
+				method: "POST",
+				url: "/api/users/get-contact-information",
+				data: {
+					contactID: props.contact.userID,
+				},
+			});
+
+			if (contactsResponse.data == "unauthorized") return (window.location.href = "/login");
+			setContactInfo(contactsResponse.data);
+
 			const response: AxiosResponse<GetPublicKeyResponse> = await axios({
 				url: "/api/crypto/get-public-key",
 				method: "POST",
@@ -168,21 +189,45 @@ const Chat: NextPage<PageProps> = (props) => {
 		})();
 	}, []);
 
-    // This is added here because the private key is not quite updated after it's retrieved from the local storage
-    // So when it updates, it can set the socket's listeners
+	// This is added here because the private key is not quite updated after it's retrieved from the local storage
+	// So when it updates, it can set the socket's listeners
 	React.useEffect(() => {
 		if (privKey !== undefined) {
 			socket.emit("join-chat", { userID: props.user.userID, contactID: props.contact.userID });
 
-			socket.on("message", async (data) => {
-				const encryptedBuffer = Uint8Array.from(Buffer.from(data.content, "base64")).buffer;
-				const decryptedText = await cryptoMethods.decrypt(encryptedBuffer);
+			socket.on(
+				"message",
+				async (data: { content: string; timestamp: number; authorID: string; contactID: string; messageID: string }) => {
+					try {
+						const encryptedBuffer = Uint8Array.from(Buffer.from(data.content, "base64")).buffer;
+						const decryptedText = await cryptoMethods.decrypt(encryptedBuffer);
 
-				// TODO: add a trycatch method, store message in localstorage, show message in chat
-				console.log("Decrypted: ", decryptedText);
-			});
+						data.content = decryptedText;
+
+						// TODO: store message in localstorage
+						setChatMessages((chatMessages) => [...chatMessages, data]);
+					} catch (err) {
+						alert("There was an error receiving a message");
+						window.location.href = "/home";
+					}
+				}
+			);
 		}
 	}, [privKey]);
+
+	const messages = chatMessages.map((message) => {
+		return (
+			<div className={`${styles["message"]}`} key={message.messageID}>
+				<div
+					className={`${styles["message-content"]} ${
+						message.authorID == props.user.userID ? styles["message-sent"] : styles["message-received"]
+					}`}
+				>
+					<p>{message.content}</p>
+				</div>
+			</div>
+		);
+	});
 
 	return (
 		<div className={styles["page"]}>
@@ -196,39 +241,23 @@ const Chat: NextPage<PageProps> = (props) => {
 						<div className={styles["go-back-button"]}>
 							<img src="/assets/svg/chevron-left.svg" alt="Go back" />
 						</div>
-						<div className={styles["contact-information"]}>
-							<img
-								src={
-									props.user.avatar !== ""
-										? `/avatars/${props.user.userID}/${props.user.avatar}.jpeg`
-										: "/assets/images/default-avatar.png"
-								}
-								alt="user avatar"
-							/>
-							<p>{props.user.username}</p>
-						</div>
+						{contactInfo !== null && (
+							<div className={styles["contact-information"]}>
+								<img
+									src={
+										contactInfo.avatar !== ""
+											? `/avatars/${contactInfo.avatar}/${contactInfo.avatar}.jpeg`
+											: "/assets/images/default-avatar.png"
+									}
+									alt="user avatar"
+								/>
+								<p>{contactInfo.username}</p>
+							</div>
+						)}
 					</div>
 				</div>
 
-				<div className={styles["chat-content"]}>
-					<h1>jeiqwoej1</h1>
-					<h1>jeiqwoej</h1>
-					<h1>jeiqwoej</h1>
-					<h1>jeiqwoej</h1>
-					<h1>jeiqwoej</h1>
-					<h1>jeiqwoej</h1>
-					<h1>jeiqwoej</h1>
-					<h1>jeiqwoej</h1>
-					<h1>jeiqwoej</h1>
-					<h1>jeiqwoej</h1>
-					<h1>jeiqwoej</h1>
-					<h1>jeiqwoej</h1>
-					<h1>jeiqwoej</h1>
-					<h1>jeiqwoej</h1>
-					<h1>jeiqwoej</h1>
-					<h1>jeiqwoej</h1>
-					<h1>jeiqwoej3</h1>
-				</div>
+				<div className={styles["chat-content"]}>{messages}</div>
 
 				<div className={styles["message-bar"]}>
 					<input ref={messageInputRef} type="text" className={styles["message-input"]} />

@@ -66,11 +66,21 @@ const Chat: NextPage<PageProps> = (props) => {
 	const [privKey, setPrivKey] = React.useState<CryptoKey>();
 
 	const sendMessage = async () => {
-		const encryptedText = await cryptoMethods.encrypt(messageInputRef.current!.value);
-		console.log(encryptedText);
+		if (socket !== null) {
+			const encryptedText = await cryptoMethods.encrypt(messageInputRef.current!.value);
+			console.log(encryptedText);
 
-		const decryptedText = await cryptoMethods.decrypt(encryptedText);
-		console.log(decryptedText);
+			const base64Message = Buffer.from(encryptedText).toString("base64");
+
+            // TODO: Save message to the device in plain text
+
+			socket.emit("message", {
+				content: base64Message,
+				timestamp: Date.now(),
+				authorID: props.user.userID,
+				contactID: props.contact.userID,
+			});
+		}
 	};
 
 	const cryptoMethods = {
@@ -107,6 +117,18 @@ const Chat: NextPage<PageProps> = (props) => {
 		const socket = io();
 		socket.on("connect", () => {
 			setSocket(socket);
+			console.log("Websocket connected!");
+
+			// Connect to the chat
+			socket.emit("join-chat", { userID: props.user.userID, contactID: props.contact.userID });
+
+			socket.on("message", async (data) => {
+				const encryptedBuffer = Uint8Array.from(Buffer.from(data.content, "base64")).buffer;
+				const decryptedText = await cryptoMethods.decrypt(encryptedBuffer);
+
+                // TODO: add a trycatch method, store message in localstorage, show message in chat
+				console.log("Decrypted: ", decryptedText);
+			});
 		});
 
 		// Retrieve the user's keys
@@ -119,7 +141,7 @@ const Chat: NextPage<PageProps> = (props) => {
 				} as GetPublicKeyRequestBody,
 			});
 
-            // This means the user requested was not found, which would be a pretty weird case
+			// This means the user requested was not found, which would be a pretty weird case
 			if (typeof response.data == "boolean") return (window.location.href = "/home");
 
 			const privateKeyData = await get("priv-key");

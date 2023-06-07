@@ -12,6 +12,9 @@ try {
     app.use("/api/upload", require("./api/upload"))
     app.use("/api/users", require("./api/users"))
     console.log(`${chalk.cyanBright("info ")} - Routes loaded`);
+
+    require("./sockets")
+    console.log(`${chalk.cyanBright("info ")} - Started websocket server`);
 } catch (err: unknown) {
     console.log(`${chalk.redBright("error ")} - There was an error loading the routes`);
     console.log(err);

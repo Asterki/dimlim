@@ -37,7 +37,6 @@ DIMLIM is an end-to-end encryption chat app currently in progress. With DIMLIM, 
 - [Extra information](#extra-information)
   - [Borwsers tested in](#borwsers-tested-in)
   - [Operative systems tested in](#operative-systems-tested-in)
-- [About the author](#about-the-author)
 - [License](#license)
 
 <br>
@@ -56,7 +55,7 @@ Ensure that you have the requirements, installed dependencies, and have set the 
 <br>
 
 ## Environment Variables
-The following variables msut be stored in a file named `.env.local`
+The following variables must be stored in a file named `.env.local`, these variables are prone to change
 | Variable             | Description                                             | Required | Default              |
 |----------------------|---------------------------------------------------------|----------|----------------------|
 | MONGODB_URI          | MongoDB URI String                                      | false    | mongodb://127.0.0.1/ |
@@ -65,7 +64,6 @@ The following variables msut be stored in a file named `.env.local`
 | COOKIE_SECURE        | Wether the cookie is under HTTPS or not                 | false    | false                |
 | COOKIE_MAX_AGE       | How long the sessions will last (in milliseconds)       | false    | 604800000            |
 | SERVER_PORT          | The port the server will listen to on dev and prod mode | false    | 3030                 |
-| REACT_APP_SERVER_URL | The URL of the server, so the client can send requests  | true     | No Default           |
 
 <br>
 
@@ -116,22 +114,12 @@ If you want to edit the code, you may want to be familiar with the following pro
 # Extra information
 
 ## Borwsers tested in
-![Brave](https://img.shields.io/badge/Brave-FB542B?style=for-the-badge&logo=Brave&logoColor=white) ![Edge](https://img.shields.io/badge/Edge-0078D7?style=for-the-badge&logo=Microsoft-edge&logoColor=white) ![Firefox](https://img.shields.io/badge/Firefox-FF7139?style=for-the-badge&logo=Firefox-Browser&logoColor=white) ![Google Chrome](https://img.shields.io/badge/Google%20Chrome-4285F4?style=for-the-badge&logo=GoogleChrome&logoColor=white) ![Opera](https://img.shields.io/badge/Opera-FF1B2D?style=for-the-badge&logo=Opera&logoColor=white) ![Tor](https://img.shields.io/badge/Tor-7D4698?style=for-the-badge&logo=Tor-Browser&logoColor=white)
-
+![Brave](https://img.shields.io/badge/Brave-FB542B?style=for-the-badge&logo=Brave&logoColor=white) ![Edge](https://img.shields.io/badge/Edge-0078D7?style=for-the-badge&logo=Microsoft-edge&logoColor=white) ![Firefox](https://img.shields.io/badge/Firefox-FF7139?style=for-the-badge&logo=Firefox-Browser&logoColor=white) ![Google Chrome](https://img.shields.io/badge/Google%20Chrome-4285F4?style=for-the-badge&logo=GoogleChrome&logoColor=white) ![Opera](https://img.shields.io/badge/Opera-FF1B2D?style=for-the-badge&logo=Opera&logoColor=white) 
 <br>
 
 ## Operative systems tested in
 
-![Debian](https://img.shields.io/badge/Debian-D70A53?style=for-the-badge&logo=debian&logoColor=white) ![Windows](https://img.shields.io/badge/Windows-0078D6?style=for-the-badge&logo=windows&logoColor=white) ![Android](https://img.shields.io/badge/Android-3DDC84?style=for-the-badge&logo=android&logoColor=white) ![Kali](https://img.shields.io/badge/Kali-268BEE?style=for-the-badge&logo=kalilinux&logoColor=white) ![iOS](https://img.shields.io/badge/iOS-000000?style=for-the-badge&logo=ios&logoColor=white)
-
-<br>
-<br>
-
-# About the author
-
-Hello, I'm Fernando, Full Stack Web Developer, and this is one of my big projects, which was born by the thought of: "What if there was an app like Duolingo, but instead of teaching you languages, it helped you study"
-
-And this is how this app was born, to help me, and others, train for exams.
+![Debian](https://img.shields.io/badge/Debian-D70A53?style=for-the-badge&logo=debian&logoColor=white) ![Windows](https://img.shields.io/badge/Windows-0078D6?style=for-the-badge&logo=windows&logoColor=white) ![Android](https://img.shields.io/badge/Android-3DDC84?style=for-the-badge&logo=android&logoColor=white) ![Kali](https://img.shields.io/badge/Kali-268BEE?style=for-the-badge&logo=kalilinux&logoColor=white) 
 
 <br>
 <br>

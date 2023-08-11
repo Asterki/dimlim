@@ -26,6 +26,10 @@ DIMLIM is an end-to-end encryption chat app currently in progress. With DIMLIM, 
   - [Features](#features)
   - [In Progress](#in-progress)
   - [Table of Contents](#table-of-contents)
+- [Screenshots](#screenshots)
+  - [Chat](#chat)
+  - [Account](#account)
+  - [Settings](#settings)
 - [Setup](#setup)
   - [Requirements](#requirements)
   - [Environment Variables](#environment-variables)
@@ -41,6 +45,20 @@ DIMLIM is an end-to-end encryption chat app currently in progress. With DIMLIM, 
 
 <br>
 <br>
+
+# Screenshots
+## Chat
+![Chat](screenshots/chat.png)
+
+## Account
+![Accounts Login](screenshots/accounts-login.png)
+![Accounts Register](screenshots/accounts-register.png)
+
+## Settings
+![Settings Account](screenshots/settings-account.png)
+![Settings Message](screenshots/settings-messages.png)
+![Settings Profile](screenshots/settings-profile.png)
+![Setting Security](screenshots/settings-security.png)
 
 # Setup
 

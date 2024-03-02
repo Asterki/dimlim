@@ -14,13 +14,26 @@ const registerRoute: RouteOptions = {
             200: {
                 type: "object",
                 properties: {
-                    hello: { type: "string" },
+                    schema: { type: "object" },
                 },
             },
         },
     },
     handler: function (request, reply) {
-        reply.send({ hello: "world" });
+        reply.send({
+            querystring: {
+                name: { type: "string" },
+                excitement: { type: "integer" },
+            },
+            response: {
+                200: {
+                    type: "object",
+                    properties: {
+                        schema: { type: "object" },
+                    },
+                },
+            },
+        });
     },
 };
 

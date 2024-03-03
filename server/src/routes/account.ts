@@ -1,10 +1,8 @@
 import { RouteOptions } from "fastify";
 
-import server from "..";
-
 const registerRoute: RouteOptions = {
     method: "GET",
-    url: "/",
+    url: "/water",
     schema: {
         querystring: {
             name: { type: "string" },
@@ -14,27 +12,15 @@ const registerRoute: RouteOptions = {
             200: {
                 type: "object",
                 properties: {
-                    schema: { type: "object" },
+                    hello: { type: "string" },
                 },
             },
         },
     },
     handler: function (request, reply) {
-        reply.send({
-            querystring: {
-                name: { type: "string" },
-                excitement: { type: "integer" },
-            },
-            response: {
-                200: {
-                    type: "object",
-                    properties: {
-                        schema: { type: "object" },
-                    },
-                },
-            },
-        });
+        reply.send({ hello: "world" });
     },
 };
 
-server.registerRoute(registerRoute);
+const routes = [registerRoute];
+export default routes;

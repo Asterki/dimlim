@@ -1,39 +1,8 @@
-import Fastify, { FastifyInstance, RouteOptions } from "fastify";
-import cors from "@fastify/cors";
+import Server from "./controllers/server";
 
-class Server {
-    fastify: FastifyInstance;
-    port: number;
+const dev = process.env.NODE_ENV !== "production";
+const server = new Server(dev, 3000);
 
-    constructor(port: number) {
-        this.fastify = Fastify({
-            logger: true,
-        });
-        this.port = port;
-    }
-
-    getServer() {
-        return this.fastify;
-    }
-
-    async start() {
-        await this.fastify.register(cors, {
-            // put your options here
-        });
-
-        this.fastify.get("/", function (request, reply) {
-            reply.send({ hello: "world" });
-        });
-
-        this.fastify.listen(this.port);
-    }
-
-    registerRoute(route: RouteOptions) {
-        this.fastify.route(route);
-    }
-}
-
-const server = new Server(3000);
 server.start();
 
 export default server;

@@ -5,6 +5,7 @@ class MongoDBClient {
 
     constructor(connectionString: string) {
         this.connectionString = connectionString
+        this.connect()
     }
 
     private onError(error: Error) {
@@ -16,7 +17,7 @@ class MongoDBClient {
         console.log(`MongoDB database connected`);
     }
 
-    private connect() {
+    connect() {
         mongoose.set("strictQuery", true);
         mongoose.connect(
             this.connectionString,

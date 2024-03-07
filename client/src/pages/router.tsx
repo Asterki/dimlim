@@ -1,11 +1,12 @@
 import { createBrowserRouter } from "react-router-dom";
 
-import App from "./App";
+// MainIndex
+import MainIndex from "./main/index";
 
 const router = createBrowserRouter([
     {
         path: "/",
-        element: <App />,
+        element: <MainIndex />,
     },
 ]);
 

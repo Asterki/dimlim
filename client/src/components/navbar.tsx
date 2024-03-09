@@ -6,7 +6,7 @@ interface ComponentProps {
 
 const NavbarComponent: React.FC<ComponentProps> = (props) => {
     return (
-        <div className="w-full flex items-center justify-between p-4">
+        <div className="w-full flex items-center justify-between p-4 h-16 bg-gray-700 shadow-md z-10 absolute">
             <h1 className="text-2xl text-white font-bold">DIMLIM</h1>
             {props.user && (
                 <div>

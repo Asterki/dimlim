@@ -16,8 +16,8 @@ const IndexPage = () => {
                     <p className="m-0">Open Source End-To-End Messaging Application</p>
 
                     <div className="w-full mt-2 flex items-center justify-center flex-col md:flex-row">
-                        <button className="bg-blue-400 opacity-95 p-4 rounded-md shadow-md w-8/12 my-2 transition-all hover:brightness-110 md:w-3/12 md:mx-2 md:my-0">Register</button>
-                        <button className="bg-neutral-400 opacity-95 p-4 rounded-md shadow-md w-8/12 my-2 transition-all hover:brightness-110 md:w-3/12 md:mx-2 md:my-0">Login</button>
+                        <a href="/login" className="text-center text-xl bg-neutral-400 opacity-95 p-4 rounded-md shadow-md w-8/12 my-2 transition-all hover:brightness-110 md:w-3/12 md:mx-2 md:my-0">Login</a>
+                        <a href="/register" className="text-center text-xl bg-blue-400 opacity-95 p-4 rounded-md shadow-md w-8/12 my-2 transition-all hover:brightness-110 md:w-3/12 md:mx-2 md:my-0">Register</a>
                     </div>
                 </div>
             </section>

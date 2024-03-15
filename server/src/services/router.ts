@@ -1,4 +1,4 @@
-import { RouteOptions } from "fastify";
+import { RouteOptions, FastifyInstance } from "fastify";
 
 import accountRouter from "../routes/account";
 
@@ -17,9 +17,9 @@ class Router {
         return [...this.routes.accounts];
     };
 
-    public registerRoutes = (routes: RouteOptions[]) => {
-        for (const route of routes) {
-            this.routes.accounts.push(route);
+    public registerRoutes = (server: FastifyInstance) => {
+        for (const route of this.getAllRoutes()) {
+            server.route(route);
         }
     }
 }

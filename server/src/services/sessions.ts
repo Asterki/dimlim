@@ -32,6 +32,11 @@ class SessionController {
         return this.fastifyPassport;
     }
 
+    public loadToServer(server: FastifyInstance) {
+        this.loadMiddleware(server);
+        this.addStrategies();
+    }
+
     public addStrategies() {
         this.fastifyPassport.use("local", this.authenticationStrategies.local);
     }

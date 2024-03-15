@@ -1,6 +1,6 @@
 import { RouteOptions } from "fastify";
 
-import accountRouter from "./account";
+import accountRouter from "../routes/account";
 
 class Router {
     routes: {
@@ -16,6 +16,12 @@ class Router {
     public getAllRoutes = (): RouteOptions[] => {
         return [...this.routes.accounts];
     };
+
+    public registerRoutes = (routes: RouteOptions[]) => {
+        for (const route of routes) {
+            this.routes.accounts.push(route);
+        }
+    }
 }
 
 export default Router;

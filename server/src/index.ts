@@ -1,3 +1,5 @@
+import 'dotenv/config'
+
 import Server from "./controllers/server";
 import MongoDBClient from "./controllers/mongodb"
 

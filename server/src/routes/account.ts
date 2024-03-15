@@ -12,7 +12,7 @@ const registerRoute: RouteOptions = {
             200: {
                 type: "object",
                 properties: {
-                    hello: { type: "string" },
+                    status: { type: "string" },
                 },
             },
         },

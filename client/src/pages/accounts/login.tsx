@@ -10,12 +10,12 @@ const AccountLogin = () => {
 
                     <div className="my-2">
                         <label>Email</label>
-                        <input type="email" className="w-full p-2 bg-gray-800 border-gray-600 outline-none rounded-md" />
+                        <input type="email" className="w-full p-2 bg-gray-800 border-2 border-gray-800 outline-none rounded-md transition-all focus:border-blue-400" />
                     </div>
 
                     <div className="my-2">
                         <label>Password</label>
-                        <input type="password" className="w-full p-2 bg-gray-800 border-gray-600 outline-none rounded-md" />
+                        <input type="password" className="w-full p-2 bg-gray-800 border-2 border-gray-800 outline-none rounded-md transition-all focus:border-blue-400" />
                     </div>
 
                     <div className="mt-4">

@@ -23,6 +23,7 @@
     "speakeasy": "^2.0.0"
   },
   "devDependencies": {
+    "@types/bcrypt": "^5.0.2",
     "@types/node": "^20.11.24",
     "@types/passport-local": "^1.0.38",
     "@types/speakeasy": "^2.0.10",

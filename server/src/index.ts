@@ -24,6 +24,7 @@ class Server {
     router: Router = new Router();
 
     constructor(dev: boolean, port: number) {
+        this.checkEnv();
         this.fastify = Fastify({
             logger: dev,
         });
@@ -42,6 +43,15 @@ class Server {
         this.fastify.listen({
             port: this.port,
         });
+    }
+
+    private checkEnv() {
+        const requiredKeys = ["MONGODB_URI", "SESSION_SECRET"];
+        for (const key of requiredKeys) {
+            if (!process.env[key]) {
+                throw new Error(`Missing environment variable: ${key}`);
+            }
+        }
     }
 
     private loadMiddlewares() {

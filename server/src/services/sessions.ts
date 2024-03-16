@@ -75,7 +75,7 @@ class SessionController {
     public loadMiddleware(server: FastifyInstance) {
         server.register(fastifyCookie);
         server.register(fastifySession, {
-            secret: "secret with minimum length of 32 characters",
+            secret: process.env.SESSION_SECRET as string,
         });
 
         server.register(this.fastifyPassport.initialize());

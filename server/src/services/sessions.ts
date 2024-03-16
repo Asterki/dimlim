@@ -1,12 +1,16 @@
 import { FastifyInstance } from "fastify";
 import { Authenticator } from "@fastify/passport";
+import { Strategy as LocalStrategy } from "passport-local";
 
 import fastifyCookie from "@fastify/cookie";
 import fastifySession from "@fastify/session";
 
-import { Strategy as LocalStrategy } from "passport-local";
+import bcrypt from "bcrypt";
+import speakeasy from "speakeasy";
 
 import UserModel from "../models/users";
+
+import { User } from "../../../shared/types/models"
 
 class SessionController {
     authenticationStrategies: {
@@ -20,11 +24,11 @@ class SessionController {
             local: new LocalStrategy(
                 {
                     usernameField: "email",
-                    passwordField: "password",
+                    passwordField: "passwd",
                     passReqToCallback: true,
-                    session: true,
+                    session: false,
                 },
-                async (req: express.Request, _email: string, _password: string, done) => {
+                async (req: any, _email: string, _password: string, done) => {
                     try {
                         const user: (User & Document) | null = await UserModel.findOne({
                             $or: [{ "email.value": req.body.email }, { username: req.body.email }],

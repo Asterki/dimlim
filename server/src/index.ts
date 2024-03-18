@@ -35,7 +35,7 @@ class Server {
         return this.fastify;
     }
 
-    async start() {
+    async startServer() {
         this.loadMiddlewares();
         this.sessions.loadToServer(this.fastify);
         this.router.registerRoutes(this.fastify);
@@ -61,6 +61,6 @@ class Server {
 
 const dev = process.env.NODE_ENV !== "production";
 const server = new Server(dev, 3000);
-server.start();
+server.startServer();
 
 export default Server;

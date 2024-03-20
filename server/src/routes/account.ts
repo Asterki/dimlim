@@ -1,4 +1,8 @@
+import bcrypt from "bcrypt";
+import { v4 as uuidv4 } from "uuid";
+
 import validator from "validator";
+import { z } from "zod";
 
 import { RouteOptions } from "fastify";
 
@@ -26,38 +30,46 @@ const registerRoute: RouteOptions = {
         },
     },
     handler: async (request, reply) => {
-        const { email, password } = request.body as {
-            email: string;
-            password: string;
-        };
+        const parsedBody = z
+            .object({
+                email: z.string().refine((email: string) => validator.isEmail(email)),
+                username: z.string().max(24).min(2),
+                password: z.string().max(128).min(6),
+            })
+            .safeParse(request.body);
 
-        if (!validator.isEmail(email)) {
-            reply.code(400).send({
-                status: "Invalid email",
-            });
-            return;
-        }
+        if (parsedBody.success === false) return reply.code(400).send({ message: "bad-request" });
+        const { email, username, password } = parsedBody.data;
 
-        if (password.length < 8) {
-            reply.code(400).send({
-                status: "Password too short",
+        // Check if the user exists
+        const userExists = await UserModel.findOne({ $or: [{ "email.value": email }, { username: username }] });
+        if (userExists)
+            return reply.code(400).send({
+                status: "user-exists",
             });
-            return;
-        }
+
+        // Create the user object
+        let userID = uuidv4();
+        const hashedPassword = await bcrypt.hash(password, 10);
 
         const user = new UserModel({
-            email,
-            password,
+            userID: userID,
+            created: Date.now(),
+            username: username,
+            email: {
+                value: email,
+            },
+            password: hashedPassword,
         });
 
         try {
             await user.save();
             reply.code(200).send({
-                status: "User registered",
+                status: "user-registered",
             });
         } catch (error) {
             reply.code(400).send({
-                status: "User already exists",
+                status: "user-exists",
             });
         }
     },

@@ -38,11 +38,11 @@ const loginRoute: RouteOptions = {
             if (err) return reply.status(500).send({ status: "internal-error" } as ResponseData);
             if (!user) return reply.status(400).send({ status: (info as any).message } as ResponseData);
 
-            request.logIn(user, { session: true });
-            reply.send({ status: "success" } as ResponseData);
+            return request.logIn(user, { session: true });
+            // return reply.send({ status: "success" } as ResponseData);
         });
         // @ts-ignore
-        await auth(request, reply);
+        return await auth(request, reply);
     },
 };
 

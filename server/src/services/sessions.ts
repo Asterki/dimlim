@@ -36,7 +36,6 @@ class SessionController {
                 },
                 async (req: any, _email: string, _password: string, done) => {
                     try {
-                        console.log(req.body);
                         const user: (User & Document) | null = await UserModel.findOne({
                             $or: [{ "email.value": req.body.emailOrUsername }, { username: req.body.emailOrUsername }],
                         });
@@ -60,11 +59,21 @@ class SessionController {
 
                         return done(null, user);
                     } catch (err: unknown) {
+                        console.log(err);
                         return done(err);
                     }
                 }
             ),
         };
+
+        this.fastifyPassport.registerUserSerializer(async (user: any, request) => {
+            console.log(user);
+            return user.userID;
+        });
+
+        this.fastifyPassport.registerUserDeserializer(async (id, request) => {
+            return await UserModel.findOne({ userID: id });
+        });
     }
 
     public getPassport() {
@@ -84,6 +93,13 @@ class SessionController {
         server.register(fastifyCookie);
         server.register(fastifySession, {
             secret: process.env.SESSION_SECRET as string,
+            cookieName: "session",
+            cookie: {
+                secure: false,
+                maxAge: 1000 * 60 * 60 * 24 * 7,
+                httpOnly: true,
+                path: "/",
+            },
         });
 
         server.register(this.fastifyPassport.initialize());

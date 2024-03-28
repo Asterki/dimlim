@@ -6,9 +6,9 @@ const AccountRegister = () => {
     const register = () => {
         axios
             .post("http://localhost:3000/api/accounts/register", {
-                username: "aster",
-                email: "asterki.dev@proton.me",
-                password: "NO0o=r]@v6~b`vO16>A:dLnQE1n-,Mm@",
+                username: "asterki2",
+                email: "asterki2.dev@proton.me",
+                password: "",
                 // repeatPassword: "password",
             })
             .then((res) => {

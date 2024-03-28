@@ -3,9 +3,10 @@ import { RouteOptions, FastifyInstance } from "fastify";
 // Account routes
 import registerRoute from "../routes/accounts/register";
 import loginRoute from "../routes/accounts/login";
+import meRoute from "../routes/accounts/me";
 
 // Routers
-const accountRouter = [registerRoute, loginRoute] as unknown as [RouteOptions];
+const accountRouter = [registerRoute, loginRoute, meRoute] as unknown as [RouteOptions];
 
 class Router {
     private instance: Router | null = null;

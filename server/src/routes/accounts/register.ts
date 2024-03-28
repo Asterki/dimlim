@@ -49,7 +49,7 @@ const registerRoute: RouteOptions = {
         // Check if the user exists
         const userExists = await UserModel.findOne({ $or: [{ "email.value": email }, { username: username }] });
         if (userExists)
-            return reply.code(400).send({
+            return reply.code(200).send({
                 status: "user-exists",
             } as ResponseData);
 
@@ -73,7 +73,7 @@ const registerRoute: RouteOptions = {
                 status: "success",
             } as ResponseData);
         } catch (error) {
-            reply.code(400).send({
+            reply.code(200).send({
                 status: "user-exists",
             } as ResponseData);
         }

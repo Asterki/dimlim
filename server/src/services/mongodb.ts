@@ -4,8 +4,8 @@ class MongoDBClient {
     connectionString: string;
 
     constructor(connectionString: string) {
-        this.connectionString = connectionString
-        this.connect()
+        this.connectionString = connectionString;
+        this.connect();
     }
 
     private onError(error: Error) {
@@ -19,13 +19,10 @@ class MongoDBClient {
 
     connect() {
         mongoose.set("strictQuery", true);
-        mongoose.connect(
-            this.connectionString,
-            {
-                useUnifiedTopology: true,
-                useNewUrlParser: true,
-            } as mongoose.ConnectOptions
-        );
+        mongoose.connect(this.connectionString, {
+            useUnifiedTopology: true,
+            useNewUrlParser: true,
+        } as mongoose.ConnectOptions);
 
         const mongooseClient = mongoose.connection;
         mongooseClient.once("open", this.onConnect);

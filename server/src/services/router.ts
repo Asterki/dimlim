@@ -8,6 +8,7 @@ import loginRoute from "../routes/accounts/login";
 const accountRouter = [registerRoute, loginRoute] as unknown as [RouteOptions];
 
 class Router {
+    private instance: Router | null = null;
     routes: {
         accounts: [RouteOptions];
     };
@@ -18,6 +19,11 @@ class Router {
         };
     }
 
+    getInstance() {
+        if (!this.instance) this.instance = new Router();
+        return this.instance;
+    }
+
     public getAllRoutes = (): RouteOptions[] => {
         return [...this.routes.accounts];
     };
@@ -26,7 +32,7 @@ class Router {
         for (const route of this.getAllRoutes()) {
             server.route(route);
         }
-    }
+    };
 }
 
 export default Router;

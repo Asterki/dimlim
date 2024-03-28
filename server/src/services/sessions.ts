@@ -10,13 +10,19 @@ import speakeasy from "speakeasy";
 
 import UserModel from "../models/users";
 
-import { User } from "../../../shared/types/models"
+import { User } from "../../../shared/types/models";
 
 class SessionController {
+    private instance: SessionController | null = null;
     authenticationStrategies: {
         local: LocalStrategy;
     };
     fastifyPassport: Authenticator;
+
+    public getInstance() {
+        if (!this.instance) this.instance = new SessionController();
+        return this.instance;
+    }
 
     constructor() {
         this.fastifyPassport = new Authenticator();

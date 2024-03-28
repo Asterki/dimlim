@@ -8,7 +8,7 @@ const AccountRegister = () => {
             .post("http://localhost:3000/api/accounts/register", {
                 username: "aster",
                 email: "asterki.dev@proton.me",
-                
+                password: "NO0o=r]@v6~b`vO16>A:dLnQE1n-,Mm@",
                 // repeatPassword: "password",
             })
             .then((res) => {

@@ -12,6 +12,8 @@ import "dotenv/config";
 import { Connection } from "mongoose";
 
 class Server {
+    private static instance: Server | null = null;
+
     // Server related
     fastify: FastifyInstance;
     port: number;
@@ -20,8 +22,8 @@ class Server {
     mongooseClient: Connection = new MongoDBClient(
         process.env.MONGODB_URI as string
     ).getClient();
-    sessions: SessionController = new SessionController();
-    router: Router = new Router();
+    sessions: SessionController =  SessionController.prototype.getInstance();
+    router: Router = Router.prototype.getInstance();
 
     constructor(dev: boolean, port: number) {
         this.checkEnv();
@@ -31,8 +33,9 @@ class Server {
         this.port = port;
     }
 
-    public getServer() {
-        return this.fastify;
+    public static getInstance() {
+        if (!this.instance) this.instance = new Server(false, 3000);
+        return this.instance;
     }
 
     async startServer() {

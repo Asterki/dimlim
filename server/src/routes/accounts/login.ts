@@ -1,22 +1,19 @@
 import bcrypt from "bcrypt";
-import { v4 as uuidv4 } from "uuid";
-
-import validator from "validator";
 import { z } from "zod";
+
+import Sessions from "../../services/sessions";
 
 import { RouteOptions } from "fastify";
 
 import UserModel from "../../models/users";
 
-interface RequestBody {
-    email: string;
-    username: string;
-    password: string;
-}
+import {
+    LoginRequestBody as RequestBody,
+    LoginResponseData as ResponseData,
+} from "../../../../shared/types/api/accounts";
 
-interface ResponseData {
-    status: "success" | "invalid-parameters" | "user-exists";
-}
+const passport = Sessions.prototype.getInstance().getPassport()
+console.log(passport)
 
 const loginRoute: RouteOptions = {
     method: "POST",
@@ -24,8 +21,9 @@ const loginRoute: RouteOptions = {
     preHandler: async (request, reply, done) => {
         const parsedBody = z
             .object({
-                email: z.string().email(),
+                emailOrUsername: z.string().email(),
                 password: z.string().min(8),
+                tfaCode: z.string().optional(),
             })
             .safeParse(request.body);
 
@@ -37,24 +35,33 @@ const loginRoute: RouteOptions = {
         done();
     },
     handler: async (request, reply) => {
-        const { email, password } = request.body as RequestBody;
+        const { emailOrUsername, password } = request.body as RequestBody;
 
-        // // Check if the user exists
-        // const user = await UserModel.findOne({ "email.value": email });
-        // if (!user)
-        //     return reply.code(400).send({
-        //         status: "invalid-credentials",
-        //     } as ResponseData);
+        // passport.authenticate("local", (err, user, info) => {
+        //     if (err) {
+        //         return reply.code(500).json({
+        //             ,
+        //         } as ResponseData);
+        //     }
 
-        // // Verify password
-        // if (!bcrypt.compareSync(password, user.password))
-        //     return reply.code(400).send({
-        //         status: "invalid-credentials",
-        //     } as ResponseData);
+        //     if (!user) {
+        //         return reply.code(401).send({
+        //             status: "invalid-credentials",
+        //         } as ResponseData);
+        //     }
 
-        reply.code(200).send({
-            status: "success",
-        } as ResponseData);
+        //     request.logIn(user, (err) => {
+        //         if (err) {
+        //             return reply.code(500).send({
+        //                 status: "error",
+        //             } as ResponseData);
+        //         }
+
+        //         return reply.send({
+        //             status: "success",
+        //         } as ResponseData);
+        //     });
+        // })
     },
 };
 

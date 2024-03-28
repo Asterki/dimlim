@@ -29,32 +29,34 @@ class SessionController {
         this.authenticationStrategies = {
             local: new LocalStrategy(
                 {
-                    usernameField: "email",
-                    passwordField: "passwd",
+                    usernameField: "emailOrUsername",
+                    passwordField: "password",
                     passReqToCallback: true,
                     session: false,
                 },
                 async (req: any, _email: string, _password: string, done) => {
                     try {
+                        console.log(req.body);
                         const user: (User & Document) | null = await UserModel.findOne({
-                            $or: [{ "email.value": req.body.email }, { username: req.body.email }],
+                            $or: [{ "email.value": req.body.emailOrUsername }, { username: req.body.emailOrUsername }],
                         });
                         if (!user) return done(null, false, { message: "invalid-credentials" });
 
                         // Verify password and TFA code
                         if (!bcrypt.compareSync(req.body.password, user.password))
                             return done(null, false, { message: "invalid-credentials" });
-                        if (user.tfa.secret !== "") {
-                            if (!req.body.tfaCode) return done(null, false, { message: "requires-tfa" });
 
-                            const verified = speakeasy.totp.verify({
-                                secret: user.tfa.secret,
-                                encoding: "base32",
-                                token: req.body.tfaCode,
-                            });
+                        // if (user.tfa.secret !== "") {
+                        //     if (!req.body.tfaCode) return done(null, false, { message: "requires-tfa" });
 
-                            if (verified == false) return done(null, false, { message: "invalid-tfa-code" });
-                        }
+                        //     const verified = speakeasy.totp.verify({
+                        //         secret: user.tfa.secret,
+                        //         encoding: "base32",
+                        //         token: req.body.tfaCode,
+                        //     });
+
+                        //     if (verified == false) return done(null, false, { message: "invalid-tfa-code" });
+                        // }
 
                         return done(null, user);
                     } catch (err: unknown) {

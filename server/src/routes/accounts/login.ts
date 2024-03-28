@@ -12,8 +12,7 @@ import {
     LoginResponseData as ResponseData,
 } from "../../../../shared/types/api/accounts";
 
-const passport = Sessions.prototype.getInstance().getPassport()
-console.log(passport)
+const passport = Sessions.prototype.getInstance().getPassport();
 
 const loginRoute: RouteOptions = {
     method: "POST",
@@ -21,8 +20,8 @@ const loginRoute: RouteOptions = {
     preHandler: async (request, reply, done) => {
         const parsedBody = z
             .object({
-                emailOrUsername: z.string().email(),
-                password: z.string().min(8),
+                emailOrUsername: z.string(),
+                password: z.string(),
                 tfaCode: z.string().optional(),
             })
             .safeParse(request.body);
@@ -35,33 +34,15 @@ const loginRoute: RouteOptions = {
         done();
     },
     handler: async (request, reply) => {
-        const { emailOrUsername, password } = request.body as RequestBody;
+        const auth = passport.authenticate("local", async (request, reply, err, user, info, status) => {
+            if (err) return reply.status(500).send({ status: "internal-error" } as ResponseData);
+            if (!user) return reply.status(400).send({ status: (info as any).message } as ResponseData);
 
-        // passport.authenticate("local", (err, user, info) => {
-        //     if (err) {
-        //         return reply.code(500).json({
-        //             ,
-        //         } as ResponseData);
-        //     }
-
-        //     if (!user) {
-        //         return reply.code(401).send({
-        //             status: "invalid-credentials",
-        //         } as ResponseData);
-        //     }
-
-        //     request.logIn(user, (err) => {
-        //         if (err) {
-        //             return reply.code(500).send({
-        //                 status: "error",
-        //             } as ResponseData);
-        //         }
-
-        //         return reply.send({
-        //             status: "success",
-        //         } as ResponseData);
-        //     });
-        // })
+            request.logIn(user, { session: true });
+            reply.send({ status: "success" } as ResponseData);
+        });
+        // @ts-ignore
+        await auth(request, reply);
     },
 };
 

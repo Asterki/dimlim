@@ -55,7 +55,9 @@ class Server {
     }
 
     private loadMiddlewares() {
-        this.fastify.register(cors, {});
+        this.fastify.register(cors, {
+            origin: "*",
+        });
     }
 }
 

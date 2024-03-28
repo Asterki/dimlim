@@ -8,45 +8,57 @@ import { RouteOptions } from "fastify";
 
 import UserModel from "../models/users";
 
+interface RequestBody {
+    email: string;
+    username: string;
+    password: string;
+}
+
+interface ResponseData {
+    status: "success" | "invalid-parameters" | "user-exists"
+}
+
 const registerRoute: RouteOptions = {
     method: "POST",
     url: "/api/accounts/register",
-    schema: {
-        body: {
-            type: "object",
-            required: ["email", "password"],
-            properties: {
-                email: { type: "string" },
-                password: { type: "string" },
-            },
-        },
-        response: {
-            200: {
-                type: "object",
-                properties: {
-                    status: { type: "string" },
-                },
-            },
-        },
+    preHandler: async (request, reply, done) => {
+        const parsedBody = z.object({
+            email: z
+                .string()
+                .email()
+                .refine((email) => {
+                    return !validator.isEmail(email);
+                }),
+            username: z
+                .string()
+                .min(3)
+                .refine((username) => {
+                    return !validator.isAlphanumeric(username, "en-US", { ignore: "_." });
+                }),
+            password: z
+                .string()
+                .min(8)
+                .refine((pass) => {
+                    return validator.isStrongPassword(pass);
+                }),
+        });
+
+        if (!parsedBody.safeParse(request.body).success)
+            return reply.code(400).send({
+                status: "invalid-parameters",
+            } as ResponseData);
+
+        done();
     },
     handler: async (request, reply) => {
-        const parsedBody = z
-            .object({
-                email: z.string().refine((email: string) => validator.isEmail(email)),
-                username: z.string().max(24).min(2),
-                password: z.string().max(128).min(6),
-            })
-            .safeParse(request.body);
-
-        if (parsedBody.success === false) return reply.code(400).send({ message: "bad-request" });
-        const { email, username, password } = parsedBody.data;
+        const { email, username, password } = request.body as RequestBody;
 
         // Check if the user exists
         const userExists = await UserModel.findOne({ $or: [{ "email.value": email }, { username: username }] });
         if (userExists)
             return reply.code(400).send({
                 status: "user-exists",
-            });
+            } as ResponseData);
 
         // Create the user object
         let userID = uuidv4();
@@ -65,12 +77,12 @@ const registerRoute: RouteOptions = {
         try {
             await user.save();
             reply.code(200).send({
-                status: "user-registered",
-            });
+                status: "success",
+            } as ResponseData);
         } catch (error) {
             reply.code(400).send({
                 status: "user-exists",
-            });
+            } as ResponseData);
         }
     },
 };

@@ -25,15 +25,13 @@ const registerRoute: RouteOptions = {
         const parsedBody = z.object({
             email: z
                 .string()
-                .email()
-                .refine((email) => {
-                    return !validator.isEmail(email);
-                }),
+                .email(),
             username: z
                 .string()
                 .min(3)
+                .max(24)
                 .refine((username) => {
-                    return !validator.isAlphanumeric(username, "en-US", { ignore: "_." });
+                    return validator.isAlphanumeric(username, "en-US", { ignore: "_." });
                 }),
             password: z
                 .string()
@@ -41,9 +39,9 @@ const registerRoute: RouteOptions = {
                 .refine((pass) => {
                     return validator.isStrongPassword(pass);
                 }),
-        });
+        }).safeParse(request.body);
 
-        if (!parsedBody.safeParse(request.body).success)
+        if (!parsedBody.success)
             return reply.code(400).send({
                 status: "invalid-parameters",
             } as ResponseData);

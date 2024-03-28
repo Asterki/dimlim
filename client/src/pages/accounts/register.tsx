@@ -6,10 +6,10 @@ const AccountRegister = () => {
     const register = () => {
         axios
             .post("http://localhost:3000/api/accounts/register", {
-                name: "Test",
-                email: "",
-                password: "password",
-                repeatPassword: "password",
+                username: "aster",
+                email: "asterki.dev@proton.me",
+                password: "NO0o=r]@v6~b`vO16>A:dLnQE1n-,Mm@",
+                // repeatPassword: "password",
             })
             .then((res) => {
                 console.log(res.data);
@@ -73,6 +73,12 @@ const AccountRegister = () => {
                         </a>
                     </div>
                 </form>
+                <button
+                            className="w-full p-2 bg-blue-500 rounded-md"
+                            onClick={register}
+                        >
+                            Register
+                        </button>
             </div>
         </div>
     );

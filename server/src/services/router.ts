@@ -1,6 +1,11 @@
 import { RouteOptions, FastifyInstance } from "fastify";
 
-import accountRouter from "../routes/account";
+// Account routes
+import registerRoute from "../routes/accounts/register";
+import loginRoute from "../routes/accounts/login";
+
+// Routers
+const accountRouter = [registerRoute, loginRoute] as unknown as [RouteOptions];
 
 class Router {
     routes: {
@@ -9,7 +14,7 @@ class Router {
 
     constructor() {
         this.routes = {
-            accounts: accountRouter as [RouteOptions],
+            accounts: accountRouter,
         };
     }
 

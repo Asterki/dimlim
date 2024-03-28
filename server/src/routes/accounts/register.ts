@@ -6,40 +6,35 @@ import { z } from "zod";
 
 import { RouteOptions } from "fastify";
 
-import UserModel from "../models/users";
+import UserModel from "../../models/users";
 
-interface RequestBody {
-    email: string;
-    username: string;
-    password: string;
-}
-
-interface ResponseData {
-    status: "success" | "invalid-parameters" | "user-exists"
-}
+import {
+    RegisterRequestBody as RequestBody,
+    RegisterResponseData as ResponseData,
+} from "../../../../shared/types/api/accounts";
 
 const registerRoute: RouteOptions = {
     method: "POST",
     url: "/api/accounts/register",
     preHandler: async (request, reply, done) => {
-        const parsedBody = z.object({
-            email: z
-                .string()
-                .email(),
-            username: z
-                .string()
-                .min(3)
-                .max(24)
-                .refine((username) => {
-                    return validator.isAlphanumeric(username, "en-US", { ignore: "_." });
-                }),
-            password: z
-                .string()
-                .min(8)
-                .refine((pass) => {
-                    return validator.isStrongPassword(pass);
-                }),
-        }).safeParse(request.body);
+        const parsedBody = z
+            .object({
+                email: z.string().email(),
+                username: z
+                    .string()
+                    .min(3)
+                    .max(24)
+                    .refine((username) => {
+                        return validator.isAlphanumeric(username, "en-US", { ignore: "_." });
+                    }),
+                password: z
+                    .string()
+                    .min(8)
+                    .refine((pass) => {
+                        return validator.isStrongPassword(pass);
+                    }),
+            })
+            .safeParse(request.body);
 
         if (!parsedBody.success)
             return reply.code(400).send({
@@ -85,5 +80,4 @@ const registerRoute: RouteOptions = {
     },
 };
 
-const routes = [registerRoute];
-export default routes;
+export default registerRoute;

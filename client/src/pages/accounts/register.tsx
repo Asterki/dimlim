@@ -3,18 +3,6 @@ import axios from "axios";
 import NavbarComponent from "../../components/navbar";
 
 const AccountRegister = () => {
-    const register = () => {
-        axios
-            .post("http://localhost:3000/api/accounts/register", {
-                username: "asterki2",
-                email: "asterki2.dev@proton.me",
-                password: "",
-                // repeatPassword: "password",
-            })
-            .then((res) => {
-                console.log(res.data);
-            });
-    };
 
     return (
         <div className="bg-gray-800 min-h-screen text-white">

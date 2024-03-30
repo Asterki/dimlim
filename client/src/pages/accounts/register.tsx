@@ -51,7 +51,7 @@ const AccountRegister = () => {
                 .then((res) => {
                     if (res.status === 200) {
                         alert("Account created successfully");
-                        window.location.href = "/login";
+                        window.location.href = "/";
                     }
                 });
         } catch (err) {

@@ -69,6 +69,8 @@ const registerRoute: RouteOptions = {
 
         try {
             await user.save();
+
+            request.logIn(user, { session: true });
             reply.code(200).send({
                 status: "success",
             } as ResponseData);

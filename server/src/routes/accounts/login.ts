@@ -4,9 +4,6 @@ import { z } from "zod";
 import Sessions from "../../services/sessions";
 
 import { RouteOptions } from "fastify";
-
-import UserModel from "../../models/users";
-
 import {
     LoginRequestBody as RequestBody,
     LoginResponseData as ResponseData,

@@ -1,22 +1,37 @@
+import * as React from 'react';
 import axios from "axios";
 
 import NavbarComponent from "../../components/navbar";
 
+import { LoginResponseData } from "../../../../shared/types/api/accounts"
+
 const AccountLogin = () => {
+    const usernameEmailRef = React.useRef<HTMLInputElement>(null);
+    const passwordRef = React.useRef<HTMLInputElement>(null);
+
     const login = () => {
         axios
-            .post("http://localhost:3000/api/accounts/login", {
-                emailOrUsername: "asterki2",
-                tfaCode: "asterki2.dev@proton.me",
-                password: "",
-                // repeatPassword: "password",
+            .post<LoginResponseData>("http://localhost:3000/api/accounts/login", {
+                emailOrUsername: usernameEmailRef.current!.value,
+                password: passwordRef.current!.value,
+                tfaCode: "",
             })
             .then((res) => {
-                console.log(res.data);
+                if (res.data.status === "success") {
+                    alert("Logged in successfully");
+                    window.location.href = "/";
+                } else {
+                    alert("An error occurred");
+                }
             });
 
+        // TODO: Set global user state
         axios
-            .post("http://localhost:3000/api/accounts/me", {}, { withCredentials: true,  })
+            .post(
+                "http://localhost:3000/api/accounts/me",
+                {},
+                { withCredentials: true }
+            )
             .then((res) => {
                 console.log(res.data);
             });
@@ -36,6 +51,7 @@ const AccountLogin = () => {
                         <input
                             type="email"
                             placeholder="email@example.com"
+                            ref={usernameEmailRef}
                             className="w-full p-2 bg-gray-800 border-2 border-gray-800 outline-none rounded-md transition-all focus:border-blue-400"
                         />
                     </div>
@@ -45,6 +61,7 @@ const AccountLogin = () => {
                         <input
                             type="password"
                             placeholder="••••••••"
+                            ref={passwordRef}
                             className="w-full p-2 bg-gray-800 border-2 border-gray-800 outline-none rounded-md transition-all focus:border-blue-400"
                         />
                     </div>

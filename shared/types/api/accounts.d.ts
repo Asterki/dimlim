@@ -1,3 +1,5 @@
+import { User } from "../models";
+
 // Register
 interface RegisterRequestBody {
     email: string;
@@ -18,9 +20,16 @@ interface LoginResponseData {
     status: "success" | "invalid-parameters" | "invalid-credentials" | "requires-tfa" | "invalid-tfa-code" | "internal-error";
 }
 
+// Me
+interface MeResponseData {
+    status: "success" | "unauthenticated";
+    user?: User
+}
+
 export type {
     RegisterRequestBody,
     RegisterResponseData,
     LoginRequestBody,
     LoginResponseData,
+    MeResponseData,
 };

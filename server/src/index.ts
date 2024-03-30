@@ -28,7 +28,7 @@ class Server {
     constructor(dev: boolean, port: number) {
         this.checkEnv();
         this.fastify = Fastify({
-            logger: dev,
+            logger: false, // dev
         });
         this.port = port;
     }
@@ -46,6 +46,7 @@ class Server {
         this.fastify.listen({
             port: this.port,
         });
+        console.log(`Server running on port ${this.port}`)
     }
 
     private checkEnv() {

@@ -22,22 +22,16 @@ const AccountLogin = () => {
             .then((res) => {
                 if (res.data.status === "success") {
                     alert("Logged in successfully");
-                    window.location.href = "/";
+                    // window.location.href = "/";
                 } else {
                     alert("An error occurred");
                 }
             });
 
         // TODO: Set global user state
-        axios
-            .post(
-                "http://localhost:3000/api/accounts/me",
-                {},
-                { withCredentials: true }
-            )
-            .then((res) => {
-                console.log(res.data);
-            });
+        axios.post("http://localhost:3000/api/accounts/me").then((res) => {
+            console.log(res.data);
+        });
     };
 
     return (

@@ -19,10 +19,7 @@ class MongoDBClient {
 
     connect() {
         mongoose.set("strictQuery", true);
-        mongoose.connect(this.connectionString, {
-            useUnifiedTopology: true,
-            useNewUrlParser: true,
-        } as mongoose.ConnectOptions);
+        mongoose.connect(this.connectionString, {} as mongoose.ConnectOptions);
 
         const mongooseClient = mongoose.connection;
         mongooseClient.once("open", this.onConnect);

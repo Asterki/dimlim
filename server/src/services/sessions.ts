@@ -32,7 +32,7 @@ class SessionController {
                     usernameField: "emailOrUsername",
                     passwordField: "password",
                     passReqToCallback: true,
-                    session: false,
+                    session: true,
                 },
                 async (req: any, _email: string, _password: string, done) => {
                     try {
@@ -67,7 +67,6 @@ class SessionController {
         };
 
         this.fastifyPassport.registerUserSerializer(async (user: any, request) => {
-            console.log(user);
             return user.userID;
         });
 

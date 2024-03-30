@@ -1,9 +1,9 @@
-import * as React from 'react';
+import * as React from "react";
 import axios from "axios";
 
 import NavbarComponent from "../../components/navbar";
 
-import { LoginResponseData } from "../../../../shared/types/api/accounts"
+import { LoginResponseData } from "../../../../shared/types/api/accounts";
 
 const AccountLogin = () => {
     const usernameEmailRef = React.useRef<HTMLInputElement>(null);
@@ -11,11 +11,14 @@ const AccountLogin = () => {
 
     const login = () => {
         axios
-            .post<LoginResponseData>("http://localhost:3000/api/accounts/login", {
-                emailOrUsername: usernameEmailRef.current!.value,
-                password: passwordRef.current!.value,
-                tfaCode: "",
-            })
+            .post<LoginResponseData>(
+                "http://localhost:3000/api/accounts/login",
+                {
+                    emailOrUsername: usernameEmailRef.current!.value,
+                    password: passwordRef.current!.value,
+                    tfaCode: "",
+                }
+            )
             .then((res) => {
                 if (res.data.status === "success") {
                     alert("Logged in successfully");
@@ -67,7 +70,11 @@ const AccountLogin = () => {
                     </div>
 
                     <div className="mt-8">
-                        <button className="w-full p-2 bg-blue-500 rounded-md">
+                        <button
+                            type="button"
+                            onClick={login}
+                            className="w-full p-2 bg-blue-500 rounded-md"
+                        >
                             Login
                         </button>
                     </div>
@@ -79,8 +86,6 @@ const AccountLogin = () => {
                         </a>
                     </div>
                 </form>
-
-                <button onClick={login}>ejwqioewqeqw</button>
             </div>
         </div>
     );

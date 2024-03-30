@@ -11,9 +11,7 @@ const AccountRegister = () => {
     const passwordRef = React.useRef<HTMLInputElement>(null);
     const repeatPasswordRef = React.useRef<HTMLInputElement>(null);
 
-    const register = (e: React.MouseEvent) => {
-        e.preventDefault();
-
+    const register = () => {
         const username = usernameRef.current!.value;
         const email = emailRef.current!.value;
         const password = passwordRef.current!.value;
@@ -43,7 +41,7 @@ const AccountRegister = () => {
 
         try {
             axios
-                .post("http://localhost:5000/api/auth/register", {
+                .post("http://localhost:3000/api/accounts/register", {
                     username: username,
                     email: email,
                     password: password,
@@ -74,6 +72,7 @@ const AccountRegister = () => {
                         <input
                             type="text"
                             ref={usernameRef}
+                            placeholder="Your username"
                             className="w-full p-2 bg-gray-800 border-2 border-gray-800 outline-none rounded-md transition-all focus:border-blue-400"
                         />
                     </div>
@@ -83,6 +82,7 @@ const AccountRegister = () => {
                         <input
                             type="email"
                             ref={emailRef}
+                            placeholder="Your email (will be verified)"
                             className="w-full p-2 bg-gray-800 border-2 border-gray-800 outline-none rounded-md transition-all focus:border-blue-400"
                         />
                     </div>
@@ -92,6 +92,7 @@ const AccountRegister = () => {
                         <input
                             type="password"
                             ref={passwordRef}
+                            placeholder="••••••••"
                             className="w-full p-2 bg-gray-800 border-2 border-gray-800 outline-none rounded-md transition-all focus:border-blue-400"
                         />
                     </div>
@@ -101,6 +102,7 @@ const AccountRegister = () => {
                         <input
                             type="password"
                             ref={repeatPasswordRef}
+                            placeholder="••••••••"
                             className="w-full p-2 bg-gray-800 border-2 border-gray-800 outline-none rounded-md transition-all focus:border-blue-400"
                         />
                     </div>
@@ -108,9 +110,8 @@ const AccountRegister = () => {
                     <div className="mt-8">
                         <button
                             className="w-full p-2 bg-blue-500 rounded-md"
-                            onClick={(e) => {
-                                register(e);
-                            }}
+                            type="button"
+                            onClick={register}
                         >
                             Register
                         </button>

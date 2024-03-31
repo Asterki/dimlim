@@ -14,7 +14,7 @@ interface RegisterResponseData {
 interface LoginRequestBody {
     emailOrUsername: string;
     password: string;
-    tfaCode: string;
+    tfaCode?: string;
 }
 interface LoginResponseData {
     status: "success" | "invalid-parameters" | "invalid-credentials" | "requires-tfa" | "invalid-tfa-code" | "internal-error";

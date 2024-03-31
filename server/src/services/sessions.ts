@@ -1,114 +1,100 @@
-import { FastifyInstance, FastifyRequest } from "fastify";
-
-import fastifySession from "@fastify/session";
-import MongoStore from "connect-mongo";
+import { Express } from "express";
+import passport from "passport";
+import passportLocal from "passport-local";
+import session from "express-session";
 
 import bcrypt from "bcrypt";
 import speakeasy from "speakeasy";
 
-import mongoose from "mongoose";
 import UserModel from "../models/users";
 
 import { User } from "../../../shared/types/models";
 
-class SessionController {
-    private instance: SessionController | null = null;
-    authenticationStrategies: {
-        local: (request: FastifyRequest) => Promise<any>;
-    };
-    // fastifyPassport: Authenticator;
+class SessionManager {
+    private instance: SessionManager | null = null;
+    authStrategies: { [key: string]: passportLocal.Strategy };
+
+    constructor() {
+        this.authStrategies = {
+            local: new passportLocal.Strategy(
+                {
+                    usernameField: "emailOrUsername",
+                    passwordField: "password",
+                    passReqToCallback: true,
+                    session: false,
+                },
+                async (req: any, _email: string, _password: string, done) => {
+                    try {
+                        const user: (User & Document) | null = await UserModel.findOne({
+                            $or: [{ "email.value": req.body.emailOrUsername }, { username: req.body.emailOrUsername }],
+                        });
+                        if (!user) return done(null, false, { message: "invalid-credentials" });
+
+                        // Verify password and TFA code
+                        if (!bcrypt.compareSync(req.body.password, user.password))
+                            return done(null, false, { message: "invalid-credentials" });
+
+                        // if (user.tfa.secret !== "") {
+                        //     if (!req.body.tfaCode) return done(null, false, { message: "requires-tfa" });
+
+                        //     const verified = speakeasy.totp.verify({
+                        //         secret: user.tfa.secret,
+                        //         encoding: "base32",
+                        //         token: req.body.tfaCode,
+                        //     });
+
+                        //     if (verified == false) return done(null, false, { message: "invalid-tfa-code" });
+                        // }
+
+                        return done(null, user);
+                    } catch (err: unknown) {
+                        console.log(err);
+                        return done(err);
+                    }
+                }
+            ),
+        };
+        this.loadStrategies();
+    }
 
     public getInstance() {
-        if (!this.instance) this.instance = new SessionController();
+        if (!this.instance) this.instance = new SessionManager();
         return this.instance;
     }
 
-    constructor() {
-        // this.fastifyPassport = new Authenticator();
-        this.authenticationStrategies = {
-            local: async (request) => {
-                try {
-                    const { emailOrUsername, password, tfaCode } = request.body as {
-                        emailOrUsername: string;
-                        password: string;
-                        tfaCode?: string;
-                    };
-
-                    const user: (User & Document) | null = await UserModel.findOne({
-                        $or: [{ "email.value": emailOrUsername }, { username: emailOrUsername }],
-                    });
-                    if (!user) return { message: "invalid-credentials" };
-
-                    // Verify password and TFA code
-                    if (!bcrypt.compareSync(password, user.password)) return { message: "invalid-credentials" };
-                    if (user.tfa.secret !== "") {
-                        if (!tfaCode) return { message: "tfa-required" };
-                        const verified = speakeasy.totp.verify({
-                            secret: user.tfa.secret,
-                            encoding: "base32",
-                            token: tfaCode,
-                        });
-
-                        if (verified == false) return { message: "invalid-tfa" };
-                    }
-
-                    return { user, err: null, message: "success" };
-                } catch (err: unknown) {
-                    return { user: null, err: err as Error, message: "internal-error" };
-                }
-            },
-        };
-    }
-
-    public authenticate(strategy: "local", request: FastifyRequest) {
-        return this.authenticationStrategies[strategy](request);
-    }
-
-    public login(user: any, request: FastifyRequest) {
-        (request.session as any).user = user;
-    }
-
-    public logout(request: FastifyRequest) {
-        request.session.destroy();
-    }
-
-    public async serializeUser(user: any) {
-        return user.userID;
-    }
-
-    public async deserializeUser(id: string) {
-        return await UserModel.findOne({ userID: id });
-    }
-
-    public loadToServer(server: FastifyInstance) {
-        this.loadMiddleware(server);
-    }
-
-    public loadMiddleware(server: FastifyInstance) {
-        server.register(fastifySession, {
-            secret: process.env.SESSION_SECRET as string,
-            cookieName: "session",
-            cookie: {
-                secure: false,
-                maxAge: 1000 * 60 * 60 * 24 * 7,
-                httpOnly: true,
-                path: "/",
-            },
-            saveUninitialized: false,
-            store: MongoStore.create({
-                mongoUrl: process.env.MONGODB_URI as string,
-                // dbName: "sessions",
-                collectionName: "sessions",
-                autoRemove: 'disabled'
-            }),
+    private loadStrategies() {
+        passport.serializeUser((user: any, done) => {
+            done(null, user._id);
         });
 
-        server.addHook("preHandler", (request, reply, next) => {
-            console.log(request.session)
-
-            next();
+        passport.deserializeUser(async (id, done) => {
+            let user = await UserModel.findById(id)
+            done(null, user)
         });
+
+        passport.use(this.authStrategies.local);
+    }
+
+    public loadToServer(server: Express) {
+        server.use(
+            session({
+                secret: process.env.SESSION_SECRET as string,
+                resave: false,
+                saveUninitialized: false,
+                cookie: {
+                    secure: false,
+                    maxAge: 1000 * 60 * 60 * 24 * 7,
+                    sameSite: "none",
+                    httpOnly: false,
+                    path: "/",
+                    domain: "localhost",
+                },
+                // store
+            })
+        );
+        server.use(passport.initialize());
+        server.use(passport.session());
     }
 }
 
-export default SessionController;
+export default SessionManager;

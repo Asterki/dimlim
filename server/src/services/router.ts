@@ -1,38 +1,28 @@
-import { RouteOptions, FastifyInstance } from "fastify";
+import express, { Router as ExpressRouter, Express, NextFunction } from "express";
 
 // Account routes
 import registerRoute from "../routes/accounts/register";
 import loginRoute from "../routes/accounts/login";
 import meRoute from "../routes/accounts/me";
 
-// Routers
-const accountRouter = [registerRoute, loginRoute, meRoute] as unknown as [RouteOptions];
-
 class Router {
     private instance: Router | null = null;
-    routes: {
-        accounts: [RouteOptions];
-    };
+    public accountRouter: ExpressRouter = express.Router();
 
-    constructor() {
-        this.routes = {
-            accounts: accountRouter,
-        };
-    }
+    constructor() {}
 
     getInstance() {
         if (!this.instance) this.instance = new Router();
         return this.instance;
     }
 
-    public getAllRoutes = (): RouteOptions[] => {
-        return [...this.routes.accounts];
-    };
+    public registerRoutes = (server: Express) => {
+        // Account routes
+        this.accountRouter.post("/register", registerRoute);
+        this.accountRouter.post("/login", loginRoute);
+        this.accountRouter.get("/me", meRoute);
 
-    public registerRoutes = (server: FastifyInstance) => {
-        for (const route of this.getAllRoutes()) {
-            server.route(route);
-        }
+        server.use("/api/accounts", this.accountRouter);
     };
 }
 

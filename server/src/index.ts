@@ -1,8 +1,8 @@
-import Fastify, { FastifyInstance } from "fastify";
+import express, { Express } from "express";
 
 // Middleware
-import cors from "@fastify/cors";
-import fastifyCookie from "@fastify/cookie";
+import cors from "cors";
+import cookie from "cookie-parser";
 
 // Services
 import Router from "./services/router";
@@ -16,7 +16,7 @@ class Server {
     private static instance: Server | null = null;
 
     // Server related
-    fastify: FastifyInstance;
+    app: Express = express();
     port: number;
 
     // Services
@@ -26,9 +26,6 @@ class Server {
 
     constructor(dev: boolean, port: number) {
         this.checkEnv();
-        this.fastify = Fastify({
-            logger: !dev,
-        });
         this.port = port;
     }
 
@@ -38,14 +35,13 @@ class Server {
     }
 
     async startServer() {
-        this.fastify.listen({
-            port: this.port,
-        });
-        console.log(`Server running on port ${this.port}`);
-
         this.loadMiddlewares();
-        this.sessions.loadToServer(this.fastify);
-        this.router.registerRoutes(this.fastify);
+        this.sessions.loadToServer(this.app);
+        this.router.registerRoutes(this.app);
+
+        this.app.listen(this.port, () => {
+            console.log(`Server running on port ${this.port}`);
+        });
     }
 
     private checkEnv() {
@@ -58,13 +54,15 @@ class Server {
     }
 
     private loadMiddlewares() {
-        this.fastify.register(fastifyCookie, {
-            secret: process.env.SESSION_SECRET as string,
-        });
-        this.fastify.register(cors, {
-            origin: ["http://localhost:3000", "http://localhost:5173"],
-            credentials: true,
-        });
+        this.app.use(express.json());
+        this.app.use(cookie(process.env.SESSION_SECRET as string));
+        this.app.use(
+            cors({
+                origin: "http://localhost:5173",
+                credentials: true,
+                exposedHeaders: ["set-cookie"],
+            })
+        );
     }
 }
 

@@ -18,10 +18,16 @@ const AccountLogin = () => {
                     emailOrUsername: usernameEmailRef.current!.value,
                     password: passwordRef.current!.value,
                     tfaCode: "",
+                },
+                {
+                    withCredentials: true,
                 }
             )
             .then((res) => {
                 if (res.data.status === "success") {
+                    // Manually set the cookie
+                    console.log(res);
+
                     alert("Logged in successfully");
                     // window.location.href = "/";
                 } else {
@@ -30,7 +36,7 @@ const AccountLogin = () => {
             });
 
         // TODO: Set global user state
-        checkLoggedIn();
+        // checkLoggedIn();
     };
 
     return (

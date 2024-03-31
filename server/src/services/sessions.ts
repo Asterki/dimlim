@@ -1,13 +1,12 @@
-import { FastifyInstance } from "fastify";
-import { Authenticator } from "@fastify/passport";
-import { Strategy as LocalStrategy } from "passport-local";
+import { FastifyInstance, FastifyRequest } from "fastify";
 
-import fastifyCookie from "@fastify/cookie";
 import fastifySession from "@fastify/session";
+import MongoStore from "connect-mongo";
 
 import bcrypt from "bcrypt";
 import speakeasy from "speakeasy";
 
+import mongoose from "mongoose";
 import UserModel from "../models/users";
 
 import { User } from "../../../shared/types/models";
@@ -15,9 +14,9 @@ import { User } from "../../../shared/types/models";
 class SessionController {
     private instance: SessionController | null = null;
     authenticationStrategies: {
-        local: LocalStrategy;
+        local: (request: FastifyRequest) => Promise<any>;
     };
-    fastifyPassport: Authenticator;
+    // fastifyPassport: Authenticator;
 
     public getInstance() {
         if (!this.instance) this.instance = new SessionController();
@@ -25,71 +24,67 @@ class SessionController {
     }
 
     constructor() {
-        this.fastifyPassport = new Authenticator();
+        // this.fastifyPassport = new Authenticator();
         this.authenticationStrategies = {
-            local: new LocalStrategy(
-                {
-                    usernameField: "emailOrUsername",
-                    passwordField: "password",
-                    passReqToCallback: true,
-                    session: true,
-                },
-                async (req: any, _email: string, _password: string, done) => {
-                    try {
-                        const user: (User & Document) | null = await UserModel.findOne({
-                            $or: [{ "email.value": req.body.emailOrUsername }, { username: req.body.emailOrUsername }],
+            local: async (request) => {
+                try {
+                    const { emailOrUsername, password, tfaCode } = request.body as {
+                        emailOrUsername: string;
+                        password: string;
+                        tfaCode?: string;
+                    };
+
+                    const user: (User & Document) | null = await UserModel.findOne({
+                        $or: [{ "email.value": emailOrUsername }, { username: emailOrUsername }],
+                    });
+                    if (!user) return { message: "invalid-credentials" };
+
+                    // Verify password and TFA code
+                    if (!bcrypt.compareSync(password, user.password)) return { message: "invalid-credentials" };
+                    if (user.tfa.secret !== "") {
+                        if (!tfaCode) return { message: "tfa-required" };
+                        const verified = speakeasy.totp.verify({
+                            secret: user.tfa.secret,
+                            encoding: "base32",
+                            token: tfaCode,
                         });
-                        if (!user) return done(null, false, { message: "invalid-credentials" });
 
-                        // Verify password and TFA code
-                        if (!bcrypt.compareSync(req.body.password, user.password))
-                            return done(null, false, { message: "invalid-credentials" });
-
-                        // if (user.tfa.secret !== "") {
-                        //     if (!req.body.tfaCode) return done(null, false, { message: "requires-tfa" });
-
-                        //     const verified = speakeasy.totp.verify({
-                        //         secret: user.tfa.secret,
-                        //         encoding: "base32",
-                        //         token: req.body.tfaCode,
-                        //     });
-
-                        //     if (verified == false) return done(null, false, { message: "invalid-tfa-code" });
-                        // }
-
-                        return done(null, user);
-                    } catch (err: unknown) {
-                        console.log(err);
-                        return done(err);
+                        if (verified == false) return { message: "invalid-tfa" };
                     }
+
+                    return { user, err: null, message: "success" };
+                } catch (err: unknown) {
+                    return { user: null, err: err as Error, message: "internal-error" };
                 }
-            ),
+            },
         };
-
-        this.fastifyPassport.registerUserSerializer(async (user: any, request) => {
-            return user.userID;
-        });
-
-        this.fastifyPassport.registerUserDeserializer(async (id, request) => {
-            return await UserModel.findOne({ userID: id });
-        });
     }
 
-    public getPassport() {
-        return this.fastifyPassport;
+    public authenticate(strategy: "local", request: FastifyRequest) {
+        return this.authenticationStrategies[strategy](request);
+    }
+
+    public login(user: any, request: FastifyRequest) {
+        (request.session as any).user = user;
+    }
+
+    public logout(request: FastifyRequest) {
+        request.session.destroy();
+    }
+
+    public async serializeUser(user: any) {
+        return user.userID;
+    }
+
+    public async deserializeUser(id: string) {
+        return await UserModel.findOne({ userID: id });
     }
 
     public loadToServer(server: FastifyInstance) {
         this.loadMiddleware(server);
-        this.addStrategies();
-    }
-
-    public addStrategies() {
-        this.fastifyPassport.use("local", this.authenticationStrategies.local);
     }
 
     public loadMiddleware(server: FastifyInstance) {
-        server.register(fastifyCookie);
         server.register(fastifySession, {
             secret: process.env.SESSION_SECRET as string,
             cookieName: "session",
@@ -99,10 +94,20 @@ class SessionController {
                 httpOnly: true,
                 path: "/",
             },
+            saveUninitialized: false,
+            store: MongoStore.create({
+                mongoUrl: process.env.MONGODB_URI as string,
+                // dbName: "sessions",
+                collectionName: "sessions",
+                autoRemove: 'disabled'
+            }),
         });
 
-        server.register(this.fastifyPassport.initialize());
-        server.register(this.fastifyPassport.secureSession());
+        server.addHook("preHandler", (request, reply, next) => {
+            console.log(request.session)
+
+            next();
+        });
     }
 }
 

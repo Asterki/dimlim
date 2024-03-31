@@ -9,7 +9,7 @@ import {
     LoginResponseData as ResponseData,
 } from "../../../../shared/types/api/accounts";
 
-const passport = Sessions.prototype.getInstance().getPassport();
+const passport = Sessions.prototype.getInstance();
 
 const loginRoute: RouteOptions = {
     method: "POST",
@@ -31,15 +31,12 @@ const loginRoute: RouteOptions = {
         done();
     },
     handler: async (request, reply) => {
-        const auth = passport.authenticate("local", async (request, reply, err, user, info, status) => {
-            if (err) return reply.status(500).send({ status: "internal-error" } as ResponseData);
-            if (!user) return reply.status(400).send({ status: (info as any).message } as ResponseData);
+        const { message, user } = await passport.authenticate("local", request);
+        if (message !== "success") return reply.code(401).send({ status: message } as ResponseData);
 
-            request.logIn(user, { session: true });
-            return reply.status(200).send({ status: "success" } as ResponseData);
-        });
-        // @ts-ignore
-        return await auth(request, reply);
+        // Login user
+        passport.login(user, request);
+        reply.send({ status: "success" } as ResponseData);
     },
 };
 

@@ -2,6 +2,7 @@ import Fastify, { FastifyInstance } from "fastify";
 
 // Middleware
 import cors from "@fastify/cors";
+import fastifyCookie from "@fastify/cookie";
 
 // Services
 import Router from "./services/router";
@@ -19,16 +20,14 @@ class Server {
     port: number;
 
     // Services
-    mongooseClient: Connection = new MongoDBClient(
-        process.env.MONGODB_URI as string
-    ).getClient();
-    sessions: SessionController =  SessionController.prototype.getInstance();
+    mongooseClient: Connection = new MongoDBClient(process.env.MONGODB_URI as string).getClient();
+    sessions: SessionController = SessionController.prototype.getInstance();
     router: Router = Router.prototype.getInstance();
 
     constructor(dev: boolean, port: number) {
         this.checkEnv();
         this.fastify = Fastify({
-            logger: false, // dev
+            logger: !dev,
         });
         this.port = port;
     }
@@ -39,14 +38,14 @@ class Server {
     }
 
     async startServer() {
-        this.loadMiddlewares();
-        this.sessions.loadToServer(this.fastify);
-        this.router.registerRoutes(this.fastify);
-
         this.fastify.listen({
             port: this.port,
         });
-        console.log(`Server running on port ${this.port}`)
+        console.log(`Server running on port ${this.port}`);
+
+        this.loadMiddlewares();
+        this.sessions.loadToServer(this.fastify);
+        this.router.registerRoutes(this.fastify);
     }
 
     private checkEnv() {
@@ -59,10 +58,11 @@ class Server {
     }
 
     private loadMiddlewares() {
+        this.fastify.register(fastifyCookie, {
+            secret: process.env.SESSION_SECRET as string,
+        });
         this.fastify.register(cors, {
-            origin: "*",
-            methods: ["GET", "POST", "PUT", "DELETE"],
-            allowedHeaders: ["Content-Type", "Authorization"],
+            origin: ["http://localhost:3000", "http://localhost:5173"],
             credentials: true,
         });
     }

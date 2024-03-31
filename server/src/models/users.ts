@@ -61,7 +61,7 @@ const User = new Schema({
     tfa: {
         secret: {
             type: String,
-            default: ""
+            default: "",
         },
     },
 });

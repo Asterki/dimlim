@@ -4,6 +4,7 @@ import axios from "axios";
 import NavbarComponent from "../../components/navbar";
 
 import { LoginResponseData } from "../../../../shared/types/api/accounts";
+import { checkLoggedIn } from "../../lib/auth";
 
 const AccountLogin = () => {
     const usernameEmailRef = React.useRef<HTMLInputElement>(null);
@@ -29,9 +30,7 @@ const AccountLogin = () => {
             });
 
         // TODO: Set global user state
-        axios.post("http://localhost:3000/api/accounts/me").then((res) => {
-            console.log(res.data);
-        });
+        checkLoggedIn();
     };
 
     return (

@@ -4,8 +4,8 @@ import { MeResponseData } from "../../../shared/types/api/accounts";
 
 const checkLoggedIn = async () => {
     try {
-        const response = await axios.post<MeResponseData>(
-            "http://localhost:3000/api/accounts/me", {},
+        const response = await axios.get<MeResponseData>(
+            "http://localhost:3000/api/accounts/me",
             { withCredentials: true }
         );
 

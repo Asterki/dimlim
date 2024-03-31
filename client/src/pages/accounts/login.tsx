@@ -25,18 +25,15 @@ const AccountLogin = () => {
             )
             .then((res) => {
                 if (res.data.status === "success") {
-                    // Manually set the cookie
-                    console.log(res);
-
                     alert("Logged in successfully");
-                    // window.location.href = "/";
+                    window.location.href = "/home";
                 } else {
                     alert("An error occurred");
                 }
             });
 
         // TODO: Set global user state
-        // checkLoggedIn();
+        checkLoggedIn();
     };
 
     return (

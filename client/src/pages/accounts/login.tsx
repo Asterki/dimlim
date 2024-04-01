@@ -1,5 +1,5 @@
 import * as React from "react";
-import { redirect, Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 
 import { useSelector, useDispatch } from "react-redux";
@@ -14,6 +14,8 @@ import { checkLoggedIn } from "../../lib/auth";
 const AccountLogin = () => {
     const user = useSelector((state: RootState) => state.page.currentUser);
     const dispatch = useDispatch();
+
+    const redirect = useNavigate();
 
     const usernameEmailRef = React.useRef<HTMLInputElement>(null);
     const passwordRef = React.useRef<HTMLInputElement>(null);
@@ -37,7 +39,6 @@ const AccountLogin = () => {
 
                     const serverUser = await checkLoggedIn();
                     if (serverUser) dispatch(setUser(serverUser));
-
                     redirect("/home");
                 } else {
                     alert("An error occurred");
@@ -52,7 +53,7 @@ const AccountLogin = () => {
                 const currentUser = await checkLoggedIn();
                 if (currentUser) {
                     dispatch(setUser(currentUser));
-                    return redirect("/home");
+                    return navigate("/home");
                 }
             }
         })();

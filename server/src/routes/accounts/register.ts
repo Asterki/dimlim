@@ -63,9 +63,10 @@ const handler = async (req: Request, res: Response<ResponseData>, next: NextFunc
     try {
         await user.save();
 
-        // request.logIn(user, { session: true });
-        res.status(200).send({
-            status: "success",
+        req.login(user, (err) => {
+            res.status(200).send({
+                status: "success",
+            });
         });
     } catch (error) {
         res.status(200).send({

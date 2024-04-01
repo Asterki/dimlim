@@ -9,8 +9,6 @@ const checkLoggedIn = async () => {
             { withCredentials: true }
         );
 
-        console.log(response.data)
-
         if (response.data.status == "success") return response.data.user;
         else return null;
     } catch (error) {

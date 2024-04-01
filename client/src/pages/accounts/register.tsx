@@ -1,11 +1,20 @@
 import * as React from "react";
+import { redirect, Link } from "react-router-dom";
 import axios from "axios";
+
+import { useSelector, useDispatch } from "react-redux";
+import { RootState } from "../../store";
+import { setUser } from "../../store/slices/page";
 
 import validator from "validator";
 
 import NavbarComponent from "../../components/navbar";
+import { checkLoggedIn } from "../../lib/auth";
 
 const AccountRegister = () => {
+    const user = useSelector((state: RootState) => state.page.currentUser);
+    const dispatch = useDispatch();
+
     const usernameRef = React.useRef<HTMLInputElement>(null);
     const emailRef = React.useRef<HTMLInputElement>(null);
     const passwordRef = React.useRef<HTMLInputElement>(null);
@@ -57,6 +66,20 @@ const AccountRegister = () => {
             alert("An error occurred");
         }
     };
+
+    // Login-protect the page
+    React.useEffect(() => {
+        (async () => {
+            if (!user) {
+                const currentUser = await checkLoggedIn();
+                if (currentUser) {
+                    dispatch(setUser(currentUser));
+                    return redirect("/home");
+                }
+            }
+        })();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
     return (
         <div className="bg-gray-800 min-h-screen text-white">
@@ -119,9 +142,9 @@ const AccountRegister = () => {
 
                     <div className="mt-4">
                         Already have an account?{" "}
-                        <a href="/login" className="text-blue-400">
+                        <Link to="/login" className="text-blue-400">
                             Login
-                        </a>
+                        </Link>
                     </div>
                 </form>
             </div>

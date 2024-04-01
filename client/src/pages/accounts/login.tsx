@@ -1,5 +1,10 @@
 import * as React from "react";
+import { redirect, Link } from "react-router-dom";
 import axios from "axios";
+
+import { useSelector, useDispatch } from "react-redux";
+import { RootState } from "../../store";
+import { setUser } from "../../store/slices/page";
 
 import NavbarComponent from "../../components/navbar";
 
@@ -7,10 +12,13 @@ import { LoginResponseData } from "../../../../shared/types/api/accounts";
 import { checkLoggedIn } from "../../lib/auth";
 
 const AccountLogin = () => {
+    const user = useSelector((state: RootState) => state.page.currentUser);
+    const dispatch = useDispatch();
+
     const usernameEmailRef = React.useRef<HTMLInputElement>(null);
     const passwordRef = React.useRef<HTMLInputElement>(null);
 
-    const login = () => {
+    const login = async () => {
         axios
             .post<LoginResponseData>(
                 "http://localhost:3000/api/accounts/login",
@@ -23,18 +31,33 @@ const AccountLogin = () => {
                     withCredentials: true,
                 }
             )
-            .then((res) => {
+            .then(async (res) => {
                 if (res.data.status === "success") {
                     alert("Logged in successfully");
-                    window.location.href = "/home";
+
+                    const serverUser = await checkLoggedIn();
+                    if (serverUser) dispatch(setUser(serverUser));
+
+                    redirect("/home");
                 } else {
                     alert("An error occurred");
                 }
             });
-
-        // TODO: Set global user state
-        checkLoggedIn();
     };
+
+    // Login-protect the page
+    React.useEffect(() => {
+        (async () => {
+            if (!user) {
+                const currentUser = await checkLoggedIn();
+                if (currentUser) {
+                    dispatch(setUser(currentUser));
+                    return redirect("/home");
+                }
+            }
+        })();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
     return (
         <div className="bg-gray-800 min-h-screen text-white">
@@ -77,9 +100,9 @@ const AccountLogin = () => {
 
                     <div className="mt-4">
                         Don't have an account yet?{" "}
-                        <a href="/register" className="text-blue-400">
+                        <Link to="/register" className="text-blue-400">
                             Register
-                        </a>
+                        </Link>
                     </div>
                 </form>
             </div>

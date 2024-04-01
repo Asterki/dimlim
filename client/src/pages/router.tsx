@@ -5,8 +5,8 @@ import MainIndex from "./main/index";
 import MainHome from "./main/home";
 
 // Register
-import AccountLogin from "./accounts/login"
-import AccountRegister from "./accounts/register"
+import AccountLogin from "./accounts/login";
+import AccountRegister from "./accounts/register";
 
 const router = createBrowserRouter([
     // Main

@@ -1,13 +1,14 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { User } from "../../../../shared/types/models";
 
 export const pageSlice = createSlice({
     name: "page",
     initialState: {
-        currentUser: null,
+        currentUser: null as User | null,
         language: "en",
     },
     reducers: {
-        setUser: (state, action) => {
+        setUser: (state, action: { payload: User | null }) => {
             state.currentUser = action.payload;
         },
         setLanguage: (state, action) => {

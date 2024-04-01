@@ -1,4 +1,5 @@
 import * as React from "react";
+import { redirect, Link } from "react-router-dom";
 
 import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "../../store";
@@ -12,22 +13,22 @@ const HomePage = () => {
 
     React.useEffect(() => {
         (async () => {
-            console.log(user)
-
             if (!user) {
                 const currentUser = await checkLoggedIn();
                 if (currentUser) return dispatch(setUser(currentUser));
-                // window.location.href = "/login";
+                redirect("/login");
             }
         })();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     return (
         <div>
             {user && (
                 <div>
-                    <h1>Welcome back, {user}!</h1>
+                    <h1>Welcome back, {user.userID}!</h1>
+                    <Link to="/test">water</Link>
+
                 </div>
             )}
             {!user && (

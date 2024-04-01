@@ -11,7 +11,7 @@ import contactsRemove from "../routes/contacts/remove";
 import contactsBlock from "../routes/contacts/block";
 import contactsUnblock from "../routes/contacts/unblock";
 import contactsPending from "../routes/contacts/pending";
-// import contactsGet from "../routes/contacts/get";
+import contactsGet from "../routes/contacts/get";
 
 class Router {
     private instance: Router | null = null;
@@ -33,6 +33,11 @@ class Router {
 
         // Contact routes
         this.contactsRouter.post("/add", contactsAdd);
+        this.contactsRouter.post("/remove", contactsRemove);
+        this.contactsRouter.post("/block", contactsBlock);
+        this.contactsRouter.post("/unblock", contactsUnblock);
+        this.contactsRouter.post("/pending", contactsPending);
+        this.contactsRouter.get("/get", contactsGet);
 
         server.use("/api/accounts", this.accountRouter);
         server.use("/api/contacts", this.contactsRouter);

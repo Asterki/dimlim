@@ -1,12 +1,14 @@
 import * as React from "react";
 
+import { User } from "../../../shared/types/models";
+
 interface ComponentProps {
-    user: string | null;
+    user: User | null;
 }
 
 const NavbarComponent: React.FC<ComponentProps> = (props) => {
     return (
-        <div className="w-full flex items-center justify-between p-4 h-16 bg-gray-700 shadow-md z-10 absolute">
+        <div className="w-full flex items-center justify-between p-4 h-16 bg-gray-700 shadow-md z-10 absolute top-0">
             <h1 className="text-2xl text-white font-bold">DIMLIM</h1>
             {props.user && (
                 <div>

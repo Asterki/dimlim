@@ -10,7 +10,7 @@ import {
 import { NextFunction, Request, Response } from "express";
 import { User } from "../../../../shared/types/models";
 
-// Contacts block
+// Contacts unblock
 const handler = async (req: Request, res: Response, next: NextFunction) => {
     if (req.isUnauthenticated() || !req.user) return res.status(401).send({ status: "unauthenticated" });
     const currentUser = req.user as User;

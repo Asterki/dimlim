@@ -18,6 +18,7 @@ const handler = async (req: Request, res: Response, next: NextFunction) => {
     const parsedBody = z
         .object({
             username: z.string(),
+            action: z.enum(["accept", "reject"]),
         })
         .safeParse(req.body);
 
@@ -25,29 +26,43 @@ const handler = async (req: Request, res: Response, next: NextFunction) => {
         return res.status(400).send({
             status: "invalid-parameters",
         });
-    const { username } = parsedBody.data;
+    const { username, action } = parsedBody.data;
     if (username == currentUser.profile.username) return res.status(400).send({ status: "cannot-add-self" });
 
     const userExists = await UserModel.findOne({ username: username }).select("username userID contacts").lean();
     if (!userExists) return res.status(404).send({ status: "user-not-found" });
 
-    // Update current user's pending contacts
-    await UserModel.updateOne(
-        { userID: currentUser.userID },
-        { $addToSet: { "contacts.pending": userExists.userID } },
-        { new: true }
-    );
+    if (action == "reject") {
+        // Update current user's pending contacts
+        await UserModel.updateOne(
+            { userID: currentUser.userID },
+            { $pull: { "contacts.pending": userExists.userID } },
+            { new: true }
+        );
 
-    // Update the other user's pending contacts, if they're not blocked
-    if (!(userExists!.contacts!.blocked! as unknown as Array<string>).includes(currentUser.userID))
-        // I swear these type assetions are going to kill me one day
-        return res.status(200).send({ status: "success" });
+        await UserModel.updateOne(
+            { userID: userExists.userID },
+            { $pull: { "contacts.pending": currentUser.userID } },
+            { new: true }
+        );
+    } else {
+        // Update current user's pending contacts
+        await UserModel.updateOne(
+            { userID: currentUser.userID },
+            { $pull: { "contacts.pending": userExists.userID }, $addToSet: { "contacts.accepted": userExists.userID } },
+            { new: true }
+        );
 
-    await UserModel.updateOne(
-        { userID: userExists.userID },
-        { $addToSet: { "contacts.pending": currentUser.userID } },
-        { new: true }
-    );
+        // Update the other user's pending contacts
+        await UserModel.updateOne(
+            { userID: userExists.userID },
+            {
+                $pull: { "contacts.pending": currentUser.userID },
+                $addToSet: { "contacts.accepted": currentUser.userID },
+            },
+            { new: true }
+        );
+    }
 
     return res.status(200).send({
         status: "success",

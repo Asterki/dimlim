@@ -5,6 +5,7 @@ import validator from "validator";
 import { z } from "zod";
 
 import UserModel from "../../models/users";
+import { User } from "../../../../shared/types/models";
 
 import {
     RegisterRequestBody as RequestBody,
@@ -51,11 +52,26 @@ const handler = async (req: Request, res: Response<ResponseData>, next: NextFunc
     const hashedPassword = await bcrypt.hash(password, 10);
 
     const user = new UserModel({
-        userID: userID,
+        userID,
         created: Date.now(),
-        username: username,
-        email: {
-            value: email,
+        profile: {
+            username,
+            email: {
+                value: email,
+                verified: false,
+            },
+        },
+        contacts: {
+            blocked: [],
+            pending: [],
+            accepted: [],
+        },
+        pubKey: Buffer.from(""),
+        preferences: {
+            privacy: {
+                showEmail: true,
+                showUsername: true,
+            },
         },
         password: hashedPassword,
     });

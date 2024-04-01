@@ -26,7 +26,7 @@ const handler = async (req: Request, res: Response, next: NextFunction) => {
             status: "invalid-parameters",
         });
     const { username } = parsedBody.data;
-    if (username == currentUser.username) return res.status(400).send({ status: "cannot-add-self" });
+    if (username == currentUser.profile.username) return res.status(400).send({ status: "cannot-add-self" });
 
     const userExists = await UserModel.findOne({ username: username }).select("username userID").lean();
     if (!userExists) return res.status(404).send({ status: "user-not-found" });
@@ -34,7 +34,7 @@ const handler = async (req: Request, res: Response, next: NextFunction) => {
     // Update current user's contacts
     const updatedUser = await UserModel.findOneAndUpdate(
         { userID: currentUser.userID },
-        { $addToSet: { contacts: userExists.userID } },
+        { $addToSet: { contacts: { pending: userExists.userID } } },
         { new: true }
     ).select("contacts");
 

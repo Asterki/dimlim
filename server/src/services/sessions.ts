@@ -27,25 +27,25 @@ class SessionManager {
                 async (req: any, _email: string, _password: string, done) => {
                     try {
                         const user: (User & Document) | null = await UserModel.findOne({
-                            $or: [{ "email.value": req.body.emailOrUsername }, { username: req.body.emailOrUsername }],
+                            $or: [{ "profile.email.value": req.body.emailOrUsername }, { "profile.username": req.body.emailOrUsername }],
                         });
                         if (!user) return done(null, false, { message: "invalid-credentials" });
 
                         // Verify password and TFA code
-                        if (!bcrypt.compareSync(req.body.password, user.password))
+                        if (!bcrypt.compareSync(req.body.password, user.preferences.security.password))
                             return done(null, false, { message: "invalid-credentials" });
 
-                        // if (user.tfa.secret !== "") {
-                        //     if (!req.body.tfaCode) return done(null, false, { message: "requires-tfa" });
+                        if (user.preferences.security.twoFactor.active) {
+                            if (!req.body.tfaCode) return done(null, false, { message: "requires-tfa" });
 
-                        //     const verified = speakeasy.totp.verify({
-                        //         secret: user.tfa.secret,
-                        //         encoding: "base32",
-                        //         token: req.body.tfaCode,
-                        //     });
+                            const verified = speakeasy.totp.verify({
+                                secret: user.preferences.security.twoFactor.secret as string,
+                                encoding: "base32",
+                                token: req.body.tfaCode,
+                            });
 
-                        //     if (verified == false) return done(null, false, { message: "invalid-tfa-code" });
-                        // }
+                            if (verified == false) return done(null, false, { message: "invalid-tfa-code" });
+                        }
 
                         return done(null, user);
                     } catch (err: unknown) {

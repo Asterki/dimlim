@@ -26,7 +26,7 @@ const handler = async (req: Request, res: Response, next: NextFunction) => {
             status: "invalid-parameters",
         });
     const { username } = parsedBody.data;
-    if (username == currentUser.username) return res.status(400).send({ status: "cannot-remove-self" });
+    if (username == currentUser.profile.username) return res.status(400).send({ status: "cannot-remove-self" });
 
     const userExists = await UserModel.findOne({ username: username }).select("username userID").lean();
     if (!userExists) return res.status(404).send({ status: "user-not-found" });

@@ -1,30 +1,41 @@
 interface User {
     userID: string;
     created: number;
-
-    username: string;
-    email: {
-        value: string;
-        verified: boolean;
+    profile: {
+        username: string;
+        avatar: string;
+        email: {
+            value: string;
+            verified: boolean;
+        };
     };
-
-    avatar: string;
-    locale: string;
-
-    contacts: Array<{
-        userID: string;
-        username: string;
-    }>;
-    blockedContacts: Array<{
-        userID: string;
-        username: string;
-    }>;
-
-    password: string;
-    pubKey: ArrayBuffer,
-
-    tfa: {
-        secret: string;
+    contacts: {
+        blocked: string[];
+        pending: string[];
+        accepted: string[];
+    };
+    pubKey: Buffer;
+    preferences: {
+        privacy: {
+            showOnlineStatus: boolean;
+            showLastSeen: boolean;
+            showReadReceipts: boolean;
+        };
+        notifications: {
+            showNotifications: boolean;
+            playSound: boolean;
+        };
+        general: {
+            theme: string;
+            language: string;
+        };
+        security: {
+            twoFactor: {
+                active: boolean;
+                secret?: string;
+            };
+            password: string;
+        };
     };
 }
 

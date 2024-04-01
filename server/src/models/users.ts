@@ -12,56 +12,85 @@ const User = new Schema({
         required: true,
     },
 
-    username: {
-        type: String,
-        required: true,
-        unique: true,
-    },
-
-    email: {
-        value: {
+    profile: {
+        username: {
             type: String,
             required: true,
             unique: true,
         },
-        verified: {
-            type: Boolean,
-            default: false,
+        avatar: {
+            type: String,
+            default: "",
+        },
+        email: {
+            value: {
+                type: String,
+                required: true,
+                unique: true,
+            },
+            verified: {
+                type: Boolean,
+                default: false,
+            },
         },
     },
 
-    avatar: {
-        type: String,
-        default: "",
-    },
-
-    locale: {
-        type: String,
-        default: "en",
-    },
-
     contacts: {
-        type: Array,
-        default: [],
-    },
-    blockedContacts: {
-        type: Array,
-        default: [],
+        blocked: {
+            type: Array<string>,
+            default: [],
+        },
+        pending: {
+            type: Array<string>,
+            default: [],
+        },
+        accepted: {
+            type: Array<string>,
+            default: [],
+        },
     },
 
     pubKey: {
         type: Buffer,
     },
 
-    password: {
-        type: String,
-        required: true,
-    },
-
-    tfa: {
-        secret: {
-            type: String,
-            default: "",
+    preferences: {
+        privacy: {
+            type: Object,
+            default: {
+                showOnlineStatus: true,
+                showLastSeen: true,
+                showReadReceipts: true,
+            },
+        },
+        notifications: {
+            type: Object,
+            default: {
+                showNotifications: true,
+                playSound: true,
+            },
+        },
+        general: {
+            type: Object,
+            default: {
+                theme: "dark",
+                language: "en",
+            },
+        },
+        security: {
+            twoFactor: {
+                active: {
+                    type: Boolean,
+                    default: false,
+                },
+                secret: {
+                    type: String,
+                },
+            },
+            password: {
+                type: String,
+                required: true,
+            },
         },
     },
 });

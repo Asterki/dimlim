@@ -32,15 +32,21 @@ const handler = async (req: Request, res: Response, next: NextFunction) => {
     if (!userExists) return res.status(404).send({ status: "user-not-found" });
 
     // Update current user's contacts
-    const updatedUser = await UserModel.findOneAndUpdate(
+    await UserModel.updateOne(
         { userID: currentUser.userID },
-        { $pull: { contacts: userExists.userID } },
+        { $pull: { "contacts.accepted": userExists.userID } },
         { new: true }
-    ).select("contacts");
+    );
+
+    // Update the other user's contacts
+    await UserModel.updateOne(
+        { userID: userExists.userID },
+        { $pull: { "contacts.accepted": currentUser.userID } },
+        { new: true }
+    );
 
     return res.status(200).send({
         status: "success",
-        contacts: updatedUser?.contacts,
     });
 };
 

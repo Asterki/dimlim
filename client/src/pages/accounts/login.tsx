@@ -53,7 +53,7 @@ const AccountLogin = () => {
                 const currentUser = await checkLoggedIn();
                 if (currentUser) {
                     dispatch(setUser(currentUser));
-                    return navigate("/home");
+                    return redirect("/home");
                 }
             }
         })();

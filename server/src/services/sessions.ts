@@ -5,6 +5,7 @@ import session from "express-session";
 
 import bcrypt from "bcrypt";
 import speakeasy from "speakeasy";
+import MongoStore from "connect-mongo";
 
 import UserModel from "../models/users";
 
@@ -89,7 +90,11 @@ class SessionManager {
                     path: "/",
                     domain: "localhost",
                 },
-                // store
+                store: MongoStore.create({
+                    mongoUrl: process.env.MONGODB_URI as string,
+                    collectionName: "sessions",
+                    dbName: "dimlim"
+                })
             })
         );
         server.use(passport.initialize());

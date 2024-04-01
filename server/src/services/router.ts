@@ -7,9 +7,11 @@ import accountsMe from "../routes/accounts/me";
 
 // Contact routes
 import contactsAdd from "../routes/contacts/add";
-// import contactsAdd from "../routes/contacts/remove";
-// import contactsAdd from "../routes/contacts/get";
-// import contactsAdd from "../routes/contacts/block";
+import contactsRemove from "../routes/contacts/remove";
+import contactsBlock from "../routes/contacts/block";
+import contactsUnblock from "../routes/contacts/unblock";
+import contactsPending from "../routes/contacts/pending";
+// import contactsGet from "../routes/contacts/get";
 
 class Router {
     private instance: Router | null = null;

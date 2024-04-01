@@ -28,19 +28,29 @@ const handler = async (req: Request, res: Response, next: NextFunction) => {
     const { username } = parsedBody.data;
     if (username == currentUser.profile.username) return res.status(400).send({ status: "cannot-add-self" });
 
-    const userExists = await UserModel.findOne({ username: username }).select("username userID").lean();
+    const userExists = await UserModel.findOne({ username: username }).select("username userID contacts").lean();
     if (!userExists) return res.status(404).send({ status: "user-not-found" });
 
-    // Update current user's contacts
-    const updatedUser = await UserModel.findOneAndUpdate(
+    // Update current user's pending contacts
+    const updatedUser = await UserModel.updateOne(
         { userID: currentUser.userID },
-        { $addToSet: { contacts: { pending: userExists.userID } } },
+        { $addToSet: { "contacts.pending": userExists.userID } },
         { new: true }
-    ).select("contacts");
+    );
+
+    // Update the other user's pending contacts, if they're not blocked
+    if (!(userExists!.contacts!.blocked! as unknown as Array<string>).includes(currentUser.userID))
+        // I swear these type assetions are going to kill me one day
+        return res.status(200).send({ status: "success" });
+
+    await UserModel.updateOne(
+        { userID: userExists.userID },
+        { $addToSet: { "contacts.pending": currentUser.userID } },
+        { new: true }
+    );
 
     return res.status(200).send({
         status: "success",
-        contacts: updatedUser?.contacts,
     });
 };
 

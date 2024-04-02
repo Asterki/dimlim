@@ -7,7 +7,7 @@ interface RegisterRequestBody {
     password: string;
 }
 interface RegisterResponseData {
-    status: "success" | "invalid-parameters" | "user-exists";
+    status: "success" | "invalid-parameters" | "user-exists" | "internal-error";
 }
 
 // Login

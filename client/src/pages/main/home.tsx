@@ -1,5 +1,6 @@
 import * as React from "react";
 import { Link, useNavigate } from "react-router-dom";
+import axios from "axios";
 
 import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "../../store";
@@ -25,6 +26,20 @@ const HomePage = () => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
+    const addContact = async () => {
+        const username = prompt(
+            "Enter the username of the user you want to add"
+        );
+        if (!username) return;
+
+        const res = await axios.post(
+            "http://localhost:3000/api/contacts/add",
+            { username: username },
+            { withCredentials: true }
+        );
+        console.log(res.data)
+    };
+
     return (
         <div className="bg-gray-800 min-h-screen text-white">
             {user && (
@@ -32,7 +47,10 @@ const HomePage = () => {
                     <NavbarComponent user={user} />
                     <div className="pt-20">
                         <div className="text-center">
-                            <button className="w-11/12 p-2 bg-blue-400 text-white rounded-md shadow-md">
+                            <button
+                                onClick={addContact}
+                                className="w-11/12 p-2 bg-blue-400 text-white rounded-md shadow-md"
+                            >
                                 Search or start chat
                             </button>
                         </div>

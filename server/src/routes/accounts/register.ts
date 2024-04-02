@@ -41,7 +41,9 @@ const handler = async (req: Request, res: Response<ResponseData>, next: NextFunc
     const { email, username, password } = req.body as RequestBody;
 
     // Check if the user exists
-    const userExists = await UserModel.findOne({ $or: [{ "email.value": email }, { username: username }] });
+    const userExists = await UserModel.findOne({
+        $or: [{ "profile.email.value": email.toLowerCase() }, { "profile.username": username.toLowerCase() }],
+    });
     if (userExists)
         return res.status(200).send({
             status: "user-exists",
@@ -92,8 +94,8 @@ const handler = async (req: Request, res: Response<ResponseData>, next: NextFunc
         });
     } catch (error) {
         console.log(error);
-        res.status(200).send({
-            status: "user-exists",
+        res.status(500).send({
+            status: "internal-error",
         });
     }
 };

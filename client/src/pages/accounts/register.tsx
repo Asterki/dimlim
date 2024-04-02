@@ -56,9 +56,11 @@ const AccountRegister = () => {
                     password: password,
                 })
                 .then((res) => {
-                    if (res.status === 200) {
+                    if (res.data.status == "success") {
                         alert("Account created successfully");
-                        window.location.href = "/";
+                        return redirect("/home");
+                    } else if (res.data.status == "user-exists") {
+                        alert("User already exists");
                     }
                 });
         } catch (err) {

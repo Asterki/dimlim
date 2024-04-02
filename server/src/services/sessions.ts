@@ -27,9 +27,10 @@ class SessionManager {
                 async (req: any, _email: string, _password: string, done) => {
                     try {
                         const user: (User & Document) | null = await UserModel.findOne({
-                            $or: [{ "profile.email.value": req.body.emailOrUsername }, { "profile.username": req.body.emailOrUsername }],
+                            $or: [{ "profile.email.value": req.body.emailOrUsername.toLowerCase() }, { "profile.username": req.body.emailOrUsername.toLowerCase() }],
                         });
                         if (!user) return done(null, false, { message: "invalid-credentials" });
+
 
                         // Verify password and TFA code
                         if (!bcrypt.compareSync(req.body.password, user.preferences.security.password))

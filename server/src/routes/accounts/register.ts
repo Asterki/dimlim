@@ -72,8 +72,14 @@ const handler = async (req: Request, res: Response<ResponseData>, next: NextFunc
                 showEmail: true,
                 showUsername: true,
             },
+            security: {
+                password: hashedPassword,
+                twoFactor: {
+                    active: false,
+                    secret: "",
+                },
+            },
         },
-        password: hashedPassword,
     });
 
     try {
@@ -85,6 +91,7 @@ const handler = async (req: Request, res: Response<ResponseData>, next: NextFunc
             });
         });
     } catch (error) {
+        console.log(error);
         res.status(200).send({
             status: "user-exists",
         });

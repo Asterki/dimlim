@@ -1,4 +1,5 @@
 import * as React from "react";
+import { motion } from "framer-motion";
 
 import { User } from "../../../shared/types/models";
 
@@ -10,24 +11,59 @@ interface ComponentProps {
 }
 
 const NavbarComponent: React.FC<ComponentProps> = (props) => {
+    const [menuOpen, setMenuOpen] = React.useState(false);
+
     return (
         <div className="w-full flex items-center justify-between p-4 h-16 bg-gray-700 shadow-md z-10 absolute top-0">
             <h1 className="text-2xl text-white font-bold">DIMLIM</h1>
             {props.user && (
-                <div className="flex items-center justify-between px-4 py-2 rounded-md border-2 border-white/20 w-2/12">
-                    <div className="flex items-center justify-center">
+                <div className="w-2/12 relative">
+                    <div
+                        onClick={() => setMenuOpen(!menuOpen)}
+                        className="flex items-center justify-between px-4 py-2 rounded-md border-2 border-white/20 transition-all hover:bg-white/10 cursor-pointer w-full"
+                    >
+                        <div className="flex items-center justify-center">
+                            <div>
+                                <img
+                                    width={30}
+                                    src="https://www.asterki.com/assets/images/icon.png"
+                                    alt="wjaoi"
+                                />
+                            </div>
+                            <div>{props.user.profile.username}</div>
+                        </div>
                         <div>
-                            <img
-                                width={30}
-                                src="https://www.asterki.com/assets/images/icon.png"
-                                alt="wjaoi"
+                            <FontAwesomeIcon
+                                className="text-white/80"
+                                icon={faChevronCircleDown}
                             />
                         </div>
-                        <div>{props.user.profile.username}</div>
                     </div>
-                    <div>
-                        <FontAwesomeIcon className="text-white/80" icon={faChevronCircleDown} />
-                    </div>
+
+                    <motion.div
+                        variants={{
+                            open: {
+                                y: "auto",
+                                display: "block",
+                                opacity: 1,
+                            },
+                            closed: {
+                                y: 0,
+                                opacity: 0,
+                                transitionEnd: {
+                                    display: "none",
+                                },
+                            },
+                        }}
+                        initial="closed"
+                        animate={menuOpen ? "open" : "closed"}
+                        className="w-full absolute bg-gray-700 rounded-md border-2 border-white/20 mt-2 p-2 "
+                    >
+                        <h1>jewoqijo</h1>
+                        <h1>jewoqijo</h1>
+                        <h1>jewoqijo</h1>
+                        <h1>jewoqijo</h1>
+                    </motion.div>
                 </div>
             )}
             {!props.user && (

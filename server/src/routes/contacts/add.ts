@@ -41,7 +41,7 @@ const handler = async (req: Request, res: Response, next: NextFunction) => {
     // Update the other user's pending contacts, if they're not blocked
     if ((userExists!.contacts!.blocked! as unknown as Array<string>).includes(currentUser.userID))
         // I swear these type assetions are going to kill me one day
-        return res.status(200).send({ status: "success23" });
+        return res.status(200).send({ status: "success" });
 
     await UserModel.updateOne(
         { userID: userExists.userID },

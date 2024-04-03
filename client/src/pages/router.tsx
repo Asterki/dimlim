@@ -8,6 +8,9 @@ import MainHome from "./main/home";
 import AccountLogin from "./accounts/login";
 import AccountRegister from "./accounts/register";
 
+// Contacts
+import ContactsIndex from "./contacts/index";
+
 const router = createBrowserRouter([
     // Main
     {
@@ -27,6 +30,12 @@ const router = createBrowserRouter([
     {
         path: "/register",
         element: <AccountRegister />,
+    },
+
+    // Contacts
+    {
+        path: "/contacts",
+        element: <ContactsIndex />,
     },
 ]);
 

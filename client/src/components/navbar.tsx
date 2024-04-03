@@ -1,5 +1,6 @@
 import * as React from "react";
 import { motion } from "framer-motion";
+import { Link } from "react-router-dom";
 
 import { User } from "../../../shared/types/models";
 
@@ -28,6 +29,7 @@ const NavbarComponent: React.FC<ComponentProps> = (props) => {
                                     width={30}
                                     src="https://www.asterki.com/assets/images/icon.png"
                                     alt="wjaoi"
+                                    className="mr-2 rounded-full"
                                 />
                             </div>
                             <div>{props.user.profile.username}</div>
@@ -59,10 +61,21 @@ const NavbarComponent: React.FC<ComponentProps> = (props) => {
                         animate={menuOpen ? "open" : "closed"}
                         className="w-full absolute bg-gray-700 rounded-md border-2 border-white/20 mt-2 p-2 "
                     >
-                        <h1>jewoqijo</h1>
-                        <h1>jewoqijo</h1>
-                        <h1>jewoqijo</h1>
-                        <h1>jewoqijo</h1>
+                        <Link to="/contacts">
+                            <div className="p-2 transitiona-all hover:bg-white/20 rounded-md cursor-pointer w-full">
+                                Settings
+                            </div>
+                        </Link>
+                        <Link to="/contacts">
+                            <div className="p-2 transitiona-all hover:bg-white/20 rounded-md cursor-pointer w-full">
+                                Contacts
+                            </div>
+                        </Link>
+                        <Link to="/contacts">
+                            <div className="p-2 transitiona-all hover:bg-white/20 rounded-md cursor-pointer w-full">
+                                Logout
+                            </div>
+                        </Link>
                     </motion.div>
                 </div>
             )}

@@ -43,7 +43,7 @@ const NavbarComponent: React.FC<ComponentProps> = (props) => {
                                 <FontAwesomeIcon
                                     className={`${
                                         menuOpen ? "transform rotate-180" : ""
-                                    } transition-all`}
+                                    } transition-all text-white/50`}
                                     icon={faChevronCircleDown}
                                 />
                             </div>

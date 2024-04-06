@@ -45,7 +45,7 @@ const handler = async (req: Request, res: Response, next: NextFunction) => {
 
     await UserModel.updateOne(
         { userID: userExists.userID },
-        { $addToSet: { "contacts.pending": currentUser.userID } },
+        { $addToSet: { "contacts.requests": currentUser.userID } },
         { new: true }
     );
 

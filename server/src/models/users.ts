@@ -44,6 +44,10 @@ const User = new Schema({
             type: Array<string>,
             default: [],
         },
+        requests: {
+            type: Array<string>,
+            default: [],
+        },
         accepted: {
             type: Array<string>,
             default: [],

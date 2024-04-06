@@ -12,21 +12,28 @@ const handler = async (req: Request, res: Response, next: NextFunction) => {
     if (req.isUnauthenticated() || !req.user) return res.status(401).send({ status: "unauthenticated" });
     const currentUser = req.user as User;
 
-    const acceptedContacts = await UserModel.find({ userID: { $in: currentUser.contacts.accepted } }).select(
-        "profile.username userID"
-    );
-    const pendingContacts = await UserModel.find({ userID: { $in: currentUser.contacts.pending } }).select(
-        "profile.username userID"
-    );
-    const blockedContacts = await UserModel.find({ userID: { $in: currentUser.contacts.blocked } }).select(
-        "profile.username userID"
-    );
+    const allContacts = await UserModel.find({
+        userID: {
+            $in: [
+                ...currentUser.contacts.accepted,
+                ...currentUser.contacts.pending,
+                ...currentUser.contacts.requests,
+                ...currentUser.contacts.blocked,
+            ],
+        },
+    }).select("profile.username userID");
+
+    const acceptedContacts = allContacts.filter((user) => currentUser.contacts.accepted.includes(user.userID));
+    const pendingContacts = allContacts.filter((user) => currentUser.contacts.pending.includes(user.userID));
+    const requestedContacts = allContacts.filter((user) => currentUser.contacts.requests.includes(user.userID));
+    const blockedContacts = allContacts.filter((user) => currentUser.contacts.blocked.includes(user.userID));
 
     return res.status(200).send({
         status: "success",
         contacts: {
             accepted: acceptedContacts,
             pending: pendingContacts,
+            requests: requestedContacts,
             blocked: blockedContacts,
         },
     });

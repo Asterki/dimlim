@@ -12,6 +12,7 @@ interface User {
     contacts: {
         blocked: string[];
         pending: string[];
+        requests: string[];
         accepted: string[];
     };
     pubKey: Buffer;

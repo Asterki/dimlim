@@ -115,11 +115,17 @@ const ContactsIndex = () => {
                                         className="p-2 rounded-md bg-gray-700 mx-2 transition-all hover:bg-gray-600 w-3/12 md:w-2/12"
                                         value="tab2"
                                     >
-                                        Current Contacts
+                                        Pending
                                     </Tabs.Trigger>
                                     <Tabs.Trigger
                                         className="p-2 rounded-md bg-gray-700 mx-2 transition-all hover:bg-gray-600 w-3/12 md:w-2/12"
                                         value="tab3"
+                                    >
+                                        Current Contacts
+                                    </Tabs.Trigger>
+                                    <Tabs.Trigger
+                                        className="p-2 rounded-md bg-gray-700 mx-2 transition-all hover:bg-gray-600 w-3/12 md:w-2/12"
+                                        value="tab4"
                                     >
                                         Blocked Contacts
                                     </Tabs.Trigger>
@@ -188,6 +194,55 @@ const ContactsIndex = () => {
                                     className="rounded-md bg-gray-700 my-2 w-11/12 text-center p-2 shadow-md"
                                     value="tab2"
                                 >
+                                    <p className="text-2xl">Request Sent</p>
+                                    <div className="flex flex-col items-center">
+                                        {contacts.pending.length === 0 && (
+                                            <p className="text-xl">
+                                                No requests
+                                            </p>
+                                        )}
+                                        {contacts.pending.length > 0 && (
+                                            <div className="w-11/12">
+                                                {contacts.pending.map(
+                                                    (contact) => (
+                                                        <div
+                                                            key={
+                                                                contact.userID as string
+                                                            }
+                                                            className="bg-gray-600 rounded-md p-2 my-2 flex justify-between items-center"
+                                                        >
+                                                            <p>
+                                                                {
+                                                                    contact.profile!
+                                                                        .username
+                                                                }
+                                                            </p>
+                                                            <div className="flex">
+                                                                <button
+                                                                    className="p-2 bg-red-400 transition-all hover:bg-red-500 rounded-md"
+                                                                    onClick={() =>
+                                                                        pending(
+                                                                            contact.profile!
+                                                                                .username,
+                                                                            "reject"
+                                                                        )
+                                                                    }
+                                                                >
+                                                                    Cancel
+                                                                </button>
+                                                            </div>
+                                                        </div>
+                                                    )
+                                                )}
+                                            </div>
+                                        )}
+                                    </div>
+                                </Tabs.Content>
+                                
+                                <Tabs.Content
+                                    className="rounded-md bg-gray-700 my-2 w-11/12 text-center p-2 shadow-md"
+                                    value="tab3"
+                                >
                                     <p className="text-2xl">Current Contacts</p>
                                     <div className="w-11/12">
                                         {contacts.accepted.length === 0 && (
@@ -244,7 +299,7 @@ const ContactsIndex = () => {
                                 </Tabs.Content>
                                 <Tabs.Content
                                     className="rounded-md bg-gray-700 my-2 w-11/12 text-center p-2 shadow-md"
-                                    value="tab3"
+                                    value="tab4"
                                 >
                                     <p className="text-2xl">Blocked Contacts</p>
                                     <div className="w-11/12">

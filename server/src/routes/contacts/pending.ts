@@ -29,7 +29,7 @@ const handler = async (req: Request, res: Response, next: NextFunction) => {
     const { username, action } = parsedBody.data;
     if (username == currentUser.profile.username) return res.status(400).send({ status: "cannot-add-self" });
 
-    const userExists = await UserModel.findOne({ username: username }).select("username userID contacts").lean();
+    const userExists = await UserModel.findOne({ username: username.toLowerCase() }).select("username userID contacts").lean();
     if (!userExists) return res.status(404).send({ status: "user-not-found" });
 
     if (action == "reject") {
@@ -40,9 +40,10 @@ const handler = async (req: Request, res: Response, next: NextFunction) => {
             { new: true }
         );
 
+        // Update the other user's contacts
         await UserModel.updateOne(
             { userID: userExists.userID },
-            { $pull: { "contacts.pending": currentUser.userID } },
+            { $pull: { "contacts.requests": currentUser.userID } },
             { new: true }
         );
     } else {
@@ -57,7 +58,7 @@ const handler = async (req: Request, res: Response, next: NextFunction) => {
         await UserModel.updateOne(
             { userID: userExists.userID },
             {
-                $pull: { "contacts.pending": currentUser.userID },
+                $pull: { "contacts.requests": currentUser.userID },
                 $addToSet: { "contacts.accepted": currentUser.userID },
             },
             { new: true }

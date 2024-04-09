@@ -26,10 +26,12 @@ const ContactsIndex = () => {
         accepted: Contact[];
         blocked: Contact[];
         pending: Contact[];
+        requests: Contact[];
     }>({
         accepted: [],
         blocked: [],
         pending: [],
+        requests: [],
     });
 
     React.useEffect(() => {
@@ -136,14 +138,14 @@ const ContactsIndex = () => {
                                 >
                                     <p className="text-2xl">Contact Requests</p>
                                     <div className="flex flex-col items-center">
-                                        {contacts.pending.length === 0 && (
+                                        {contacts.requests.length === 0 && (
                                             <p className="text-xl">
                                                 No requests
                                             </p>
                                         )}
-                                        {contacts.pending.length > 0 && (
+                                        {contacts.requests.length > 0 && (
                                             <div className="w-11/12">
-                                                {contacts.pending.map(
+                                                {contacts.requests.map(
                                                     (contact) => (
                                                         <div
                                                             key={
@@ -244,7 +246,7 @@ const ContactsIndex = () => {
                                     value="tab3"
                                 >
                                     <p className="text-2xl">Current Contacts</p>
-                                    <div className="w-11/12">
+                                    <div className="flex flex-col items-center">
                                         {contacts.accepted.length === 0 && (
                                             <p className="text-xl">
                                                 No contacts
@@ -302,7 +304,7 @@ const ContactsIndex = () => {
                                     value="tab4"
                                 >
                                     <p className="text-2xl">Blocked Contacts</p>
-                                    <div className="w-11/12">
+                                    <div className="flex flex-col items-center">
                                         {contacts.blocked.length === 0 && (
                                             <p className="text-xl">
                                                 No contacts

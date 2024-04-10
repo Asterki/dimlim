@@ -253,7 +253,7 @@ const ContactsIndex = () => {
                                             </p>
                                         )}
                                         {contacts.accepted.length > 0 && (
-                                            <div>
+                                            <div className="w-11/12">
                                                 {contacts.accepted.map(
                                                     (contact) => (
                                                         <div
@@ -269,10 +269,21 @@ const ContactsIndex = () => {
                                                                 }
                                                             </p>
                                                             <div className="flex">
-                                                                <button
-                                                                    className="p-2 bg-red-400 rounded-md"
+                                                            <button
+                                                                    className="p-2 bg-red-400 rounded-md mx-2"
                                                                     onClick={() =>
                                                                         remove(
+                                                                            contact.profile!
+                                                                                .username
+                                                                        )
+                                                                    }
+                                                                >
+                                                                    Remove
+                                                                </button>
+                                                                <button
+                                                                    className="p-2 bg-red-400 rounded-md mx-2"
+                                                                    onClick={() =>
+                                                                        block(
                                                                             contact.profile!
                                                                                 .username
                                                                         )
@@ -283,7 +294,7 @@ const ContactsIndex = () => {
                                                                 <button
                                                                     className="p-2 bg-red-400 rounded-md"
                                                                     onClick={() =>
-                                                                        remove(
+                                                                        unblock(
                                                                             contact.profile!
                                                                                 .username
                                                                         )

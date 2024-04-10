@@ -29,28 +29,37 @@ const handler = async (req: Request, res: Response, next: NextFunction) => {
     const { username, action } = parsedBody.data;
     if (username == currentUser.profile.username) return res.status(400).send({ status: "cannot-add-self" });
 
-    const userExists = await UserModel.findOne({ username: username.toLowerCase() }).select("username userID contacts").lean();
+    const userExists = await UserModel.findOne({ username: username.toLowerCase() })
+        .select("username userID contacts")
+        .lean();
     if (!userExists) return res.status(404).send({ status: "user-not-found" });
 
     if (action == "reject") {
         // Update current user's pending contacts
         await UserModel.updateOne(
             { userID: currentUser.userID },
-            { $pull: { "contacts.pending": userExists.userID } },
+            {
+                $pull: { "contacts.requests": userExists.userID },
+            },
             { new: true }
         );
 
-        // Update the other user's contacts
+        // Update the other user's pending contacts
         await UserModel.updateOne(
             { userID: userExists.userID },
-            { $pull: { "contacts.requests": currentUser.userID } },
+            {
+                $pull: { "contacts.pending": currentUser.userID },
+            },
             { new: true }
         );
     } else {
         // Update current user's pending contacts
         await UserModel.updateOne(
             { userID: currentUser.userID },
-            { $pull: { "contacts.requests": userExists.userID }, $addToSet: { "contacts.accepted": userExists.userID } },
+            {
+                $pull: { "contacts.requests": userExists.userID },
+                $addToSet: { "contacts.accepted": userExists.userID },
+            },
             { new: true }
         );
 

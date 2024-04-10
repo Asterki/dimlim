@@ -50,7 +50,7 @@ const handler = async (req: Request, res: Response, next: NextFunction) => {
         // Update current user's pending contacts
         await UserModel.updateOne(
             { userID: currentUser.userID },
-            { $pull: { "contacts.pending": userExists.userID }, $addToSet: { "contacts.accepted": userExists.userID } },
+            { $pull: { "contacts.requests": userExists.userID }, $addToSet: { "contacts.accepted": userExists.userID } },
             { new: true }
         );
 
@@ -58,7 +58,7 @@ const handler = async (req: Request, res: Response, next: NextFunction) => {
         await UserModel.updateOne(
             { userID: userExists.userID },
             {
-                $pull: { "contacts.requests": currentUser.userID },
+                $pull: { "contacts.pending": currentUser.userID },
                 $addToSet: { "contacts.accepted": currentUser.userID },
             },
             { new: true }

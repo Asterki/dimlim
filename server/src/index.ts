@@ -1,4 +1,5 @@
 import express, { Express } from "express";
+import { createServer } from "http";
 
 // Middleware
 import cors from "cors";
@@ -8,6 +9,7 @@ import cookie from "cookie-parser";
 import Router from "./services/router";
 import MongoDBClient from "./services/mongodb";
 import SessionController from "./services/sessions";
+import SocketServer from "./services/socket";
 
 import "dotenv/config";
 import { Connection } from "mongoose";
@@ -17,12 +19,14 @@ class Server {
 
     // Server related
     app: Express = express();
+    httpServer: ReturnType<typeof createServer> = createServer(this.app);
     port: number;
 
     // Services
     mongooseClient: Connection = new MongoDBClient(process.env.MONGODB_URI as string).getClient();
     sessions: SessionController = SessionController.prototype.getInstance();
     router: Router = Router.prototype.getInstance();
+    socketServer: SocketServer = SocketServer.getInstance();
 
     constructor(dev: boolean, port: number) {
         this.checkEnv();
@@ -39,9 +43,10 @@ class Server {
         this.sessions.loadToServer(this.app);
         this.router.registerRoutes(this.app);
 
-        this.app.listen(this.port, () => {
+        this.httpServer.listen(this.port, () => {
             console.log(`Server running on port ${this.port}`);
         });
+        this.socketServer.loadToServer(this.httpServer);
     }
 
     private checkEnv() {

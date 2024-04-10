@@ -20,6 +20,7 @@
     "mongoose": "^8.2.0",
     "passport": "^0.7.0",
     "passport-local": "^1.0.0",
+    "socket.io": "^4.7.5",
     "speakeasy": "^2.0.0",
     "uuid": "^9.0.1",
     "validator": "^13.11.0",

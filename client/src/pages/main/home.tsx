@@ -15,6 +15,14 @@ const HomePage = () => {
 
     const redirect = useNavigate();
 
+    type Contact = {
+        userID: string;
+        profile: {
+            username: string;
+        };
+    };
+    const [contacts, setContacts] = React.useState<Contact[]>([]);
+
     React.useEffect(() => {
         (async () => {
             if (!user) {
@@ -24,6 +32,17 @@ const HomePage = () => {
             }
         })();
         // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
+
+    React.useEffect(() => {
+        (async () => {
+            const { data } = await axios.get(
+                "http://localhost:3000/api/contacts/get",
+                { withCredentials: true }
+            );
+            console.log(data);
+            setContacts(data.contacts.accepted);
+        })();
     }, []);
 
     const addContact = async () => {
@@ -37,7 +56,7 @@ const HomePage = () => {
             { username: username },
             { withCredentials: true }
         );
-        console.log(res.data)
+        console.log(res.data);
     };
 
     return (
@@ -53,6 +72,22 @@ const HomePage = () => {
                             >
                                 Search or start chat
                             </button>
+
+                            <div>
+                                <h1 className="text-2xl mt-5">Contacts</h1>
+                                {contacts.map((contact) => (
+                                    <div key={contact.userID}>
+                                        <Link to={`/chat/${contact.userID}`}>
+                                            <div className="flex items-center justify-between p-2 bg-gray-600 rounded-md mt-2">
+                                                <p>
+                                                    {contact.profile.username}
+                                                </p>
+                                                <p>Online</p>
+                                            </div>
+                                        </Link>
+                                    </div>
+                                ))}
+                            </div>
                         </div>
                     </div>
                 </div>

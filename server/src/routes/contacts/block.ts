@@ -1,4 +1,3 @@
-import validator from "validator";
 import { z } from "zod";
 
 import UserModel from "../../models/users";

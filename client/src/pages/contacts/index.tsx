@@ -51,7 +51,6 @@ const ContactsIndex = () => {
                 "http://localhost:3000/api/contacts/get",
                 { withCredentials: true }
             );
-            console.log(data);
             setContacts(data.contacts);
         })();
     }, []);
@@ -62,7 +61,6 @@ const ContactsIndex = () => {
             { action: action, username },
             { withCredentials: true }
         );
-        console.log(data);
     };
 
     const remove = async (username: string) => {
@@ -71,7 +69,6 @@ const ContactsIndex = () => {
             { username },
             { withCredentials: true }
         );
-        console.log(data);
     };
 
     const block = async (username: string) => {
@@ -80,7 +77,6 @@ const ContactsIndex = () => {
             { username },
             { withCredentials: true }
         );
-        console.log(data);
     };
 
     const unblock = async (username: string) => {
@@ -89,7 +85,6 @@ const ContactsIndex = () => {
             { username },
             { withCredentials: true }
         );
-        console.log(data);
     };
 
     return (

@@ -8,6 +8,7 @@ interface User {
             value: string;
             verified: boolean;
         };
+        imageID: string;
     };
     contacts: {
         blocked: string[];

@@ -1,10 +1,3 @@
-import bcrypt from "bcrypt";
-import { z } from "zod";
-
-import Sessions from "../../services/sessions";
-
-import UserModel from "../../models/users";
-
 import { MeResponseData as ResponseData } from "../../../../shared/types/api/accounts";
 import { NextFunction, Request, Response } from "express";
 

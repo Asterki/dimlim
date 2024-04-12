@@ -1,5 +1,3 @@
-import validator from "validator";
-import { z } from "zod";
 import formidable, { IncomingForm } from "formidable";
 import path from "path";
 import sharp from "sharp";

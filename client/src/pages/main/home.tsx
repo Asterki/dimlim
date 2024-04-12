@@ -40,7 +40,6 @@ const HomePage = () => {
                 "http://localhost:3000/api/contacts/get",
                 { withCredentials: true }
             );
-            console.log(data);
             setContacts(data.contacts.accepted);
         })();
     }, []);
@@ -56,7 +55,6 @@ const HomePage = () => {
             { username: username },
             { withCredentials: true }
         );
-        console.log(res.data);
     };
 
     return (

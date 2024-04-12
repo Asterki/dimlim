@@ -1,8 +1,5 @@
 import fsExtra from "fs-extra";
-import sharp from "sharp";
 import path from "path";
-
-import { v4 as uuidv4 } from "uuid";
 
 class UploadService {
     private static instance: UploadService | null = null;
@@ -32,7 +29,36 @@ class UploadService {
         fsExtra.removeSync(folderPath);
     }
 
+    async fileExists(filePath: string) {
+        return fsExtra.existsSync(filePath);
+    }
 
+    async moveFile(oldPath: string, newPath: string) {
+        fsExtra.moveSync(oldPath, newPath);
+    }
+
+    async copyFile(oldPath: string, newPath: string) {
+        fsExtra.copySync(oldPath, newPath);
+    }
+
+    async readDirectory(directoryPath: string) {
+        return fsExtra.readdirSync(directoryPath);
+    }
+
+    async readFile(filePath: string) {
+        return fsExtra.readFileSync(filePath);
+    }
+
+    async writeFile(filePath: string, data: any) {
+        fsExtra
+            .writeFile(filePath, data)
+            .then(() => {
+                console.log("File written successfully");
+            })
+            .catch((error) => {
+                console.log("Error writing file: ", error);
+            });
+    }
 }
 
 export default UploadService;

@@ -33,6 +33,10 @@ const User = new Schema({
                 default: false,
             },
         },
+        imageID: {
+            type: String,
+            default: "",
+        }
     },
 
     contacts: {

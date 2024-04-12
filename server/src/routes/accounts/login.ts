@@ -1,10 +1,7 @@
 import passport from "passport";
 import { z } from "zod";
 
-import {
-    LoginRequestBody as RequestBody,
-    LoginResponseData as ResponseData,
-} from "../../../../shared/types/api/accounts";
+import { LoginResponseData as ResponseData } from "../../../../shared/types/api/accounts";
 import { NextFunction, Request, Response } from "express";
 
 const handler = (req: Request, res: Response<ResponseData>, next: NextFunction) => {

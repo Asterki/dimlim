@@ -1,14 +1,11 @@
 import UserModel from "../../models/users";
 
-import {
-    RegisterRequestBody as RequestBody,
-    RegisterResponseData as ResponseData,
-} from "../../../../shared/types/api/accounts";
+import { GetResponseData as ResponseData } from "../../../../shared/types/api/contacts";
 import { NextFunction, Request, Response } from "express";
 import { User } from "../../../../shared/types/models";
 
 // Contacts get
-const handler = async (req: Request, res: Response, next: NextFunction) => {
+const handler = async (req: Request, res: Response<ResponseData>, next: NextFunction) => {
     if (req.isUnauthenticated() || !req.user) return res.status(401).send({ status: "unauthenticated" });
     const currentUser = req.user as User;
 
@@ -31,10 +28,10 @@ const handler = async (req: Request, res: Response, next: NextFunction) => {
     return res.status(200).send({
         status: "success",
         contacts: {
-            accepted: acceptedContacts,
-            pending: pendingContacts,
-            requests: requestedContacts,
-            blocked: blockedContacts,
+            accepted: acceptedContacts as any,
+            pending: pendingContacts as any,
+            requests: requestedContacts as any,
+            blocked: blockedContacts as any,
         },
     });
 };

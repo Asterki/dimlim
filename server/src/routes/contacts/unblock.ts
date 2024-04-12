@@ -2,15 +2,12 @@ import { z } from "zod";
 
 import UserModel from "../../models/users";
 
-import {
-    RegisterRequestBody as RequestBody,
-    RegisterResponseData as ResponseData,
-} from "../../../../shared/types/api/accounts";
+import { UnblockResponseData as ResponseData } from "../../../../shared/types/api/contacts";
 import { NextFunction, Request, Response } from "express";
 import { User } from "../../../../shared/types/models";
 
 // Contacts unblock
-const handler = async (req: Request, res: Response, next: NextFunction) => {
+const handler = async (req: Request, res: Response<ResponseData>, next: NextFunction) => {
     if (req.isUnauthenticated() || !req.user) return res.status(401).send({ status: "unauthenticated" });
     const currentUser = req.user as User;
 

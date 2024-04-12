@@ -2,15 +2,12 @@ import { z } from "zod";
 
 import UserModel from "../../models/users";
 
-import {
-    RegisterRequestBody as RequestBody,
-    RegisterResponseData as ResponseData,
-} from "../../../../shared/types/api/accounts";
+import { AddResponseData as ResponseData } from "../../../../shared/types/api/contacts";
 import { NextFunction, Request, Response } from "express";
 import { User } from "../../../../shared/types/models";
 
 // Contacts add
-const handler = async (req: Request, res: Response, next: NextFunction) => {
+const handler = async (req: Request, res: Response<ResponseData>, next: NextFunction) => {
     if (req.isUnauthenticated() || !req.user) return res.status(401).send({ status: "unauthenticated" });
     const currentUser = req.user as User;
 
@@ -27,7 +24,9 @@ const handler = async (req: Request, res: Response, next: NextFunction) => {
     const { username } = parsedBody.data;
     if (username == currentUser.profile.username) return res.status(400).send({ status: "cannot-add-self" });
 
-    const userExists = await UserModel.findOne({ username: username.toLowerCase() }).select("username userID contacts").lean();
+    const userExists = await UserModel.findOne({ username: username.toLowerCase() })
+        .select("username userID contacts")
+        .lean();
     if (!userExists) return res.status(404).send({ status: "user-not-found" });
 
     // Update current user's pending contacts

@@ -5,7 +5,6 @@ import validator from "validator";
 import { z } from "zod";
 
 import UserModel from "../../models/users";
-import { User } from "../../../../shared/types/models";
 
 import {
     RegisterRequestBody as RequestBody,

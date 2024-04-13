@@ -24,7 +24,7 @@ const handler = async (req: Request, res: Response<ResponseData>, next: NextFunc
     const { username } = parsedBody.data;
     if (username == currentUser.profile.username) return res.status(400).send({ status: "cannot-unblock-self" });
 
-    const userExists = await UserModel.findOne({ username: username.toLowerCase() }).select("username userID").lean();
+    const userExists = await UserModel.findOne({ "profile.username": username.toLowerCase() }).select("username userID").lean();
     if (!userExists) return res.status(404).send({ status: "user-not-found" });
 
     // Update current user's contacts

@@ -23,11 +23,12 @@ const handler = async (req: Request, res: Response<ResponseData>, next: NextFunc
             status: "invalid-parameters",
         });
     const { username, action } = parsedBody.data;
-    if (username == currentUser.profile.username) return res.status(400).send({ status: "cannot-add-self" });
+    if (username.toLowerCase() == currentUser.profile.username.toLowerCase())
+        return res.status(400).send({ status: "cannot-add-self" });
 
-    const userExists = await UserModel.findOne({ username: username.toLowerCase() })
-        .select("username userID contacts")
-        .lean();
+    const userExists = await UserModel.findOne({ "profile.username": username.toLowerCase() }).select(
+        "profile.username userID contacts"
+    );
     if (!userExists) return res.status(404).send({ status: "user-not-found" });
 
     if (action == "reject") {

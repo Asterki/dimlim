@@ -61,6 +61,7 @@ const ContactsIndex = () => {
             { action: action, username },
             { withCredentials: true }
         );
+        console.log(data)
     };
 
     const remove = async (username: string) => {

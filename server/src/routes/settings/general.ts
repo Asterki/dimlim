@@ -2,7 +2,7 @@ import { z } from "zod";
 
 import UserModel from "../../models/users";
 
-import { AddResponseData as ResponseData } from "../../../../shared/types/api/contacts";
+import { GeneralResponseData as ResponseData } from "../../../../shared/types/api/settings";
 import { NextFunction, Request, Response } from "express";
 import { User } from "../../../../shared/types/models";
 
@@ -23,19 +23,25 @@ const handler = async (req: Request, res: Response<ResponseData>, next: NextFunc
             status: "invalid-parameters",
         });
 
-    await UserModel.updateOne(
-        { userID: currentUser.userID },
-        {
-            $set: {
-                "preferences.general.theme": parsedBody.data.theme,
-                "preferences.general.language": parsedBody.data.language,
-            },
-        }
-    ).exec();
+    try {
+        await UserModel.updateOne(
+            { userID: currentUser.userID },
+            {
+                $set: {
+                    "preferences.general.theme": parsedBody.data.theme,
+                    "preferences.general.language": parsedBody.data.language,
+                },
+            }
+        ).exec();
 
-    return res.status(200).send({
-        status: "success",
-    });
+        return res.status(200).send({
+            status: "success",
+        });
+    } catch (e) {
+        return res.status(500).send({
+            status: "internal-error",
+        });
+    }
 };
 
 export default handler;

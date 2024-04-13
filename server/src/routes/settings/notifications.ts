@@ -2,7 +2,7 @@ import { z } from "zod";
 
 import UserModel from "../../models/users";
 
-import { AddResponseData as ResponseData } from "../../../../shared/types/api/contacts";
+import { GeneralResponseData as ResponseData } from "../../../../shared/types/api/settings";
 import { NextFunction, Request, Response } from "express";
 import { User } from "../../../../shared/types/models";
 

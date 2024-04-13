@@ -25,21 +25,26 @@ const handler = async (req: Request, res: Response<ResponseData>, next: NextFunc
         });
    
     
-    await UserModel.updateOne(
-        { userID: currentUser.userID },
-        {
-            $set: {
-                "preferences.privacy.showOnlineStatus": parsedBody.data.showOnlineStatus,
-                "preferences.privacy.showLastSeen": parsedBody.data.showLastSeen,
-                "preferences.privacy.showReadReceipts": parsedBody.data.showReadReceipts,
-            },
-        }
-    ).exec();
+    try {
+        await UserModel.updateOne(
+            { userID: currentUser.userID },
+            {
+                $set: {
+                    "preferences.privacy.showOnlineStatus": parsedBody.data.showOnlineStatus,
+                    "preferences.privacy.showLastSeen": parsedBody.data.showLastSeen,
+                    "preferences.privacy.showReadReceipts": parsedBody.data.showReadReceipts,
+                },
+            }
+        ).exec();
 
-
-    return res.status(200).send({
-        status: "success",
-    });
+        return res.status(200).send({
+            status: "success",
+        });
+    } catch (e) {
+        return res.status(500).send({
+            status: "internal-error",
+        });
+    }
 };
 
 export default handler;

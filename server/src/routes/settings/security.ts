@@ -27,23 +27,28 @@ const handler = async (req: Request, res: Response<ResponseData>, next: NextFunc
             status: "invalid-parameters",
         });
 
-    const pass = await bcrypt.hash(parsedBody.data.password, 10);
+    try {
+        const pass = await bcrypt.hash(parsedBody.data.password, 10);
 
-    await UserModel.updateOne(
-        { userID: currentUser.userID },
-        {
-            $set: {
-                "preferences.security.twoFactor.active": parsedBody.data.twoFactor.active,
-                "preferences.security.twoFactor.secret": parsedBody.data.twoFactor.secret,
-                "preferences.security.password": pass,
-            },
-        }
-    ).exec();
-        
+        await UserModel.updateOne(
+            { userID: currentUser.userID },
+            {
+                $set: {
+                    "preferences.security.twoFactor.active": parsedBody.data.twoFactor.active,
+                    "preferences.security.twoFactor.secret": parsedBody.data.twoFactor.secret,
+                    "preferences.security.password": pass,
+                },
+            }
+        ).exec();
 
-    return res.status(200).send({
-        status: "success",
-    });
+        return res.status(200).send({
+            status: "success",
+        });
+    } catch (e) {
+        return res.status(500).send({
+            status: "internal-error",
+        });
+    }
 };
 
 export default handler;

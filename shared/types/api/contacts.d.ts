@@ -9,7 +9,8 @@ interface AddResponseData {
         | "invalid-parameters"
         | "user-exists"
         | "cannot-add-self"
-        | "user-not-found";
+        | "user-not-found"
+        | "internal-error";
 }
 
 // Block contact
@@ -23,7 +24,8 @@ interface BlockResponseData {
         | "invalid-parameters"
         | "user-exists"
         | "cannot-block-self"
-        | "user-not-found";
+        | "user-not-found"
+        | "internal-error";
 }
 
 // Get contacts
@@ -34,7 +36,7 @@ interface Contact {
     userID: string;
 }
 interface GetResponseData {
-    status: "unauthenticated" | "success";
+    status: "unauthenticated" | "success" | "internal-error";
     contacts?: {
         accepted: Contact[];
         pending: Contact[];
@@ -55,7 +57,8 @@ interface PendingResponseData {
         | "success"
         | "invalid-parameters"
         | "cannot-add-self"
-        | "user-not-found";
+        | "user-not-found"
+        | "internal-error";
 }
 
 // Remove
@@ -68,7 +71,8 @@ interface RemoveResponseData {
         | "success"
         | "invalid-parameters"
         | "cannot-remove-self"
-        | "user-not-found";
+        | "user-not-found"
+        | "internal-error";
 }
 
 // Unblock
@@ -81,7 +85,8 @@ interface UnblockResponseData {
         | "success"
         | "invalid-parameters"
         | "cannot-unblock-self"
-        | "user-not-found";
+        | "user-not-found"
+        | "internal-error";
 }
 
 export type {

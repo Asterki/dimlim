@@ -48,42 +48,42 @@ const handler = async (req: Request, res: Response<ResponseData>, next: NextFunc
             status: "user-exists",
         });
 
-    // Create the user object
-    let userID = uuidv4();
-    const hashedPassword = await bcrypt.hash(password, 10);
+    try {
+        // Create the user object
+        let userID = uuidv4();
+        const hashedPassword = await bcrypt.hash(password, 10);
 
-    const user = new UserModel({
-        userID,
-        created: Date.now(),
-        profile: {
-            username,
-            email: {
-                value: email,
-                verified: false,
-            },
-        },
-        contacts: {
-            blocked: [],
-            pending: [],
-            accepted: [],
-        },
-        pubKey: Buffer.from(""),
-        preferences: {
-            privacy: {
-                showEmail: true,
-                showUsername: true,
-            },
-            security: {
-                password: hashedPassword,
-                twoFactor: {
-                    active: false,
-                    secret: "",
+        const user = new UserModel({
+            userID,
+            created: Date.now(),
+            profile: {
+                username,
+                email: {
+                    value: email,
+                    verified: false,
                 },
             },
-        },
-    });
-
-    try {
+            contacts: {
+                blocked: [],
+                pending: [],
+                accepted: [],
+            },
+            pubKey: Buffer.from(""),
+            preferences: {
+                privacy: {
+                    showEmail: true,
+                    showUsername: true,
+                },
+                security: {
+                    password: hashedPassword,
+                    twoFactor: {
+                        active: false,
+                        secret: "",
+                    },
+                },
+            },
+        });
+        
         await user.save();
 
         req.login(user, (err) => {

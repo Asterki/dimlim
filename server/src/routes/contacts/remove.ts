@@ -24,26 +24,34 @@ const handler = async (req: Request, res: Response<ResponseData>, next: NextFunc
     const { username } = parsedBody.data;
     if (username == currentUser.profile.username) return res.status(400).send({ status: "cannot-remove-self" });
 
-    const userExists = await UserModel.findOne({ "profile.username": username.toLowerCase() }).select("username userID").lean();
-    if (!userExists) return res.status(404).send({ status: "user-not-found" });
+    try {
+        const userExists = await UserModel.findOne({ "profile.username": username.toLowerCase() })
+            .select("username userID")
+            .lean();
+        if (!userExists) return res.status(404).send({ status: "user-not-found" });
 
-    // Update current user's contacts
-    await UserModel.updateOne(
-        { userID: currentUser.userID },
-        { $pull: { "contacts.accepted": userExists.userID } },
-        { new: true }
-    );
+        // Update current user's contacts
+        await UserModel.updateOne(
+            { userID: currentUser.userID },
+            { $pull: { "contacts.accepted": userExists.userID } },
+            { new: true }
+        );
 
-    // Update the other user's contacts
-    await UserModel.updateOne(
-        { userID: userExists.userID },
-        { $pull: { "contacts.accepted": currentUser.userID } },
-        { new: true }
-    );
+        // Update the other user's contacts
+        await UserModel.updateOne(
+            { userID: userExists.userID },
+            { $pull: { "contacts.accepted": currentUser.userID } },
+            { new: true }
+        );
 
-    return res.status(200).send({
-        status: "success",
-    });
+        return res.status(200).send({
+            status: "success",
+        });
+    } catch (e) {
+        return res.status(500).send({
+            status: "internal-error",
+        });
+    }
 };
 
 export default handler;

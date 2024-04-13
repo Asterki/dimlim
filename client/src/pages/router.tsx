@@ -11,6 +11,9 @@ import AccountRegister from "./accounts/register";
 // Contacts
 import ContactsIndex from "./contacts/index";
 
+// Settings
+import SettingsIndex from "./settings/index";
+
 const router = createBrowserRouter([
     // Main
     {
@@ -36,6 +39,12 @@ const router = createBrowserRouter([
     {
         path: "/contacts",
         element: <ContactsIndex />,
+    },
+
+    // Settings
+    {
+        path: "/settings",
+        element: <SettingsIndex />,
     },
 ]);
 

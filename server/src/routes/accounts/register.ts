@@ -12,6 +12,8 @@ import {
 } from "../../../../shared/types/api/accounts";
 import { NextFunction, Request, Response } from "express";
 
+import Logger from "../../services/logger";
+
 const handler = async (req: Request, res: Response<ResponseData>, next: NextFunction) => {
     const parsedBody = z
         .object({
@@ -91,11 +93,11 @@ const handler = async (req: Request, res: Response<ResponseData>, next: NextFunc
                 status: "success",
             });
         });
-    } catch (error) {
-        console.log(error);
+    } catch (error: unknown) {
         res.status(500).send({
             status: "internal-error",
         });
+        Logger.getInstance().error((error as Error).message, true);
     }
 };
 

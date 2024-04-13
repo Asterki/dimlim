@@ -6,6 +6,8 @@ import { RemoveResponseData as ResponseData } from "../../../../shared/types/api
 import { NextFunction, Request, Response } from "express";
 import { User } from "../../../../shared/types/models";
 
+import Logger from "../../services/logger";
+
 // Contacts remove
 const handler = async (req: Request, res: Response<ResponseData>, next: NextFunction) => {
     if (req.isUnauthenticated() || !req.user) return res.status(401).send({ status: "unauthenticated" });
@@ -47,10 +49,11 @@ const handler = async (req: Request, res: Response<ResponseData>, next: NextFunc
         return res.status(200).send({
             status: "success",
         });
-    } catch (e) {
-        return res.status(500).send({
+    } catch (error: unknown) {
+        res.status(500).send({
             status: "internal-error",
         });
+        Logger.getInstance().error((error as Error).message, true);
     }
 };
 

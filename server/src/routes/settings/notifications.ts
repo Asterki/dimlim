@@ -6,16 +6,15 @@ import { AddResponseData as ResponseData } from "../../../../shared/types/api/co
 import { NextFunction, Request, Response } from "express";
 import { User } from "../../../../shared/types/models";
 
-// Settings Privacy
+// Settings Notifications
 const handler = async (req: Request, res: Response<ResponseData>, next: NextFunction) => {
     if (req.isUnauthenticated() || !req.user) return res.status(401).send({ status: "unauthenticated" });
     const currentUser = req.user as User;
 
     const parsedBody = z
         .object({
-            showOnlineStatus: z.boolean(),
-            showLastSeen: z.boolean(),
-            showReadReceipts: z.boolean(),
+            showNotifications: z.boolean(),
+            playSound: z.boolean(),
         })
         .safeParse(req.body);
 
@@ -29,9 +28,8 @@ const handler = async (req: Request, res: Response<ResponseData>, next: NextFunc
         { userID: currentUser.userID },
         {
             $set: {
-                "preferences.privacy.showOnlineStatus": parsedBody.data.showOnlineStatus,
-                "preferences.privacy.showLastSeen": parsedBody.data.showLastSeen,
-                "preferences.privacy.showReadReceipts": parsedBody.data.showReadReceipts,
+                "preferences.notifications.showNotifications": parsedBody.data.showNotifications,
+                "preferences.notifications.playSound": parsedBody.data.playSound,
             },
         }
     ).exec();

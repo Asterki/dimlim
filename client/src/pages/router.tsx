@@ -9,10 +9,10 @@ import AccountLogin from "./accounts/login";
 import AccountRegister from "./accounts/register";
 
 // Contacts
-import ContactsIndex from "./contacts/index";
+import ContactsIndex from "./contacts";
 
 // Settings
-import SettingsIndex from "./settings/index";
+import SettingsIndex from "./settings";
 
 const router = createBrowserRouter([
     // Main

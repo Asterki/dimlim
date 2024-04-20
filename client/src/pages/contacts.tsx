@@ -105,7 +105,7 @@ const ContactsIndex = () => {
                                 }}
                             >
                                 <Tabs.List
-                                    className="w-11/12 flex justify-self-center shadow-md border-b-2 border-gray-800"
+                                    className="w-full flex justify-self-center shadow-md border-b-2 border-gray-800"
                                     aria-label="Manage your account"
                                 >
                                     <Tabs.Trigger
@@ -150,7 +150,7 @@ const ContactsIndex = () => {
                                     </Tabs.Trigger>
                                 </Tabs.List>
                                 <Tabs.Content
-                                    className="rounded-br-md rounded-bl-md bg-gray-700 w-11/12 text-center p-2 shadow-md"
+                                    className="rounded-br-md rounded-bl-md bg-gray-700 w-full text-center p-2 shadow-md"
                                     value="tab1"
                                 >
                                     <p className="text-2xl">Contact Requests</p>
@@ -210,7 +210,7 @@ const ContactsIndex = () => {
                                     </div>
                                 </Tabs.Content>
                                 <Tabs.Content
-                                    className="rounded-br-md rounded-bl-md bg-gray-700 w-11/12 text-center p-2 shadow-md"
+                                    className="rounded-br-md rounded-bl-md bg-gray-700 w-full text-center p-2 shadow-md"
                                     value="tab2"
                                 >
                                     <p className="text-2xl">Request Sent</p>
@@ -258,7 +258,7 @@ const ContactsIndex = () => {
                                     </div>
                                 </Tabs.Content>
                                 <Tabs.Content
-                                    className="rounded-br-md rounded-bl-md bg-gray-700 w-11/12 text-center p-2 shadow-md"
+                                    className="rounded-br-md rounded-bl-md bg-gray-700 w-full text-center p-2 shadow-md"
                                     value="tab3"
                                 >
                                     <p className="text-2xl">Current Contacts</p>
@@ -316,7 +316,7 @@ const ContactsIndex = () => {
                                     </div>
                                 </Tabs.Content>
                                 <Tabs.Content
-                                    className="rounded-br-md rounded-bl-md bg-gray-700 w-11/12 text-center p-2 shadow-md"
+                                    className="rounded-br-md rounded-bl-md bg-gray-700 w-full text-center p-2 shadow-md"
                                     value="tab4"
                                 >
                                     <p className="text-2xl">Blocked Contacts</p>

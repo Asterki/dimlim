@@ -17,7 +17,7 @@ const NavbarComponent: React.FC<ComponentProps> = (props) => {
 
     return (
         <div className="w-full flex items-center justify-between p-4 h-16 bg-gray-700 shadow-md z-10 absolute top-0">
-            <h1 className="text-2xl text-white font-bold">DIMLIM</h1>
+            <Link to="/home" className="text-2xl text-white font-bold">DIMLIM</Link>
             {props.user && (
                 <div className="w-auto md:w-2/12">
                     <DropdownMenu.Root

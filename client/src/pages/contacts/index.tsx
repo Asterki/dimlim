@@ -34,6 +34,8 @@ const ContactsIndex = () => {
         requests: [],
     });
 
+    const [tab, setTab] = React.useState("tab1");
+
     React.useEffect(() => {
         (async () => {
             if (!user) {
@@ -61,7 +63,7 @@ const ContactsIndex = () => {
             { action: action, username },
             { withCredentials: true }
         );
-        console.log(data)
+        console.log(data);
     };
 
     const remove = async (username: string) => {
@@ -89,7 +91,7 @@ const ContactsIndex = () => {
     };
 
     return (
-        <div className="bg-gray-800 min-h-screen text-white">
+        <div className="bg-gray-800 min-h-screen text-white box-border">
             {user && (
                 <div>
                     <NavbarComponent user={user} />
@@ -98,46 +100,65 @@ const ContactsIndex = () => {
                             <Tabs.Root
                                 className="text-center w-full flex items-center flex-col"
                                 defaultValue="tab1"
+                                onValueChange={(e) => {
+                                    setTab(e);
+                                }}
                             >
                                 <Tabs.List
-                                    className="w-full flex items-center justify-center"
+                                    className="w-11/12 flex items-center justify-center shadow-md border-b-2 border-gray-800"
                                     aria-label="Manage your account"
                                 >
                                     <Tabs.Trigger
-                                        className="p-2 rounded-md bg-gray-700 mx-2 transition-all hover:bg-gray-600 w-3/12 md:w-2/12"
+                                        className={`p-2 rounded-tl-md transition-all w-3/12 md:w-1/4 ${
+                                            tab == "tab1"
+                                                ? "bg-emerald-400 shadow-2xl z-20"
+                                                : "bg-gray-700 hover:brightness-125"
+                                        }`}
                                         value="tab1"
                                     >
                                         Requests
                                     </Tabs.Trigger>
                                     <Tabs.Trigger
-                                        className="p-2 rounded-md bg-gray-700 mx-2 transition-all hover:bg-gray-600 w-3/12 md:w-2/12"
+                                        className={`p-2 transition-all w-3/12 md:w-1/4 ${
+                                            tab == "tab2"
+                                                ? "bg-emerald-400 shadow-2xl z-20"
+                                                : "bg-gray-700 hover:brightness-125"
+                                        }`}
                                         value="tab2"
                                     >
                                         Pending
                                     </Tabs.Trigger>
                                     <Tabs.Trigger
-                                        className="p-2 rounded-md bg-gray-700 mx-2 transition-all hover:bg-gray-600 w-3/12 md:w-2/12"
+                                        className={`p-2 transition-all w-3/12 md:w-1/4 ${
+                                            tab == "tab3"
+                                                ? "bg-emerald-400 shadow-2xl z-20"
+                                                : "bg-gray-700 hover:brightness-125"
+                                        }`}
                                         value="tab3"
                                     >
                                         Current Contacts
                                     </Tabs.Trigger>
                                     <Tabs.Trigger
-                                        className="p-2 rounded-md bg-gray-700 mx-2 transition-all hover:bg-gray-600 w-3/12 md:w-2/12"
+                                        className={`p-2 rounded-tr-md transition-all w-3/12 md:w-1/4 ${
+                                            tab == "tab4"
+                                                ? "bg-emerald-400 shadow-2xl z-20"
+                                                : "bg-gray-700 hover:brightness-125"
+                                        }`}
                                         value="tab4"
                                     >
                                         Blocked Contacts
                                     </Tabs.Trigger>
                                 </Tabs.List>
                                 <Tabs.Content
-                                    className="rounded-md bg-gray-700 my-2 w-11/12 text-center p-2 shadow-md"
+                                    className="rounded-br-md rounded-bl-md bg-gray-700 w-11/12 text-center p-2 shadow-md"
                                     value="tab1"
                                 >
                                     <p className="text-2xl">Contact Requests</p>
                                     <div className="flex flex-col items-center">
                                         {contacts.requests.length === 0 && (
-                                            <p className="text-xl">
+                                            <div className="text-lg h-64 flex items-center justify-center text-white/50">
                                                 No requests
-                                            </p>
+                                            </div>
                                         )}
                                         {contacts.requests.length > 0 && (
                                             <div className="w-11/12">
@@ -155,9 +176,9 @@ const ContactsIndex = () => {
                                                                         .username
                                                                 }
                                                             </p>
-                                                            <div className="flex">
+                                                            <div className="flex w-3/12">
                                                                 <button
-                                                                    className="p-2 bg-green-400 transition-all hover:bg-green-500 rounded-md mx-2"
+                                                                    className="p-2 bg-emerald-400 transition-all hover:brightness-125 rounded-md mx-2 w-1/2"
                                                                     onClick={() =>
                                                                         pending(
                                                                             contact.profile!
@@ -169,7 +190,7 @@ const ContactsIndex = () => {
                                                                     Accept
                                                                 </button>
                                                                 <button
-                                                                    className="p-2 bg-red-400 transition-all hover:bg-red-500 rounded-md"
+                                                                    className="p-2 bg-red-400 transition-all hover:brightness-125 rounded-md w-1/2"
                                                                     onClick={() =>
                                                                         pending(
                                                                             contact.profile!
@@ -189,15 +210,15 @@ const ContactsIndex = () => {
                                     </div>
                                 </Tabs.Content>
                                 <Tabs.Content
-                                    className="rounded-md bg-gray-700 my-2 w-11/12 text-center p-2 shadow-md"
+                                    className="rounded-br-md rounded-bl-md bg-gray-700 w-11/12 text-center p-2 shadow-md"
                                     value="tab2"
                                 >
                                     <p className="text-2xl">Request Sent</p>
                                     <div className="flex flex-col items-center">
                                         {contacts.pending.length === 0 && (
-                                            <p className="text-xl">
+                                            <div className="text-lg h-64 flex items-center justify-center text-white/50">
                                                 No requests
-                                            </p>
+                                            </div>
                                         )}
                                         {contacts.pending.length > 0 && (
                                             <div className="w-11/12">
@@ -215,9 +236,9 @@ const ContactsIndex = () => {
                                                                         .username
                                                                 }
                                                             </p>
-                                                            <div className="flex">
+                                                            <div className="flex w-3/12">
                                                                 <button
-                                                                    className="p-2 bg-red-400 transition-all hover:bg-red-500 rounded-md"
+                                                                    className="p-2 bg-red-400 transition-all hover:brightness-125 rounded-md w-1/2"
                                                                     onClick={() =>
                                                                         pending(
                                                                             contact.profile!
@@ -236,17 +257,16 @@ const ContactsIndex = () => {
                                         )}
                                     </div>
                                 </Tabs.Content>
-                                
                                 <Tabs.Content
-                                    className="rounded-md bg-gray-700 my-2 w-11/12 text-center p-2 shadow-md"
+                                    className="rounded-br-md rounded-bl-md bg-gray-700 w-11/12 text-center p-2 shadow-md"
                                     value="tab3"
                                 >
                                     <p className="text-2xl">Current Contacts</p>
                                     <div className="flex flex-col items-center">
                                         {contacts.accepted.length === 0 && (
-                                            <p className="text-xl">
+                                            <div className="text-lg h-64 flex items-center justify-center text-white/50">
                                                 No contacts
-                                            </p>
+                                            </div>
                                         )}
                                         {contacts.accepted.length > 0 && (
                                             <div className="w-11/12">
@@ -264,9 +284,9 @@ const ContactsIndex = () => {
                                                                         .username
                                                                 }
                                                             </p>
-                                                            <div className="flex">
-                                                            <button
-                                                                    className="p-2 bg-red-400 rounded-md mx-2"
+                                                            <div className="flex w-4/12">
+                                                                <button
+                                                                    className="p-2 bg-red-400 rounded-md mx-2 w-1/2"
                                                                     onClick={() =>
                                                                         remove(
                                                                             contact.profile!
@@ -277,7 +297,7 @@ const ContactsIndex = () => {
                                                                     Remove
                                                                 </button>
                                                                 <button
-                                                                    className="p-2 bg-red-400 rounded-md mx-2"
+                                                                    className="p-2 bg-red-400 rounded-md mx-2 w-1/2"
                                                                     onClick={() =>
                                                                         block(
                                                                             contact.profile!
@@ -286,17 +306,6 @@ const ContactsIndex = () => {
                                                                     }
                                                                 >
                                                                     Block
-                                                                </button>
-                                                                <button
-                                                                    className="p-2 bg-red-400 rounded-md"
-                                                                    onClick={() =>
-                                                                        unblock(
-                                                                            contact.profile!
-                                                                                .username
-                                                                        )
-                                                                    }
-                                                                >
-                                                                    Remove
                                                                 </button>
                                                             </div>
                                                         </div>
@@ -307,15 +316,15 @@ const ContactsIndex = () => {
                                     </div>
                                 </Tabs.Content>
                                 <Tabs.Content
-                                    className="rounded-md bg-gray-700 my-2 w-11/12 text-center p-2 shadow-md"
+                                    className="rounded-br-md rounded-bl-md bg-gray-700 w-11/12 text-center p-2 shadow-md"
                                     value="tab4"
                                 >
                                     <p className="text-2xl">Blocked Contacts</p>
                                     <div className="flex flex-col items-center">
                                         {contacts.blocked.length === 0 && (
-                                            <p className="text-xl">
-                                                No contacts
-                                            </p>
+                                            <div className="text-lg h-64 flex items-center justify-center text-white/50">
+                                                No blocked contacts
+                                            </div>
                                         )}
                                         {contacts.blocked.length > 0 && (
                                             <div>

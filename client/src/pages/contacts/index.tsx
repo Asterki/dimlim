@@ -96,22 +96,22 @@ const ContactsIndex = () => {
                 <div>
                     <NavbarComponent user={user} />
                     <div className="pt-20">
-                        <div className="text-center">
+                        <div className="text-center flex items-center justify-center">
                             <Tabs.Root
-                                className="text-center w-full flex items-center flex-col"
+                                className="text-center w-11/12 md:w-8/12 flex justify-center items-center flex-col "
                                 defaultValue="tab1"
                                 onValueChange={(e) => {
                                     setTab(e);
                                 }}
                             >
                                 <Tabs.List
-                                    className="w-11/12 flex items-center justify-center shadow-md border-b-2 border-gray-800"
+                                    className="w-11/12 flex justify-self-center shadow-md border-b-2 border-gray-800"
                                     aria-label="Manage your account"
                                 >
                                     <Tabs.Trigger
-                                        className={`p-2 rounded-tl-md transition-all w-3/12 md:w-1/4 ${
+                                        className={`p-2 rounded-tl-md transition-all w-3/12 md:w-1/4 border-r-2 border-gray-800 ${
                                             tab == "tab1"
-                                                ? "bg-emerald-400 shadow-2xl z-20"
+                                                ? "bg-purple-400 shadow-2xl z-20"
                                                 : "bg-gray-700 hover:brightness-125"
                                         }`}
                                         value="tab1"
@@ -119,9 +119,9 @@ const ContactsIndex = () => {
                                         Requests
                                     </Tabs.Trigger>
                                     <Tabs.Trigger
-                                        className={`p-2 transition-all w-3/12 md:w-1/4 ${
+                                        className={`p-2 transition-all w-3/12 md:w-1/4 border-r-2 border-gray-800 ${
                                             tab == "tab2"
-                                                ? "bg-emerald-400 shadow-2xl z-20"
+                                                ? "bg-purple-400 shadow-2xl z-20"
                                                 : "bg-gray-700 hover:brightness-125"
                                         }`}
                                         value="tab2"
@@ -131,7 +131,7 @@ const ContactsIndex = () => {
                                     <Tabs.Trigger
                                         className={`p-2 transition-all w-3/12 md:w-1/4 ${
                                             tab == "tab3"
-                                                ? "bg-emerald-400 shadow-2xl z-20"
+                                                ? "bg-purple-400 shadow-2xl z-20"
                                                 : "bg-gray-700 hover:brightness-125"
                                         }`}
                                         value="tab3"
@@ -139,9 +139,9 @@ const ContactsIndex = () => {
                                         Current Contacts
                                     </Tabs.Trigger>
                                     <Tabs.Trigger
-                                        className={`p-2 rounded-tr-md transition-all w-3/12 md:w-1/4 ${
+                                        className={`p-2 rounded-tr-md transition-all w-3/12 md:w-1/4 border-l-2 border-gray-800 ${
                                             tab == "tab4"
-                                                ? "bg-emerald-400 shadow-2xl z-20"
+                                                ? "bg-purple-400 shadow-2xl z-20"
                                                 : "bg-gray-700 hover:brightness-125"
                                         }`}
                                         value="tab4"
@@ -161,7 +161,7 @@ const ContactsIndex = () => {
                                             </div>
                                         )}
                                         {contacts.requests.length > 0 && (
-                                            <div className="w-11/12">
+                                            <div className="w-11/12 min-h-64">
                                                 {contacts.requests.map(
                                                     (contact) => (
                                                         <div
@@ -176,9 +176,9 @@ const ContactsIndex = () => {
                                                                         .username
                                                                 }
                                                             </p>
-                                                            <div className="flex w-3/12">
+                                                            <div className="flex w-5/12 md:w-3/12">
                                                                 <button
-                                                                    className="p-2 bg-emerald-400 transition-all hover:brightness-125 rounded-md mx-2 w-1/2"
+                                                                    className="p-2 bg-blue-400 transition-all hover:brightness-125 rounded-md mx-2 w-1/2"
                                                                     onClick={() =>
                                                                         pending(
                                                                             contact.profile!
@@ -221,7 +221,7 @@ const ContactsIndex = () => {
                                             </div>
                                         )}
                                         {contacts.pending.length > 0 && (
-                                            <div className="w-11/12">
+                                            <div className="w-11/12 min-h-64">
                                                 {contacts.pending.map(
                                                     (contact) => (
                                                         <div
@@ -236,7 +236,7 @@ const ContactsIndex = () => {
                                                                         .username
                                                                 }
                                                             </p>
-                                                            <div className="flex w-3/12">
+                                                            <div className="flex w-5/12 md:w-3/12">
                                                                 <button
                                                                     className="p-2 bg-red-400 transition-all hover:brightness-125 rounded-md w-1/2"
                                                                     onClick={() =>
@@ -269,7 +269,7 @@ const ContactsIndex = () => {
                                             </div>
                                         )}
                                         {contacts.accepted.length > 0 && (
-                                            <div className="w-11/12">
+                                            <div className="w-11/12 min-h-64">
                                                 {contacts.accepted.map(
                                                     (contact) => (
                                                         <div
@@ -284,7 +284,7 @@ const ContactsIndex = () => {
                                                                         .username
                                                                 }
                                                             </p>
-                                                            <div className="flex w-4/12">
+                                                            <div className="flex w-6/12 md:w-4/12">
                                                                 <button
                                                                     className="p-2 bg-red-400 rounded-md mx-2 w-1/2"
                                                                     onClick={() =>

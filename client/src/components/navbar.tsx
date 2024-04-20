@@ -19,7 +19,7 @@ const NavbarComponent: React.FC<ComponentProps> = (props) => {
         <div className="w-full flex items-center justify-between p-4 h-16 bg-gray-700 shadow-md z-10 absolute top-0">
             <h1 className="text-2xl text-white font-bold">DIMLIM</h1>
             {props.user && (
-                <div className="w-2/12">
+                <div className="w-auto md:w-2/12">
                     <DropdownMenu.Root
                         open={menuOpen}
                         onOpenChange={(change) => {
@@ -42,8 +42,8 @@ const NavbarComponent: React.FC<ComponentProps> = (props) => {
                             <div>
                                 <FontAwesomeIcon
                                     className={`${
-                                        menuOpen ? "transform rotate-180" : ""
-                                    } transition-all text-white/50`}
+                                        menuOpen ? "transform rotate-180 px-2" : ""
+                                    } transition-all text-white/50 px-2`}
                                     icon={faChevronCircleDown}
                                 />
                             </div>

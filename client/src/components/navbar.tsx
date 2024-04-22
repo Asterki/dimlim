@@ -79,16 +79,16 @@ const NavbarComponent: React.FC<ComponentProps> = (props) => {
                 </div>
             )}
             {!props.user && (
-                <div>
+                <div className="flex items-end justify-end w-1/2 md:w-3/12">
                     <a
                         href="/login"
-                        className="mr-2 hover:underline text-white"
+                        className="mr-2 hover:underline text-white bg-blue-400 rounded-md py-2 w-1/2 text-center"
                     >
                         Login
                     </a>
                     <a
                         href="/register"
-                        className="mr-2 hover:underline text-white"
+                        className="mr-2 hover:underline text-white bg-blue-400 rounded-md py-2 w-1/2 text-center"
                     >
                         Register
                     </a>

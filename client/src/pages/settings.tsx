@@ -7,6 +7,8 @@ import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "../store";
 import { setUser } from "../store/slices/page";
 
+import * as Switch from "@radix-ui/react-switch";
+
 import NavbarComponent from "../components/navbar";
 import { checkLoggedIn } from "../lib/auth";
 
@@ -93,7 +95,12 @@ const SettingsIndex = () => {
                                     className="rounded-br-md rounded-bl-md bg-gray-700 w-full text-center p-2 shadow-md"
                                     value="tab1"
                                 >
-                                    ewq
+                                    <Switch.Root
+                                        className="w-[42px] h-[25px] rounded-full relative bg-gray-800  data-[state=checked]:bg-blue-400 transition-all outline-none cursor-default"
+                                        id="airplane-mode"
+                                    >
+                                        <Switch.Thumb className="block w-[21px] h-[21px] bg-white rounded-full transition-transform duration-100 translate-x-0.5 will-change-transform data-[state=checked]:translate-x-[19px]" />
+                                    </Switch.Root>
                                 </Tabs.Content>
                                 <Tabs.Content
                                     className="rounded-br-md rounded-bl-md bg-gray-700 w-full text-center p-2 shadow-md"

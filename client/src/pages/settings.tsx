@@ -1,7 +1,7 @@
 import * as React from "react";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
 import * as Tabs from "@radix-ui/react-tabs";
+import * as Select from "@radix-ui/react-select";
 
 import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "../store";
@@ -11,13 +11,14 @@ import * as Switch from "@radix-ui/react-switch";
 
 import NavbarComponent from "../components/navbar";
 import { checkLoggedIn } from "../lib/auth";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faChevronDown } from "@fortawesome/free-solid-svg-icons";
 
 const SettingsIndex = () => {
     const user = useSelector((state: RootState) => state.page.currentUser);
     const dispatch = useDispatch();
 
     const redirect = useNavigate();
-
     React.useEffect(() => {
         (async () => {
             if (!user) {
@@ -101,12 +102,54 @@ const SettingsIndex = () => {
                                     >
                                         <Switch.Thumb className="block w-[21px] h-[21px] bg-white rounded-full transition-transform duration-100 translate-x-0.5 will-change-transform data-[state=checked]:translate-x-[19px]" />
                                     </Switch.Root>
+
+                                    el<Select.Root>
+                                        <Select.Trigger
+                                            className="bg-gray-800 rounded-md p-2"
+                                            aria-label="Food"
+                                        >
+                                            <Select.Value placeholder="Select a fruit…" />
+                                            <Select.Icon className="ml-2">
+                                                <FontAwesomeIcon
+                                                    icon={faChevronDown}
+                                                />
+                                            </Select.Icon>
+                                        </Select.Trigger>
+
+                                        <Select.Portal>
+                                            <Select.Content
+                                                side="top"
+                                                className="z-50 bg-gray-800 shadow-md rounded-md p-2 text-white"
+                                            >
+                                                <Select.Viewport className="flex flex-col gap-2">
+                                                    <Select.Item
+                                                        value="ejwqoiw"
+                                                        className="hover:bg-gray-700 p-2 rounded-md transition-all cursor-pointer
+                                                        data-[state=checked]:bg-blue-400
+                                                    "
+                                                    >
+                                                        <Select.ItemText>
+                                                            Light Theme
+                                                        </Select.ItemText>
+                                                    </Select.Item>
+                                                    <Select.Item
+                                                        value="ejwqoi23w"
+                                                        className="data-[state=checked]:bg-blue-400 hover:bg-gray-700 p-2 rounded-md transition-all cursor-pointer"
+                                                    >
+                                                        <Select.ItemText>
+                                                            Dark Theme
+                                                        </Select.ItemText>
+                                                    </Select.Item>
+                                                </Select.Viewport>
+                                            </Select.Content>
+                                        </Select.Portal>
+                                    </Select.Root>
                                 </Tabs.Content>
                                 <Tabs.Content
                                     className="rounded-br-md rounded-bl-md bg-gray-700 w-full text-center p-2 shadow-md"
                                     value="tab2"
                                 >
-                                    ewq
+                          
                                 </Tabs.Content>
                                 <Tabs.Content
                                     className="rounded-br-md rounded-bl-md bg-gray-700 w-full text-center p-2 shadow-md"

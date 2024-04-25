@@ -32,6 +32,13 @@ const SettingsIndex = () => {
 
     const [tab, setTab] = React.useState("tab1");
 
+    const [settings, setSettings] = React.useState({
+        general: {
+            theme: "light",
+            language: "en",
+        },
+    });
+
     return (
         <div className="bg-gray-800 min-h-screen text-white">
             {user && (
@@ -96,61 +103,122 @@ const SettingsIndex = () => {
                                     className="rounded-br-md rounded-bl-md bg-gray-700 w-full text-center p-2 shadow-md"
                                     value="tab1"
                                 >
-                                    <Switch.Root
-                                        className="w-[42px] h-[25px] rounded-full relative bg-gray-800  data-[state=checked]:bg-blue-400 transition-all outline-none cursor-default"
-                                        id="airplane-mode"
-                                    >
-                                        <Switch.Thumb className="block w-[21px] h-[21px] bg-white rounded-full transition-transform duration-100 translate-x-0.5 will-change-transform data-[state=checked]:translate-x-[19px]" />
-                                    </Switch.Root>
+                                    <div className="grid grid-cols-2">
+                                        <div className="flex flex-col items-center justify-center">
+                                            <h1 className="text-2xl">Theme</h1>
 
-                                    el<Select.Root>
-                                        <Select.Trigger
-                                            className="bg-gray-800 rounded-md p-2"
-                                            aria-label="Food"
-                                        >
-                                            <Select.Value placeholder="Select a fruit…" />
-                                            <Select.Icon className="ml-2">
-                                                <FontAwesomeIcon
-                                                    icon={faChevronDown}
-                                                />
-                                            </Select.Icon>
-                                        </Select.Trigger>
-
-                                        <Select.Portal>
-                                            <Select.Content
-                                                side="top"
-                                                className="z-50 bg-gray-800 shadow-md rounded-md p-2 text-white"
+                                            <Select.Root
+                                                defaultValue={
+                                                    settings.general.theme
+                                                }
+                                                onValueChange={(val) => {
+                                                    setSettings({
+                                                        general: {
+                                                            ...settings.general,
+                                                            theme: val,
+                                                        },
+                                                    });
+                                                }}
                                             >
-                                                <Select.Viewport className="flex flex-col gap-2">
-                                                    <Select.Item
-                                                        value="ejwqoiw"
-                                                        className="hover:bg-gray-700 p-2 rounded-md transition-all cursor-pointer
-                                                        data-[state=checked]:bg-blue-400
-                                                    "
+                                                <Select.Trigger className="bg-gray-800 rounded-md p-2 w-7/12 flex justify-between">
+                                                    <Select.Value placeholder="Select a theme" />
+                                                    <Select.Icon className="ml-2">
+                                                        <FontAwesomeIcon
+                                                            icon={faChevronDown}
+                                                        />
+                                                    </Select.Icon>
+                                                </Select.Trigger>
+
+                                                <Select.Portal>
+                                                    <Select.Content
+                                                        side="bottom"
+                                                        align="end"
+                                                        className="z-50 bg-gray-800 shadow-md rounded-md p-2 text-white outline-none"
                                                     >
-                                                        <Select.ItemText>
-                                                            Light Theme
-                                                        </Select.ItemText>
-                                                    </Select.Item>
-                                                    <Select.Item
-                                                        value="ejwqoi23w"
-                                                        className="data-[state=checked]:bg-blue-400 hover:bg-gray-700 p-2 rounded-md transition-all cursor-pointer"
+                                                        <Select.Viewport className="flex flex-col gap-2">
+                                                            <Select.Item
+                                                                value="light"
+                                                                className="hover:bg-gray-700 p-2 rounded-md transition-all cursor-pointer data-[state=checked]:bg-blue-400 outline-none"
+                                                            >
+                                                                <Select.ItemText>
+                                                                    Light Theme
+                                                                </Select.ItemText>
+                                                            </Select.Item>
+                                                            <Select.Item
+                                                                value="dark"
+                                                                className="data-[state=checked]:bg-blue-400 hover:bg-gray-700 p-2 rounded-md transition-all cursor-pointer outline-none"
+                                                            >
+                                                                <Select.ItemText>
+                                                                    Dark Theme
+                                                                </Select.ItemText>
+                                                            </Select.Item>
+                                                        </Select.Viewport>
+                                                    </Select.Content>
+                                                </Select.Portal>
+                                            </Select.Root>
+                                        </div>
+
+                                        <div className="flex flex-col items-center justify-center">
+                                            <h1 className="text-2xl">
+                                                Language
+                                            </h1>
+
+                                            <Select.Root
+                                                defaultValue={
+                                                    settings.general.language
+                                                }
+                                                onValueChange={(val) => {
+                                                    setSettings({
+                                                        general: {
+                                                            ...settings.general,
+                                                            language: val,
+                                                        },
+                                                    });
+                                                }}
+                                            >
+                                                <Select.Trigger className="bg-gray-800 rounded-md p-2 w-7/12 flex justify-between">
+                                                    <Select.Value placeholder="Select a language" />
+                                                    <Select.Icon className="ml-2">
+                                                        <FontAwesomeIcon
+                                                            icon={faChevronDown}
+                                                        />
+                                                    </Select.Icon>
+                                                </Select.Trigger>
+
+                                                <Select.Portal>
+                                                    <Select.Content
+                                                        side="bottom"
+                                                        align="end"
+                                                        className="z-50 bg-gray-800 shadow-md rounded-md p-2 text-white w-full outline-none"
                                                     >
-                                                        <Select.ItemText>
-                                                            Dark Theme
-                                                        </Select.ItemText>
-                                                    </Select.Item>
-                                                </Select.Viewport>
-                                            </Select.Content>
-                                        </Select.Portal>
-                                    </Select.Root>
+                                                        <Select.Viewport className="flex flex-col gap-2">
+                                                            <Select.Item
+                                                                value="en"
+                                                                className="hover:bg-gray-700 p-2 rounded-md transition-all cursor-pointer data-[state=checked]:bg-blue-400 outline-none"
+                                                            >
+                                                                <Select.ItemText>
+                                                                    English
+                                                                </Select.ItemText>
+                                                            </Select.Item>
+                                                            <Select.Item
+                                                                value="es"
+                                                                className="data-[state=checked]:bg-blue-400 hover:bg-gray-700 p-2 rounded-md transition-all cursor-pointer outline-none"
+                                                            >
+                                                                <Select.ItemText>
+                                                                    Spanish
+                                                                </Select.ItemText>
+                                                            </Select.Item>
+                                                        </Select.Viewport>
+                                                    </Select.Content>
+                                                </Select.Portal>
+                                            </Select.Root>
+                                        </div>
+                                    </div>
                                 </Tabs.Content>
                                 <Tabs.Content
                                     className="rounded-br-md rounded-bl-md bg-gray-700 w-full text-center p-2 shadow-md"
                                     value="tab2"
-                                >
-                          
-                                </Tabs.Content>
+                                ></Tabs.Content>
                                 <Tabs.Content
                                     className="rounded-br-md rounded-bl-md bg-gray-700 w-full text-center p-2 shadow-md"
                                     value="tab3"

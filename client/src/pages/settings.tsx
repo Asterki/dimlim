@@ -41,6 +41,11 @@ const SettingsIndex = () => {
             showNotifications: true,
             playSound: true,
         },
+        privacy: {
+            showOnlineStatus: true,
+            showLastSeen: true,
+            showReadReceipts: true,
+        },
     });
 
     return (
@@ -265,14 +270,84 @@ const SettingsIndex = () => {
                                         >
                                             <Switch.Thumb className="block w-[21px] h-[21px] bg-white rounded-full transition-transform duration-100 translate-x-0.5 will-change-transform data-[state=checked]:translate-x-[19px]" />
                                         </Switch.Root>
-                                        <h1>Play notification sound</h1>
+                                        <h1>
+                                            Play notification sound
+                                        </h1>
                                     </div>
                                 </Tabs.Content>
                                 <Tabs.Content
                                     className="rounded-br-md rounded-bl-md bg-gray-700 w-full text-center p-2 shadow-md"
                                     value="tab3"
                                 >
-                                    ewq
+                                    <div className="flex items-center gap-2 my-2">
+                                        <Switch.Root
+                                            defaultChecked={
+                                                settings.privacy
+                                                    .showOnlineStatus
+                                            }
+                                            onCheckedChange={(val) =>
+                                                setSettings({
+                                                    ...settings,
+                                                    privacy: {
+                                                        ...settings.privacy,
+                                                        showOnlineStatus: val,
+                                                    },
+                                                })
+                                            }
+                                            className="w-[42px] h-[25px] rounded-full relative bg-gray-800  data-[state=checked]:bg-blue-400 transition-all outline-none cursor-default"
+                                        >
+                                            <Switch.Thumb className="block w-[21px] h-[21px] bg-white rounded-full transition-transform duration-100 translate-x-0.5 will-change-transform data-[state=checked]:translate-x-[19px]" />
+                                        </Switch.Root>
+                                        <h1>
+                                            Show online status
+                                        </h1>
+                                    </div>
+                                    <div className="flex items-center gap-2 my-2">
+                                        <Switch.Root
+                                            defaultChecked={
+                                                settings.privacy
+                                                    .showLastSeen
+                                            }
+                                            onCheckedChange={(val) =>
+                                                setSettings({
+                                                    ...settings,
+                                                    privacy: {
+                                                        ...settings.privacy,
+                                                        showLastSeen: val,
+                                                    },
+                                                })
+                                            }
+                                            className="w-[42px] h-[25px] rounded-full relative bg-gray-800  data-[state=checked]:bg-blue-400 transition-all outline-none cursor-default"
+                                        >
+                                            <Switch.Thumb className="block w-[21px] h-[21px] bg-white rounded-full transition-transform duration-100 translate-x-0.5 will-change-transform data-[state=checked]:translate-x-[19px]" />
+                                        </Switch.Root>
+                                        <h1>
+                                            Show last seen
+                                        </h1>
+                                    </div>
+                                    <div className="flex items-center gap-2 my-2">
+                                        <Switch.Root
+                                            defaultChecked={
+                                                settings.privacy
+                                                    .showReadReceipts
+                                            }
+                                            onCheckedChange={(val) =>
+                                                setSettings({
+                                                    ...settings,
+                                                    privacy: {
+                                                        ...settings.privacy,
+                                                        showReadReceipts: val,
+                                                    },
+                                                })
+                                            }
+                                            className="w-[42px] h-[25px] rounded-full relative bg-gray-800  data-[state=checked]:bg-blue-400 transition-all outline-none cursor-default"
+                                        >
+                                            <Switch.Thumb className="block w-[21px] h-[21px] bg-white rounded-full transition-transform duration-100 translate-x-0.5 will-change-transform data-[state=checked]:translate-x-[19px]" />
+                                        </Switch.Root>
+                                        <h1>
+                                            Show read receipts
+                                        </h1>
+                                    </div>
                                 </Tabs.Content>
                                 <Tabs.Content
                                     className="rounded-br-md rounded-bl-md bg-gray-700 w-full text-center p-2 shadow-md"

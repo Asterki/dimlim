@@ -37,6 +37,10 @@ const SettingsIndex = () => {
             theme: "light",
             language: "en",
         },
+        notifications: {
+            showNotifications: true,
+            playSound: true,
+        },
     });
 
     return (
@@ -218,7 +222,50 @@ const SettingsIndex = () => {
                                 <Tabs.Content
                                     className="rounded-br-md rounded-bl-md bg-gray-700 w-full text-center p-2 shadow-md"
                                     value="tab2"
-                                ></Tabs.Content>
+                                >
+                                    <div className="flex items-center gap-2 my-2">
+                                        <Switch.Root
+                                            defaultChecked={
+                                                settings.notifications
+                                                    .showNotifications
+                                            }
+                                            onCheckedChange={(val) =>
+                                                setSettings({
+                                                    ...settings,
+                                                    notifications: {
+                                                        ...settings.notifications,
+                                                        showNotifications: val,
+                                                    },
+                                                })
+                                            }
+                                            className="w-[42px] h-[25px] rounded-full relative bg-gray-800  data-[state=checked]:bg-blue-400 transition-all outline-none cursor-default"
+                                        >
+                                            <Switch.Thumb className="block w-[21px] h-[21px] bg-white rounded-full transition-transform duration-100 translate-x-0.5 will-change-transform data-[state=checked]:translate-x-[19px]" />
+                                        </Switch.Root>
+                                        <h1>Show notifications</h1>
+                                    </div>
+                                    <div className="flex items-center gap-2 my-2">
+                                        <Switch.Root
+                                            defaultChecked={
+                                                settings.notifications
+                                                    .showNotifications
+                                            }
+                                            onCheckedChange={(val) =>
+                                                setSettings({
+                                                    ...settings,
+                                                    notifications: {
+                                                        ...settings.notifications,
+                                                        playSound: val,
+                                                    },
+                                                })
+                                            }
+                                            className="w-[42px] h-[25px] rounded-full relative bg-gray-800  data-[state=checked]:bg-blue-400 transition-all outline-none cursor-default"
+                                        >
+                                            <Switch.Thumb className="block w-[21px] h-[21px] bg-white rounded-full transition-transform duration-100 translate-x-0.5 will-change-transform data-[state=checked]:translate-x-[19px]" />
+                                        </Switch.Root>
+                                        <h1>Play notification sound</h1>
+                                    </div>
+                                </Tabs.Content>
                                 <Tabs.Content
                                     className="rounded-br-md rounded-bl-md bg-gray-700 w-full text-center p-2 shadow-md"
                                     value="tab3"

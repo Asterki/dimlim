@@ -117,6 +117,7 @@ const SettingsIndex = () => {
                                                 }
                                                 onValueChange={(val) => {
                                                     setSettings({
+                                                        ...settings,
                                                         general: {
                                                             ...settings.general,
                                                             theme: val,
@@ -173,6 +174,7 @@ const SettingsIndex = () => {
                                                 }
                                                 onValueChange={(val) => {
                                                     setSettings({
+                                                        ...settings,
                                                         general: {
                                                             ...settings.general,
                                                             language: val,

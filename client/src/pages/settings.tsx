@@ -347,13 +347,35 @@ const SettingsIndex = () => {
                                 >
                                     <div className="flex flex-col gap-2">
                                         <div className="flex gap-2 items-center">
-                                            <Dialog.Root open={false}>
+                                            <Dialog.Root>
                                                 <Dialog.Trigger className="bg-blue-400 rounded-md p-2 shadow-md w-3/12">
                                                     Change password
                                                 </Dialog.Trigger>
                                                 <Dialog.Portal>
                                                     <Dialog.Overlay className="bg-black/50 data-[state=open]:animate-overlayShow fixed inset-0 z-20" />
-                                                    <Dialog.Content className="data-[state=open]:animate-contentShow fixed top-[50%] left-[50%] max-h-[85vh] w-[90vw] max-w-[450px] translate-x-[-50%] translate-y-[-50%] rounded-md bg-gray-700 p-4 text-white focus:outline-none z-30"></Dialog.Content>
+                                                    <Dialog.Content className="data-[state=open]:animate-contentShow fixed top-[50%] left-[50%] max-h-[85vh] w-[90vw] max-w-[450px] translate-x-[-50%] translate-y-[-50%] rounded-md bg-gray-700 p-4 text-white focus:outline-none z-30 flex items-center flex-col gap-2">
+                                                        <h1 className="text-2xl">
+                                                            Change Password
+                                                        </h1>
+                                                        <input
+                                                            type="password"
+                                                            className="bg-gray-800 rounded-md p-2 text-white w-full"
+                                                            placeholder="Current Password"
+                                                        />
+                                                        <input
+                                                            type="password"
+                                                            className="bg-gray-800 rounded-md p-2 text-white w-full"
+                                                            placeholder="New Password"
+                                                        />
+                                                        <input
+                                                            type="password"
+                                                            className="bg-gray-800 rounded-md p-2 text-white w-full"
+                                                            placeholder="Confirm New Password"
+                                                        />
+                                                        <button className="p-2 bg-blue-400 rounded-md mt-2 w-1/2">
+                                                            Submit
+                                                        </button>
+                                                    </Dialog.Content>
                                                 </Dialog.Portal>
                                             </Dialog.Root>
                                             <p>
@@ -367,11 +389,35 @@ const SettingsIndex = () => {
                                         <div className="flex gap-2 items-center">
                                             <Dialog.Root>
                                                 <Dialog.Trigger className="bg-blue-400 rounded-md p-2 shadow-md w-3/12">
-                                                    Activate TFA
+                                                    Two Factor Authentication
                                                 </Dialog.Trigger>
                                                 <Dialog.Portal>
                                                     <Dialog.Overlay className="bg-black/50 data-[state=open]:animate-overlayShow fixed inset-0 z-20" />
-                                                    <Dialog.Content className="data-[state=open]:animate-contentShow fixed top-[50%] left-[50%] max-h-[85vh] w-[90vw] max-w-[450px] translate-x-[-50%] translate-y-[-50%] rounded-md bg-gray-700 p-4 text-white focus:outline-none z-30"></Dialog.Content>
+                                                    <Dialog.Content className="data-[state=open]:animate-contentShow fixed top-[50%] left-[50%] max-h-[85vh] w-[90vw] max-w-[450px] translate-x-[-50%] translate-y-[-50%] rounded-md bg-gray-700 p-4 text-white focus:outline-none z-30 flex flex-col items-center">
+                                                        <img
+                                                            src="https://placehold.co/300"
+                                                            alt=""
+                                                        />
+                                                        <h1 className="text-2xl">
+                                                            Scan with your
+                                                            device
+                                                        </h1>
+                                                        <p className="text-center">
+                                                            Scan the QR code
+                                                            with your device to
+                                                            enable two factor
+                                                            authentication
+                                                        </p>
+
+                                                        <input
+                                                            type="text"
+                                                            className="bg-gray-800 rounded-md p-2 text-white w-full"
+                                                            placeholder="Code Generated by your app"
+                                                        />
+                                                        <button className="p-2 bg-blue-400 rounded-md mt-2 w-1/2">
+                                                            Submit
+                                                        </button>
+                                                    </Dialog.Content>
                                                 </Dialog.Portal>
                                             </Dialog.Root>
                                             <p>

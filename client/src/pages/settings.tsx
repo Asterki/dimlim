@@ -1,13 +1,14 @@
 import * as React from "react";
 import { useNavigate } from "react-router-dom";
+
 import * as Tabs from "@radix-ui/react-tabs";
 import * as Select from "@radix-ui/react-select";
+import * as Dialog from "@radix-ui/react-dialog";
+import * as Switch from "@radix-ui/react-switch";
 
 import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "../store";
 import { setUser } from "../store/slices/page";
-
-import * as Switch from "@radix-ui/react-switch";
 
 import NavbarComponent from "../components/navbar";
 import { checkLoggedIn } from "../lib/auth";
@@ -270,9 +271,7 @@ const SettingsIndex = () => {
                                         >
                                             <Switch.Thumb className="block w-[21px] h-[21px] bg-white rounded-full transition-transform duration-100 translate-x-0.5 will-change-transform data-[state=checked]:translate-x-[19px]" />
                                         </Switch.Root>
-                                        <h1>
-                                            Play notification sound
-                                        </h1>
+                                        <h1>Play notification sound</h1>
                                     </div>
                                 </Tabs.Content>
                                 <Tabs.Content
@@ -298,15 +297,12 @@ const SettingsIndex = () => {
                                         >
                                             <Switch.Thumb className="block w-[21px] h-[21px] bg-white rounded-full transition-transform duration-100 translate-x-0.5 will-change-transform data-[state=checked]:translate-x-[19px]" />
                                         </Switch.Root>
-                                        <h1>
-                                            Show online status
-                                        </h1>
+                                        <h1>Show online status</h1>
                                     </div>
                                     <div className="flex items-center gap-2 my-2">
                                         <Switch.Root
                                             defaultChecked={
-                                                settings.privacy
-                                                    .showLastSeen
+                                                settings.privacy.showLastSeen
                                             }
                                             onCheckedChange={(val) =>
                                                 setSettings({
@@ -321,9 +317,7 @@ const SettingsIndex = () => {
                                         >
                                             <Switch.Thumb className="block w-[21px] h-[21px] bg-white rounded-full transition-transform duration-100 translate-x-0.5 will-change-transform data-[state=checked]:translate-x-[19px]" />
                                         </Switch.Root>
-                                        <h1>
-                                            Show last seen
-                                        </h1>
+                                        <h1>Show last seen</h1>
                                     </div>
                                     <div className="flex items-center gap-2 my-2">
                                         <Switch.Root
@@ -344,16 +338,51 @@ const SettingsIndex = () => {
                                         >
                                             <Switch.Thumb className="block w-[21px] h-[21px] bg-white rounded-full transition-transform duration-100 translate-x-0.5 will-change-transform data-[state=checked]:translate-x-[19px]" />
                                         </Switch.Root>
-                                        <h1>
-                                            Show read receipts
-                                        </h1>
+                                        <h1>Show read receipts</h1>
                                     </div>
                                 </Tabs.Content>
                                 <Tabs.Content
                                     className="rounded-br-md rounded-bl-md bg-gray-700 w-full text-center p-2 shadow-md"
                                     value="tab4"
                                 >
-                                    ewq
+                                    <div className="flex flex-col gap-2">
+                                        <div className="flex gap-2 items-center">
+                                            <Dialog.Root open={false}>
+                                                <Dialog.Trigger className="bg-blue-400 rounded-md p-2 shadow-md w-3/12">
+                                                    Change password
+                                                </Dialog.Trigger>
+                                                <Dialog.Portal>
+                                                    <Dialog.Overlay className="bg-black/50 data-[state=open]:animate-overlayShow fixed inset-0 z-20" />
+                                                    <Dialog.Content className="data-[state=open]:animate-contentShow fixed top-[50%] left-[50%] max-h-[85vh] w-[90vw] max-w-[450px] translate-x-[-50%] translate-y-[-50%] rounded-md bg-gray-700 p-4 text-white focus:outline-none z-30"></Dialog.Content>
+                                                </Dialog.Portal>
+                                            </Dialog.Root>
+                                            <p>
+                                                Last Changed:{" "}
+                                                {new Date(
+                                                    Date.now()
+                                                ).toString()}
+                                            </p>
+                                        </div>
+
+                                        <div className="flex gap-2 items-center">
+                                            <Dialog.Root>
+                                                <Dialog.Trigger className="bg-blue-400 rounded-md p-2 shadow-md w-3/12">
+                                                    Activate TFA
+                                                </Dialog.Trigger>
+                                                <Dialog.Portal>
+                                                    <Dialog.Overlay className="bg-black/50 data-[state=open]:animate-overlayShow fixed inset-0 z-20" />
+                                                    <Dialog.Content className="data-[state=open]:animate-contentShow fixed top-[50%] left-[50%] max-h-[85vh] w-[90vw] max-w-[450px] translate-x-[-50%] translate-y-[-50%] rounded-md bg-gray-700 p-4 text-white focus:outline-none z-30"></Dialog.Content>
+                                                </Dialog.Portal>
+                                            </Dialog.Root>
+                                            <p>
+                                                Status:{" "}
+                                                {user.preferences.security
+                                                    .twoFactor.active
+                                                    ? "Active"
+                                                    : "Inactive"}
+                                            </p>
+                                        </div>
+                                    </div>
                                 </Tabs.Content>
                             </Tabs.Root>
                         </div>

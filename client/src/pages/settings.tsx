@@ -1,4 +1,5 @@
 import * as React from "react";
+import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
 import * as Tabs from "@radix-ui/react-tabs";
@@ -48,6 +49,71 @@ const SettingsIndex = () => {
         showLastSeen: true,
         showReadReceipts: true,
     });
+
+    // Update the user preferences when the settings change
+    React.useEffect(() => {
+        if (user) {
+            dispatch(
+                setUser({
+                    ...user,
+                    preferences: {
+                        ...user.preferences,
+                        general: generalSettings,
+                    },
+                })
+            );
+
+            const response = axios.post("http://localhost:3000/api/settings/general", {
+                ...generalSettings,
+            }, { withCredentials: true });
+            console.log(response)
+        }
+    }, [generalSettings]);
+
+    React.useEffect(() => {
+        if (user) {
+            dispatch(
+                setUser({
+                    ...user,
+                    preferences: {
+                        ...user.preferences,
+                        notifications: notificationsSettings,
+                    },
+                })
+            );
+            
+            const response = axios.post("http://localhost:3000/api/settings/notifications", {
+                ...notificationsSettings,
+            }, { withCredentials: true });
+        }
+    }, [notificationsSettings]);
+
+    React.useEffect(() => {
+        if (user) {
+            dispatch(
+                setUser({
+                    ...user,
+                    preferences: {
+                        ...user.preferences,
+                        privacy: privacySettings,
+                    },
+                })
+            );
+
+            const response = axios.post("http://localhost:3000/api/settings/privacy", {
+                ...privacySettings,
+            }, { withCredentials: true });
+        }
+    }, [privacySettings]);
+
+    // Load the user preferences when the user is loaded
+    React.useEffect(() => {
+        if (user) {
+            setGeneralSettings(user.preferences.general);
+            setNotificationsSettings(user.preferences.notifications);
+            setPrivacySettings(user.preferences.privacy);
+        }
+    }, [user]);
 
     return (
         <div className="bg-gray-800 min-h-screen text-white">

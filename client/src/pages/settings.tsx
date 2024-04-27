@@ -33,20 +33,20 @@ const SettingsIndex = () => {
 
     const [tab, setTab] = React.useState("tab1");
 
-    const [settings, setSettings] = React.useState({
-        general: {
-            theme: "light",
-            language: "en",
-        },
-        notifications: {
-            showNotifications: true,
-            playSound: true,
-        },
-        privacy: {
-            showOnlineStatus: true,
-            showLastSeen: true,
-            showReadReceipts: true,
-        },
+    const [generalSettings, setGeneralSettings] = React.useState({
+        theme: "light",
+        language: "en",
+    });
+
+    const [notificationsSettings, setNotificationsSettings] = React.useState({
+        showNotifications: true,
+        playSound: true,
+    });
+
+    const [privacySettings, setPrivacySettings] = React.useState({
+        showOnlineStatus: true,
+        showLastSeen: true,
+        showReadReceipts: true,
     });
 
     return (
@@ -119,15 +119,12 @@ const SettingsIndex = () => {
 
                                             <Select.Root
                                                 defaultValue={
-                                                    settings.general.theme
+                                                    generalSettings.theme
                                                 }
                                                 onValueChange={(val) => {
-                                                    setSettings({
-                                                        ...settings,
-                                                        general: {
-                                                            ...settings.general,
-                                                            theme: val,
-                                                        },
+                                                    setGeneralSettings({
+                                                        ...generalSettings,
+                                                        theme: val,
                                                     });
                                                 }}
                                             >
@@ -176,15 +173,12 @@ const SettingsIndex = () => {
 
                                             <Select.Root
                                                 defaultValue={
-                                                    settings.general.language
+                                                    generalSettings.language
                                                 }
                                                 onValueChange={(val) => {
-                                                    setSettings({
-                                                        ...settings,
-                                                        general: {
-                                                            ...settings.general,
-                                                            language: val,
-                                                        },
+                                                    setGeneralSettings({
+                                                        ...generalSettings,
+                                                        language: val,
                                                     });
                                                 }}
                                             >
@@ -234,16 +228,12 @@ const SettingsIndex = () => {
                                     <div className="flex items-center gap-2 my-2">
                                         <Switch.Root
                                             defaultChecked={
-                                                settings.notifications
-                                                    .showNotifications
+                                                notificationsSettings.showNotifications
                                             }
                                             onCheckedChange={(val) =>
-                                                setSettings({
-                                                    ...settings,
-                                                    notifications: {
-                                                        ...settings.notifications,
-                                                        showNotifications: val,
-                                                    },
+                                                setNotificationsSettings({
+                                                    ...notificationsSettings,
+                                                    showNotifications: val,
                                                 })
                                             }
                                             className="w-[42px] h-[25px] rounded-full relative bg-gray-800  data-[state=checked]:bg-blue-400 transition-all outline-none cursor-default"
@@ -255,16 +245,12 @@ const SettingsIndex = () => {
                                     <div className="flex items-center gap-2 my-2">
                                         <Switch.Root
                                             defaultChecked={
-                                                settings.notifications
-                                                    .showNotifications
+                                                notificationsSettings.showNotifications
                                             }
                                             onCheckedChange={(val) =>
-                                                setSettings({
-                                                    ...settings,
-                                                    notifications: {
-                                                        ...settings.notifications,
-                                                        playSound: val,
-                                                    },
+                                                setNotificationsSettings({
+                                                    ...notificationsSettings,
+                                                    playSound: val,
                                                 })
                                             }
                                             className="w-[42px] h-[25px] rounded-full relative bg-gray-800  data-[state=checked]:bg-blue-400 transition-all outline-none cursor-default"
@@ -281,16 +267,12 @@ const SettingsIndex = () => {
                                     <div className="flex items-center gap-2 my-2">
                                         <Switch.Root
                                             defaultChecked={
-                                                settings.privacy
-                                                    .showOnlineStatus
+                                                privacySettings.showOnlineStatus
                                             }
                                             onCheckedChange={(val) =>
-                                                setSettings({
-                                                    ...settings,
-                                                    privacy: {
-                                                        ...settings.privacy,
-                                                        showOnlineStatus: val,
-                                                    },
+                                                setPrivacySettings({
+                                                    ...privacySettings,
+                                                    showOnlineStatus: val,
                                                 })
                                             }
                                             className="w-[42px] h-[25px] rounded-full relative bg-gray-800  data-[state=checked]:bg-blue-400 transition-all outline-none cursor-default"
@@ -302,15 +284,12 @@ const SettingsIndex = () => {
                                     <div className="flex items-center gap-2 my-2">
                                         <Switch.Root
                                             defaultChecked={
-                                                settings.privacy.showLastSeen
+                                                privacySettings.showLastSeen
                                             }
                                             onCheckedChange={(val) =>
-                                                setSettings({
-                                                    ...settings,
-                                                    privacy: {
-                                                        ...settings.privacy,
-                                                        showLastSeen: val,
-                                                    },
+                                                setPrivacySettings({
+                                                    ...privacySettings,
+                                                    showLastSeen: val,
                                                 })
                                             }
                                             className="w-[42px] h-[25px] rounded-full relative bg-gray-800  data-[state=checked]:bg-blue-400 transition-all outline-none cursor-default"
@@ -322,16 +301,12 @@ const SettingsIndex = () => {
                                     <div className="flex items-center gap-2 my-2">
                                         <Switch.Root
                                             defaultChecked={
-                                                settings.privacy
-                                                    .showReadReceipts
+                                                privacySettings.showReadReceipts
                                             }
                                             onCheckedChange={(val) =>
-                                                setSettings({
-                                                    ...settings,
-                                                    privacy: {
-                                                        ...settings.privacy,
-                                                        showReadReceipts: val,
-                                                    },
+                                                setPrivacySettings({
+                                                    ...privacySettings,
+                                                    showReadReceipts: val,
                                                 })
                                             }
                                             className="w-[42px] h-[25px] rounded-full relative bg-gray-800  data-[state=checked]:bg-blue-400 transition-all outline-none cursor-default"

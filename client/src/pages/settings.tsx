@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import * as React from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
@@ -34,6 +35,7 @@ const SettingsIndex = () => {
     }, []);
 
     const [tab, setTab] = React.useState("tab1");
+    const [userLoaded, setUserLoaded] = React.useState(false);
     const [secretImage, setSecretImage] = React.useState<string>("");
 
     // Settings
@@ -68,13 +70,20 @@ const SettingsIndex = () => {
     });
 
     const generateSecret = async () => {
-        const response = await axios.get("http://localhost:3000/api/accounts/generate-tfa")
-        console.log(response.data)
+        const response = await axios.get(
+            "http://localhost:3000/api/accounts/generate-tfa"
+        );
+        if (response.data.status === "success") {
+            QRCode.toDataURL(response.data.data.otpauth_url, (err, url) => {
+                if (err) console.error(err);
+                setSecretImage(url);
+            });
+        }
     };
 
     // Update the user preferences when the settings change
     React.useEffect(() => {
-        if (user) {
+        if (user && userLoaded) {
             dispatch(
                 setUser({
                     ...user,
@@ -92,12 +101,13 @@ const SettingsIndex = () => {
                 },
                 { withCredentials: true }
             );
+
             console.log(response);
         }
     }, [generalSettings]);
 
     React.useEffect(() => {
-        if (user) {
+        if (user && userLoaded) {
             dispatch(
                 setUser({
                     ...user,
@@ -115,11 +125,13 @@ const SettingsIndex = () => {
                 },
                 { withCredentials: true }
             );
+
+            console.log(response);
         }
     }, [notificationsSettings]);
 
     React.useEffect(() => {
-        if (user) {
+        if (user && userLoaded) {
             dispatch(
                 setUser({
                     ...user,
@@ -137,8 +149,34 @@ const SettingsIndex = () => {
                 },
                 { withCredentials: true }
             );
+
+            console.log(response);
         }
     }, [privacySettings]);
+
+    React.useEffect(() => {
+        if (user && userLoaded) {
+            dispatch(
+                setUser({
+                    ...user,
+                    preferences: {
+                        ...user.preferences,
+                        security: securitySettings,
+                    },
+                })
+            );
+
+            const response = axios.post(
+                "http://localhost:3000/api/settings/security",
+                {
+                    ...securitySettings,
+                },
+                { withCredentials: true }
+            );
+
+            console.log(response);
+        }
+    }, [securitySettings]);
 
     // Load the user preferences when the user is loaded
     React.useEffect(() => {
@@ -147,6 +185,8 @@ const SettingsIndex = () => {
             setNotificationsSettings(user.preferences.notifications);
             setPrivacySettings(user.preferences.privacy);
             setSecuritySettings(user.preferences.security);
+
+            setUserLoaded(true);
         }
     }, [user]);
 

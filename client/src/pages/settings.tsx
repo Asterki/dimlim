@@ -71,7 +71,7 @@ const SettingsIndex = () => {
 
     const generateSecret = async () => {
         const response = await axios.get(
-            "http://localhost:3000/api/accounts/generate-tfa"
+            "http://localhost:3000/api/utils/generate-tfa"
         );
         if (response.data.status === "success") {
             QRCode.toDataURL(response.data.data.otpauth_url, (err, url) => {

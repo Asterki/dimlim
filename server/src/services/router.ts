@@ -4,7 +4,6 @@ import express, { Router as ExpressRouter, Express, NextFunction } from "express
 import accountsRegister from "../routes/accounts/register";
 import accountsLogin from "../routes/accounts/login";
 import accountsMe from "../routes/accounts/me";
-import generateTFA from "../routes/accounts/generate-tfa";
 
 // Contact routes
 import contactsAdd from "../routes/contacts/add";
@@ -20,11 +19,16 @@ import securitySettings from "../routes/settings/security";
 import privacySettings from "../routes/settings/privacy";
 import notificationSettings from "../routes/settings/notifications";
 
+// Utils routes
+import generateTFA from "../routes/utils/generate-tfa";
+import verifyTFA from "../routes/utils/verify-tfa";
+
 class Router {
     private instance: Router | null = null;
     public accountRouter: ExpressRouter = express.Router();
     public contactsRouter: ExpressRouter = express.Router();
     public settingsRouter: ExpressRouter = express.Router();
+    public utilsRouter: ExpressRouter = express.Router();
 
     constructor() {}
 
@@ -38,8 +42,7 @@ class Router {
         this.accountRouter.post("/register", accountsRegister);
         this.accountRouter.post("/login", accountsLogin);
         this.accountRouter.get("/me", accountsMe);
-        this.accountRouter.get("/generate-tfa", generateTFA);
-
+        
         // Contact routes
         this.contactsRouter.post("/add", contactsAdd);
         this.contactsRouter.post("/remove", contactsRemove);
@@ -54,9 +57,15 @@ class Router {
         this.settingsRouter.post("/privacy", privacySettings);
         this.settingsRouter.post("/notifications", notificationSettings);
 
+        // Utils routes
+        this.utilsRouter.post("/verify-tfa", verifyTFA);
+        this.utilsRouter.get("/verify-tfa", generateTFA);
+
+
         server.use("/api/accounts", this.accountRouter);
         server.use("/api/contacts", this.contactsRouter);
         server.use("/api/settings", this.settingsRouter);
+        server.use("/api/utils", this.utilsRouter);
     };
 }
 

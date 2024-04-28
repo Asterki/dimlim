@@ -32,17 +32,10 @@ interface MeResponseData {
     user?: User;
 }
 
-// Generate TFA
-interface GenerateTFAResponseData {
-    status: "success";
-    data: speakeasy.GeneratedSecret;
-}
-
 export type {
     RegisterRequestBody,
     RegisterResponseData,
     LoginRequestBody,
     LoginResponseData,
     MeResponseData,
-    GenerateTFAResponseData
 };

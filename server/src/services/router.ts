@@ -61,7 +61,6 @@ class Router {
         this.utilsRouter.post("/verify-tfa", verifyTFA);
         this.utilsRouter.get("/verify-tfa", generateTFA);
 
-
         server.use("/api/accounts", this.accountRouter);
         server.use("/api/contacts", this.contactsRouter);
         server.use("/api/settings", this.settingsRouter);

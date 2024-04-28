@@ -17,13 +17,25 @@ interface LoginRequestBody {
     tfaCode?: string;
 }
 interface LoginResponseData {
-    status: "success" | "invalid-parameters" | "invalid-credentials" | "requires-tfa" | "invalid-tfa-code" | "internal-error";
+    status:
+        | "success"
+        | "invalid-parameters"
+        | "invalid-credentials"
+        | "requires-tfa"
+        | "invalid-tfa-code"
+        | "internal-error";
 }
 
 // Me
 interface MeResponseData {
     status: "success" | "unauthenticated";
-    user?: User
+    user?: User;
+}
+
+// Generate TFA
+interface GenerateTFAResponseData {
+    status: "success";
+    data: speakeasy.GeneratedSecret;
 }
 
 export type {
@@ -32,4 +44,5 @@ export type {
     LoginRequestBody,
     LoginResponseData,
     MeResponseData,
+    GenerateTFAResponseData
 };

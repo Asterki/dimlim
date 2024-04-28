@@ -1,6 +1,7 @@
 import * as React from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import QRCode from "qrcode";
 
 import * as Tabs from "@radix-ui/react-tabs";
 import * as Select from "@radix-ui/react-select";
@@ -33,7 +34,9 @@ const SettingsIndex = () => {
     }, []);
 
     const [tab, setTab] = React.useState("tab1");
+    const [secretImage, setSecretImage] = React.useState<string>("");
 
+    // Settings
     const [generalSettings, setGeneralSettings] = React.useState({
         theme: "light",
         language: "en",
@@ -50,6 +53,25 @@ const SettingsIndex = () => {
         showReadReceipts: true,
     });
 
+    const [securitySettings, setSecuritySettings] = React.useState<{
+        twoFactor: {
+            active: boolean;
+            secret?: string | undefined;
+        };
+        password: string;
+    }>({
+        twoFactor: {
+            active: false,
+            secret: undefined,
+        },
+        password: "",
+    });
+
+    const generateSecret = async () => {
+        const response = await axios.get("http://localhost:3000/api/accounts/generate-tfa")
+        console.log(response.data)
+    };
+
     // Update the user preferences when the settings change
     React.useEffect(() => {
         if (user) {
@@ -63,10 +85,14 @@ const SettingsIndex = () => {
                 })
             );
 
-            const response = axios.post("http://localhost:3000/api/settings/general", {
-                ...generalSettings,
-            }, { withCredentials: true });
-            console.log(response)
+            const response = axios.post(
+                "http://localhost:3000/api/settings/general",
+                {
+                    ...generalSettings,
+                },
+                { withCredentials: true }
+            );
+            console.log(response);
         }
     }, [generalSettings]);
 
@@ -81,10 +107,14 @@ const SettingsIndex = () => {
                     },
                 })
             );
-            
-            const response = axios.post("http://localhost:3000/api/settings/notifications", {
-                ...notificationsSettings,
-            }, { withCredentials: true });
+
+            const response = axios.post(
+                "http://localhost:3000/api/settings/notifications",
+                {
+                    ...notificationsSettings,
+                },
+                { withCredentials: true }
+            );
         }
     }, [notificationsSettings]);
 
@@ -100,9 +130,13 @@ const SettingsIndex = () => {
                 })
             );
 
-            const response = axios.post("http://localhost:3000/api/settings/privacy", {
-                ...privacySettings,
-            }, { withCredentials: true });
+            const response = axios.post(
+                "http://localhost:3000/api/settings/privacy",
+                {
+                    ...privacySettings,
+                },
+                { withCredentials: true }
+            );
         }
     }, [privacySettings]);
 
@@ -112,6 +146,7 @@ const SettingsIndex = () => {
             setGeneralSettings(user.preferences.general);
             setNotificationsSettings(user.preferences.notifications);
             setPrivacySettings(user.preferences.privacy);
+            setSecuritySettings(user.preferences.security);
         }
     }, [user]);
 
@@ -428,7 +463,11 @@ const SettingsIndex = () => {
                                         </div>
 
                                         <div className="flex gap-2 items-center">
-                                            <Dialog.Root>
+                                            <Dialog.Root
+                                                onOpenChange={() => {
+                                                    generateSecret();
+                                                }}
+                                            >
                                                 <Dialog.Trigger className="bg-blue-400 rounded-md p-2 shadow-md w-3/12">
                                                     Two Factor Authentication
                                                 </Dialog.Trigger>
@@ -436,7 +475,7 @@ const SettingsIndex = () => {
                                                     <Dialog.Overlay className="bg-black/50 data-[state=open]:animate-overlayShow fixed inset-0 z-20" />
                                                     <Dialog.Content className="data-[state=open]:animate-contentShow fixed top-[50%] left-[50%] max-h-[85vh] w-[90vw] max-w-[450px] translate-x-[-50%] translate-y-[-50%] rounded-md bg-gray-700 p-4 text-white focus:outline-none z-30 flex flex-col items-center">
                                                         <img
-                                                            src="https://placehold.co/300"
+                                                            src={secretImage}
                                                             alt=""
                                                         />
                                                         <h1 className="text-2xl">

@@ -86,7 +86,7 @@ class SessionManager {
                 cookie: {
                     secure: false,
                     maxAge: 1000 * 60 * 60 * 24 * 7,
-                    sameSite: "none",
+                    sameSite: "lax",
                     httpOnly: false,
                     path: "/",
                     domain: "localhost",

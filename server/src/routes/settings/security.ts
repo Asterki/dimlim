@@ -21,6 +21,7 @@ const handler = async (req: Request, res: Response<ResponseData>, next: NextFunc
                 secret: z.string(),
             }),
             password: z.string(),
+            providedPassword: z.string(),
         })
         .safeParse(req.body);
 
@@ -30,6 +31,15 @@ const handler = async (req: Request, res: Response<ResponseData>, next: NextFunc
         });
 
     try {
+        const user = await UserModel.findOne({ userID: currentUser.userID }).exec();
+        if (!user) return res.status(404).send({ status: "not-found" });
+
+        const validPassword = await bcrypt.compare(
+            parsedBody.data.providedPassword,
+            currentUser.preferences.security.password
+        );
+        if (!validPassword) return res.status(401).send({ status: "unauthenticated" });
+
         const pass = await bcrypt.hash(parsedBody.data.password, 10);
 
         await UserModel.updateOne(

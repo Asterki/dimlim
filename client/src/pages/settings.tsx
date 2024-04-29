@@ -34,7 +34,8 @@ const SettingsIndex = () => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
-    const tfaInput = React.useRef<HTMLInputElement>(null);
+    const tfaCodeInput = React.useRef<HTMLInputElement>(null);
+    const tfaPasswordInput = React.useRef<HTMLInputElement>(null);
 
     const [tab, setTab] = React.useState("tab1");
     const [userLoaded, setUserLoaded] = React.useState(false);
@@ -93,7 +94,7 @@ const SettingsIndex = () => {
     };
 
     const verifyCode = async () => {
-        const code = tfaInput.current?.value;
+        const code = tfaCodeInput.current?.value;
 
         const response = await axios.post(
             "http://localhost:3000/api/utils/verify-tfa",
@@ -545,43 +546,88 @@ const SettingsIndex = () => {
                                                 </Dialog.Trigger>
                                                 <Dialog.Portal>
                                                     <Dialog.Overlay className="bg-black/50 data-[state=open]:animate-overlayShow fixed inset-0 z-20" />
-                                                    <Dialog.Content className="data-[state=open]:animate-contentShow fixed top-[50%] left-[50%] max-h-[85vh] w-[90vw] max-w-[450px] translate-x-[-50%] translate-y-[-50%] rounded-md bg-gray-700 p-4 text-white focus:outline-none z-30 flex flex-col items-center">
-                                                        <h1 className="text-2xl">
-                                                            Scan with your
-                                                            device
-                                                        </h1>
-                                                        <img
-                                                            src={secret.image}
-                                                            alt=""
-                                                        />
-                                                        <input
-                                                            type="text"
-                                                            value={
-                                                                secret.base32
-                                                            }
-                                                            className="bg-gray-800 rounded-md w-full p-2 my-2"
-                                                        />
+                                                    {!user.preferences.security
+                                                        .twoFactor.active && (
+                                                        <Dialog.Content className="data-[state=open]:animate-contentShow fixed top-[50%] left-[50%] max-h-[85vh] w-[90vw] max-w-[450px] translate-x-[-50%] translate-y-[-50%] rounded-md bg-gray-700 p-4 text-white focus:outline-none z-30 flex flex-col items-center">
+                                                            <h1 className="text-2xl">
+                                                                Scan with your
+                                                                device
+                                                            </h1>
+                                                            <img
+                                                                src={
+                                                                    secret.image
+                                                                }
+                                                                alt=""
+                                                            />
+                                                            <input
+                                                                type="text"
+                                                                value={
+                                                                    secret.base32
+                                                                }
+                                                                className="bg-gray-800 rounded-md w-full p-2 my-2"
+                                                            />
 
-                                                        <p className="text-center">
-                                                            Scan the QR code
-                                                            with your device to
-                                                            enable two factor
-                                                            authentication
-                                                        </p>
+                                                            <p className="text-center">
+                                                                Scan the QR code
+                                                                with your device
+                                                                to enable two
+                                                                factor
+                                                                authentication
+                                                            </p>
 
-                                                        <input
-                                                            type="text"
-                                                            ref={tfaInput}
-                                                            className="bg-gray-800 rounded-md p-2 text-white w-full"
-                                                            placeholder="Code Generated by your app"
-                                                        />
-                                                        <button
-                                                            className="p-2 bg-blue-400 rounded-md mt-2 w-1/2"
-                                                            onClick={verifyCode}
-                                                        >
-                                                            Submit
-                                                        </button>
-                                                    </Dialog.Content>
+                                                            <input
+                                                                type="text"
+                                                                ref={
+                                                                    tfaCodeInput
+                                                                }
+                                                                className="bg-gray-800 rounded-md p-2 text-white w-full"
+                                                                placeholder="Code Generated by your app"
+                                                            />
+
+                                                            <input
+                                                                type="password"
+                                                                ref={
+                                                                    tfaPasswordInput
+                                                                }
+                                                                className="bg-gray-800 rounded-md p-2 text-white w-full mt-2"
+                                                                placeholder="Your password"
+                                                            />
+
+                                                            <button
+                                                                className="p-2 bg-blue-400 rounded-md mt-2 w-1/2"
+                                                                onClick={
+                                                                    verifyCode
+                                                                }
+                                                            >
+                                                                Submit
+                                                            </button>
+                                                        </Dialog.Content>
+                                                    )}
+                                                    {user.preferences.security
+                                                        .twoFactor.active && (
+                                                        <Dialog.Content className="data-[state=open]:animate-contentShow fixed top-[50%] left-[50%] max-h-[85vh] w-[90vw] max-w-[450px] translate-x-[-50%] translate-y-[-50%] rounded-md bg-gray-700 p-4 text-white focus:outline-none z-30 flex flex-col items-center">
+                                                            <h1 className="text-2xl">
+                                                                Disable TFA
+                                                            </h1>
+
+                                                            <input
+                                                                type="text"
+                                                                ref={
+                                                                    tfaCodeInput
+                                                                }
+                                                                className="bg-gray-800 rounded-md p-2 text-white w-full"
+                                                                placeholder="Your password"
+                                                            />
+                                                            <button
+                                                                className="p-2 bg-blue-400 rounded-md mt-2 w-1/2"
+                                                                onClick={
+                                                                    verifyCode
+                                                                }
+                                                            >
+                                                                Submit
+                                                            </button>
+                                                        </Dialog.Content>
+                                                    )}
                                                 </Dialog.Portal>
                                             </Dialog.Root>
                                             <p>

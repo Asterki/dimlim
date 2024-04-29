@@ -47,7 +47,8 @@ interface SecurityResponseData {
         | "success"
         | "unauthenticated"
         | "invalid-parameters"
-        | "internal-error";
+        | "internal-error"
+        | "not-found"
 }
 
 

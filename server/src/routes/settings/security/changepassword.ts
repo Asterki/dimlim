@@ -1,5 +1,6 @@
 import { z } from "zod";
 import bcrypt from "bcrypt";
+import validator from "validator";
 
 import UserModel from "../../../models/users";
 
@@ -16,7 +17,9 @@ const handler = async (req: Request, res: Response<ResponseData>, next: NextFunc
 
     const parsedBody = z
         .object({
-            newPassword: z.string(),
+            newPassword: z.string().refine((pass) => {
+                return validator.isStrongPassword(pass);
+            }),
             oldPassword: z.string(),
         })
         .safeParse(req.body);

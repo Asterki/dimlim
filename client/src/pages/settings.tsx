@@ -1,6 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import * as React from "react";
 import axios from "axios";
+import validator from "validator";
 import { useNavigate } from "react-router-dom";
 import QRCode from "qrcode";
 
@@ -34,6 +35,12 @@ const SettingsIndex = () => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
+    // Change password
+    const oldPasswordInput = React.useRef<HTMLInputElement>(null);
+    const newPasswordInput = React.useRef<HTMLInputElement>(null);
+    const confirmNewPasswordInput = React.useRef<HTMLInputElement>(null);
+
+    // TFA
     const tfaCodeInput = React.useRef<HTMLInputElement>(null);
     const tfaPasswordInput = React.useRef<HTMLInputElement>(null);
 
@@ -64,20 +71,7 @@ const SettingsIndex = () => {
         showReadReceipts: true,
     });
 
-    const [securitySettings, setSecuritySettings] = React.useState<{
-        twoFactor: {
-            active: boolean;
-            secret?: string | undefined;
-        };
-        password: string;
-    }>({
-        twoFactor: {
-            active: false,
-            secret: undefined,
-        },
-        password: "",
-    });
-
+    // TFA Functions
     const generateSecret = async () => {
         const response = await axios.get(
             "http://localhost:3000/api/utils/generate-tfa"
@@ -104,14 +98,42 @@ const SettingsIndex = () => {
             }
         );
         if (response.data.status === "success") {
-            setSecuritySettings({
-                ...securitySettings,
-                twoFactor: {
-                    active: true,
-                    secret: secret.base32,
-                },
-            });
+            alert("Correct code");
         }
+    };
+
+    // Password functions
+    const changePassword = async () => {
+        const password = newPasswordInput.current?.value as string;
+        const confirmPassword = confirmNewPasswordInput.current
+            ?.value as string;
+        const oldPassword = oldPasswordInput.current?.value as string;
+
+        if (password !== confirmPassword) {
+            alert("Passwords do not match");
+            return;
+        }
+
+        if (validator.isStrongPassword(password) === false) {
+            alert(
+                "Password must be at least 8 characters long and contain at least one uppercase letter, one lowercase letter, one number and one special character"
+            );
+            return;
+        }
+
+        const response = await axios.post(
+            "http://localhost:3000/api/settings/security/password",
+            {
+                oldPassword: oldPassword,
+                newPassword: password,
+            }
+        );
+
+        if (response.data.status === "success") {
+            alert("Updated");
+        }
+
+        // TODO Show success alert
     };
 
     // Update the user preferences when the settings change
@@ -187,37 +209,12 @@ const SettingsIndex = () => {
         }
     }, [privacySettings]);
 
-    React.useEffect(() => {
-        if (user && userLoaded) {
-            dispatch(
-                setUser({
-                    ...user,
-                    preferences: {
-                        ...user.preferences,
-                        security: securitySettings,
-                    },
-                })
-            );
-
-            const response = axios.post(
-                "http://localhost:3000/api/settings/security",
-                {
-                    ...securitySettings,
-                },
-                { withCredentials: true }
-            );
-
-            console.log(response);
-        }
-    }, [securitySettings]);
-
     // Load the user preferences when the user is loaded
     React.useEffect(() => {
         if (user) {
             setGeneralSettings(user.preferences.general);
             setNotificationsSettings(user.preferences.notifications);
             setPrivacySettings(user.preferences.privacy);
-            setSecuritySettings(user.preferences.security);
 
             setUserLoaded(true);
         }
@@ -510,18 +507,32 @@ const SettingsIndex = () => {
                                                             type="password"
                                                             className="bg-gray-800 rounded-md p-2 text-white w-full"
                                                             placeholder="Current Password"
+                                                            ref={
+                                                                oldPasswordInput
+                                                            }
                                                         />
                                                         <input
                                                             type="password"
                                                             className="bg-gray-800 rounded-md p-2 text-white w-full"
                                                             placeholder="New Password"
+                                                            ref={
+                                                                newPasswordInput
+                                                            }
                                                         />
                                                         <input
                                                             type="password"
                                                             className="bg-gray-800 rounded-md p-2 text-white w-full"
                                                             placeholder="Confirm New Password"
+                                                            ref={
+                                                                confirmNewPasswordInput
+                                                            }
                                                         />
-                                                        <button className="p-2 bg-blue-400 rounded-md mt-2 w-1/2">
+                                                        <button
+                                                            className="p-2 bg-blue-400 rounded-md mt-2 w-1/2"
+                                                            onClick={
+                                                                changePassword
+                                                            }
+                                                        >
                                                             Submit
                                                         </button>
                                                     </Dialog.Content>

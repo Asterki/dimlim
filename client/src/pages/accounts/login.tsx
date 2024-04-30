@@ -7,6 +7,7 @@ import { RootState } from "../../store";
 import { setUser } from "../../store/slices/page";
 
 import NavbarComponent from "../../components/navbar";
+import NotificationComponent from "../../components/notifications";
 
 import { LoginResponseData } from "../../../../shared/types/api/accounts";
 import { checkLoggedIn } from "../../lib/auth";
@@ -16,6 +17,41 @@ const AccountLogin = () => {
     const dispatch = useDispatch();
 
     const redirect = useNavigate();
+
+    // Notification state
+    const [notification, setNotification] = React.useState<{
+        state: "showing" | "hidden";
+        title: string;
+        content: string;
+        type: "error" | "success" | "info" | "warning";
+    }>({
+        state: "hidden",
+        title: "",
+        content: "",
+        type: "info",
+    });
+
+    const showNotification = (
+        title: string,
+        content: string,
+        type: "warning" | "info" | "success" | "error"
+    ) => {
+        setNotification({
+            state: "showing",
+            title: title,
+            content: content,
+            type: type,
+        });
+
+        setTimeout(() => {
+            setNotification({
+                state: "hidden",
+                title: "",
+                content: "",
+                type: "info",
+            });
+        }, 5000);
+    };
 
     const usernameEmailRef = React.useRef<HTMLInputElement>(null);
     const passwordRef = React.useRef<HTMLInputElement>(null);
@@ -35,16 +71,26 @@ const AccountLogin = () => {
             )
             .then(async (res) => {
                 if (res.data.status === "success") {
-                    alert("Logged in successfully");
+                    showNotification(
+                        "Logged in successfully",
+                        "You have been logged in successfully",
+                        "success"
+                    );
 
                     const serverUser = await checkLoggedIn();
                     if (serverUser) dispatch(setUser(serverUser));
                     redirect("/home");
                 } else {
-                    alert("An error occurred");
+                    showNotification(
+                        "Failed to login",
+                        "Invalid email/username or password",
+                        "error"
+                    );
                 }
             });
     };
+
+    // const loginWIthTFA = async (tfaCode: string) => {};
 
     // Login-protect the page
     React.useEffect(() => {
@@ -63,6 +109,14 @@ const AccountLogin = () => {
     return (
         <div className="bg-gray-800 min-h-screen text-white">
             <NavbarComponent user={null} />
+
+            <NotificationComponent
+                content={notification.content}
+                title={notification.title}
+                state={notification.state}
+                type={notification.type}
+            />
+
             <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-gray-700 rounded-md p-4 w-11/12 md:w-4/12">
                 <form>
                     <h1 className="text-2xl font-semibold mb-2">

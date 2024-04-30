@@ -62,7 +62,7 @@ class Router {
         this.settingsRouter.post("/security/change-password", settingsChangePassword);
         this.settingsRouter.post("/security/tfa", settingsTfa);
 
-        // Utils routes
+        // Utils routesw
         this.utilsRouter.post("/verify-tfa", verifyTFA);
         this.utilsRouter.get("/generate-tfa", generateTFA);
 

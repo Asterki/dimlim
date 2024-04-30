@@ -7,6 +7,7 @@ import { RootState } from "../../store";
 import { setUser } from "../../store/slices/page";
 
 import NavbarComponent from "../../components/navbar";
+import NotificationComponent from "../../components/notifications";
 
 import { checkLoggedIn } from "../../lib/auth";
 
@@ -16,15 +17,53 @@ const AccountLogout = () => {
 
     const redirect = useNavigate();
 
+    // Notification state
+    const [notification, setNotification] = React.useState<{
+        state: "showing" | "hidden";
+        title: string;
+        content: string;
+        type: "error" | "success" | "info" | "warning";
+    }>({
+        state: "hidden",
+        title: "",
+        content: "",
+        type: "info",
+    });
+
+    const showNotification = (
+        title: string,
+        content: string,
+        type: "warning" | "info" | "success" | "error"
+    ) => {
+        setNotification({
+            state: "showing",
+            title: title,
+            content: content,
+            type: type,
+        });
+
+        setTimeout(() => {
+            setNotification({
+                state: "hidden",
+                title: "",
+                content: "",
+                type: "info",
+            });
+        }, 5000);
+    };
+
     const logout = async () => {
         axios
             .get(`${import.meta.env.VITE_SERVER_HOST}/api/accounts/logout`, {
                 withCredentials: true,
             })
             .then(async () => {
-                alert("Logged out successfully");
+                showNotification("Logged out", "You have been logged out", "success");
                 dispatch(setUser(null));
-                redirect("/login");
+
+                setTimeout(() => {
+                    redirect("/login");
+                }, 3000)
             });
     };
 
@@ -44,6 +83,14 @@ const AccountLogout = () => {
             {user && (
                 <div>
                     <NavbarComponent user={user} />
+
+                    <NotificationComponent
+                        content={notification.content}
+                        title={notification.title}
+                        state={notification.state}
+                        type={notification.type}
+                    />
+
                     <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-gray-700 rounded-md p-4 w-11/12 md:w-4/12">
                         <h1 className="text-2xl font-semibold mb-2">
                             Are you sure you want to log out?

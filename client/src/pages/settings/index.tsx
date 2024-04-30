@@ -248,8 +248,6 @@ const SettingsIndex = () => {
         } else {
             console.log(response.data.status);
         }
-
-        // TODO Show success alert
     };
 
     // Update the user preferences when the settings change

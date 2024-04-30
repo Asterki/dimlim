@@ -59,7 +59,7 @@ const NavbarComponent: React.FC<ComponentProps> = (props) => {
                                 </DropdownMenu.Item>
 
                                 <DropdownMenu.Item className="p-2 transition-all hover:bg-white/20 cursor-pointer w-full">
-                                    <Link to="/contacts">Logout</Link>
+                                    <Link to="/logout">Logout</Link>
                                 </DropdownMenu.Item>
                             </DropdownMenu.Content>
                         </DropdownMenu.Portal>

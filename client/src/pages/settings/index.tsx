@@ -11,12 +11,12 @@ import * as Dialog from "@radix-ui/react-dialog";
 import * as Switch from "@radix-ui/react-switch";
 
 import { useSelector, useDispatch } from "react-redux";
-import { RootState } from "../store";
-import { setUser } from "../store/slices/page";
+import { RootState } from "../../store";
+import { setUser } from "../../store/slices/page";
 
-import NavbarComponent from "../components/navbar";
-import NotificationComponent from "../components/notifications";
-import { checkLoggedIn } from "../lib/auth";
+import NavbarComponent from "../../components/navbar";
+import NotificationComponent from "../../components/notifications";
+import { checkLoggedIn } from "../../lib/auth";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronDown } from "@fortawesome/free-solid-svg-icons";
 

@@ -4,9 +4,10 @@ import { createBrowserRouter } from "react-router-dom";
 import MainIndex from "./main/index";
 import MainHome from "./main/home";
 
-// Register
+// Accounts
 import AccountLogin from "./accounts/login";
 import AccountRegister from "./accounts/register";
+import AccountLogout from "./accounts/logout";
 
 // Contacts
 import ContactsIndex from "./contacts";
@@ -33,6 +34,10 @@ const router = createBrowserRouter([
     {
         path: "/register",
         element: <AccountRegister />,
+    },
+    {
+        path: "/logout",
+        element: <AccountLogout />,
     },
 
     // Contacts

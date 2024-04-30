@@ -42,7 +42,8 @@ const SettingsIndex = () => {
 
     // TFA
     const tfaCodeInput = React.useRef<HTMLInputElement>(null);
-    const tfaPasswordInput = React.useRef<HTMLInputElement>(null);
+    const tfaEnablePasswordInput = React.useRef<HTMLInputElement>(null);
+    const tfaDisablePasswordInput = React.useRef<HTMLInputElement>(null);
 
     const [tab, setTab] = React.useState("tab1");
     const [userLoaded, setUserLoaded] = React.useState(false);
@@ -87,7 +88,7 @@ const SettingsIndex = () => {
         }
     };
 
-    const verifyCode = async () => {
+    const activateTFA = async () => {
         const code = tfaCodeInput.current?.value;
 
         const response = await axios.post(
@@ -95,10 +96,54 @@ const SettingsIndex = () => {
             {
                 code,
                 secret: secret.base32,
+            },
+            {
+                withCredentials: true,
             }
         );
         if (response.data.status === "success") {
-            alert("Correct code");
+            const password = tfaEnablePasswordInput.current?.value;
+
+            const response = await axios.post(
+                "http://localhost:3000/api/settings/security/tfa",
+                {
+                    password,
+                    action: "activate",
+                    secret: secret.base32,
+                },
+                {
+                    withCredentials: true,
+                }
+            );
+
+            if (response.data.status === "success") {
+                alert("Two factor authentication enabled");
+            } else {
+                console.log(response.data.status);
+            }
+        }
+    };
+
+    const deactivateTFA = async () => {
+        const password = tfaDisablePasswordInput.current?.value;
+        console.log(password)
+
+        const response = await axios.post(
+            "http://localhost:3000/api/settings/security/tfa",
+            {
+                password: password,
+                action: "deactivate",
+                secret: secret.base32,
+            },
+            {
+                withCredentials: true,
+            }
+        );
+
+        if (response.data.status === "success") {
+            alert("Two factor authentication disabled");
+        } else {
+            console.log(response.data.status);
         }
     };
 
@@ -580,6 +625,7 @@ const SettingsIndex = () => {
                                                                 value={
                                                                     secret.base32
                                                                 }
+                                                                readOnly
                                                                 className="bg-gray-800 rounded-md w-full p-2 my-2"
                                                             />
 
@@ -603,7 +649,7 @@ const SettingsIndex = () => {
                                                             <input
                                                                 type="password"
                                                                 ref={
-                                                                    tfaPasswordInput
+                                                                    tfaEnablePasswordInput
                                                                 }
                                                                 className="bg-gray-800 rounded-md p-2 text-white w-full mt-2"
                                                                 placeholder="Your password"
@@ -612,7 +658,7 @@ const SettingsIndex = () => {
                                                             <button
                                                                 className="p-2 bg-blue-400 rounded-md mt-2 w-1/2"
                                                                 onClick={
-                                                                    verifyCode
+                                                                    activateTFA
                                                                 }
                                                             >
                                                                 Submit
@@ -629,7 +675,7 @@ const SettingsIndex = () => {
                                                             <input
                                                                 type="text"
                                                                 ref={
-                                                                    tfaCodeInput
+                                                                    tfaDisablePasswordInput
                                                                 }
                                                                 className="bg-gray-800 rounded-md p-2 text-white w-full"
                                                                 placeholder="Your password"
@@ -637,7 +683,7 @@ const SettingsIndex = () => {
                                                             <button
                                                                 className="p-2 bg-blue-400 rounded-md mt-2 w-1/2"
                                                                 onClick={
-                                                                    verifyCode
+                                                                    deactivateTFA
                                                                 }
                                                             >
                                                                 Submit

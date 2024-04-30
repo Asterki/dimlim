@@ -31,8 +31,8 @@ const handler = async (req: Request, res: Response<ResponseData>, next: NextFunc
         const user = await UserModel.findOne({ userID: currentUser.userID }).exec();
         if (!user) return res.status(404).send({ status: "not-found" });
 
-        const validPassword = await bcrypt.compare(parsedBody.data.password, currentUser.preferences.security.password);
-        if (!validPassword) return res.status(401).send({ status: "unauthenticated" });
+        const validPassword = bcrypt.compareSync(parsedBody.data.password, currentUser.preferences.security.password);
+        if (!validPassword) return res.status(200).send({ status: "invalid-password" });
 
         if (parsedBody.data.action === "activate") {
             UserModel.updateOne(

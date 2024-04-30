@@ -33,11 +33,8 @@ const handler = async (req: Request, res: Response<ResponseData>, next: NextFunc
         const user = await UserModel.findOne({ userID: currentUser.userID }).exec();
         if (!user) return res.status(404).send({ status: "not-found" });
 
-        const validPassword = await bcrypt.compare(
-            parsedBody.data.oldPassword,
-            currentUser.preferences.security.password
-        );
-        if (!validPassword) return res.status(401).send({ status: "unauthenticated" });
+        if (!!bcrypt.compareSync(parsedBody.data.oldPassword, currentUser.preferences.security.password))
+            return res.status(200).send({ status: "invalid-password" });
 
         const pass = await bcrypt.hash(parsedBody.data.newPassword, 10);
 

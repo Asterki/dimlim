@@ -49,6 +49,7 @@ interface SecurityResponseData {
         | "invalid-parameters"
         | "internal-error"
         | "not-found"
+        | "invalid-password"
 }
 
 

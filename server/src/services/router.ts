@@ -15,9 +15,10 @@ import contactsGet from "../routes/contacts/get";
 
 // Settings routes
 import generalSettings from "../routes/settings/general";
-import securitySettings from "../routes/settings/security";
 import privacySettings from "../routes/settings/privacy";
 import notificationSettings from "../routes/settings/notifications";
+import changePassword from "../routes/settings/security/changepassword";
+import tfa from "../routes/settings/security/tfa";
 
 // Utils routes
 import generateTFA from "../routes/utils/generate-tfa";
@@ -53,9 +54,10 @@ class Router {
 
         // Settings routes
         this.settingsRouter.post("/general", generalSettings);
-        this.settingsRouter.post("/security", securitySettings);
         this.settingsRouter.post("/privacy", privacySettings);
         this.settingsRouter.post("/notifications", notificationSettings);
+        this.settingsRouter.post("/security/change-password", changePassword);
+        this.settingsRouter.post("/security/tfa", tfa);
 
         // Utils routes
         this.utilsRouter.post("/verify-tfa", verifyTFA);

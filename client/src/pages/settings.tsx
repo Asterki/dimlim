@@ -104,17 +104,17 @@ const SettingsIndex = () => {
 
     // Password functions
     const changePassword = async () => {
-        const password = newPasswordInput.current?.value as string;
+        const newPassword = newPasswordInput.current?.value as string;
         const confirmPassword = confirmNewPasswordInput.current
             ?.value as string;
         const oldPassword = oldPasswordInput.current?.value as string;
 
-        if (password !== confirmPassword) {
+        if (newPassword !== confirmPassword) {
             alert("Passwords do not match");
             return;
         }
 
-        if (validator.isStrongPassword(password) === false) {
+        if (validator.isStrongPassword(newPassword) === false) {
             alert(
                 "Password must be at least 8 characters long and contain at least one uppercase letter, one lowercase letter, one number and one special character"
             );
@@ -122,15 +122,20 @@ const SettingsIndex = () => {
         }
 
         const response = await axios.post(
-            "http://localhost:3000/api/settings/security/password",
+            "http://localhost:3000/api/settings/security/change-password",
             {
                 oldPassword: oldPassword,
-                newPassword: password,
+                newPassword: newPassword,
+            },
+            {
+                withCredentials: true,
             }
         );
 
         if (response.data.status === "success") {
             alert("Updated");
+        } else {
+            console.log(response.data.status);
         }
 
         // TODO Show success alert

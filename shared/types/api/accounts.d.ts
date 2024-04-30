@@ -32,10 +32,16 @@ interface MeResponseData {
     user?: User;
 }
 
+// Logout
+interface LogoutResponseData {
+    status: "success" | "unauthenticated";
+}
+
 export type {
     RegisterRequestBody,
     RegisterResponseData,
     LoginRequestBody,
     LoginResponseData,
     MeResponseData,
+    LogoutResponseData,
 };

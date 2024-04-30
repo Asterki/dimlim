@@ -8,7 +8,6 @@ import { setUser } from "../../store/slices/page";
 
 import NavbarComponent from "../../components/navbar";
 
-import { LoginResponseData } from "../../../../shared/types/api/accounts";
 import { checkLoggedIn } from "../../lib/auth";
 
 const AccountLogout = () => {
@@ -51,8 +50,8 @@ const AccountLogout = () => {
                         </h1>
 
                         <p>
-                            You will be logged out of your account and will have to
-                            log back in to access your account.
+                            You will be logged out of your account and will have
+                            to log back in to access your account.
                         </p>
 
                         <button

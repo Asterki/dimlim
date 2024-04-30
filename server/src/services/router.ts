@@ -4,6 +4,7 @@ import express, { Router as ExpressRouter, Express, NextFunction } from "express
 import accountsRegister from "../routes/accounts/register";
 import accountsLogin from "../routes/accounts/login";
 import accountsMe from "../routes/accounts/me";
+import accountsLogout from "../routes/accounts/logout";
 
 // Contact routes
 import contactsAdd from "../routes/contacts/add";
@@ -14,11 +15,11 @@ import contactsPending from "../routes/contacts/pending";
 import contactsGet from "../routes/contacts/get";
 
 // Settings routes
-import generalSettings from "../routes/settings/general";
-import privacySettings from "../routes/settings/privacy";
-import notificationSettings from "../routes/settings/notifications";
-import changePassword from "../routes/settings/security/changepassword";
-import tfa from "../routes/settings/security/tfa";
+import settingsGeneral from "../routes/settings/general";
+import settingsPrivacy from "../routes/settings/privacy";
+import settingsNotification from "../routes/settings/notifications";
+import settingsChangePassword from "../routes/settings/security/changepassword";
+import settingsTfa from "../routes/settings/security/tfa";
 
 // Utils routes
 import generateTFA from "../routes/utils/generate-tfa";
@@ -43,6 +44,7 @@ class Router {
         this.accountRouter.post("/register", accountsRegister);
         this.accountRouter.post("/login", accountsLogin);
         this.accountRouter.get("/me", accountsMe);
+        this.accountRouter.get("/logout", accountsLogout);
         
         // Contact routes
         this.contactsRouter.post("/add", contactsAdd);
@@ -51,13 +53,14 @@ class Router {
         this.contactsRouter.post("/unblock", contactsUnblock);
         this.contactsRouter.post("/pending", contactsPending);
         this.contactsRouter.get("/get", contactsGet);
+        
 
         // Settings routes
-        this.settingsRouter.post("/general", generalSettings);
-        this.settingsRouter.post("/privacy", privacySettings);
-        this.settingsRouter.post("/notifications", notificationSettings);
-        this.settingsRouter.post("/security/change-password", changePassword);
-        this.settingsRouter.post("/security/tfa", tfa);
+        this.settingsRouter.post("/general", settingsGeneral);
+        this.settingsRouter.post("/privacy", settingsPrivacy);
+        this.settingsRouter.post("/notifications", settingsNotification);
+        this.settingsRouter.post("/security/change-password", settingsChangePassword);
+        this.settingsRouter.post("/security/tfa", settingsTfa);
 
         // Utils routes
         this.utilsRouter.post("/verify-tfa", verifyTFA);

@@ -35,6 +35,10 @@ const SettingsIndex = () => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
+    // Modals state
+    const [passwordModalOpen, setPasswordModalOpen] = React.useState(false);
+    const [tfaModalOpen, setTfaModalOpen] = React.useState(false);
+
     // Change password
     const oldPasswordInput = React.useRef<HTMLInputElement>(null);
     const newPasswordInput = React.useRef<HTMLInputElement>(null);
@@ -71,6 +75,8 @@ const SettingsIndex = () => {
         showLastSeen: true,
         showReadReceipts: true,
     });
+
+    const [tfaActive, setTfaActive] = React.useState(false);
 
     // TFA Functions
     const generateSecret = async () => {
@@ -118,6 +124,9 @@ const SettingsIndex = () => {
 
             if (response.data.status === "success") {
                 alert("Two factor authentication enabled");
+                setTfaActive(true);
+
+                setTfaModalOpen(false);
             } else {
                 console.log(response.data.status);
             }
@@ -126,7 +135,7 @@ const SettingsIndex = () => {
 
     const deactivateTFA = async () => {
         const password = tfaDisablePasswordInput.current?.value;
-        console.log(password)
+        console.log(password);
 
         const response = await axios.post(
             "http://localhost:3000/api/settings/security/tfa",
@@ -142,6 +151,9 @@ const SettingsIndex = () => {
 
         if (response.data.status === "success") {
             alert("Two factor authentication disabled");
+            setTfaActive(false);
+
+            setTfaModalOpen(false);
         } else {
             console.log(response.data.status);
         }
@@ -179,6 +191,7 @@ const SettingsIndex = () => {
 
         if (response.data.status === "success") {
             alert("Updated");
+            setPasswordModalOpen(false);
         } else {
             console.log(response.data.status);
         }
@@ -265,6 +278,7 @@ const SettingsIndex = () => {
             setGeneralSettings(user.preferences.general);
             setNotificationsSettings(user.preferences.notifications);
             setPrivacySettings(user.preferences.privacy);
+            setTfaActive(user.preferences.security.twoFactor.active);
 
             setUserLoaded(true);
         }
@@ -543,8 +557,26 @@ const SettingsIndex = () => {
                                 >
                                     <div className="flex flex-col gap-2">
                                         <div className="flex gap-2 items-center">
-                                            <Dialog.Root>
-                                                <Dialog.Trigger className="bg-blue-400 rounded-md p-2 shadow-md w-3/12">
+                                            <Dialog.Root
+                                                onOpenChange={(state) => {
+                                                    if (state) {
+                                                        oldPasswordInput.current?.focus();
+                                                    } else {
+                                                        setPasswordModalOpen(
+                                                            false
+                                                        );
+                                                    }
+                                                }}
+                                                open={passwordModalOpen}
+                                            >
+                                                <Dialog.Trigger
+                                                    onClick={() =>
+                                                        setPasswordModalOpen(
+                                                            true
+                                                        )
+                                                    }
+                                                    className="bg-blue-400 rounded-md p-2 shadow-md w-3/12"
+                                                >
                                                     Change password
                                                 </Dialog.Trigger>
                                                 <Dialog.Portal>
@@ -598,17 +630,26 @@ const SettingsIndex = () => {
 
                                         <div className="flex gap-2 items-center">
                                             <Dialog.Root
-                                                onOpenChange={() => {
-                                                    generateSecret();
+                                                open={tfaModalOpen}
+                                                onOpenChange={(state) => {
+                                                    if (state) {
+                                                        generateSecret();
+                                                    } else {
+                                                        setTfaModalOpen(false);
+                                                    }
                                                 }}
                                             >
-                                                <Dialog.Trigger className="bg-blue-400 rounded-md p-2 shadow-md w-3/12">
+                                                <Dialog.Trigger
+                                                    onClick={() =>
+                                                        setTfaModalOpen(true)
+                                                    }
+                                                    className="bg-blue-400 rounded-md p-2 shadow-md w-3/12"
+                                                >
                                                     Two Factor Authentication
                                                 </Dialog.Trigger>
                                                 <Dialog.Portal>
                                                     <Dialog.Overlay className="bg-black/50 data-[state=open]:animate-overlayShow fixed inset-0 z-20" />
-                                                    {!user.preferences.security
-                                                        .twoFactor.active && (
+                                                    {!tfaActive && (
                                                         <Dialog.Content className="data-[state=open]:animate-contentShow fixed top-[50%] left-[50%] max-h-[85vh] w-[90vw] max-w-[450px] translate-x-[-50%] translate-y-[-50%] rounded-md bg-gray-700 p-4 text-white focus:outline-none z-30 flex flex-col items-center">
                                                             <h1 className="text-2xl">
                                                                 Scan with your
@@ -665,8 +706,7 @@ const SettingsIndex = () => {
                                                             </button>
                                                         </Dialog.Content>
                                                     )}
-                                                    {user.preferences.security
-                                                        .twoFactor.active && (
+                                                    {tfaActive && (
                                                         <Dialog.Content className="data-[state=open]:animate-contentShow fixed top-[50%] left-[50%] max-h-[85vh] w-[90vw] max-w-[450px] translate-x-[-50%] translate-y-[-50%] rounded-md bg-gray-700 p-4 text-white focus:outline-none z-30 flex flex-col items-center">
                                                             <h1 className="text-2xl">
                                                                 Disable TFA
@@ -694,8 +734,7 @@ const SettingsIndex = () => {
                                             </Dialog.Root>
                                             <p>
                                                 Status:{" "}
-                                                {user.preferences.security
-                                                    .twoFactor.active
+                                                {tfaActive
                                                     ? "Active"
                                                     : "Inactive"}
                                             </p>

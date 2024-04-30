@@ -210,15 +210,19 @@ const SettingsIndex = () => {
         const oldPassword = oldPasswordInput.current?.value as string;
 
         if (newPassword !== confirmPassword) {
-            alert("Passwords do not match");
-            return;
+            return showNotification(
+                "Passwords do not match",
+                "The new password and the confirmation password do not match",
+                "error"
+            );
         }
 
         if (validator.isStrongPassword(newPassword) === false) {
-            alert(
-                "Password must be at least 8 characters long and contain at least one uppercase letter, one lowercase letter, one number and one special character"
+            return showNotification(
+                "Password not strong enough",
+                "The password must be at least 8 characters long and contain at least one uppercase letter, one lowercase letter, one number and one special character",
+                "error"
             );
-            return;
         }
 
         const response = await axios.post(

@@ -25,7 +25,7 @@ const NotificationComponent: React.FC<ComponentProps> = (props) => {
     return (
         <div
             data-state={props.state}
-            className="bg-blue-400 transition-all data-[state=hidden]:opacity-0 text-white rounded-md absolute bottom-4 left-4 shadow-md p-4 flex items-center gap-4"
+            className="z-30 bg-blue-400 transition-all data-[state=hidden]:opacity-0 text-white rounded-md absolute bottom-4 left-4 shadow-md p-4 flex items-center gap-4"
         >
             <div>
                 <FontAwesomeIcon icon={icon} className="text-3xl" />

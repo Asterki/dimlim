@@ -15,6 +15,7 @@ import { RootState } from "../store";
 import { setUser } from "../store/slices/page";
 
 import NavbarComponent from "../components/navbar";
+import NotificationComponent from "../components/notifications";
 import { checkLoggedIn } from "../lib/auth";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronDown } from "@fortawesome/free-solid-svg-icons";
@@ -34,6 +35,19 @@ const SettingsIndex = () => {
         })();
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
+
+    // Notification state
+    const [notification, setNotification] = React.useState<{
+        state: "showing" | "hidden";
+        title: string;
+        content: string;
+        type: "error" | "success" | "info" | "warning";
+    }>({
+        state: "hidden",
+        title: "",
+        content: "",
+        type: "info",
+    });
 
     // Modals state
     const [passwordModalOpen, setPasswordModalOpen] = React.useState(false);
@@ -77,6 +91,29 @@ const SettingsIndex = () => {
     });
 
     const [tfaActive, setTfaActive] = React.useState(false);
+
+    // Other methods
+    const showNotification = (
+        title: string,
+        content: string,
+        type: "warning" | "info" | "success" | "error"
+    ) => {
+        setNotification({
+            state: "showing",
+            title: title,
+            content: content,
+            type: type,
+        });
+
+        setTimeout(() => {
+            setNotification({
+                state: "hidden",
+                title: "",
+                content: "",
+                type: "info",
+            });
+        }, 5000);
+    };
 
     // TFA Functions
     const generateSecret = async () => {
@@ -123,10 +160,13 @@ const SettingsIndex = () => {
             );
 
             if (response.data.status === "success") {
-                alert("Two factor authentication enabled");
                 setTfaActive(true);
-
                 setTfaModalOpen(false);
+                showNotification(
+                    "Two factor authentication enabled",
+                    "Two factor authentication has been enabled successfully",
+                    "success"
+                );
             } else {
                 console.log(response.data.status);
             }
@@ -150,10 +190,13 @@ const SettingsIndex = () => {
         );
 
         if (response.data.status === "success") {
-            alert("Two factor authentication disabled");
             setTfaActive(false);
-
             setTfaModalOpen(false);
+            showNotification(
+                "Two factor authentication disabled",
+                "Two factor authentication has been disabled successfully",
+                "warning"
+            );
         } else {
             console.log(response.data.status);
         }
@@ -190,8 +233,12 @@ const SettingsIndex = () => {
         );
 
         if (response.data.status === "success") {
-            alert("Updated");
             setPasswordModalOpen(false);
+            showNotification(
+                "Password changed",
+                "Your password has been changed successfully",
+                "success"
+            );
         } else {
             console.log(response.data.status);
         }
@@ -289,6 +336,13 @@ const SettingsIndex = () => {
             {user && (
                 <div>
                     <NavbarComponent user={user} />
+
+                    <NotificationComponent
+                        content={notification.content}
+                        title={notification.title}
+                        state={notification.state}
+                        type={notification.type}
+                    />
 
                     <div className="pt-20">
                         <div className="text-center flex items-center justify-center">

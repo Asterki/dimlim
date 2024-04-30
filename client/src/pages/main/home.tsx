@@ -7,6 +7,7 @@ import { RootState } from "../../store";
 import { setUser } from "../../store/slices/page";
 
 import NavbarComponent from "../../components/navbar";
+
 import { checkLoggedIn } from "../../lib/auth";
 
 const HomePage = () => {

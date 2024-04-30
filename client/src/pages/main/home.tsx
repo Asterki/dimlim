@@ -38,7 +38,7 @@ const HomePage = () => {
     React.useEffect(() => {
         (async () => {
             const { data } = await axios.get(
-                "http://localhost:3000/api/contacts/get",
+                `${import.meta.env.VITE_SERVER_HOST}/api/contacts/get`,
                 { withCredentials: true }
             );
             setContacts(data.contacts.accepted);
@@ -52,7 +52,7 @@ const HomePage = () => {
         if (!username) return;
 
         const res = await axios.post(
-            "http://localhost:3000/api/contacts/add",
+            `${import.meta.env.VITE_SERVER_HOST}/api/contacts/add`,
             { username: username },
             { withCredentials: true }
         );

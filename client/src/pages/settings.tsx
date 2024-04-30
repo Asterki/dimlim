@@ -118,7 +118,7 @@ const SettingsIndex = () => {
     // TFA Functions
     const generateSecret = async () => {
         const response = await axios.get(
-            "http://localhost:3000/api/utils/generate-tfa"
+            `${import.meta.env.VITE_SERVER_HOST}/api/utils/generate-tfa`
         );
         if (response.data.status === "success") {
             QRCode.toDataURL(response.data.data.otpauth_url, (err, url) => {
@@ -135,7 +135,7 @@ const SettingsIndex = () => {
         const code = tfaCodeInput.current?.value;
 
         const response = await axios.post(
-            "http://localhost:3000/api/utils/verify-tfa",
+            `${import.meta.env.VITE_SERVER_HOST}/api/utils/verify-tfa`,
             {
                 code,
                 secret: secret.base32,
@@ -148,7 +148,7 @@ const SettingsIndex = () => {
             const password = tfaEnablePasswordInput.current?.value;
 
             const response = await axios.post(
-                "http://localhost:3000/api/settings/security/tfa",
+                `${import.meta.env.VITE_SERVER_HOST}/api/settings/security/tfa`,
                 {
                     password,
                     action: "activate",
@@ -178,7 +178,7 @@ const SettingsIndex = () => {
         console.log(password);
 
         const response = await axios.post(
-            "http://localhost:3000/api/settings/security/tfa",
+            `${import.meta.env.VITE_SERVER_HOST}/api/settings/security/tfa`,
             {
                 password: password,
                 action: "deactivate",
@@ -226,7 +226,9 @@ const SettingsIndex = () => {
         }
 
         const response = await axios.post(
-            "http://localhost:3000/api/settings/security/change-password",
+            `${
+                import.meta.env.VITE_SERVER_HOST
+            }/api/settings/security/change-password`,
             {
                 oldPassword: oldPassword,
                 newPassword: newPassword,
@@ -264,7 +266,7 @@ const SettingsIndex = () => {
             );
 
             const response = axios.post(
-                "http://localhost:3000/api/settings/general",
+                `${import.meta.env.VITE_SERVER_HOST}/api/settings/general`,
                 {
                     ...generalSettings,
                 },
@@ -288,7 +290,9 @@ const SettingsIndex = () => {
             );
 
             const response = axios.post(
-                "http://localhost:3000/api/settings/notifications",
+                `${
+                    import.meta.env.VITE_SERVER_HOST
+                }/api/settings/notifications`,
                 {
                     ...notificationsSettings,
                 },
@@ -312,7 +316,7 @@ const SettingsIndex = () => {
             );
 
             const response = axios.post(
-                "http://localhost:3000/api/settings/privacy",
+                `${import.meta.env.VITE_SERVER_HOST}/api/settings/privacy`,
                 {
                     ...privacySettings,
                 },

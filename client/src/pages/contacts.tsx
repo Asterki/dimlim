@@ -50,7 +50,7 @@ const ContactsIndex = () => {
     React.useEffect(() => {
         (async () => {
             const { data } = await axios.get(
-                "http://localhost:3000/api/contacts/get",
+                `${import.meta.env.VITE_SERVER_HOST}/api/contacts/get`,
                 { withCredentials: true }
             );
             setContacts(data.contacts);
@@ -59,7 +59,7 @@ const ContactsIndex = () => {
 
     const pending = async (username: string, action: "accept" | "reject") => {
         const { data } = await axios.post(
-            "http://localhost:3000/api/contacts/pending",
+            `${import.meta.env.VITE_SERVER_HOST}/api/contacts/pending`,
             { action: action, username },
             { withCredentials: true }
         );
@@ -68,7 +68,7 @@ const ContactsIndex = () => {
 
     const remove = async (username: string) => {
         const { data } = await axios.post(
-            "http://localhost:3000/api/contacts/remove",
+            `${import.meta.env.VITE_SERVER_HOST}/api/contacts/remove`,
             { username },
             { withCredentials: true }
         );
@@ -76,7 +76,7 @@ const ContactsIndex = () => {
 
     const block = async (username: string) => {
         const { data } = await axios.post(
-            "http://localhost:3000/api/contacts/block",
+            `${import.meta.env.VITE_SERVER_HOST}/api/contacts/block`,
             { username },
             { withCredentials: true }
         );
@@ -84,7 +84,7 @@ const ContactsIndex = () => {
 
     const unblock = async (username: string) => {
         const { data } = await axios.post(
-            "http://localhost:3000/api/contacts/unblock",
+            `${import.meta.env.VITE_SERVER_HOST}/api/contacts/unblock`,
             { username },
             { withCredentials: true }
         );

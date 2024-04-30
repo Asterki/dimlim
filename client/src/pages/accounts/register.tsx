@@ -50,7 +50,7 @@ const AccountRegister = () => {
 
         try {
             axios
-                .post("http://localhost:3000/api/accounts/register", {
+                .post(`${import.meta.env.VITE_SERVER_HOST}/api/accounts/register`, {
                     username: username,
                     email: email,
                     password: password,

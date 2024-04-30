@@ -5,7 +5,7 @@ import { MeResponseData } from "../../../shared/types/api/accounts";
 const checkLoggedIn = async () => {
     try {
         const response = await axios.get<MeResponseData>(
-            "http://localhost:3000/api/accounts/me",
+            `${import.meta.env.VITE_SERVER_HOST}/api/accounts/me`,
             { withCredentials: true }
         );
 

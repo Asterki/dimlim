@@ -23,7 +23,7 @@ const AccountLogin = () => {
     const login = async () => {
         axios
             .post<LoginResponseData>(
-                "http://localhost:3000/api/accounts/login",
+                `${import.meta.env.VITE_SERVER_HOST}/api/accounts/login`,
                 {
                     emailOrUsername: usernameEmailRef.current!.value,
                     password: passwordRef.current!.value,

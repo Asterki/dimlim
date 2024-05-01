@@ -635,7 +635,7 @@ const SettingsIndex = () => {
                                                             true
                                                         )
                                                     }
-                                                    className="bg-blue-400 rounded-md p-2 shadow-md w-3/12"
+                                                    className="bg-blue-400 rounded-md p-2 shadow-md md:w-3/12 w-1/2"
                                                 >
                                                     Change password
                                                 </Dialog.Trigger>
@@ -703,7 +703,7 @@ const SettingsIndex = () => {
                                                     onClick={() =>
                                                         setTfaModalOpen(true)
                                                     }
-                                                    className="bg-blue-400 rounded-md p-2 shadow-md w-3/12"
+                                                    className="bg-blue-400 rounded-md p-2 shadow-md md:w-3/12 w-1/2"
                                                 >
                                                     Two Factor Authentication
                                                 </Dialog.Trigger>

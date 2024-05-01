@@ -58,12 +58,16 @@ const AccountLogout = () => {
                 withCredentials: true,
             })
             .then(async () => {
-                showNotification("Logged out", "You have been logged out", "success");
+                showNotification(
+                    "Logged out",
+                    "You have been logged out",
+                    "success"
+                );
                 dispatch(setUser(null));
 
                 setTimeout(() => {
                     redirect("/login");
-                }, 3000)
+                }, 3000);
             });
     };
 
@@ -80,16 +84,16 @@ const AccountLogout = () => {
 
     return (
         <div className="bg-gray-800 min-h-screen text-white">
+            <NotificationComponent
+                content={notification.content}
+                title={notification.title}
+                state={notification.state}
+                type={notification.type}
+            />
+
             {user && (
                 <div>
                     <NavbarComponent user={user} />
-
-                    <NotificationComponent
-                        content={notification.content}
-                        title={notification.title}
-                        state={notification.state}
-                        type={notification.type}
-                    />
 
                     <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-gray-700 rounded-md p-4 w-11/12 md:w-4/12">
                         <h1 className="text-2xl font-semibold mb-2">

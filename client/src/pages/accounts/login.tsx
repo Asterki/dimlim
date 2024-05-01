@@ -12,6 +12,13 @@ import NotificationComponent from "../../components/notifications";
 import { LoginResponseData } from "../../../../shared/types/api/accounts";
 import { checkLoggedIn } from "../../lib/auth";
 
+// To be later changed to a translate service
+const messages = {
+    "invalid-credentials": "Invalid email/username or password",
+    "requires-tfa": "Two-factor authentication is required",
+    "invalid-tfa-code": "Invalid two-factor authentication code",
+};
+
 const AccountLogin = () => {
     const user = useSelector((state: RootState) => state.page.currentUser);
     const dispatch = useDispatch();
@@ -57,37 +64,48 @@ const AccountLogin = () => {
     const passwordRef = React.useRef<HTMLInputElement>(null);
 
     const login = async () => {
-        axios
-            .post<LoginResponseData>(
+        const emailOrUsername = usernameEmailRef.current!.value;
+        const password = passwordRef.current!.value;
+
+        try {
+            const response = await axios.post(
                 `${import.meta.env.VITE_SERVER_HOST}/api/accounts/login`,
                 {
-                    emailOrUsername: usernameEmailRef.current!.value,
-                    password: passwordRef.current!.value,
+                    emailOrUsername,
+                    password,
                     tfaCode: "",
                 },
                 {
                     withCredentials: true,
                 }
-            )
-            .then(async (res) => {
-                if (res.data.status === "success") {
-                    showNotification(
-                        "Logged in successfully",
-                        "You have been logged in successfully",
-                        "success"
-                    );
+            );
 
-                    const serverUser = await checkLoggedIn();
-                    if (serverUser) dispatch(setUser(serverUser));
-                    redirect("/home");
-                } else {
-                    showNotification(
-                        "Failed to login",
-                        "Invalid email/username or password",
-                        "error"
-                    );
-                }
-            });
+            if (response.data.status === "success") {
+                showNotification(
+                    "Logged in successfully",
+                    "You have been logged in successfully",
+                    "success"
+                );
+
+                const serverUser = await checkLoggedIn();
+                if (serverUser) dispatch(setUser(serverUser));
+                redirect("/home");
+            } else {
+                console.log(response.data);
+
+                showNotification(
+                    "Failed to login",
+                    messages[response.data.status as keyof typeof messages],
+                    "error"
+                );
+            }
+        } catch (err) {
+            showNotification(
+                "Failed to login",
+                "Unable to login at the moment. Please try again later.",
+                "error"
+            );
+        }
     };
 
     // const loginWIthTFA = async (tfaCode: string) => {};

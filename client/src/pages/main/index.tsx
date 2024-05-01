@@ -1,5 +1,5 @@
 import * as React from "react";
-import { redirect, Link } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 
 import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "../../store";
@@ -11,6 +11,8 @@ import { checkLoggedIn } from "../../lib/auth";
 const IndexPage = () => {
     const user = useSelector((state: RootState) => state.page.currentUser);
     const dispatch = useDispatch();
+    
+    const redirect = useNavigate();
 
     // Login-protect the page
     React.useEffect(() => {

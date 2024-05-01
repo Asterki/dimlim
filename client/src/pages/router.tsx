@@ -10,7 +10,7 @@ import AccountRegister from "./accounts/register";
 import AccountLogout from "./accounts/logout";
 
 // Contacts
-import ContactsIndex from "./contacts";
+import ContactsIndex from "./contacts/index";
 
 // Settings
 import SettingsIndex from "./settings";

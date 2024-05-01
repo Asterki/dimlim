@@ -4,11 +4,11 @@ import axios from "axios";
 import * as Tabs from "@radix-ui/react-tabs";
 
 import { useSelector, useDispatch } from "react-redux";
-import { RootState } from "../store";
-import { setUser } from "../store/slices/page";
+import { RootState } from "../../store";
+import { setUser } from "../../store/slices/page";
 
-import NavbarComponent from "../components/navbar";
-import { checkLoggedIn } from "../lib/auth";
+import NavbarComponent from "../../components/navbar";
+import { checkLoggedIn } from "../../lib/auth";
 
 const ContactsIndex = () => {
     const user = useSelector((state: RootState) => state.page.currentUser);

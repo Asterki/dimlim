@@ -114,8 +114,6 @@ const AccountLogin = () => {
         }
     };
 
-    // const loginWIthTFA = async (tfaCode: string) => {};
-
     // Login-protect the page
     React.useEffect(() => {
         (async () => {

@@ -11,6 +11,7 @@ import NavbarComponent from "../../components/navbar";
 import NotificationComponent from "../../components/notifications";
 
 import { checkLoggedIn } from "../../lib/auth";
+import { RegisterResponseData } from "../../../../shared/types/api/accounts";
 
 const AccountRegister = () => {
     const user = useSelector((state: RootState) => state.page.currentUser);
@@ -90,41 +91,43 @@ const AccountRegister = () => {
                 "error"
             );
 
-        try {
-            axios
-                .post(
-                    `${import.meta.env.VITE_SERVER_HOST}/api/accounts/register`,
-                    {
-                        username: username,
-                        email: email,
-                        password: password,
-                    }
-                )
-                .then((res) => {
-                    if (res.data.status == "success") {
-                        showNotification(
-                            "Registered successfully",
-                            "You have been registered successfully",
-                            "success"
-                        );
+        axios
+            .post<RegisterResponseData>(
+                `${import.meta.env.VITE_SERVER_HOST}/api/accounts/register`,
+                {
+                    username: username,
+                    email: email,
+                    password: password,
+                }
+            )
+            .then((res) => {
+                if (res.data.status == "success") {
+                    showNotification(
+                        "Registered successfully",
+                        "You have been registered successfully",
+                        "success"
+                    );
 
-                        return redirect("/home");
-                    } else if (res.data.status == "user-exists") {
-                        showNotification(
-                            "Failed to register",
-                            "User already exists",
-                            "error"
-                        );
-                    }
-                });
-        } catch (err) {
-            console.log(err);
-            showNotification(
-                "Failed to register",
-                "An error occurred",
-                "error"
-            );
-        }
+                    return redirect("/home");
+                } else if (res.data.status == "user-exists") {
+                    showNotification(
+                        "Failed to register",
+                        "User already exists",
+                        "error"
+                    );
+                }
+            })
+            .catch((err) => {
+                console.log(err);
+                showNotification(
+                    "Failed to register",
+                    "An error occurred",
+                    "error"
+                );
+            })
+            .finally(() => {
+                return usernameRef.current!.focus();
+            });
     };
 
     // Login-protect the page

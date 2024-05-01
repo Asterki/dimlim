@@ -31,7 +31,8 @@ const IndexPage = () => {
     return (
         <div className="bg-gray-800 min-h-screen">
             <NavbarComponent user={null} />
-            <section className="relative select-none">
+            
+            <section className="">
                 <img
                     src="/assets/images/bg-2.png"
                     alt="Background"
@@ -41,7 +42,7 @@ const IndexPage = () => {
                     <img
                         src="/assets/images/logo-no-background.png"
                         alt="Logo"
-                        className="w-1/4 md:w-2/12"
+                        className="w-1/4 md:w-2/12 select-none"
                     />
                     <h1 className="text-5xl font-bold">DIMLIM</h1> <br />
                     <p className="m-0">

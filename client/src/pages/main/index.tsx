@@ -29,7 +29,7 @@ const IndexPage = () => {
     }, []);
 
     return (
-        <div className="bg-gray-800 min-h-screen">
+        <div className="dark:bg-gray-800 bg-white min-h-screen">
             <NavbarComponent user={null} />
             
             <section className="">

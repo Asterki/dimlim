@@ -83,7 +83,7 @@ const AccountLogout = () => {
     }, []);
 
     return (
-        <div className="bg-gray-800 min-h-screen text-white">
+        <div className="dark:bg-gray-800 bg-slate-200 min-h-screen dark:text-white text-neutral-700">
             <NotificationComponent
                 content={notification.content}
                 title={notification.title}
@@ -95,7 +95,7 @@ const AccountLogout = () => {
                 <div>
                     <NavbarComponent user={user} />
 
-                    <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-gray-700 rounded-md p-4 w-11/12 md:w-4/12">
+                    <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 dark:bg-gray-700 bg-slate-100 shadow-md rounded-md p-4 w-11/12 md:w-4/12">
                         <h1 className="text-2xl font-semibold mb-2">
                             Are you sure you want to log out?
                         </h1>
@@ -114,7 +114,7 @@ const AccountLogout = () => {
 
                         <Link
                             to="/home"
-                            className="text-center w-full block bg-gray-500 text-white rounded-md p-2 mt-4 hover:brightness-125 transition-all"
+                            className="text-center w-full block dark:bg-gray-500 bg-slate-500 text-white rounded-md p-2 mt-4 hover:brightness-125 transition-all"
                         >
                             Cancel
                         </Link>

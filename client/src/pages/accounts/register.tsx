@@ -145,7 +145,7 @@ const AccountRegister = () => {
     }, []);
 
     return (
-        <div className="bg-gray-800 min-h-screen text-white">
+        <div className="dark:bg-gray-800 bg-slate-200 min-h-screen dark:text-white text-neutral-700">
             <NavbarComponent user={null} />
 
             <NotificationComponent
@@ -155,7 +155,7 @@ const AccountRegister = () => {
                 type={notification.type}
             />
 
-            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-gray-700 rounded-md p-4 w-11/12 md:w-4/12">
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 dark:bg-gray-700 bg-slate-100 rounded-md p-4 w-11/12 md:w-4/12 shadow-md">
                 <form>
                     <h1 className="text-2xl font-semibold mb-2">
                         Register to DIMLIM
@@ -167,7 +167,7 @@ const AccountRegister = () => {
                             type="text"
                             ref={usernameRef}
                             placeholder="Your username"
-                            className="w-full p-2 bg-gray-800 border-2 border-gray-800 outline-none rounded-md transition-all focus:border-blue-400"
+                            className="w-full p-2 dark:bg-gray-800 border-2 dark:border-gray-800 border-slate-200  outline-none rounded-md transition-all focus:border-blue-400"
                         />
                     </div>
 
@@ -177,7 +177,7 @@ const AccountRegister = () => {
                             type="email"
                             ref={emailRef}
                             placeholder="Your email (will be verified)"
-                            className="w-full p-2 bg-gray-800 border-2 border-gray-800 outline-none rounded-md transition-all focus:border-blue-400"
+                            className="w-full p-2 dark:bg-gray-800 border-2 dark:border-gray-800 border-slate-200  outline-none rounded-md transition-all focus:border-blue-400"
                         />
                     </div>
 
@@ -187,7 +187,7 @@ const AccountRegister = () => {
                             type="password"
                             ref={passwordRef}
                             placeholder="••••••••"
-                            className="w-full p-2 bg-gray-800 border-2 border-gray-800 outline-none rounded-md transition-all focus:border-blue-400"
+                            className="w-full p-2 dark:bg-gray-800 border-2 dark:border-gray-800 border-slate-200  outline-none rounded-md transition-all focus:border-blue-400"
                         />
                     </div>
 
@@ -197,13 +197,13 @@ const AccountRegister = () => {
                             type="password"
                             ref={repeatPasswordRef}
                             placeholder="••••••••"
-                            className="w-full p-2 bg-gray-800 border-2 border-gray-800 outline-none rounded-md transition-all focus:border-blue-400"
+                            className="w-full p-2 dark:bg-gray-800 border-2 dark:border-gray-800 border-slate-200  outline-none rounded-md transition-all focus:border-blue-400"
                         />
                     </div>
 
                     <div className="mt-8">
                         <button
-                            className="w-full p-2 bg-blue-500 rounded-md"
+                            className="w-full p-2 bg-blue-500 rounded-md text-white"
                             type="button"
                             onClick={register}
                         >

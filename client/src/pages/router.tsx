@@ -15,6 +15,9 @@ import ContactsIndex from "./contacts/index";
 // Settings
 import SettingsIndex from "./settings";
 
+// Chat
+import Chat from "./chat";
+
 const router = createBrowserRouter([
     // Main
     {
@@ -50,6 +53,12 @@ const router = createBrowserRouter([
     {
         path: "/settings",
         element: <SettingsIndex />,
+    },
+
+    // Chat
+    {
+        path: "/chat/:userid",
+        element: <Chat />,
     },
 ]);
 

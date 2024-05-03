@@ -21,7 +21,7 @@ const handler = async (req: Request, res: Response<ResponseData>, next: NextFunc
                     ...currentUser.contacts.blocked,
                 ],
             },
-        }).select("profile.username userID");
+        }).select("profile.username profile.avatar userID");
 
         const acceptedContacts = allContacts.filter((user) => currentUser.contacts.accepted.includes(user.userID));
         const pendingContacts = allContacts.filter((user) => currentUser.contacts.pending.includes(user.userID));

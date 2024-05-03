@@ -11,7 +11,9 @@ class SocketServer {
     loadToServer(server: ReturnType<typeof createServer>) {
         this.io.attach(server, {
             cors: {
-                origin: "*",
+                origin: "http://localhost:5173",
+                credentials: true,
+                exposedHeaders: ["set-cookie"],
             },
         });
 

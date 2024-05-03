@@ -338,7 +338,7 @@ const SettingsIndex = () => {
     }, [user]);
 
     return (
-        <div className="bg-gray-800 min-h-screen text-white">
+        <div className="dark:bg-gray-800 bg-slate-200 min-h-screen dark:text-white text-neutral-700">
             {user && (
                 <div>
                     <NavbarComponent user={user} />
@@ -353,31 +353,31 @@ const SettingsIndex = () => {
                     <div className="pt-20">
                         <div className="text-center flex items-center justify-center">
                             <Tabs.Root
-                                className="text-center w-11/12 md:w-8/12 flex justify-center items-center flex-col "
+                                className="text-center w-11/12 md:w-8/12 flex justify-center items-center flex-col"
                                 defaultValue="tab1"
                                 onValueChange={(e) => {
                                     setTab(e);
                                 }}
                             >
                                 <Tabs.List
-                                    className="w-full flex justify-self-center shadow-md border-b-2 border-gray-800"
+                                    className="w-full flex justify-self-center shadow-md border-b-2 dark:border-gray-800"
                                     aria-label="Manage your account"
                                 >
                                     <Tabs.Trigger
-                                        className={`p-2 rounded-tl-md transition-all w-3/12 md:w-1/4 border-r-2 border-gray-800 ${
+                                        className={`p-2 rounded-tl-md transition-all w-3/12 md:w-1/4 border-r-2 dark:border-gray-800 ${
                                             tab == "tab1"
-                                                ? "bg-purple-400 shadow-2xl z-20"
-                                                : "bg-gray-700 hover:brightness-125"
+                                                ? "bg-blue-400 shadow-2xl z-20 text-white"
+                                                : "dark:bg-gray-700 bg-slate-100 hover:brightness-125"
                                         }`}
                                         value="tab1"
                                     >
                                         General
                                     </Tabs.Trigger>
                                     <Tabs.Trigger
-                                        className={`p-2 transition-all w-3/12 md:w-1/4 border-r-2 border-gray-800 ${
+                                        className={`p-2 transition-all w-3/12 md:w-1/4 border-r-2 dark:border-gray-800 ${
                                             tab == "tab2"
-                                                ? "bg-purple-400 shadow-2xl z-20"
-                                                : "bg-gray-700 hover:brightness-125"
+                                                ? "bg-blue-400 shadow-2xl z-20 text-white"
+                                                : "dark:bg-gray-700 bg-slate-100 hover:brightness-125"
                                         }`}
                                         value="tab2"
                                     >
@@ -386,18 +386,18 @@ const SettingsIndex = () => {
                                     <Tabs.Trigger
                                         className={`p-2 transition-all w-3/12 md:w-1/4 ${
                                             tab == "tab3"
-                                                ? "bg-purple-400 shadow-2xl z-20"
-                                                : "bg-gray-700 hover:brightness-125"
+                                                ? "bg-blue-400 shadow-2xl z-20 text-white"
+                                                : "dark:bg-gray-700 bg-slate-100 hover:brightness-125"
                                         }`}
                                         value="tab3"
                                     >
                                         Privacy
                                     </Tabs.Trigger>
                                     <Tabs.Trigger
-                                        className={`p-2 rounded-tr-md transition-all w-3/12 md:w-1/4 border-l-2 border-gray-800 ${
+                                        className={`p-2 rounded-tr-md transition-all w-3/12 md:w-1/4 border-l-2 dark:border-gray-800 ${
                                             tab == "tab4"
-                                                ? "bg-purple-400 shadow-2xl z-20"
-                                                : "bg-gray-700 hover:brightness-125"
+                                                ? "bg-blue-400 shadow-2xl z-20 text-white"
+                                                : "dark:bg-gray-700 bg-slate-100 hover:brightness-125"
                                         }`}
                                         value="tab4"
                                     >
@@ -405,7 +405,7 @@ const SettingsIndex = () => {
                                     </Tabs.Trigger>
                                 </Tabs.List>
                                 <Tabs.Content
-                                    className="rounded-br-md rounded-bl-md bg-gray-700 w-full text-center p-2 shadow-md"
+                                    className="rounded-br-md rounded-bl-md bg-slate-100 dark:bg-gray-700 w-full text-center p-2 shadow-md"
                                     value="tab1"
                                 >
                                     <div className="grid grid-cols-2">
@@ -423,7 +423,7 @@ const SettingsIndex = () => {
                                                     });
                                                 }}
                                             >
-                                                <Select.Trigger className="bg-gray-800 rounded-md p-2 w-7/12 flex justify-between">
+                                                <Select.Trigger className="dark:bg-gray-800 bg-slate-200 rounded-md p-2 w-7/12 flex justify-between">
                                                     <Select.Value placeholder="Select a theme" />
                                                     <Select.Icon className="ml-2">
                                                         <FontAwesomeIcon
@@ -436,12 +436,12 @@ const SettingsIndex = () => {
                                                     <Select.Content
                                                         side="bottom"
                                                         align="end"
-                                                        className="z-50 bg-gray-800 shadow-md rounded-md p-2 text-white outline-none"
+                                                        className="z-50 dark:bg-gray-800 bg-slate-200 shadow-md rounded-md p-2 dark:text-white text-slate-700 outline-none"
                                                     >
                                                         <Select.Viewport className="flex flex-col gap-2">
                                                             <Select.Item
                                                                 value="light"
-                                                                className="hover:bg-gray-700 p-2 rounded-md transition-all cursor-pointer data-[state=checked]:bg-blue-400 outline-none"
+                                                                className="hover:dark:bg-gray-700 p-2 rounded-md transition-all cursor-pointer data-[state=checked]:bg-blue-400 outline-none"
                                                             >
                                                                 <Select.ItemText>
                                                                     Light Theme
@@ -449,7 +449,7 @@ const SettingsIndex = () => {
                                                             </Select.Item>
                                                             <Select.Item
                                                                 value="dark"
-                                                                className="data-[state=checked]:bg-blue-400 hover:bg-gray-700 p-2 rounded-md transition-all cursor-pointer outline-none"
+                                                                className="data-[state=checked]:bg-blue-400 hover:dark:bg-gray-700 p-2 rounded-md transition-all cursor-pointer outline-none"
                                                             >
                                                                 <Select.ItemText>
                                                                     Dark Theme
@@ -477,7 +477,7 @@ const SettingsIndex = () => {
                                                     });
                                                 }}
                                             >
-                                                <Select.Trigger className="bg-gray-800 rounded-md p-2 w-7/12 flex justify-between">
+                                                <Select.Trigger className="dark:bg-gray-800 bg-slate-200 rounded-md p-2 w-7/12 flex justify-between">
                                                     <Select.Value placeholder="Select a language" />
                                                     <Select.Icon className="ml-2">
                                                         <FontAwesomeIcon
@@ -490,12 +490,12 @@ const SettingsIndex = () => {
                                                     <Select.Content
                                                         side="bottom"
                                                         align="end"
-                                                        className="z-50 bg-gray-800 shadow-md rounded-md p-2 text-white w-full outline-none"
+                                                        className="z-50 dark:bg-gray-800 bg-slate-200 shadow-md rounded-md p-2 dark:text-white text-slate-700 w-full outline-none"
                                                     >
                                                         <Select.Viewport className="flex flex-col gap-2">
                                                             <Select.Item
                                                                 value="en"
-                                                                className="hover:bg-gray-700 p-2 rounded-md transition-all cursor-pointer data-[state=checked]:bg-blue-400 outline-none"
+                                                                className="hover:dark:bg-gray-700 p-2 rounded-md transition-all cursor-pointer data-[state=checked]:bg-blue-400 outline-none"
                                                             >
                                                                 <Select.ItemText>
                                                                     English
@@ -503,7 +503,7 @@ const SettingsIndex = () => {
                                                             </Select.Item>
                                                             <Select.Item
                                                                 value="es"
-                                                                className="data-[state=checked]:bg-blue-400 hover:bg-gray-700 p-2 rounded-md transition-all cursor-pointer outline-none"
+                                                                className="data-[state=checked]:bg-blue-400 dark:hover:bg-gray-700 p-2 rounded-md transition-all cursor-pointer outline-none"
                                                             >
                                                                 <Select.ItemText>
                                                                     Spanish
@@ -517,7 +517,7 @@ const SettingsIndex = () => {
                                     </div>
                                 </Tabs.Content>
                                 <Tabs.Content
-                                    className="rounded-br-md rounded-bl-md bg-gray-700 w-full text-center p-2 shadow-md"
+                                    className="rounded-br-md rounded-bl-md bg-slate-100 dark:bg-gray-700 w-full text-center p-2 shadow-md"
                                     value="tab2"
                                 >
                                     <div className="flex items-center gap-2 my-2">
@@ -531,7 +531,7 @@ const SettingsIndex = () => {
                                                     showNotifications: val,
                                                 })
                                             }
-                                            className="w-[42px] h-[25px] rounded-full relative bg-gray-800  data-[state=checked]:bg-blue-400 transition-all outline-none cursor-default"
+                                            className="w-[42px] h-[25px] rounded-full relative dark:bg-gray-800  data-[state=checked]:bg-blue-400 transition-all outline-none cursor-default"
                                         >
                                             <Switch.Thumb className="block w-[21px] h-[21px] bg-white rounded-full transition-transform duration-100 translate-x-0.5 will-change-transform data-[state=checked]:translate-x-[19px]" />
                                         </Switch.Root>
@@ -548,7 +548,7 @@ const SettingsIndex = () => {
                                                     playSound: val,
                                                 })
                                             }
-                                            className="w-[42px] h-[25px] rounded-full relative bg-gray-800  data-[state=checked]:bg-blue-400 transition-all outline-none cursor-default"
+                                            className="w-[42px] h-[25px] rounded-full relative dark:bg-gray-800  data-[state=checked]:bg-blue-400 transition-all outline-none cursor-default"
                                         >
                                             <Switch.Thumb className="block w-[21px] h-[21px] bg-white rounded-full transition-transform duration-100 translate-x-0.5 will-change-transform data-[state=checked]:translate-x-[19px]" />
                                         </Switch.Root>
@@ -556,7 +556,7 @@ const SettingsIndex = () => {
                                     </div>
                                 </Tabs.Content>
                                 <Tabs.Content
-                                    className="rounded-br-md rounded-bl-md bg-gray-700 w-full text-center p-2 shadow-md"
+                                    className="rounded-br-md rounded-bl-md bg-slate-100 dark:bg-gray-700 w-full text-center p-2 shadow-md"
                                     value="tab3"
                                 >
                                     <div className="flex items-center gap-2 my-2">
@@ -570,7 +570,7 @@ const SettingsIndex = () => {
                                                     showOnlineStatus: val,
                                                 })
                                             }
-                                            className="w-[42px] h-[25px] rounded-full relative bg-gray-800  data-[state=checked]:bg-blue-400 transition-all outline-none cursor-default"
+                                            className="w-[42px] h-[25px] rounded-full relative dark:bg-gray-800  data-[state=checked]:bg-blue-400 transition-all outline-none cursor-default"
                                         >
                                             <Switch.Thumb className="block w-[21px] h-[21px] bg-white rounded-full transition-transform duration-100 translate-x-0.5 will-change-transform data-[state=checked]:translate-x-[19px]" />
                                         </Switch.Root>
@@ -587,7 +587,7 @@ const SettingsIndex = () => {
                                                     showLastSeen: val,
                                                 })
                                             }
-                                            className="w-[42px] h-[25px] rounded-full relative bg-gray-800  data-[state=checked]:bg-blue-400 transition-all outline-none cursor-default"
+                                            className="w-[42px] h-[25px] rounded-full relative dark:bg-gray-800  data-[state=checked]:bg-blue-400 transition-all outline-none cursor-default"
                                         >
                                             <Switch.Thumb className="block w-[21px] h-[21px] bg-white rounded-full transition-transform duration-100 translate-x-0.5 will-change-transform data-[state=checked]:translate-x-[19px]" />
                                         </Switch.Root>
@@ -604,7 +604,7 @@ const SettingsIndex = () => {
                                                     showReadReceipts: val,
                                                 })
                                             }
-                                            className="w-[42px] h-[25px] rounded-full relative bg-gray-800  data-[state=checked]:bg-blue-400 transition-all outline-none cursor-default"
+                                            className="w-[42px] h-[25px] rounded-full relative dark:bg-gray-800  data-[state=checked]:bg-blue-400 transition-all outline-none cursor-default"
                                         >
                                             <Switch.Thumb className="block w-[21px] h-[21px] bg-white rounded-full transition-transform duration-100 translate-x-0.5 will-change-transform data-[state=checked]:translate-x-[19px]" />
                                         </Switch.Root>
@@ -612,7 +612,7 @@ const SettingsIndex = () => {
                                     </div>
                                 </Tabs.Content>
                                 <Tabs.Content
-                                    className="rounded-br-md rounded-bl-md bg-gray-700 w-full text-center p-2 shadow-md"
+                                    className="rounded-br-md rounded-bl-md bg-slate-100 dark:bg-gray-700 w-full text-center p-2 shadow-md"
                                     value="tab4"
                                 >
                                     <div className="flex flex-col gap-2">
@@ -635,19 +635,19 @@ const SettingsIndex = () => {
                                                             true
                                                         )
                                                     }
-                                                    className="bg-blue-400 rounded-md p-2 shadow-md md:w-3/12 w-1/2"
+                                                    className="bg-blue-400 rounded-md p-2 shadow-md md:w-3/12 w-1/2 text-white"
                                                 >
                                                     Change password
                                                 </Dialog.Trigger>
                                                 <Dialog.Portal>
                                                     <Dialog.Overlay className="bg-black/50 data-[state=open]:animate-overlayShow fixed inset-0 z-20" />
-                                                    <Dialog.Content className="data-[state=open]:animate-contentShow fixed top-[50%] left-[50%] max-h-[85vh] w-[90vw] max-w-[450px] translate-x-[-50%] translate-y-[-50%] rounded-md bg-gray-700 p-4 text-white focus:outline-none z-30 flex items-center flex-col gap-2">
+                                                    <Dialog.Content className="data-[state=open]:animate-contentShow fixed top-[50%] left-[50%] max-h-[85vh] w-[90vw] max-w-[450px] translate-x-[-50%] translate-y-[-50%] rounded-md dark:bg-gray-700 bg-slate-100 p-4 dark:text-white text-slate-700 focus:outline-none z-30 flex items-center flex-col gap-2">
                                                         <h1 className="text-2xl">
                                                             Change Password
                                                         </h1>
                                                         <input
                                                             type="password"
-                                                            className="bg-gray-800 rounded-md p-2 text-white w-full"
+                                                            className="dark:bg-gray-800 rounded-md p-2 dark:text-white w-full"
                                                             placeholder="Current Password"
                                                             ref={
                                                                 oldPasswordInput
@@ -655,7 +655,7 @@ const SettingsIndex = () => {
                                                         />
                                                         <input
                                                             type="password"
-                                                            className="bg-gray-800 rounded-md p-2 text-white w-full"
+                                                            className="dark:bg-gray-800 rounded-md p-2 dark:text-white w-full"
                                                             placeholder="New Password"
                                                             ref={
                                                                 newPasswordInput
@@ -663,14 +663,14 @@ const SettingsIndex = () => {
                                                         />
                                                         <input
                                                             type="password"
-                                                            className="bg-gray-800 rounded-md p-2 text-white w-full"
+                                                            className="dark:bg-gray-800 rounded-md p-2 dark:text-white w-full"
                                                             placeholder="Confirm New Password"
                                                             ref={
                                                                 confirmNewPasswordInput
                                                             }
                                                         />
                                                         <button
-                                                            className="p-2 bg-blue-400 rounded-md mt-2 w-1/2"
+                                                            className="p-2 bg-blue-400 rounded-md mt-2 w-1/2 text-white"
                                                             onClick={
                                                                 changePassword
                                                             }
@@ -703,14 +703,14 @@ const SettingsIndex = () => {
                                                     onClick={() =>
                                                         setTfaModalOpen(true)
                                                     }
-                                                    className="bg-blue-400 rounded-md p-2 shadow-md md:w-3/12 w-1/2"
+                                                    className="bg-blue-400 rounded-md p-2 shadow-md text-white md:w-3/12 w-1/2"
                                                 >
                                                     Two Factor Authentication
                                                 </Dialog.Trigger>
                                                 <Dialog.Portal>
                                                     <Dialog.Overlay className="bg-black/50 data-[state=open]:animate-overlayShow fixed inset-0 z-20" />
                                                     {!tfaActive && (
-                                                        <Dialog.Content className="data-[state=open]:animate-contentShow fixed top-[50%] left-[50%] max-h-[85vh] w-[90vw] max-w-[450px] translate-x-[-50%] translate-y-[-50%] rounded-md bg-gray-700 p-4 text-white focus:outline-none z-30 flex flex-col items-center">
+                                                        <Dialog.Content className="data-[state=open]:animate-contentShow fixed top-[50%] left-[50%] max-h-[85vh] w-[90vw] max-w-[450px] translate-x-[-50%] translate-y-[-50%] rounded-md dark:bg-gray-700 bg-slate-200 text-slate-700 p-4 text-white focus:outline-none z-30 flex flex-col items-center">
                                                             <h1 className="text-2xl">
                                                                 Scan with your
                                                                 device
@@ -727,7 +727,7 @@ const SettingsIndex = () => {
                                                                     secret.base32
                                                                 }
                                                                 readOnly
-                                                                className="bg-gray-800 rounded-md w-full p-2 my-2"
+                                                                className="dark:bg-gray-800 rounded-md w-full p-2 my-2"
                                                             />
 
                                                             <p className="text-center">
@@ -743,7 +743,7 @@ const SettingsIndex = () => {
                                                                 ref={
                                                                     tfaCodeInput
                                                                 }
-                                                                className="bg-gray-800 rounded-md p-2 text-white w-full"
+                                                                className="dark:bg-gray-800 rounded-md p-2 dark:text-white w-full"
                                                                 placeholder="Code Generated by your app"
                                                             />
 
@@ -752,12 +752,12 @@ const SettingsIndex = () => {
                                                                 ref={
                                                                     tfaEnablePasswordInput
                                                                 }
-                                                                className="bg-gray-800 rounded-md p-2 text-white w-full mt-2"
+                                                                className="dark:bg-gray-800 rounded-md p-2 dark:text-white w-full mt-2"
                                                                 placeholder="Your password"
                                                             />
 
                                                             <button
-                                                                className="p-2 bg-blue-400 rounded-md mt-2 w-1/2"
+                                                                className="p-2 bg-blue-400 text-white rounded-md mt-2 w-1/2"
                                                                 onClick={
                                                                     activateTFA
                                                                 }
@@ -767,7 +767,7 @@ const SettingsIndex = () => {
                                                         </Dialog.Content>
                                                     )}
                                                     {tfaActive && (
-                                                        <Dialog.Content className="data-[state=open]:animate-contentShow fixed top-[50%] left-[50%] max-h-[85vh] w-[90vw] max-w-[450px] translate-x-[-50%] translate-y-[-50%] rounded-md bg-gray-700 p-4 text-white focus:outline-none z-30 flex flex-col items-center">
+                                                        <Dialog.Content className="data-[state=open]:animate-contentShow fixed top-[50%] left-[50%] max-h-[85vh] w-[90vw] max-w-[450px] translate-x-[-50%] translate-y-[-50%] rounded-md dark:bg-gray-700 p-4 text-white focus:outline-none z-30 flex flex-col items-center">
                                                             <h1 className="text-2xl">
                                                                 Disable TFA
                                                             </h1>
@@ -777,7 +777,7 @@ const SettingsIndex = () => {
                                                                 ref={
                                                                     tfaDisablePasswordInput
                                                                 }
-                                                                className="bg-gray-800 rounded-md p-2 text-white w-full"
+                                                                className="dark:bg-gray-800 rounded-md p-2 text-white w-full"
                                                                 placeholder="Your password"
                                                             />
                                                             <button

@@ -1,4 +1,5 @@
 import * as React from "react";
+import { io, Socket } from "socket.io-client";
 import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
 
@@ -25,6 +26,8 @@ const ChatIndex = () => {
         userID: string;
     } | null>(null);
 
+    const [socket, setSocket] = React.useState<Socket | null>(null);
+
     React.useEffect(() => {
         (async () => {
             if (!user) {
@@ -48,6 +51,15 @@ const ChatIndex = () => {
         })();
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
+
+    React.useEffect(() => {
+        if (contact !== null) {
+            const newSocket = io(import.meta.env.VITE_SERVER_HOST, {
+                withCredentials: true,
+            });
+            setSocket(newSocket);
+        }
+    }, [contact])
 
     return (
         <div className="dark:bg-gray-800 bg-slate-200 min-h-screen dark:text-white text-neutral-700">

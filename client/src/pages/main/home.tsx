@@ -59,7 +59,7 @@ const HomePage = () => {
     };
 
     return (
-        <div className="bg-gray-800 min-h-screen text-white">
+        <div className="dark:bg-gray-800 bg-slate-200 min-h-screen dark:text-white text-neutral-700">
             {user && (
                 <div>
                     <NavbarComponent user={user} />
@@ -77,7 +77,7 @@ const HomePage = () => {
                                 {contacts.map((contact) => (
                                     <div key={contact.userID}>
                                         <Link to={`/chat/${contact.userID}`}>
-                                            <div className="flex items-center justify-between p-2 bg-gray-600 rounded-md mt-2">
+                                            <div className="flex items-center justify-between p-2 dark:bg-gray-600 bg-slate-100 rounded-md mt-2">
                                                 <p>
                                                     {contact.profile.username}
                                                 </p>

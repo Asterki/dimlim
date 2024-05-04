@@ -111,8 +111,8 @@ const ContactsIndex = () => {
                                     <Tabs.Trigger
                                         className={`p-2 rounded-tl-md transition-all w-3/12 md:w-1/4 border-r-2 dark:border-gray-800 ${
                                             tab == "tab1"
-                                                ? "bg-blue-400 shadow-2xl z-20"
-                                                : "dark:bg-gray-700 hover:brightness-125 bg-slate-100"
+                                                ? "text-white bg-blue-400 z-20"
+                                                : "dark:bg-gray-700 bg-slate-100 hover:bg-white dark:hover:bg-gray-600"
                                         }`}
                                         value="tab1"
                                     >
@@ -121,8 +121,8 @@ const ContactsIndex = () => {
                                     <Tabs.Trigger
                                         className={`p-2 transition-all w-3/12 md:w-1/4 border-r-2 dark:border-gray-800 ${
                                             tab == "tab2"
-                                                ? "bg-blue-400 shadow-2xl z-20"
-                                                : "dark:bg-gray-700 hover:brightness-125 bg-slate-100"
+                                                ? "text-white bg-blue-400 z-20"
+                                                : "dark:bg-gray-700 bg-slate-100 hover:bg-white dark:hover:bg-gray-600"
                                         }`}
                                         value="tab2"
                                     >
@@ -131,8 +131,8 @@ const ContactsIndex = () => {
                                     <Tabs.Trigger
                                         className={`p-2 transition-all w-3/12 md:w-1/4 ${
                                             tab == "tab3"
-                                                ? "bg-blue-400 shadow-2xl z-20"
-                                                : "dark:bg-gray-700 hover:brightness-125 bg-slate-100"
+                                                ? "text-white bg-blue-400 z-20"
+                                                : "dark:bg-gray-700 bg-slate-100 hover:bg-white dark:hover:bg-gray-600"
                                         }`}
                                         value="tab3"
                                     >
@@ -141,8 +141,8 @@ const ContactsIndex = () => {
                                     <Tabs.Trigger
                                         className={`p-2 rounded-tr-md transition-all w-3/12 md:w-1/4 border-l-2 dark:border-gray-800 ${
                                             tab == "tab4"
-                                                ? "bg-blue-400 shadow-2xl z-20"
-                                                : "dark:bg-gray-700 hover:brightness-125 bg-slate-100"
+                                                ? "text-white bg-blue-400 z-20"
+                                                : "dark:bg-gray-700 bg-slate-100 hover:bg-white dark:hover:bg-gray-600"
                                         }`}
                                         value="tab4"
                                     >
@@ -176,9 +176,9 @@ const ContactsIndex = () => {
                                                                         .username
                                                                 }
                                                             </p>
-                                                            <div className="flex w-5/12 md:w-3/12">
+                                                            <div className="flex w-7/12 md:w-4/12">
                                                                 <button
-                                                                    className="p-2 bg-blue-400 transition-all hover:brightness-125 rounded-md text-white mx-2 w-1/2"
+                                                                    className="p-2 bg-blue-400 transition-all hover:brightness-110 rounded-md text-white mx-2 w-1/2"
                                                                     onClick={() =>
                                                                         pending(
                                                                             contact.profile!
@@ -190,7 +190,7 @@ const ContactsIndex = () => {
                                                                     Accept
                                                                 </button>
                                                                 <button
-                                                                    className="p-2 bg-red-400 transition-all hover:brightness-125 rounded-md text-white w-1/2"
+                                                                    className="p-2 bg-red-400 transition-all hover:brightness-110 rounded-md text-white w-1/2"
                                                                     onClick={() =>
                                                                         pending(
                                                                             contact.profile!
@@ -236,9 +236,9 @@ const ContactsIndex = () => {
                                                                         .username
                                                                 }
                                                             </p>
-                                                            <div className="flex w-5/12 md:w-3/12">
+                                                            <div className="flex justify-end w-7/12 md:w-4/12">
                                                                 <button
-                                                                    className="p-2 bg-red-400 transition-all hover:brightness-125 text-white rounded-md w-1/2"
+                                                                    className="p-2 bg-red-400 transition-all hover:brightness-110 rounded-md text-white w-1/2"
                                                                     onClick={() =>
                                                                         pending(
                                                                             contact.profile!
@@ -284,9 +284,9 @@ const ContactsIndex = () => {
                                                                         .username
                                                                 }
                                                             </p>
-                                                            <div className="flex w-6/12 md:w-4/12">
+                                                            <div className="flex gap-2 justify-end w-7/12 md:w-4/12">
                                                                 <button
-                                                                    className="p-2 bg-red-400 rounded-md mx-2 w-1/2 text-white"
+                                                                    className="p-2 bg-red-400 transition-all hover:brightness-110 rounded-md text-white w-1/2"
                                                                     onClick={() =>
                                                                         remove(
                                                                             contact.profile!
@@ -297,7 +297,7 @@ const ContactsIndex = () => {
                                                                     Remove
                                                                 </button>
                                                                 <button
-                                                                    className="p-2 bg-red-400 rounded-md mx-2 w-1/2 text-white"
+                                                                    className="p-2 bg-red-400 transition-all hover:brightness-110 rounded-md text-white w-1/2"
                                                                     onClick={() =>
                                                                         block(
                                                                             contact.profile!
@@ -327,14 +327,14 @@ const ContactsIndex = () => {
                                             </div>
                                         )}
                                         {contacts.blocked.length > 0 && (
-                                            <div>
+                                            <div className="w-11/12 min-h-64">
                                                 {contacts.blocked.map(
                                                     (contact) => (
                                                         <div
                                                             key={
                                                                 contact.userID as string
                                                             }
-                                                            className="dark:bg-gray-600 bg-slate-200 rounded-md p-2 my-2 flex justify-between items-center"
+                                                            className="dark:bg-gray-600 bg-slate-200 rounded-md p-2 my-2 flex justify-between items-center w-full"
                                                         >
                                                             <p>
                                                                 {
@@ -343,7 +343,7 @@ const ContactsIndex = () => {
                                                                 }
                                                             </p>
                                                             <button
-                                                                className="p-2 bg-green-400 rounded-md text-white"
+                                                                className="p-2 bg-blue-400 transition-all hover:brightness-110 rounded-md text-white w-1/2"
                                                                 onClick={() =>
                                                                     unblock(
                                                                         contact.profile!

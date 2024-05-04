@@ -1,5 +1,6 @@
 import express, { Express } from "express";
 import { createServer } from "http";
+import path from "path"
 
 // Middleware
 import cors from "cors";
@@ -21,6 +22,7 @@ class Server {
     app: Express = express();
     httpServer: ReturnType<typeof createServer> = createServer(this.app);
     port: number;
+    dev: boolean;
 
     // Services
     mongooseClient: Connection = new MongoDBClient(process.env.MONGODB_URI as string).getClient();
@@ -30,6 +32,7 @@ class Server {
 
     constructor(dev: boolean, port: number) {
         this.checkEnv();
+        this.dev = dev;
         this.port = port;
     }
 
@@ -61,13 +64,18 @@ class Server {
     private loadMiddlewares() {
         this.app.use(express.json());
         this.app.use(cookie(process.env.SESSION_SECRET as string));
-        this.app.use(
-            cors({
-                origin: "http://localhost:5173",
-                credentials: true,
-                exposedHeaders: ["set-cookie"],
-            })
-        );
+
+        if (!this.dev) {
+            this.app.use(express.static(path.join(__dirname, "../../client/dist")));
+        } else {
+            this.app.use(
+                cors({
+                    origin: "http://localhost:5173",
+                    credentials: true,
+                    exposedHeaders: ["set-cookie"],
+                })
+            );
+        }
     }
 }
 

@@ -26,8 +26,12 @@ const NavbarComponent: React.FC<ComponentProps> = (props) => {
                             redirect("/home");
                         }}
                         to="/home"
-                        className="text-2xl dark:text-white font-bold block"
+                        className="text-2xl dark:text-white text-neutral-800 font-bold flex items-center gap-2"
                     >
+                        <img
+                            src="http://localhost:5173/assets/images/logo-no-background.png"
+                            className="w-8"
+                        />
                         DIMLIM
                     </Link>
                     <div className="w-auto md:w-2/12">
@@ -47,7 +51,9 @@ const NavbarComponent: React.FC<ComponentProps> = (props) => {
                                             className="mr-2 rounded-full"
                                         />
                                     </div>
-                                    <div className="dark:text-white">{props.user.profile.username}</div>
+                                    <div className="dark:text-white">
+                                        {props.user.profile.username}
+                                    </div>
                                 </div>
                                 <div>
                                     <FontAwesomeIcon
@@ -89,8 +95,12 @@ const NavbarComponent: React.FC<ComponentProps> = (props) => {
                             redirect("/");
                         }}
                         to="/"
-                        className="text-2xl dark:text-white text-neutral-800 font-bold block"
+                        className="text-2xl dark:text-white text-neutral-800 font-bold flex items-center gap-2"
                     >
+                        <img
+                            src="http://localhost:5173/assets/images/logo-no-background.png"
+                            className="w-8"
+                        />
                         DIMLIM
                     </Link>
                     <div className="w-1/2 flex items-center justify-end md:w-3/12">
@@ -102,7 +112,7 @@ const NavbarComponent: React.FC<ComponentProps> = (props) => {
                         </Link>
                         <Link
                             to="/register"
-                            className="mr-2 hover:underline text-white bg-blue-400 shadow-md rounded-md py-2 w-1/2 text-center"
+                            className="mr-2 hover:underline text-white bg-purple-400 shadow-md rounded-md py-2 w-1/2 text-center"
                         >
                             Register
                         </Link>

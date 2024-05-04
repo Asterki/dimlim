@@ -710,7 +710,7 @@ const SettingsIndex = () => {
                                                 <Dialog.Portal>
                                                     <Dialog.Overlay className="bg-black/50 data-[state=open]:animate-overlayShow fixed inset-0 z-20" />
                                                     {!tfaActive && (
-                                                        <Dialog.Content className="data-[state=open]:animate-contentShow fixed top-[50%] left-[50%] max-h-[85vh] w-[90vw] max-w-[450px] translate-x-[-50%] translate-y-[-50%] rounded-md dark:bg-gray-700 bg-slate-200 text-slate-700 p-4 text-white focus:outline-none z-30 flex flex-col items-center">
+                                                        <Dialog.Content className="data-[state=open]:animate-contentShow fixed top-[50%] left-[50%] max-h-[85vh] w-[90vw] max-w-[450px] translate-x-[-50%] translate-y-[-50%] rounded-md dark:bg-gray-700 bg-slate-200 text-slate-700 p-4 dark:text-white focus:outline-none z-30 flex flex-col items-center">
                                                             <h1 className="text-2xl">
                                                                 Scan with your
                                                                 device

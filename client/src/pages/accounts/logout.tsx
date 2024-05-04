@@ -83,7 +83,7 @@ const AccountLogout = () => {
     }, []);
 
     return (
-        <div className="dark:bg-gray-800 bg-slate-200 min-h-screen dark:text-white text-neutral-700">
+        <div className="dark:bg-gray-800 bg-slate-200 min-h-screen dark:text-white text-slate-700 bg-gradient-to-bl from-blue-400 to-purple-400 dark:from-gray-500 dark:to-gray-700">
             <NotificationComponent
                 content={notification.content}
                 title={notification.title}

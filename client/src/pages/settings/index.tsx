@@ -263,15 +263,17 @@ const SettingsIndex = () => {
                 })
             );
 
-            const response = axios.post(
-                `${import.meta.env.VITE_SERVER_HOST}/api/settings/general`,
-                {
-                    ...generalSettings,
-                },
-                { withCredentials: true }
-            );
+            (async () => {
+                const response = await axios.post(
+                    `${import.meta.env.VITE_SERVER_HOST}/api/settings/general`,
+                    {
+                        ...generalSettings,
+                    },
+                    { withCredentials: true }
+                );
 
-            console.log(response);
+                console.log(response);
+            })();
         }
     }, [generalSettings]);
 
@@ -282,22 +284,24 @@ const SettingsIndex = () => {
                     ...user,
                     preferences: {
                         ...user.preferences,
-                        notifications: notificationsSettings,
+                        notifications: notificationsSettings,                        
                     },
                 })
             );
 
-            const response = axios.post(
-                `${
-                    import.meta.env.VITE_SERVER_HOST
-                }/api/settings/notifications`,
-                {
-                    ...notificationsSettings,
-                },
-                { withCredentials: true }
-            );
+            (async () => {
+                const response = await axios.post(
+                    `${
+                        import.meta.env.VITE_SERVER_HOST
+                    }/api/settings/notifications`,
+                    {
+                        ...notificationsSettings,
+                    },
+                    { withCredentials: true }
+                );
 
-            console.log(response);
+                console.log(response);
+            })();
         }
     }, [notificationsSettings]);
 
@@ -313,21 +317,24 @@ const SettingsIndex = () => {
                 })
             );
 
-            const response = axios.post(
-                `${import.meta.env.VITE_SERVER_HOST}/api/settings/privacy`,
-                {
-                    ...privacySettings,
-                },
-                { withCredentials: true }
-            );
+            (async () => {
+                const response = await axios.post(
+                    `${import.meta.env.VITE_SERVER_HOST}/api/settings/privacy`,
+                    {
+                        ...privacySettings,
+                    },
+                    { withCredentials: true }
+                );
 
-            console.log(response);
+                console.log(response);
+            })();
         }
     }, [privacySettings]);
 
     // Load the user preferences when the user is loaded
     React.useEffect(() => {
         if (user) {
+            console.log(user.preferences.general)
             setGeneralSettings(user.preferences.general);
             setNotificationsSettings(user.preferences.notifications);
             setPrivacySettings(user.preferences.privacy);

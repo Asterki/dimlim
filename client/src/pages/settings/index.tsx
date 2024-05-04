@@ -49,6 +49,8 @@ const SettingsIndex = () => {
         type: "info",
     });
 
+    const page = React.useRef<HTMLDivElement>(null);
+
     // Modals state
     const [passwordModalOpen, setPasswordModalOpen] = React.useState(false);
     const [tfaModalOpen, setTfaModalOpen] = React.useState(false);
@@ -284,7 +286,7 @@ const SettingsIndex = () => {
                     ...user,
                     preferences: {
                         ...user.preferences,
-                        notifications: notificationsSettings,                        
+                        notifications: notificationsSettings,
                     },
                 })
             );
@@ -334,7 +336,7 @@ const SettingsIndex = () => {
     // Load the user preferences when the user is loaded
     React.useEffect(() => {
         if (user) {
-            console.log(user.preferences.general)
+            console.log(user.preferences.general);
             setGeneralSettings(user.preferences.general);
             setNotificationsSettings(user.preferences.notifications);
             setPrivacySettings(user.preferences.privacy);
@@ -347,6 +349,7 @@ const SettingsIndex = () => {
     return (
         <div
             className={user?.preferences.general.theme == "dark" ? "dark" : ""}
+            ref={page}
         >
             <div className="dark:bg-gray-800 bg-slate-200 min-h-screen dark:text-white text-neutral-700">
                 {user && (
@@ -425,7 +428,7 @@ const SettingsIndex = () => {
                                                 </h1>
 
                                                 <Select.Root
-                                                    defaultValue={
+                                                    value={
                                                         generalSettings.theme
                                                     }
                                                     onValueChange={(val) => {
@@ -446,7 +449,11 @@ const SettingsIndex = () => {
                                                         </Select.Icon>
                                                     </Select.Trigger>
 
-                                                    <Select.Portal>
+                                                    <Select.Portal
+                                                        container={
+                                                            page.current!
+                                                        }
+                                                    >
                                                         <Select.Content
                                                             side="bottom"
                                                             align="end"
@@ -483,7 +490,7 @@ const SettingsIndex = () => {
                                                 </h1>
 
                                                 <Select.Root
-                                                    defaultValue={
+                                                    value={
                                                         generalSettings.language
                                                     }
                                                     onValueChange={(val) => {
@@ -504,7 +511,11 @@ const SettingsIndex = () => {
                                                         </Select.Icon>
                                                     </Select.Trigger>
 
-                                                    <Select.Portal>
+                                                    <Select.Portal
+                                                        container={
+                                                            page.current!
+                                                        }
+                                                    >
                                                         <Select.Content
                                                             side="bottom"
                                                             align="end"

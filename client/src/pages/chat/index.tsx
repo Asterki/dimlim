@@ -56,10 +56,29 @@ const ChatIndex = () => {
         if (contact !== null) {
             const newSocket = io(import.meta.env.VITE_SERVER_HOST, {
                 withCredentials: true,
+                autoConnect: true,
             });
-            setSocket(newSocket);
+
+            newSocket.on("connect", () => {
+                setSocket(newSocket);
+
+                newSocket.emit("messageewq", {
+                    to: "jewioqejoqiwe",
+                    message: "Hello",
+                });
+            });
         }
-    }, [contact])
+    }, [contact]);
+
+    const a = () => {
+        if (socket && socket.connected) {
+            console.log("weqewqeqw");
+            socket.emit("messageewq", {
+                to: "jewioqejoqiwe",
+                message: "Hello",
+            });
+        }
+    };
 
     return (
         <div className="dark:bg-gray-800 bg-slate-200 min-h-screen dark:text-white text-neutral-700">
@@ -199,10 +218,12 @@ const ChatIndex = () => {
                                         className="w-full rounded-md p-2 dark:bg-gray-800 bg-slate-200 outline-none border-2 focus:border-blue-400"
                                         placeholder="Type a message..."
                                     />
-                                    <button className="bg-blue-400 rounded-md p-2 ml-2 w-2/12 text-white">
+                                    <button
+                                        className="bg-blue-400 rounded-md p-2 ml-2 w-2/12 text-white"
+                                        onClick={a}
+                                    >
                                         Send
                                     </button>
-
                                 </div>
                             </div>
                         </div>

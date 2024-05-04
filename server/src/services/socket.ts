@@ -17,12 +17,19 @@ class SocketServer {
 
         this.io.on("connection", (socket) => {
             console.log("Socket connected");
+
+            socket.on("messageewq", (data) => {
+                console.log("Message received");
+                this.io.send("Message received");
+            })
         });
 
         // Once the server is ready
         this.io.on("listening", () => {
             console.log("Socket server ready");
         });
+
+       
     }
 
     public static getInstance() {

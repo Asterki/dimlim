@@ -1,8 +1,6 @@
 import { Server } from "socket.io";
 import { createServer } from "http";
 
-import { Express } from "express";
-
 class SocketServer {
     private static instance: SocketServer | null = null;
 
@@ -34,4 +32,3 @@ class SocketServer {
 }
 
 export default SocketServer;
-

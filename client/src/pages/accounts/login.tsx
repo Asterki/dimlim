@@ -2,7 +2,7 @@ import * as React from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios, { AxiosResponse } from "axios";
 
-import { useSelector, useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../store";
 import { setUser } from "../../store/slices/page";
 
@@ -17,7 +17,7 @@ import { checkLoggedIn } from "../../lib/auth";
 const messages = {
     "invalid-credentials": "Invalid email/username or password",
     "requires-tfa": "Two-factor authentication is required",
-    "invalid-tfa-code": "Invalid two-factor authentication code",
+    "invalid-tfa-code": "Invalid two-factor authentication code"
 };
 
 const AccountLogin = () => {
@@ -36,7 +36,7 @@ const AccountLogin = () => {
         state: "hidden",
         title: "",
         content: "",
-        type: "info",
+        type: "info"
     });
 
     const showNotification = (
@@ -48,7 +48,7 @@ const AccountLogin = () => {
             state: "showing",
             title: title,
             content: content,
-            type: type,
+            type: type
         });
 
         setTimeout(() => {
@@ -56,7 +56,7 @@ const AccountLogin = () => {
                 state: "hidden",
                 title: "",
                 content: "",
-                type: "info",
+                type: "info"
             });
         }, 5000);
     };
@@ -79,10 +79,10 @@ const AccountLogin = () => {
                 {
                     emailOrUsername,
                     password,
-                    tfaCode: tfaCode,
+                    tfaCode: tfaCode
                 },
                 {
-                    withCredentials: true,
+                    withCredentials: true
                 }
             );
 
@@ -129,7 +129,8 @@ const AccountLogin = () => {
     }, []);
 
     return (
-        <div className="dark:bg-gray-800 bg-slate-200 min-h-screen dark:text-white text-neutral-700 bg-gradient-to-bl from-blue-400 to-purple-400 dark:from-gray-500 dark:to-gray-700">
+        <div
+            className="dark:bg-gray-800 bg-slate-200 min-h-screen dark:text-white text-neutral-700 bg-gradient-to-bl from-blue-400 to-purple-400 dark:from-gray-500 dark:to-gray-700">
             <NavbarComponent user={null} />
 
             <NotificationComponent
@@ -151,7 +152,8 @@ const AccountLogin = () => {
             >
                 <Dialog.Portal>
                     <Dialog.Overlay className="bg-black/50 data-[state=open]:animate-overlayShow fixed inset-0 z-20" />
-                    <Dialog.Content className="data-[state=open]:animate-contentShow fixed top-[50%] left-[50%] max-h-[85vh] w-[90vw] max-w-[450px] translate-x-[-50%] translate-y-[-50%] rounded-md dark:bg-gray-700 bg-slate-100 p-4 dark:text-white text-slate-700 focus:outline-none z-30 flex items-center flex-col gap-2">
+                    <Dialog.Content
+                        className="data-[state=open]:animate-contentShow fixed top-[50%] left-[50%] max-h-[85vh] w-[90vw] max-w-[450px] translate-x-[-50%] translate-y-[-50%] rounded-md dark:bg-gray-700 bg-slate-100 p-4 dark:text-white text-slate-700 focus:outline-none z-30 flex items-center flex-col gap-2">
                         <h1 className="text-2xl">TFA Code</h1>
                         <input
                             type="password"
@@ -169,7 +171,8 @@ const AccountLogin = () => {
                 </Dialog.Portal>
             </Dialog.Root>
 
-            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 dark:bg-gray-700 bg-white/80 rounded-md shadow-md p-4 w-11/12 md:w-4/12">
+            <div
+                className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 dark:bg-gray-700 bg-white/80 rounded-md shadow-md p-4 w-11/12 md:w-4/12">
                 <form>
                     <div className="flex flex-col items-center gap-2">
                         <img

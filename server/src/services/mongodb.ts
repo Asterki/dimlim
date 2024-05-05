@@ -8,15 +8,6 @@ class MongoDBClient {
         this.connect();
     }
 
-    private onError(error: Error) {
-        console.error(`There was an error trying to connect to MongoDB`);
-        console.error(error);
-    }
-
-    private onConnect() {
-        console.log(`MongoDB database connected`);
-    }
-
     connect() {
         mongoose.set("strictQuery", true);
         mongoose.connect(this.connectionString, {} as mongoose.ConnectOptions);
@@ -28,6 +19,15 @@ class MongoDBClient {
 
     public getClient() {
         return mongoose.connection;
+    }
+
+    private onError(error: Error) {
+        console.error(`There was an error trying to connect to MongoDB`);
+        console.error(error);
+    }
+
+    private onConnect() {
+        console.log(`MongoDB database connected`);
     }
 }
 

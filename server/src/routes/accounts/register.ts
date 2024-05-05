@@ -8,7 +8,7 @@ import UserModel from "../../models/users";
 
 import {
     RegisterRequestBody as RequestBody,
-    RegisterResponseData as ResponseData,
+    RegisterResponseData as ResponseData
 } from "../../../../shared/types/api/accounts";
 import { NextFunction, Request, Response } from "express";
 
@@ -30,24 +30,24 @@ const handler = async (req: Request, res: Response<ResponseData>, next: NextFunc
                 .min(8)
                 .refine((pass) => {
                     return validator.isStrongPassword(pass);
-                }),
+                })
         })
         .safeParse(req.body);
 
     if (!parsedBody.success)
         return res.status(400).send({
-            status: "invalid-parameters",
+            status: "invalid-parameters"
         });
 
     const { email, username, password } = req.body as RequestBody;
 
     // Check if the user exists
     const userExists = await UserModel.findOne({
-        $or: [{ "profile.email.value": email.toLowerCase() }, { "profile.username": username.toLowerCase() }],
+        $or: [{ "profile.email.value": email.toLowerCase() }, { "profile.username": username.toLowerCase() }]
     });
     if (userExists)
         return res.status(200).send({
-            status: "user-exists",
+            status: "user-exists"
         });
 
     try {
@@ -62,40 +62,40 @@ const handler = async (req: Request, res: Response<ResponseData>, next: NextFunc
                 username,
                 email: {
                     value: email,
-                    verified: false,
-                },
+                    verified: false
+                }
             },
             contacts: {
                 blocked: [],
                 pending: [],
-                accepted: [],
+                accepted: []
             },
             pubKey: Buffer.from(""),
             preferences: {
                 privacy: {
                     showEmail: true,
-                    showUsername: true,
+                    showUsername: true
                 },
                 security: {
                     password: hashedPassword,
                     twoFactor: {
                         active: false,
-                        secret: "",
-                    },
-                },
-            },
+                        secret: ""
+                    }
+                }
+            }
         });
-        
+
         await user.save();
 
         req.login(user, (err) => {
             res.status(200).send({
-                status: "success",
+                status: "success"
             });
         });
     } catch (error: unknown) {
         res.status(500).send({
-            status: "internal-error",
+            status: "internal-error"
         });
         Logger.getInstance().error((error as Error).message, true);
     }

@@ -10,7 +10,7 @@ import * as Select from "@radix-ui/react-select";
 import * as Dialog from "@radix-ui/react-dialog";
 import * as Switch from "@radix-ui/react-switch";
 
-import { useSelector, useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../store";
 import { setUser } from "../../store/slices/page";
 
@@ -29,8 +29,7 @@ const SettingsIndex = () => {
         (async () => {
             if (!user) {
                 const currentUser = await checkLoggedIn();
-                if (currentUser) dispatch(setUser(currentUser));
-                else return redirect("/login");
+                if (currentUser) dispatch(setUser(currentUser)); else return redirect("/login");
             }
         })();
         // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -38,15 +37,9 @@ const SettingsIndex = () => {
 
     // Notification state
     const [notification, setNotification] = React.useState<{
-        state: "showing" | "hidden";
-        title: string;
-        content: string;
-        type: "error" | "success" | "info" | "warning";
+        state: "showing" | "hidden"; title: string; content: string; type: "error" | "success" | "info" | "warning";
     }>({
-        state: "hidden",
-        title: "",
-        content: "",
-        type: "info",
+        state: "hidden", title: "", content: "", type: "info"
     });
 
     const page = React.useRef<HTMLDivElement>(null);
@@ -68,66 +61,45 @@ const SettingsIndex = () => {
     const [tab, setTab] = React.useState("tab1");
     const [userLoaded, setUserLoaded] = React.useState(false);
     const [secret, setSecret] = React.useState({
-        ascii: "",
-        base32: "",
-        hex: "",
-        otpauth_url: "",
-        image: "",
+        ascii: "", base32: "", hex: "", otpauth_url: "", image: ""
     });
 
     // Settings
     const [generalSettings, setGeneralSettings] = React.useState({
-        theme: "light",
-        language: "en",
+        theme: "light", language: "en"
     });
 
     const [notificationsSettings, setNotificationsSettings] = React.useState({
-        showNotifications: true,
-        playSound: true,
+        showNotifications: true, playSound: true
     });
 
     const [privacySettings, setPrivacySettings] = React.useState({
-        showOnlineStatus: true,
-        showLastSeen: true,
-        showReadReceipts: true,
+        showOnlineStatus: true, showLastSeen: true, showReadReceipts: true
     });
 
     const [tfaActive, setTfaActive] = React.useState(false);
 
     // Other methods
-    const showNotification = (
-        title: string,
-        content: string,
-        type: "warning" | "info" | "success" | "error"
-    ) => {
+    const showNotification = (title: string, content: string, type: "warning" | "info" | "success" | "error") => {
         setNotification({
-            state: "showing",
-            title: title,
-            content: content,
-            type: type,
+            state: "showing", title: title, content: content, type: type
         });
 
         setTimeout(() => {
             setNotification({
-                state: "hidden",
-                title: "",
-                content: "",
-                type: "info",
+                state: "hidden", title: "", content: "", type: "info"
             });
         }, 5000);
     };
 
     // TFA Functions
     const generateSecret = async () => {
-        const response = await axios.get(
-            `${import.meta.env.VITE_SERVER_HOST}/api/utils/generate-tfa`
-        );
+        const response = await axios.get(`${import.meta.env.VITE_SERVER_HOST}/api/utils/generate-tfa`);
         if (response.data.status === "success") {
             QRCode.toDataURL(response.data.data.otpauth_url, (err, url) => {
                 if (err) console.error(err);
                 setSecret({
-                    ...response.data.data,
-                    image: url,
+                    ...response.data.data, image: url
                 });
             });
         }
@@ -136,39 +108,24 @@ const SettingsIndex = () => {
     const activateTFA = async () => {
         const code = tfaCodeInput.current?.value;
 
-        const response = await axios.post(
-            `${import.meta.env.VITE_SERVER_HOST}/api/utils/verify-tfa`,
-            {
-                code,
-                secret: secret.base32,
-            },
-            {
-                withCredentials: true,
-            }
-        );
+        const response = await axios.post(`${import.meta.env.VITE_SERVER_HOST}/api/utils/verify-tfa`, {
+            code, secret: secret.base32
+        }, {
+            withCredentials: true
+        });
         if (response.data.status === "success") {
             const password = tfaEnablePasswordInput.current?.value;
 
-            const response = await axios.post(
-                `${import.meta.env.VITE_SERVER_HOST}/api/settings/security/tfa`,
-                {
-                    password,
-                    action: "activate",
-                    secret: secret.base32,
-                },
-                {
-                    withCredentials: true,
-                }
-            );
+            const response = await axios.post(`${import.meta.env.VITE_SERVER_HOST}/api/settings/security/tfa`, {
+                password, action: "activate", secret: secret.base32
+            }, {
+                withCredentials: true
+            });
 
             if (response.data.status === "success") {
                 setTfaActive(true);
                 setTfaModalOpen(false);
-                showNotification(
-                    "Two factor authentication enabled",
-                    "Two factor authentication has been enabled successfully",
-                    "success"
-                );
+                showNotification("Two factor authentication enabled", "Two factor authentication has been enabled successfully", "success");
             } else {
                 console.log(response.data.status);
             }
@@ -179,26 +136,16 @@ const SettingsIndex = () => {
         const password = tfaDisablePasswordInput.current?.value;
         console.log(password);
 
-        const response = await axios.post(
-            `${import.meta.env.VITE_SERVER_HOST}/api/settings/security/tfa`,
-            {
-                password: password,
-                action: "deactivate",
-                secret: secret.base32,
-            },
-            {
-                withCredentials: true,
-            }
-        );
+        const response = await axios.post(`${import.meta.env.VITE_SERVER_HOST}/api/settings/security/tfa`, {
+            password: password, action: "deactivate", secret: secret.base32
+        }, {
+            withCredentials: true
+        });
 
         if (response.data.status === "success") {
             setTfaActive(false);
             setTfaModalOpen(false);
-            showNotification(
-                "Two factor authentication disabled",
-                "Two factor authentication has been disabled successfully",
-                "warning"
-            );
+            showNotification("Two factor authentication disabled", "Two factor authentication has been disabled successfully", "warning");
         } else {
             console.log(response.data.status);
         }
@@ -207,46 +154,26 @@ const SettingsIndex = () => {
     // Password functions
     const changePassword = async () => {
         const newPassword = newPasswordInput.current?.value as string;
-        const confirmPassword = confirmNewPasswordInput.current
-            ?.value as string;
+        const confirmPassword = confirmNewPasswordInput.current?.value as string;
         const oldPassword = oldPasswordInput.current?.value as string;
 
         if (newPassword !== confirmPassword) {
-            return showNotification(
-                "Passwords do not match",
-                "The new password and the confirmation password do not match",
-                "error"
-            );
+            return showNotification("Passwords do not match", "The new password and the confirmation password do not match", "error");
         }
 
-        if (validator.isStrongPassword(newPassword) === false) {
-            return showNotification(
-                "Password not strong enough",
-                "The password must be at least 8 characters long and contain at least one uppercase letter, one lowercase letter, one number and one special character",
-                "error"
-            );
+        if (!validator.isStrongPassword(newPassword)) {
+            return showNotification("Password not strong enough", "The password must be at least 8 characters long and contain at least one uppercase letter, one lowercase letter, one number and one special character", "error");
         }
 
-        const response = await axios.post(
-            `${
-                import.meta.env.VITE_SERVER_HOST
-            }/api/settings/security/change-password`,
-            {
-                oldPassword: oldPassword,
-                newPassword: newPassword,
-            },
-            {
-                withCredentials: true,
-            }
-        );
+        const response = await axios.post(`${import.meta.env.VITE_SERVER_HOST}/api/settings/security/change-password`, {
+            oldPassword: oldPassword, newPassword: newPassword
+        }, {
+            withCredentials: true
+        });
 
         if (response.data.status === "success") {
             setPasswordModalOpen(false);
-            showNotification(
-                "Password changed",
-                "Your password has been changed successfully",
-                "success"
-            );
+            showNotification("Password changed", "Your password has been changed successfully", "success");
         } else {
             console.log(response.data.status);
         }
@@ -255,24 +182,16 @@ const SettingsIndex = () => {
     // Update the user preferences when the settings change
     React.useEffect(() => {
         if (user && userLoaded) {
-            dispatch(
-                setUser({
-                    ...user,
-                    preferences: {
-                        ...user.preferences,
-                        general: generalSettings,
-                    },
-                })
-            );
+            dispatch(setUser({
+                ...user, preferences: {
+                    ...user.preferences, general: generalSettings
+                }
+            }));
 
             (async () => {
-                const response = await axios.post(
-                    `${import.meta.env.VITE_SERVER_HOST}/api/settings/general`,
-                    {
-                        ...generalSettings,
-                    },
-                    { withCredentials: true }
-                );
+                const response = await axios.post(`${import.meta.env.VITE_SERVER_HOST}/api/settings/general`, {
+                    ...generalSettings
+                }, { withCredentials: true });
 
                 console.log(response);
             })();
@@ -281,26 +200,16 @@ const SettingsIndex = () => {
 
     React.useEffect(() => {
         if (user && userLoaded) {
-            dispatch(
-                setUser({
-                    ...user,
-                    preferences: {
-                        ...user.preferences,
-                        notifications: notificationsSettings,
-                    },
-                })
-            );
+            dispatch(setUser({
+                ...user, preferences: {
+                    ...user.preferences, notifications: notificationsSettings
+                }
+            }));
 
             (async () => {
-                const response = await axios.post(
-                    `${
-                        import.meta.env.VITE_SERVER_HOST
-                    }/api/settings/notifications`,
-                    {
-                        ...notificationsSettings,
-                    },
-                    { withCredentials: true }
-                );
+                const response = await axios.post(`${import.meta.env.VITE_SERVER_HOST}/api/settings/notifications`, {
+                    ...notificationsSettings
+                }, { withCredentials: true });
 
                 console.log(response);
             })();
@@ -309,24 +218,16 @@ const SettingsIndex = () => {
 
     React.useEffect(() => {
         if (user && userLoaded) {
-            dispatch(
-                setUser({
-                    ...user,
-                    preferences: {
-                        ...user.preferences,
-                        privacy: privacySettings,
-                    },
-                })
-            );
+            dispatch(setUser({
+                ...user, preferences: {
+                    ...user.preferences, privacy: privacySettings
+                }
+            }));
 
             (async () => {
-                const response = await axios.post(
-                    `${import.meta.env.VITE_SERVER_HOST}/api/settings/privacy`,
-                    {
-                        ...privacySettings,
-                    },
-                    { withCredentials: true }
-                );
+                const response = await axios.post(`${import.meta.env.VITE_SERVER_HOST}/api/settings/privacy`, {
+                    ...privacySettings
+                }, { withCredentials: true });
 
                 console.log(response);
             })();
@@ -346,505 +247,452 @@ const SettingsIndex = () => {
         }
     }, [user]);
 
-    return (
-        <div
-            className={user?.preferences.general.theme == "dark" ? "dark" : ""}
-            ref={page}
-        >
-            <div className="dark:bg-gray-800 bg-slate-200 min-h-screen dark:text-white text-neutral-700">
-                {user && (
-                    <div>
-                        <NavbarComponent user={user} />
+    return (<div
+        className={user?.preferences.general.theme == "dark" ? "dark" : ""}
+        ref={page}
+    >
+        <div className="min-h-screen bg-slate-200 text-neutral-700 dark:bg-gray-800 dark:text-white">
+            {user && (<div>
+                <NavbarComponent user={user} />
 
-                        <NotificationComponent
-                            content={notification.content}
-                            title={notification.title}
-                            state={notification.state}
-                            type={notification.type}
-                        />
+                <NotificationComponent
+                    content={notification.content}
+                    title={notification.title}
+                    state={notification.state}
+                    type={notification.type}
+                />
 
-                        <div className="pt-20">
-                            <div className="text-center flex items-center justify-center">
-                                <Tabs.Root
-                                    className="text-center w-11/12 md:w-8/12 flex justify-center items-center flex-col"
-                                    defaultValue="tab1"
-                                    onValueChange={(e) => {
-                                        setTab(e);
-                                    }}
+                <div className="pt-20">
+                    <div className="flex items-center justify-center text-center">
+                        <Tabs.Root
+                            className="flex w-11/12 flex-col items-center justify-center text-center md:w-8/12"
+                            defaultValue="tab1"
+                            onValueChange={(e) => {
+                                setTab(e);
+                            }}
+                        >
+                            <Tabs.List
+                                className="flex w-full justify-self-center border-b-2 shadow-md dark:border-gray-800"
+                                aria-label="Manage your account"
+                            >
+                                <Tabs.Trigger
+                                    className={`p-2 rounded-tl-md transition-all w-3/12 md:w-1/4 border-r-2 dark:border-gray-800 ${tab == "tab1" ? "bg-blue-400 shadow-2xl z-20 text-white" : "dark:bg-gray-700 bg-slate-100 hover:brightness-125"}`}
+                                    value="tab1"
                                 >
-                                    <Tabs.List
-                                        className="w-full flex justify-self-center shadow-md border-b-2 dark:border-gray-800"
-                                        aria-label="Manage your account"
-                                    >
-                                        <Tabs.Trigger
-                                            className={`p-2 rounded-tl-md transition-all w-3/12 md:w-1/4 border-r-2 dark:border-gray-800 ${
-                                                tab == "tab1"
-                                                    ? "bg-blue-400 shadow-2xl z-20 text-white"
-                                                    : "dark:bg-gray-700 bg-slate-100 hover:brightness-125"
-                                            }`}
-                                            value="tab1"
-                                        >
-                                            General
-                                        </Tabs.Trigger>
-                                        <Tabs.Trigger
-                                            className={`p-2 transition-all w-3/12 md:w-1/4 border-r-2 dark:border-gray-800 ${
-                                                tab == "tab2"
-                                                    ? "bg-blue-400 shadow-2xl z-20 text-white"
-                                                    : "dark:bg-gray-700 bg-slate-100 hover:brightness-125"
-                                            }`}
-                                            value="tab2"
-                                        >
-                                            Notifications
-                                        </Tabs.Trigger>
-                                        <Tabs.Trigger
-                                            className={`p-2 transition-all w-3/12 md:w-1/4 ${
-                                                tab == "tab3"
-                                                    ? "bg-blue-400 shadow-2xl z-20 text-white"
-                                                    : "dark:bg-gray-700 bg-slate-100 hover:brightness-125"
-                                            }`}
-                                            value="tab3"
-                                        >
-                                            Privacy
-                                        </Tabs.Trigger>
-                                        <Tabs.Trigger
-                                            className={`p-2 rounded-tr-md transition-all w-3/12 md:w-1/4 border-l-2 dark:border-gray-800 ${
-                                                tab == "tab4"
-                                                    ? "bg-blue-400 shadow-2xl z-20 text-white"
-                                                    : "dark:bg-gray-700 bg-slate-100 hover:brightness-125"
-                                            }`}
-                                            value="tab4"
-                                        >
-                                            Security
-                                        </Tabs.Trigger>
-                                    </Tabs.List>
-                                    <Tabs.Content
-                                        className="rounded-br-md rounded-bl-md bg-slate-100 dark:bg-gray-700 w-full text-center p-2 shadow-md"
-                                        value="tab1"
-                                    >
-                                        <div className="grid grid-cols-2">
-                                            <div className="flex flex-col items-center justify-center">
-                                                <h1 className="text-2xl">
-                                                    Theme
-                                                </h1>
+                                    General
+                                </Tabs.Trigger>
+                                <Tabs.Trigger
+                                    className={`p-2 transition-all w-3/12 md:w-1/4 border-r-2 dark:border-gray-800 ${tab == "tab2" ? "bg-blue-400 shadow-2xl z-20 text-white" : "dark:bg-gray-700 bg-slate-100 hover:brightness-125"}`}
+                                    value="tab2"
+                                >
+                                    Profile
+                                </Tabs.Trigger>
+                                <Tabs.Trigger
+                                    className={`p-2 transition-all w-3/12 md:w-1/4 border-r-2 dark:border-gray-800 ${tab == "tab3" ? "bg-blue-400 shadow-2xl z-20 text-white" : "dark:bg-gray-700 bg-slate-100 hover:brightness-125"}`}
+                                    value="tab3"
+                                >
+                                    Notifications
+                                </Tabs.Trigger>
+                                <Tabs.Trigger
+                                    className={`p-2 transition-all w-3/12 md:w-1/4 ${tab == "tab4" ? "bg-blue-400 shadow-2xl z-20 text-white" : "dark:bg-gray-700 bg-slate-100 hover:brightness-125"}`}
+                                    value="tab4"
+                                >
+                                    Privacy
+                                </Tabs.Trigger>
+                                <Tabs.Trigger
+                                    className={`p-2 transition-all w-3/12 rounded-tr-md  md:w-1/4 border-l-2 dark:border-gray-800 ${tab == "tab5" ? "bg-blue-400 shadow-2xl z-20 text-white" : "dark:bg-gray-700 bg-slate-100 hover:brightness-125"}`}
+                                    value="tab5"
+                                >Security
+                                </Tabs.Trigger>
+                            </Tabs.List>
+                            <Tabs.Content
+                                className="w-full rounded-br-md rounded-bl-md bg-slate-100 p-2 text-center shadow-md dark:bg-gray-700"
+                                value="tab1"
+                            >
+                                <div className="grid grid-cols-2">
+                                    <div className="flex flex-col items-center justify-center">
+                                        <h1 className="text-2xl">
+                                            Theme
+                                        </h1>
 
-                                                <Select.Root
-                                                    value={
-                                                        generalSettings.theme
-                                                    }
-                                                    onValueChange={(val) => {
-                                                        setGeneralSettings({
-                                                            ...generalSettings,
-                                                            theme: val,
-                                                        });
-                                                    }}
+                                        <Select.Root
+                                            value={generalSettings.theme}
+                                            onValueChange={(val) => {
+                                                setGeneralSettings({
+                                                    ...generalSettings, theme: val
+                                                });
+                                            }}
+                                        >
+                                            <Select.Trigger
+                                                className="flex w-7/12 justify-between rounded-md bg-slate-200 p-2 dark:bg-gray-800">
+                                                <Select.Value placeholder="Select a theme" />
+                                                <Select.Icon className="ml-2">
+                                                    <FontAwesomeIcon
+                                                        icon={faChevronDown}
+                                                    />
+                                                </Select.Icon>
+                                            </Select.Trigger>
+
+                                            <Select.Portal
+                                                container={page.current!}
+                                            >
+                                                <Select.Content
+                                                    side="bottom"
+                                                    align="end"
+                                                    className="z-50 rounded-md bg-slate-200 p-2 text-slate-700 shadow-md outline-none dark:bg-gray-800 dark:text-white"
                                                 >
-                                                    <Select.Trigger className="dark:bg-gray-800 bg-slate-200 rounded-md p-2 w-7/12 flex justify-between">
-                                                        <Select.Value placeholder="Select a theme" />
-                                                        <Select.Icon className="ml-2">
-                                                            <FontAwesomeIcon
-                                                                icon={
-                                                                    faChevronDown
-                                                                }
-                                                            />
-                                                        </Select.Icon>
-                                                    </Select.Trigger>
-
-                                                    <Select.Portal
-                                                        container={
-                                                            page.current!
-                                                        }
-                                                    >
-                                                        <Select.Content
-                                                            side="bottom"
-                                                            align="end"
-                                                            className="z-50 dark:bg-gray-800 bg-slate-200 shadow-md rounded-md p-2 dark:text-white text-slate-700 outline-none"
+                                                    <Select.Viewport className="flex flex-col gap-2">
+                                                        <Select.Item
+                                                            value="light"
+                                                            className="hover:dark:bg-gray-700 p-2 rounded-md transition-all cursor-pointer data-[state=checked]:bg-blue-400 outline-none"
                                                         >
-                                                            <Select.Viewport className="flex flex-col gap-2">
-                                                                <Select.Item
-                                                                    value="light"
-                                                                    className="hover:dark:bg-gray-700 p-2 rounded-md transition-all cursor-pointer data-[state=checked]:bg-blue-400 outline-none"
-                                                                >
-                                                                    <Select.ItemText>
-                                                                        Light
-                                                                        Theme
-                                                                    </Select.ItemText>
-                                                                </Select.Item>
-                                                                <Select.Item
-                                                                    value="dark"
-                                                                    className="data-[state=checked]:bg-blue-400 hover:dark:bg-gray-700 p-2 rounded-md transition-all cursor-pointer outline-none"
-                                                                >
-                                                                    <Select.ItemText>
-                                                                        Dark
-                                                                        Theme
-                                                                    </Select.ItemText>
-                                                                </Select.Item>
-                                                            </Select.Viewport>
-                                                        </Select.Content>
-                                                    </Select.Portal>
-                                                </Select.Root>
-                                            </div>
-
-                                            <div className="flex flex-col items-center justify-center">
-                                                <h1 className="text-2xl">
-                                                    Language
-                                                </h1>
-
-                                                <Select.Root
-                                                    value={
-                                                        generalSettings.language
-                                                    }
-                                                    onValueChange={(val) => {
-                                                        setGeneralSettings({
-                                                            ...generalSettings,
-                                                            language: val,
-                                                        });
-                                                    }}
-                                                >
-                                                    <Select.Trigger className="dark:bg-gray-800 bg-slate-200 rounded-md p-2 w-7/12 flex justify-between">
-                                                        <Select.Value placeholder="Select a language" />
-                                                        <Select.Icon className="ml-2">
-                                                            <FontAwesomeIcon
-                                                                icon={
-                                                                    faChevronDown
-                                                                }
-                                                            />
-                                                        </Select.Icon>
-                                                    </Select.Trigger>
-
-                                                    <Select.Portal
-                                                        container={
-                                                            page.current!
-                                                        }
-                                                    >
-                                                        <Select.Content
-                                                            side="bottom"
-                                                            align="end"
-                                                            className="z-50 dark:bg-gray-800 bg-slate-200 shadow-md rounded-md p-2 dark:text-white text-slate-700 w-full outline-none"
+                                                            <Select.ItemText>
+                                                                Light
+                                                                Theme
+                                                            </Select.ItemText>
+                                                        </Select.Item>
+                                                        <Select.Item
+                                                            value="dark"
+                                                            className="data-[state=checked]:bg-blue-400 hover:dark:bg-gray-700 p-2 rounded-md transition-all cursor-pointer outline-none"
                                                         >
-                                                            <Select.Viewport className="flex flex-col gap-2">
-                                                                <Select.Item
-                                                                    value="en"
-                                                                    className="hover:dark:bg-gray-700 p-2 rounded-md transition-all cursor-pointer data-[state=checked]:bg-blue-400 outline-none"
-                                                                >
-                                                                    <Select.ItemText>
-                                                                        English
-                                                                    </Select.ItemText>
-                                                                </Select.Item>
-                                                                <Select.Item
-                                                                    value="es"
-                                                                    className="data-[state=checked]:bg-blue-400 dark:hover:bg-gray-700 p-2 rounded-md transition-all cursor-pointer outline-none"
-                                                                >
-                                                                    <Select.ItemText>
-                                                                        Spanish
-                                                                    </Select.ItemText>
-                                                                </Select.Item>
-                                                            </Select.Viewport>
-                                                        </Select.Content>
-                                                    </Select.Portal>
-                                                </Select.Root>
-                                            </div>
-                                        </div>
-                                    </Tabs.Content>
-                                    <Tabs.Content
-                                        className="rounded-br-md rounded-bl-md bg-slate-100 dark:bg-gray-700 w-full text-center p-2 shadow-md"
-                                        value="tab2"
-                                    >
-                                        <div className="flex items-center gap-2 my-2">
-                                            <Switch.Root
-                                                defaultChecked={
-                                                    notificationsSettings.showNotifications
-                                                }
-                                                onCheckedChange={(val) =>
-                                                    setNotificationsSettings({
-                                                        ...notificationsSettings,
-                                                        showNotifications: val,
-                                                    })
-                                                }
-                                                className="w-[42px] h-[25px] rounded-full relative dark:bg-gray-800  data-[state=checked]:bg-blue-400 transition-all outline-none cursor-default"
+                                                            <Select.ItemText>
+                                                                Dark
+                                                                Theme
+                                                            </Select.ItemText>
+                                                        </Select.Item>
+                                                    </Select.Viewport>
+                                                </Select.Content>
+                                            </Select.Portal>
+                                        </Select.Root>
+                                    </div>
+
+                                    <div className="flex flex-col items-center justify-center">
+                                        <h1 className="text-2xl">
+                                            Language
+                                        </h1>
+
+                                        <Select.Root
+                                            value={generalSettings.language}
+                                            onValueChange={(val) => {
+                                                setGeneralSettings({
+                                                    ...generalSettings, language: val
+                                                });
+                                            }}
+                                        >
+                                            <Select.Trigger
+                                                className="flex w-7/12 justify-between rounded-md bg-slate-200 p-2 dark:bg-gray-800">
+                                                <Select.Value placeholder="Select a language" />
+                                                <Select.Icon className="ml-2">
+                                                    <FontAwesomeIcon
+                                                        icon={faChevronDown}
+                                                    />
+                                                </Select.Icon>
+                                            </Select.Trigger>
+
+                                            <Select.Portal
+                                                container={page.current!}
                                             >
-                                                <Switch.Thumb className="block w-[21px] h-[21px] bg-white rounded-full transition-transform duration-100 translate-x-0.5 will-change-transform data-[state=checked]:translate-x-[19px]" />
-                                            </Switch.Root>
-                                            <h1>Show notifications</h1>
-                                        </div>
-                                        <div className="flex items-center gap-2 my-2">
-                                            <Switch.Root
-                                                defaultChecked={
-                                                    notificationsSettings.showNotifications
-                                                }
-                                                onCheckedChange={(val) =>
-                                                    setNotificationsSettings({
-                                                        ...notificationsSettings,
-                                                        playSound: val,
-                                                    })
-                                                }
-                                                className="w-[42px] h-[25px] rounded-full relative dark:bg-gray-800  data-[state=checked]:bg-blue-400 transition-all outline-none cursor-default"
-                                            >
-                                                <Switch.Thumb className="block w-[21px] h-[21px] bg-white rounded-full transition-transform duration-100 translate-x-0.5 will-change-transform data-[state=checked]:translate-x-[19px]" />
-                                            </Switch.Root>
-                                            <h1>Play notification sound</h1>
-                                        </div>
-                                    </Tabs.Content>
-                                    <Tabs.Content
-                                        className="rounded-br-md rounded-bl-md bg-slate-100 dark:bg-gray-700 w-full text-center p-2 shadow-md"
-                                        value="tab3"
-                                    >
-                                        <div className="flex items-center gap-2 my-2">
-                                            <Switch.Root
-                                                defaultChecked={
-                                                    privacySettings.showOnlineStatus
-                                                }
-                                                onCheckedChange={(val) =>
-                                                    setPrivacySettings({
-                                                        ...privacySettings,
-                                                        showOnlineStatus: val,
-                                                    })
-                                                }
-                                                className="w-[42px] h-[25px] rounded-full relative dark:bg-gray-800  data-[state=checked]:bg-blue-400 transition-all outline-none cursor-default"
-                                            >
-                                                <Switch.Thumb className="block w-[21px] h-[21px] bg-white rounded-full transition-transform duration-100 translate-x-0.5 will-change-transform data-[state=checked]:translate-x-[19px]" />
-                                            </Switch.Root>
-                                            <h1>Show online status</h1>
-                                        </div>
-                                        <div className="flex items-center gap-2 my-2">
-                                            <Switch.Root
-                                                defaultChecked={
-                                                    privacySettings.showLastSeen
-                                                }
-                                                onCheckedChange={(val) =>
-                                                    setPrivacySettings({
-                                                        ...privacySettings,
-                                                        showLastSeen: val,
-                                                    })
-                                                }
-                                                className="w-[42px] h-[25px] rounded-full relative dark:bg-gray-800  data-[state=checked]:bg-blue-400 transition-all outline-none cursor-default"
-                                            >
-                                                <Switch.Thumb className="block w-[21px] h-[21px] bg-white rounded-full transition-transform duration-100 translate-x-0.5 will-change-transform data-[state=checked]:translate-x-[19px]" />
-                                            </Switch.Root>
-                                            <h1>Show last seen</h1>
-                                        </div>
-                                        <div className="flex items-center gap-2 my-2">
-                                            <Switch.Root
-                                                defaultChecked={
-                                                    privacySettings.showReadReceipts
-                                                }
-                                                onCheckedChange={(val) =>
-                                                    setPrivacySettings({
-                                                        ...privacySettings,
-                                                        showReadReceipts: val,
-                                                    })
-                                                }
-                                                className="w-[42px] h-[25px] rounded-full relative dark:bg-gray-800  data-[state=checked]:bg-blue-400 transition-all outline-none cursor-default"
-                                            >
-                                                <Switch.Thumb className="block w-[21px] h-[21px] bg-white rounded-full transition-transform duration-100 translate-x-0.5 will-change-transform data-[state=checked]:translate-x-[19px]" />
-                                            </Switch.Root>
-                                            <h1>Show read receipts</h1>
-                                        </div>
-                                    </Tabs.Content>
-                                    <Tabs.Content
-                                        className="rounded-br-md rounded-bl-md bg-slate-100 dark:bg-gray-700 w-full text-center p-2 shadow-md"
-                                        value="tab4"
-                                    >
-                                        <div className="flex flex-col gap-2">
-                                            <div className="flex gap-2 items-center">
-                                                <Dialog.Root
-                                                    onOpenChange={(state) => {
-                                                        if (state) {
-                                                            oldPasswordInput.current?.focus();
-                                                        } else {
-                                                            setPasswordModalOpen(
-                                                                false
-                                                            );
-                                                        }
-                                                    }}
-                                                    open={passwordModalOpen}
+                                                <Select.Content
+                                                    side="bottom"
+                                                    align="end"
+                                                    className="z-50 w-full rounded-md bg-slate-200 p-2 text-slate-700 shadow-md outline-none dark:bg-gray-800 dark:text-white"
                                                 >
-                                                    <Dialog.Trigger
-                                                        onClick={() =>
-                                                            setPasswordModalOpen(
-                                                                true
-                                                            )
-                                                        }
-                                                        className="bg-blue-400 rounded-md p-2 shadow-md md:w-3/12 w-1/2 text-white"
+                                                    <Select.Viewport className="flex flex-col gap-2">
+                                                        <Select.Item
+                                                            value="en"
+                                                            className="hover:dark:bg-gray-700 p-2 rounded-md transition-all cursor-pointer data-[state=checked]:bg-blue-400 outline-none"
+                                                        >
+                                                            <Select.ItemText>
+                                                                English
+                                                            </Select.ItemText>
+                                                        </Select.Item>
+                                                        <Select.Item
+                                                            value="es"
+                                                            className="data-[state=checked]:bg-blue-400 dark:hover:bg-gray-700 p-2 rounded-md transition-all cursor-pointer outline-none"
+                                                        >
+                                                            <Select.ItemText>
+                                                                Spanish
+                                                            </Select.ItemText>
+                                                        </Select.Item>
+                                                    </Select.Viewport>
+                                                </Select.Content>
+                                            </Select.Portal>
+                                        </Select.Root>
+                                    </div>
+                                </div>
+                            </Tabs.Content>
+                            <Tabs.Content
+                                className="w-full rounded-br-md rounded-bl-md bg-slate-100 p-2 text-center shadow-md dark:bg-gray-700"
+                                value="tab2"
+                            >
+                                <div className="my-2 flex items-center gap-2">
+                                    <Switch.Root
+                                        defaultChecked={notificationsSettings.showNotifications}
+                                        onCheckedChange={(val) => setNotificationsSettings({
+                                            ...notificationsSettings, showNotifications: val
+                                        })}
+                                        className="w-[42px] h-[25px] rounded-full relative dark:bg-gray-800  data-[state=checked]:bg-blue-400 transition-all outline-none cursor-default"
+                                    >
+                                        <Switch.Thumb
+                                            className="block w-[21px] h-[21px] bg-white rounded-full transition-transform duration-100 translate-x-0.5 will-change-transform data-[state=checked]:translate-x-[19px]" />
+                                    </Switch.Root>
+                                    <h1>Show notifications</h1>
+                                </div>
+                                <div className="my-2 flex items-center gap-2">
+                                    <Switch.Root
+                                        defaultChecked={notificationsSettings.showNotifications}
+                                        onCheckedChange={(val) => setNotificationsSettings({
+                                            ...notificationsSettings, playSound: val
+                                        })}
+                                        className="w-[42px] h-[25px] rounded-full relative dark:bg-gray-800  data-[state=checked]:bg-blue-400 transition-all outline-none cursor-default"
+                                    >
+                                        <Switch.Thumb
+                                            className="block w-[21px] h-[21px] bg-white rounded-full transition-transform duration-100 translate-x-0.5 will-change-transform data-[state=checked]:translate-x-[19px]" />
+                                    </Switch.Root>
+                                    <h1>Play notification sound</h1>
+                                </div>
+                            </Tabs.Content>
+                            <Tabs.Content
+                                className="w-full rounded-br-md rounded-bl-md bg-slate-100 p-2 text-center shadow-md dark:bg-gray-700"
+                                value="tab3"
+                            >
+                                <div className="my-2 flex items-center gap-2">
+                                    <Switch.Root
+                                        defaultChecked={notificationsSettings.showNotifications}
+                                        onCheckedChange={(val) => setNotificationsSettings({
+                                            ...notificationsSettings, showNotifications: val
+                                        })}
+                                        className="w-[42px] h-[25px] rounded-full relative dark:bg-gray-800  data-[state=checked]:bg-blue-400 transition-all outline-none cursor-default"
+                                    >
+                                        <Switch.Thumb
+                                            className="block w-[21px] h-[21px] bg-white rounded-full transition-transform duration-100 translate-x-0.5 will-change-transform data-[state=checked]:translate-x-[19px]" />
+                                    </Switch.Root>
+                                    <h1>Show notifications</h1>
+                                </div>
+                                <div className="my-2 flex items-center gap-2">
+                                    <Switch.Root
+                                        defaultChecked={notificationsSettings.showNotifications}
+                                        onCheckedChange={(val) => setNotificationsSettings({
+                                            ...notificationsSettings, playSound: val
+                                        })}
+                                        className="w-[42px] h-[25px] rounded-full relative dark:bg-gray-800  data-[state=checked]:bg-blue-400 transition-all outline-none cursor-default"
+                                    >
+                                        <Switch.Thumb
+                                            className="block w-[21px] h-[21px] bg-white rounded-full transition-transform duration-100 translate-x-0.5 will-change-transform data-[state=checked]:translate-x-[19px]" />
+                                    </Switch.Root>
+                                    <h1>Play notification sound</h1>
+                                </div>
+                            </Tabs.Content>
+                            <Tabs.Content
+                                className="w-full rounded-br-md rounded-bl-md bg-slate-100 p-2 text-center shadow-md dark:bg-gray-700"
+                                value="tab4"
+                            >
+                                <div className="my-2 flex items-center gap-2">
+                                    <Switch.Root
+                                        defaultChecked={privacySettings.showOnlineStatus}
+                                        onCheckedChange={(val) => setPrivacySettings({
+                                            ...privacySettings, showOnlineStatus: val
+                                        })}
+                                        className="w-[42px] h-[25px] rounded-full relative dark:bg-gray-800  data-[state=checked]:bg-blue-400 transition-all outline-none cursor-default"
+                                    >
+                                        <Switch.Thumb
+                                            className="block w-[21px] h-[21px] bg-white rounded-full transition-transform duration-100 translate-x-0.5 will-change-transform data-[state=checked]:translate-x-[19px]" />
+                                    </Switch.Root>
+                                    <h1>Show online status</h1>
+                                </div>
+                                <div className="my-2 flex items-center gap-2">
+                                    <Switch.Root
+                                        defaultChecked={privacySettings.showLastSeen}
+                                        onCheckedChange={(val) => setPrivacySettings({
+                                            ...privacySettings, showLastSeen: val
+                                        })}
+                                        className="w-[42px] h-[25px] rounded-full relative dark:bg-gray-800  data-[state=checked]:bg-blue-400 transition-all outline-none cursor-default"
+                                    >
+                                        <Switch.Thumb
+                                            className="block w-[21px] h-[21px] bg-white rounded-full transition-transform duration-100 translate-x-0.5 will-change-transform data-[state=checked]:translate-x-[19px]" />
+                                    </Switch.Root>
+                                    <h1>Show last seen</h1>
+                                </div>
+                                <div className="my-2 flex items-center gap-2">
+                                    <Switch.Root
+                                        defaultChecked={privacySettings.showReadReceipts}
+                                        onCheckedChange={(val) => setPrivacySettings({
+                                            ...privacySettings, showReadReceipts: val
+                                        })}
+                                        className="w-[42px] h-[25px] rounded-full relative dark:bg-gray-800  data-[state=checked]:bg-blue-400 transition-all outline-none cursor-default"
+                                    >
+                                        <Switch.Thumb
+                                            className="block w-[21px] h-[21px] bg-white rounded-full transition-transform duration-100 translate-x-0.5 will-change-transform data-[state=checked]:translate-x-[19px]" />
+                                    </Switch.Root>
+                                    <h1>Show read receipts</h1>
+                                </div>
+                            </Tabs.Content>
+                            <Tabs.Content
+                                className="w-full rounded-br-md rounded-bl-md bg-slate-100 p-2 text-center shadow-md dark:bg-gray-700"
+                                value="tab5"
+                            >
+                                <div className="flex flex-col gap-2">
+                                    <div className="flex items-center gap-2">
+                                        <Dialog.Root
+                                            onOpenChange={(state) => {
+                                                if (state) {
+                                                    oldPasswordInput.current?.focus();
+                                                } else {
+                                                    setPasswordModalOpen(false);
+                                                }
+                                            }}
+                                            open={passwordModalOpen}
+                                        >
+                                            <Dialog.Trigger
+                                                onClick={() => setPasswordModalOpen(true)}
+                                                className="w-1/2 rounded-md bg-blue-400 p-2 text-white shadow-md md:w-3/12"
+                                            >
+                                                Change password
+                                            </Dialog.Trigger>
+                                            <Dialog.Portal>
+                                                <Dialog.Overlay
+                                                    className="bg-black/50 data-[state=open]:animate-overlayShow fixed inset-0 z-20" />
+                                                <Dialog.Content
+                                                    className="data-[state=open]:animate-contentShow fixed top-[50%] left-[50%] max-h-[85vh] w-[90vw] max-w-[450px] translate-x-[-50%] translate-y-[-50%] rounded-md dark:bg-gray-700 bg-slate-100 p-4 dark:text-white text-slate-700 focus:outline-none z-30 flex items-center flex-col gap-2">
+                                                    <h1 className="text-2xl">
+                                                        Change Password
+                                                    </h1>
+                                                    <input
+                                                        type="password"
+                                                        className="w-full rounded-md p-2 dark:bg-gray-800 dark:text-white"
+                                                        placeholder="Current Password"
+                                                        ref={oldPasswordInput}
+                                                    />
+                                                    <input
+                                                        type="password"
+                                                        className="w-full rounded-md p-2 dark:bg-gray-800 dark:text-white"
+                                                        placeholder="New Password"
+                                                        ref={newPasswordInput}
+                                                    />
+                                                    <input
+                                                        type="password"
+                                                        className="w-full rounded-md p-2 dark:bg-gray-800 dark:text-white"
+                                                        placeholder="Confirm New Password"
+                                                        ref={confirmNewPasswordInput}
+                                                    />
+                                                    <button
+                                                        className="mt-2 w-1/2 rounded-md bg-blue-400 p-2 text-white"
+                                                        onClick={changePassword}
                                                     >
-                                                        Change password
-                                                    </Dialog.Trigger>
-                                                    <Dialog.Portal>
-                                                        <Dialog.Overlay className="bg-black/50 data-[state=open]:animate-overlayShow fixed inset-0 z-20" />
-                                                        <Dialog.Content className="data-[state=open]:animate-contentShow fixed top-[50%] left-[50%] max-h-[85vh] w-[90vw] max-w-[450px] translate-x-[-50%] translate-y-[-50%] rounded-md dark:bg-gray-700 bg-slate-100 p-4 dark:text-white text-slate-700 focus:outline-none z-30 flex items-center flex-col gap-2">
-                                                            <h1 className="text-2xl">
-                                                                Change Password
-                                                            </h1>
-                                                            <input
-                                                                type="password"
-                                                                className="dark:bg-gray-800 rounded-md p-2 dark:text-white w-full"
-                                                                placeholder="Current Password"
-                                                                ref={
-                                                                    oldPasswordInput
-                                                                }
-                                                            />
-                                                            <input
-                                                                type="password"
-                                                                className="dark:bg-gray-800 rounded-md p-2 dark:text-white w-full"
-                                                                placeholder="New Password"
-                                                                ref={
-                                                                    newPasswordInput
-                                                                }
-                                                            />
-                                                            <input
-                                                                type="password"
-                                                                className="dark:bg-gray-800 rounded-md p-2 dark:text-white w-full"
-                                                                placeholder="Confirm New Password"
-                                                                ref={
-                                                                    confirmNewPasswordInput
-                                                                }
-                                                            />
-                                                            <button
-                                                                className="p-2 bg-blue-400 rounded-md mt-2 w-1/2 text-white"
-                                                                onClick={
-                                                                    changePassword
-                                                                }
-                                                            >
-                                                                Submit
-                                                            </button>
-                                                        </Dialog.Content>
-                                                    </Dialog.Portal>
-                                                </Dialog.Root>
-                                                <p>
-                                                    Last Changed:{" "}
-                                                    {new Date(
-                                                        Date.now()
-                                                    ).toString()}
-                                                </p>
-                                            </div>
+                                                        Submit
+                                                    </button>
+                                                </Dialog.Content>
+                                            </Dialog.Portal>
+                                        </Dialog.Root>
+                                        <p>
+                                            Last Changed:{" "}
+                                            {new Date(Date.now()).toString()}
+                                        </p>
+                                    </div>
 
-                                            <div className="flex gap-2 items-center">
-                                                <Dialog.Root
-                                                    open={tfaModalOpen}
-                                                    onOpenChange={(state) => {
-                                                        if (state) {
-                                                            generateSecret();
-                                                        } else {
-                                                            setTfaModalOpen(
-                                                                false
-                                                            );
-                                                        }
-                                                    }}
-                                                >
-                                                    <Dialog.Trigger
-                                                        onClick={() =>
-                                                            setTfaModalOpen(
-                                                                true
-                                                            )
-                                                        }
-                                                        className="bg-blue-400 rounded-md p-2 shadow-md text-white md:w-3/12 w-1/2"
+                                    <div className="flex items-center gap-2">
+                                        <Dialog.Root
+                                            open={tfaModalOpen}
+                                            onOpenChange={(state) => {
+                                                if (state) {
+                                                    generateSecret().then(r => r);
+                                                } else {
+                                                    setTfaModalOpen(false);
+                                                }
+                                            }}
+                                        >
+                                            <Dialog.Trigger
+                                                onClick={() => setTfaModalOpen(true)}
+                                                className="w-1/2 rounded-md bg-blue-400 p-2 text-white shadow-md md:w-3/12"
+                                            >
+                                                Two Factor
+                                                Authentication
+                                            </Dialog.Trigger>
+                                            <Dialog.Portal>
+                                                <Dialog.Overlay
+                                                    className="bg-black/50 data-[state=open]:animate-overlayShow fixed inset-0 z-20" />
+                                                {!tfaActive && (<Dialog.Content
+                                                    className="data-[state=open]:animate-contentShow fixed top-[50%] left-[50%] max-h-[85vh] w-[90vw] max-w-[450px] translate-x-[-50%] translate-y-[-50%] rounded-md dark:bg-gray-700 bg-slate-200 text-slate-700 p-4 dark:text-white focus:outline-none z-30 flex flex-col items-center">
+                                                    <h1 className="text-2xl">
+                                                        Scan with
+                                                        your device
+                                                    </h1>
+                                                    <img
+                                                        src={secret.image}
+                                                        alt=""
+                                                    />
+                                                    <input
+                                                        type="text"
+                                                        value={secret.base32}
+                                                        readOnly
+                                                        className="my-2 w-full rounded-md p-2 dark:bg-gray-800"
+                                                    />
+
+                                                    <p className="text-center">
+                                                        Scan the QR
+                                                        code with
+                                                        your device
+                                                        to enable
+                                                        two factor
+                                                        authentication
+                                                    </p>
+
+                                                    <input
+                                                        type="text"
+                                                        ref={tfaCodeInput}
+                                                        className="w-full rounded-md p-2 dark:bg-gray-800 dark:text-white"
+                                                        placeholder="Code Generated by your app"
+                                                    />
+
+                                                    <input
+                                                        type="password"
+                                                        ref={tfaEnablePasswordInput}
+                                                        className="mt-2 w-full rounded-md p-2 dark:bg-gray-800 dark:text-white"
+                                                        placeholder="Your password"
+                                                    />
+
+                                                    <button
+                                                        className="mt-2 w-1/2 rounded-md bg-blue-400 p-2 text-white"
+                                                        onClick={activateTFA}
                                                     >
-                                                        Two Factor
-                                                        Authentication
-                                                    </Dialog.Trigger>
-                                                    <Dialog.Portal>
-                                                        <Dialog.Overlay className="bg-black/50 data-[state=open]:animate-overlayShow fixed inset-0 z-20" />
-                                                        {!tfaActive && (
-                                                            <Dialog.Content className="data-[state=open]:animate-contentShow fixed top-[50%] left-[50%] max-h-[85vh] w-[90vw] max-w-[450px] translate-x-[-50%] translate-y-[-50%] rounded-md dark:bg-gray-700 bg-slate-200 text-slate-700 p-4 dark:text-white focus:outline-none z-30 flex flex-col items-center">
-                                                                <h1 className="text-2xl">
-                                                                    Scan with
-                                                                    your device
-                                                                </h1>
-                                                                <img
-                                                                    src={
-                                                                        secret.image
-                                                                    }
-                                                                    alt=""
-                                                                />
-                                                                <input
-                                                                    type="text"
-                                                                    value={
-                                                                        secret.base32
-                                                                    }
-                                                                    readOnly
-                                                                    className="dark:bg-gray-800 rounded-md w-full p-2 my-2"
-                                                                />
+                                                        Submit
+                                                    </button>
+                                                </Dialog.Content>)}
+                                                {tfaActive && (<Dialog.Content
+                                                    className="data-[state=open]:animate-contentShow fixed top-[50%] left-[50%] max-h-[85vh] w-[90vw] max-w-[450px] translate-x-[-50%] translate-y-[-50%] rounded-md dark:bg-gray-700 p-4 text-white focus:outline-none z-30 flex flex-col items-center">
+                                                    <h1 className="text-2xl">
+                                                        Disable TFA
+                                                    </h1>
 
-                                                                <p className="text-center">
-                                                                    Scan the QR
-                                                                    code with
-                                                                    your device
-                                                                    to enable
-                                                                    two factor
-                                                                    authentication
-                                                                </p>
-
-                                                                <input
-                                                                    type="text"
-                                                                    ref={
-                                                                        tfaCodeInput
-                                                                    }
-                                                                    className="dark:bg-gray-800 rounded-md p-2 dark:text-white w-full"
-                                                                    placeholder="Code Generated by your app"
-                                                                />
-
-                                                                <input
-                                                                    type="password"
-                                                                    ref={
-                                                                        tfaEnablePasswordInput
-                                                                    }
-                                                                    className="dark:bg-gray-800 rounded-md p-2 dark:text-white w-full mt-2"
-                                                                    placeholder="Your password"
-                                                                />
-
-                                                                <button
-                                                                    className="p-2 bg-blue-400 text-white rounded-md mt-2 w-1/2"
-                                                                    onClick={
-                                                                        activateTFA
-                                                                    }
-                                                                >
-                                                                    Submit
-                                                                </button>
-                                                            </Dialog.Content>
-                                                        )}
-                                                        {tfaActive && (
-                                                            <Dialog.Content className="data-[state=open]:animate-contentShow fixed top-[50%] left-[50%] max-h-[85vh] w-[90vw] max-w-[450px] translate-x-[-50%] translate-y-[-50%] rounded-md dark:bg-gray-700 p-4 text-white focus:outline-none z-30 flex flex-col items-center">
-                                                                <h1 className="text-2xl">
-                                                                    Disable TFA
-                                                                </h1>
-
-                                                                <input
-                                                                    type="text"
-                                                                    ref={
-                                                                        tfaDisablePasswordInput
-                                                                    }
-                                                                    className="dark:bg-gray-800 rounded-md p-2 text-white w-full"
-                                                                    placeholder="Your password"
-                                                                />
-                                                                <button
-                                                                    className="p-2 bg-blue-400 rounded-md mt-2 w-1/2"
-                                                                    onClick={
-                                                                        deactivateTFA
-                                                                    }
-                                                                >
-                                                                    Submit
-                                                                </button>
-                                                            </Dialog.Content>
-                                                        )}
-                                                    </Dialog.Portal>
-                                                </Dialog.Root>
-                                                <p>
-                                                    Status:{" "}
-                                                    {tfaActive
-                                                        ? "Active"
-                                                        : "Inactive"}
-                                                </p>
-                                            </div>
-                                        </div>
-                                    </Tabs.Content>
-                                </Tabs.Root>
-                            </div>
-                        </div>
+                                                    <input
+                                                        type="text"
+                                                        ref={tfaDisablePasswordInput}
+                                                        className="w-full rounded-md p-2 text-white dark:bg-gray-800"
+                                                        placeholder="Your password"
+                                                    />
+                                                    <button
+                                                        className="mt-2 w-1/2 rounded-md bg-blue-400 p-2"
+                                                        onClick={deactivateTFA}
+                                                    >
+                                                        Submit
+                                                    </button>
+                                                </Dialog.Content>)}
+                                            </Dialog.Portal>
+                                        </Dialog.Root>
+                                        <p>
+                                            Status:{" "}
+                                            {tfaActive ? "Active" : "Inactive"}
+                                        </p>
+                                    </div>
+                                </div>
+                            </Tabs.Content>
+                        </Tabs.Root>
                     </div>
-                )}
-                {!user && <div>Loading...</div>}
-            </div>
+                </div>
+            </div>)}
+            {!user && <div>Loading...</div>}
         </div>
-    );
+    </div>);
 };
 
 export default SettingsIndex;

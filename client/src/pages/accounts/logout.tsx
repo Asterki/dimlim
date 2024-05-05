@@ -2,7 +2,7 @@ import * as React from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 
-import { useSelector, useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../store";
 import { setUser } from "../../store/slices/page";
 
@@ -27,7 +27,7 @@ const AccountLogout = () => {
         state: "hidden",
         title: "",
         content: "",
-        type: "info",
+        type: "info"
     });
 
     const showNotification = (
@@ -39,7 +39,7 @@ const AccountLogout = () => {
             state: "showing",
             title: title,
             content: content,
-            type: type,
+            type: type
         });
 
         setTimeout(() => {
@@ -47,7 +47,7 @@ const AccountLogout = () => {
                 state: "hidden",
                 title: "",
                 content: "",
-                type: "info",
+                type: "info"
             });
         }, 5000);
     };
@@ -55,7 +55,7 @@ const AccountLogout = () => {
     const logout = async () => {
         axios
             .get(`${import.meta.env.VITE_SERVER_HOST}/api/accounts/logout`, {
-                withCredentials: true,
+                withCredentials: true
             })
             .then(async () => {
                 showNotification(
@@ -86,7 +86,8 @@ const AccountLogout = () => {
         <div
             className={user?.preferences.general.theme == "dark" ? "dark" : ""}
         >
-            <div className="dark:bg-gray-800 bg-slate-200 min-h-screen dark:text-white text-slate-700 bg-gradient-to-bl from-blue-400 to-purple-400 dark:from-gray-500 dark:to-gray-700">
+            <div
+                className="dark:bg-gray-800 bg-slate-200 min-h-screen dark:text-white text-slate-700 bg-gradient-to-bl from-blue-400 to-purple-400 dark:from-gray-500 dark:to-gray-700">
                 <NotificationComponent
                     content={notification.content}
                     title={notification.title}
@@ -98,7 +99,8 @@ const AccountLogout = () => {
                     <div>
                         <NavbarComponent user={user} />
 
-                        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 dark:bg-gray-700 bg-slate-100 shadow-md rounded-md p-4 w-11/12 md:w-4/12">
+                        <div
+                            className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 dark:bg-gray-700 bg-slate-100 shadow-md rounded-md p-4 w-11/12 md:w-4/12">
                             <h1 className="text-2xl font-semibold mb-2">
                                 Are you sure you want to log out?
                             </h1>

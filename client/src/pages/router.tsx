@@ -22,44 +22,44 @@ const router = createBrowserRouter([
     // Main
     {
         path: "/",
-        element: <MainIndex />,
+        element: <MainIndex />
     },
     {
         path: "/home",
-        element: <MainHome />,
+        element: <MainHome />
     },
 
     // Accounts
     {
         path: "/login",
-        element: <AccountLogin />,
+        element: <AccountLogin />
     },
     {
         path: "/register",
-        element: <AccountRegister />,
+        element: <AccountRegister />
     },
     {
         path: "/logout",
-        element: <AccountLogout />,
+        element: <AccountLogout />
     },
 
     // Contacts
     {
         path: "/contacts",
-        element: <ContactsIndex />,
+        element: <ContactsIndex />
     },
 
     // Settings
     {
         path: "/settings",
-        element: <SettingsIndex />,
+        element: <SettingsIndex />
     },
 
     // Chat
     {
         path: "/chat/:userid",
-        element: <Chat />,
-    },
+        element: <Chat />
+    }
 ]);
 
 export default router;

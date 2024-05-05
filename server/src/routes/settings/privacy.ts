@@ -17,16 +17,16 @@ const handler = async (req: Request, res: Response<ResponseData>, next: NextFunc
         .object({
             showOnlineStatus: z.boolean(),
             showLastSeen: z.boolean(),
-            showReadReceipts: z.boolean(),
+            showReadReceipts: z.boolean()
         })
         .safeParse(req.body);
 
     if (!parsedBody.success)
         return res.status(400).send({
-            status: "invalid-parameters",
+            status: "invalid-parameters"
         });
-   
-    
+
+
     try {
         await UserModel.updateOne(
             { userID: currentUser.userID },
@@ -34,17 +34,17 @@ const handler = async (req: Request, res: Response<ResponseData>, next: NextFunc
                 $set: {
                     "preferences.privacy.showOnlineStatus": parsedBody.data.showOnlineStatus,
                     "preferences.privacy.showLastSeen": parsedBody.data.showLastSeen,
-                    "preferences.privacy.showReadReceipts": parsedBody.data.showReadReceipts,
-                },
+                    "preferences.privacy.showReadReceipts": parsedBody.data.showReadReceipts
+                }
             }
         ).exec();
 
         return res.status(200).send({
-            status: "success",
+            status: "success"
         });
     } catch (error: unknown) {
         res.status(500).send({
-            status: "internal-error",
+            status: "internal-error"
         });
         Logger.getInstance().error((error as Error).message, true);
     }

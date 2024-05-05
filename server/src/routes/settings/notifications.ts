@@ -16,13 +16,13 @@ const handler = async (req: Request, res: Response<ResponseData>, next: NextFunc
     const parsedBody = z
         .object({
             showNotifications: z.boolean(),
-            playSound: z.boolean(),
+            playSound: z.boolean()
         })
         .safeParse(req.body);
 
     if (!parsedBody.success)
         return res.status(400).send({
-            status: "invalid-parameters",
+            status: "invalid-parameters"
         });
 
     try {
@@ -31,17 +31,17 @@ const handler = async (req: Request, res: Response<ResponseData>, next: NextFunc
             {
                 $set: {
                     "preferences.notifications.showNotifications": parsedBody.data.showNotifications,
-                    "preferences.notifications.playSound": parsedBody.data.playSound,
-                },
+                    "preferences.notifications.playSound": parsedBody.data.playSound
+                }
             }
         ).exec();
 
         return res.status(200).send({
-            status: "success",
+            status: "success"
         });
     } catch (error: unknown) {
         res.status(500).send({
-            status: "internal-error",
+            status: "internal-error"
         });
         Logger.getInstance().error((error as Error).message, true);
     }

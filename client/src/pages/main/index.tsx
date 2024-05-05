@@ -1,7 +1,7 @@
 import * as React from "react";
-import { useNavigate, Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
-import { useSelector, useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../store";
 import { setUser } from "../../store/slices/page";
 
@@ -11,7 +11,7 @@ import { checkLoggedIn } from "../../lib/auth";
 const IndexPage = () => {
     const user = useSelector((state: RootState) => state.page.currentUser);
     const dispatch = useDispatch();
-    
+
     const redirect = useNavigate();
 
     // Login-protect the page
@@ -31,14 +31,15 @@ const IndexPage = () => {
     return (
         <div className="dark:bg-gray-800 bg-white min-h-screen">
             <NavbarComponent user={null} />
-            
+
             <section className="">
                 <img
                     src="/assets/images/bg-2.png"
                     alt="Background"
                     className="w-full h-screen overflow-y-hidden object-none shadow-md"
                 />
-                <div className="w-full absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-white flex items-center justify-center flex-col ">
+                <div
+                    className="w-full absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-white flex items-center justify-center flex-col ">
                     <img
                         src="/assets/images/logo-no-background.png"
                         alt="Logo"

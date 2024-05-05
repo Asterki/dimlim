@@ -5,12 +5,12 @@ const handler = async (req: Request, res: Response<ResponseData>, next: NextFunc
     const user = req.user;
     if (!user)
         return res.status(401).send({
-            status: "unauthenticated",
+            status: "unauthenticated"
         });
 
     return res.status(200).send({
         status: "success",
-        user: user as any,
+        user: user as any
     });
 };
 

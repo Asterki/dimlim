@@ -2,7 +2,7 @@ import * as React from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 
-import { useSelector, useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../store";
 import { setUser } from "../../store/slices/page";
 
@@ -82,7 +82,8 @@ const HomePage = () => {
                                             <Link
                                                 to={`/chat/${contact.userID}`}
                                             >
-                                                <div className="flex items-center justify-between p-2 dark:bg-gray-600 bg-slate-100 rounded-md mt-2">
+                                                <div
+                                                    className="flex items-center justify-between p-2 dark:bg-gray-600 bg-slate-100 rounded-md mt-2">
                                                     <p>
                                                         {
                                                             contact.profile

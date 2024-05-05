@@ -1,4 +1,4 @@
-import express, { Router as ExpressRouter, Express, NextFunction } from "express";
+import express, { Express, Router as ExpressRouter } from "express";
 
 // Account routes
 import accountsRegister from "../routes/accounts/register";
@@ -26,13 +26,14 @@ import generateTFA from "../routes/utils/generate-tfa";
 import verifyTFA from "../routes/utils/verify-tfa";
 
 class Router {
-    private instance: Router | null = null;
     public accountRouter: ExpressRouter = express.Router();
     public contactsRouter: ExpressRouter = express.Router();
     public settingsRouter: ExpressRouter = express.Router();
     public utilsRouter: ExpressRouter = express.Router();
+    private instance: Router | null = null;
 
-    constructor() {}
+    constructor() {
+    }
 
     getInstance() {
         if (!this.instance) this.instance = new Router();
@@ -45,7 +46,7 @@ class Router {
         this.accountRouter.post("/login", accountsLogin);
         this.accountRouter.get("/me", accountsMe);
         this.accountRouter.get("/logout", accountsLogout);
-        
+
         // Contact routes
         this.contactsRouter.post("/add", contactsAdd);
         this.contactsRouter.post("/remove", contactsRemove);
@@ -53,7 +54,7 @@ class Router {
         this.contactsRouter.post("/unblock", contactsUnblock);
         this.contactsRouter.post("/pending", contactsPending);
         this.contactsRouter.get("/get", contactsGet);
-        
+
 
         // Settings routes
         this.settingsRouter.post("/general", settingsGeneral);

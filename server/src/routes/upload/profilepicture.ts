@@ -6,11 +6,6 @@ import fs from "fs-extra";
 
 import UserModel from "../../models/users";
 
-import {
-    RegisterRequestBody as RequestBody,
-    RegisterResponseData as ResponseData,
-} from "../../../../shared/types/api/accounts";
-
 import UploadService from "../../services/upload";
 
 import { NextFunction, Request, Response } from "express";
@@ -59,13 +54,13 @@ const handler = async (req: Request, res: Response, next: NextFunction) => {
                 rawData = data;
             });
 
-        fs.writeFile(newPath, rawData, function (err) {
+        fs.writeFile(newPath, rawData, function(err) {
             if (err) console.log(err);
         });
 
         // Delete the old user profile picture
         const userProfile = await UserModel.findOne({
-            userID: currentUser.userID,
+            userID: currentUser.userID
         });
         if (userProfile && userProfile.profile!.imageID) {
             fs.unlinkSync(
@@ -83,17 +78,17 @@ const handler = async (req: Request, res: Response, next: NextFunction) => {
             { userID: currentUser.userID },
             {
                 $set: {
-                    "profile.imageID": imgID,
-                },
+                    "profile.imageID": imgID
+                }
             }
         );
 
         return res.status(200).send({
-            status: "success",
+            status: "success"
         });
     } catch (error: unknown) {
         res.status(500).send({
-            status: "internal-error",
+            status: "internal-error"
         });
         Logger.getInstance().error((error as Error).message, true);
     }

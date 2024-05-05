@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import * as Tabs from "@radix-ui/react-tabs";
 
-import { useSelector, useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../store";
 import { setUser } from "../../store/slices/page";
 
@@ -31,7 +31,7 @@ const ContactsIndex = () => {
         accepted: [],
         blocked: [],
         pending: [],
-        requests: [],
+        requests: []
     });
 
     const [tab, setTab] = React.useState("tab1");
@@ -161,7 +161,8 @@ const ContactsIndex = () => {
                                         </p>
                                         <div className="flex flex-col items-center">
                                             {contacts.requests.length === 0 && (
-                                                <div className="text-lg h-64 flex items-center justify-center dark:text-white/50">
+                                                <div
+                                                    className="text-lg h-64 flex items-center justify-center dark:text-white/50">
                                                     No requests
                                                 </div>
                                             )}
@@ -221,7 +222,8 @@ const ContactsIndex = () => {
                                         <p className="text-2xl">Request Sent</p>
                                         <div className="flex flex-col items-center">
                                             {contacts.pending.length === 0 && (
-                                                <div className="text-lg h-64 flex items-center justify-center dark:text-white/50">
+                                                <div
+                                                    className="text-lg h-64 flex items-center justify-center dark:text-white/50">
                                                     No requests
                                                 </div>
                                             )}
@@ -271,7 +273,8 @@ const ContactsIndex = () => {
                                         </p>
                                         <div className="flex flex-col items-center">
                                             {contacts.accepted.length === 0 && (
-                                                <div className="text-lg h-64 flex items-center justify-center dark:text-white/50">
+                                                <div
+                                                    className="text-lg h-64 flex items-center justify-center dark:text-white/50">
                                                     No contacts
                                                 </div>
                                             )}
@@ -291,7 +294,8 @@ const ContactsIndex = () => {
                                                                             .username
                                                                     }
                                                                 </p>
-                                                                <div className="flex gap-2 justify-end w-7/12 md:w-4/12">
+                                                                <div
+                                                                    className="flex gap-2 justify-end w-7/12 md:w-4/12">
                                                                     <button
                                                                         className="p-2 bg-red-400 transition-all hover:brightness-110 rounded-md text-white w-1/2"
                                                                         onClick={() =>
@@ -331,7 +335,8 @@ const ContactsIndex = () => {
                                         </p>
                                         <div className="flex flex-col items-center">
                                             {contacts.blocked.length === 0 && (
-                                                <div className="text-lg h-64 flex items-center justify-center dark:text-white/50">
+                                                <div
+                                                    className="text-lg h-64 flex items-center justify-center dark:text-white/50">
                                                     No blocked contacts
                                                 </div>
                                             )}

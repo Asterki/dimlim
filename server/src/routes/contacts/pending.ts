@@ -16,13 +16,13 @@ const handler = async (req: Request, res: Response<ResponseData>, next: NextFunc
     const parsedBody = z
         .object({
             username: z.string(),
-            action: z.enum(["accept", "reject"]),
+            action: z.enum(["accept", "reject"])
         })
         .safeParse(req.body);
 
     if (!parsedBody.success)
         return res.status(400).send({
-            status: "invalid-parameters",
+            status: "invalid-parameters"
         });
     const { username, action } = parsedBody.data;
     if (username.toLowerCase() == currentUser.profile.username.toLowerCase())
@@ -39,7 +39,7 @@ const handler = async (req: Request, res: Response<ResponseData>, next: NextFunc
             await UserModel.updateOne(
                 { userID: currentUser.userID },
                 {
-                    $pull: { "contacts.requests": userExists.userID },
+                    $pull: { "contacts.requests": userExists.userID }
                 },
                 { new: true }
             );
@@ -48,7 +48,7 @@ const handler = async (req: Request, res: Response<ResponseData>, next: NextFunc
             await UserModel.updateOne(
                 { userID: userExists.userID },
                 {
-                    $pull: { "contacts.pending": currentUser.userID },
+                    $pull: { "contacts.pending": currentUser.userID }
                 },
                 { new: true }
             );
@@ -58,7 +58,7 @@ const handler = async (req: Request, res: Response<ResponseData>, next: NextFunc
                 { userID: currentUser.userID },
                 {
                     $pull: { "contacts.requests": userExists.userID },
-                    $addToSet: { "contacts.accepted": userExists.userID },
+                    $addToSet: { "contacts.accepted": userExists.userID }
                 },
                 { new: true }
             );
@@ -68,18 +68,18 @@ const handler = async (req: Request, res: Response<ResponseData>, next: NextFunc
                 { userID: userExists.userID },
                 {
                     $pull: { "contacts.pending": currentUser.userID },
-                    $addToSet: { "contacts.accepted": currentUser.userID },
+                    $addToSet: { "contacts.accepted": currentUser.userID }
                 },
                 { new: true }
             );
         }
 
         return res.status(200).send({
-            status: "success",
+            status: "success"
         });
     } catch (error: unknown) {
         res.status(500).send({
-            status: "internal-error",
+            status: "internal-error"
         });
         Logger.getInstance().error((error as Error).message, true);
     }

@@ -10,7 +10,7 @@ class UploadService {
     }
 
     async uploadFile(folderPath: string, fileName: string, rawData: any) {
-        fsExtra.writeFile(path.join(__dirname, folderPath, fileName), rawData, function (err: any) {
+        fsExtra.writeFile(path.join(__dirname, folderPath, fileName), rawData, function(err: any) {
             if (err) console.log(err);
         });
     }

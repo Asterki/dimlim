@@ -1,9 +1,9 @@
 import * as React from "react";
-import { redirect, Link } from "react-router-dom";
+import { Link, redirect } from "react-router-dom";
 import axios from "axios";
 import validator from "validator";
 
-import { useSelector, useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../store";
 import { setUser } from "../../store/slices/page";
 
@@ -27,7 +27,7 @@ const AccountRegister = () => {
         state: "hidden",
         title: "",
         content: "",
-        type: "info",
+        type: "info"
     });
 
     const showNotification = (
@@ -39,7 +39,7 @@ const AccountRegister = () => {
             state: "showing",
             title: title,
             content: content,
-            type: type,
+            type: type
         });
 
         setTimeout(() => {
@@ -47,7 +47,7 @@ const AccountRegister = () => {
                 state: "hidden",
                 title: "",
                 content: "",
-                type: "info",
+                type: "info"
             });
         }, 5000);
     };
@@ -97,7 +97,7 @@ const AccountRegister = () => {
                 {
                     username: username,
                     email: email,
-                    password: password,
+                    password: password
                 }
             )
             .then((res) => {
@@ -145,7 +145,8 @@ const AccountRegister = () => {
     }, []);
 
     return (
-        <div className="dark:bg-gray-800 bg-slate-200 min-h-screen dark:text-white text-slate-700 bg-gradient-to-bl from-blue-400 to-purple-400 dark:from-gray-500 dark:to-gray-700">
+        <div
+            className="dark:bg-gray-800 bg-slate-200 min-h-screen dark:text-white text-slate-700 bg-gradient-to-bl from-blue-400 to-purple-400 dark:from-gray-500 dark:to-gray-700">
             <NavbarComponent user={null} />
 
             <NotificationComponent
@@ -155,9 +156,10 @@ const AccountRegister = () => {
                 type={notification.type}
             />
 
-            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 dark:bg-gray-700 bg-slate-100 rounded-md p-4 w-11/12 md:w-4/12 shadow-md">
+            <div
+                className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 dark:bg-gray-700 bg-slate-100 rounded-md p-4 w-11/12 md:w-4/12 shadow-md">
                 <form>
-                <div className="flex flex-col items-center">
+                    <div className="flex flex-col items-center">
                         <img
                             src="http://localhost:5173/assets/images/logo-no-background.png"
                             className="w-8"

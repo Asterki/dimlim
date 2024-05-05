@@ -1,12 +1,7 @@
 import React from "react";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-    faWarning,
-    faXmarkCircle,
-    faCheckCircle,
-    faInfoCircle,
-} from "@fortawesome/free-solid-svg-icons";
+import { faCheckCircle, faInfoCircle, faWarning, faXmarkCircle } from "@fortawesome/free-solid-svg-icons";
 
 interface ComponentProps {
     state: "showing" | "hidden";

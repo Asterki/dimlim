@@ -1,6 +1,6 @@
 import express, { Express } from "express";
 import { createServer } from "http";
-import path from "path"
+import path from "path";
 
 // Middleware
 import cors from "cors";
@@ -72,7 +72,7 @@ class Server {
                 cors({
                     origin: "http://localhost:5173",
                     credentials: true,
-                    exposedHeaders: ["set-cookie"],
+                    exposedHeaders: ["set-cookie"]
                 })
             );
         }

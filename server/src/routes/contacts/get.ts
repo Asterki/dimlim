@@ -18,9 +18,9 @@ const handler = async (req: Request, res: Response<ResponseData>, next: NextFunc
                     ...currentUser.contacts.accepted,
                     ...currentUser.contacts.pending,
                     ...currentUser.contacts.requests,
-                    ...currentUser.contacts.blocked,
-                ],
-            },
+                    ...currentUser.contacts.blocked
+                ]
+            }
         }).select("profile.username profile.avatar userID");
 
         const acceptedContacts = allContacts.filter((user) => currentUser.contacts.accepted.includes(user.userID));
@@ -34,12 +34,12 @@ const handler = async (req: Request, res: Response<ResponseData>, next: NextFunc
                 accepted: acceptedContacts as any,
                 pending: pendingContacts as any,
                 requests: requestedContacts as any,
-                blocked: blockedContacts as any,
-            },
+                blocked: blockedContacts as any
+            }
         });
     } catch (error: unknown) {
         res.status(500).send({
-            status: "internal-error",
+            status: "internal-error"
         });
         Logger.getInstance().error((error as Error).message, true);
     }

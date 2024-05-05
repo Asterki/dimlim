@@ -3,7 +3,7 @@ import { io, Socket } from "socket.io-client";
 import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
 
-import { useSelector, useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../store";
 import { setUser } from "../../store/slices/page";
 
@@ -56,7 +56,7 @@ const ChatIndex = () => {
         if (contact !== null) {
             const newSocket = io(import.meta.env.VITE_SERVER_HOST, {
                 withCredentials: true,
-                autoConnect: true,
+                autoConnect: true
             });
 
             newSocket.on("connect", () => {
@@ -64,7 +64,7 @@ const ChatIndex = () => {
 
                 newSocket.emit("messageewq", {
                     to: "jewioqejoqiwe",
-                    message: "Hello",
+                    message: "Hello"
                 });
             });
         }
@@ -75,7 +75,7 @@ const ChatIndex = () => {
             console.log("weqewqeqw");
             socket.emit("messageewq", {
                 to: "jewioqejoqiwe",
-                message: "Hello",
+                message: "Hello"
             });
         }
     };
@@ -101,9 +101,12 @@ const ChatIndex = () => {
                                 </div>
                             </div>
 
-                            <div className="mt-2 rounded-md shadow-md p-4 dark:bg-gray-700 bg-slate-100 h-[calc(100%-3rem)] relative">
-                                <div className="flex flex-col gap-2 overflow-y-scroll pb-4 max-h-[calc(100%-3.5rem)] px-4 shadow-md">
-                                    <div className=" shadow-md rounded-md bg-slate-500 w-max max-w-xl text-white p-2 my-2">
+                            <div
+                                className="mt-2 rounded-md shadow-md p-4 dark:bg-gray-700 bg-slate-100 h-[calc(100%-3rem)] relative">
+                                <div
+                                    className="flex flex-col gap-2 overflow-y-scroll pb-4 max-h-[calc(100%-3.5rem)] px-4 shadow-md">
+                                    <div
+                                        className=" shadow-md rounded-md bg-slate-500 w-max max-w-xl text-white p-2 my-2">
                                         <div>This is a test message</div>
                                         <div className="text-sm text-white/50">
                                             {new Date(
@@ -112,7 +115,8 @@ const ChatIndex = () => {
                                         </div>
                                     </div>
 
-                                    <div className=" shadow-md rounded-md bg-blue-400 w-max max-w-xl text-white p-2 my-2 ml-auto text-right">
+                                    <div
+                                        className=" shadow-md rounded-md bg-blue-400 w-max max-w-xl text-white p-2 my-2 ml-auto text-right">
                                         <div>This is a test message</div>
                                         <div className="text-sm text-white/50">
                                             {new Date(
@@ -121,7 +125,8 @@ const ChatIndex = () => {
                                         </div>
                                     </div>
 
-                                    <div className=" shadow-md rounded-md bg-slate-500 w-max max-w-xl text-white p-2 my-2">
+                                    <div
+                                        className=" shadow-md rounded-md bg-slate-500 w-max max-w-xl text-white p-2 my-2">
                                         <div>This is a test message</div>
                                         <div className="text-sm text-white/50">
                                             {new Date(
@@ -130,7 +135,8 @@ const ChatIndex = () => {
                                         </div>
                                     </div>
 
-                                    <div className=" shadow-md rounded-md bg-blue-400 w-max max-w-xl text-white p-2 my-2 ml-auto text-right">
+                                    <div
+                                        className=" shadow-md rounded-md bg-blue-400 w-max max-w-xl text-white p-2 my-2 ml-auto text-right">
                                         <div>This is a test message</div>
                                         <div className="text-sm text-white/50">
                                             {new Date(
@@ -139,7 +145,8 @@ const ChatIndex = () => {
                                         </div>
                                     </div>
 
-                                    <div className=" shadow-md rounded-md bg-slate-500 w-max max-w-xl text-white p-2 my-2">
+                                    <div
+                                        className=" shadow-md rounded-md bg-slate-500 w-max max-w-xl text-white p-2 my-2">
                                         <div>This is a test message</div>
                                         <div className="text-sm text-white/50">
                                             {new Date(
@@ -148,7 +155,8 @@ const ChatIndex = () => {
                                         </div>
                                     </div>
 
-                                    <div className=" shadow-md rounded-md bg-blue-400 w-max max-w-xl text-white p-2 my-2 ml-auto text-right">
+                                    <div
+                                        className=" shadow-md rounded-md bg-blue-400 w-max max-w-xl text-white p-2 my-2 ml-auto text-right">
                                         <div>This is a test message</div>
                                         <div className="text-sm text-white/50">
                                             {new Date(
@@ -157,7 +165,8 @@ const ChatIndex = () => {
                                         </div>
                                     </div>
 
-                                    <div className=" shadow-md rounded-md bg-slate-500 w-max max-w-xl text-white p-2 my-2">
+                                    <div
+                                        className=" shadow-md rounded-md bg-slate-500 w-max max-w-xl text-white p-2 my-2">
                                         <div>This is a test message</div>
                                         <div className="text-sm text-white/50">
                                             {new Date(
@@ -166,7 +175,8 @@ const ChatIndex = () => {
                                         </div>
                                     </div>
 
-                                    <div className=" shadow-md rounded-md bg-blue-400 w-max max-w-xl text-white p-2 my-2 ml-auto text-right">
+                                    <div
+                                        className=" shadow-md rounded-md bg-blue-400 w-max max-w-xl text-white p-2 my-2 ml-auto text-right">
                                         <div>This is a test message</div>
                                         <div className="text-sm text-white/50">
                                             {new Date(
@@ -175,7 +185,8 @@ const ChatIndex = () => {
                                         </div>
                                     </div>
 
-                                    <div className=" shadow-md rounded-md bg-slate-500 w-max max-w-xl text-white p-2 my-2">
+                                    <div
+                                        className=" shadow-md rounded-md bg-slate-500 w-max max-w-xl text-white p-2 my-2">
                                         <div>This is a test message</div>
                                         <div className="text-sm text-white/50">
                                             {new Date(
@@ -184,7 +195,8 @@ const ChatIndex = () => {
                                         </div>
                                     </div>
 
-                                    <div className=" shadow-md rounded-md bg-blue-400 w-max max-w-xl text-white p-2 my-2 ml-auto text-right">
+                                    <div
+                                        className=" shadow-md rounded-md bg-blue-400 w-max max-w-xl text-white p-2 my-2 ml-auto text-right">
                                         <div>This is a test message</div>
                                         <div className="text-sm text-white/50">
                                             {new Date(
@@ -193,7 +205,8 @@ const ChatIndex = () => {
                                         </div>
                                     </div>
 
-                                    <div className=" shadow-md rounded-md bg-slate-500 w-max max-w-xl text-white p-2 my-2">
+                                    <div
+                                        className=" shadow-md rounded-md bg-slate-500 w-max max-w-xl text-white p-2 my-2">
                                         <div>This is a test message</div>
                                         <div className="text-sm text-white/50">
                                             {new Date(
@@ -202,7 +215,8 @@ const ChatIndex = () => {
                                         </div>
                                     </div>
 
-                                    <div className=" shadow-md rounded-md bg-blue-400 w-max max-w-xl text-white p-2 my-2 ml-auto text-right">
+                                    <div
+                                        className=" shadow-md rounded-md bg-blue-400 w-max max-w-xl text-white p-2 my-2 ml-auto text-right">
                                         <div>This is a test message</div>
                                         <div className="text-sm text-white/50">
                                             {new Date(

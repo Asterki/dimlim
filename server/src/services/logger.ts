@@ -5,7 +5,8 @@ import path from "path";
 class Logger {
     private static instance: Logger;
 
-    private constructor() {}
+    private constructor() {
+    }
 
     public static getInstance() {
         if (!Logger.instance) Logger.instance = new Logger();

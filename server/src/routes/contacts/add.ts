@@ -15,13 +15,13 @@ const handler = async (req: Request, res: Response<ResponseData>, next: NextFunc
 
     const parsedBody = z
         .object({
-            username: z.string(),
+            username: z.string()
         })
         .safeParse(req.body);
 
     if (!parsedBody.success)
         return res.status(400).send({
-            status: "invalid-parameters",
+            status: "invalid-parameters"
         });
     const { username } = parsedBody.data;
     if (username == currentUser.profile.username) return res.status(400).send({ status: "cannot-add-self" });
@@ -51,11 +51,11 @@ const handler = async (req: Request, res: Response<ResponseData>, next: NextFunc
         );
 
         return res.status(200).send({
-            status: "success",
+            status: "success"
         });
     } catch (error: unknown) {
         res.status(500).send({
-            status: "internal-error",
+            status: "internal-error"
         });
         Logger.getInstance().error((error as Error).message, true);
     }

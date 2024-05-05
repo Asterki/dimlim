@@ -18,13 +18,13 @@ const handler = async (req: Request, res: Response<ResponseData>, next: NextFunc
         .object({
             password: z.string(),
             action: z.enum(["activate", "deactivate"]),
-            secret: z.string().optional(),
+            secret: z.string().optional()
         })
         .safeParse(req.body);
 
     if (!parsedBody.success)
         return res.status(400).send({
-            status: "invalid-parameters",
+            status: "invalid-parameters"
         });
 
     try {
@@ -40,8 +40,8 @@ const handler = async (req: Request, res: Response<ResponseData>, next: NextFunc
                 {
                     $set: {
                         "preferences.security.twoFactor.active": true,
-                        "preferences.security.twoFactor.secret": parsedBody.data.secret,
-                    },
+                        "preferences.security.twoFactor.secret": parsedBody.data.secret
+                    }
                 }
             ).exec();
         } else {
@@ -50,18 +50,18 @@ const handler = async (req: Request, res: Response<ResponseData>, next: NextFunc
                 {
                     $set: {
                         "preferences.security.twoFactor.active": false,
-                        "preferences.security.twoFactor.secret": "",
-                    },
+                        "preferences.security.twoFactor.secret": ""
+                    }
                 }
             ).exec();
         }
 
         return res.status(200).send({
-            status: "success",
+            status: "success"
         });
     } catch (error: unknown) {
         res.status(500).send({
-            status: "internal-error",
+            status: "internal-error"
         });
         Logger.getInstance().error((error as Error).message, true);
     }

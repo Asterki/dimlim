@@ -1,5 +1,5 @@
 import * as React from "react";
-import { useNavigate, Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 import { User } from "../../../shared/types/models";
 
@@ -28,7 +28,8 @@ const NavbarComponent: React.FC<ComponentProps> = (props) => {
                             : ""
                     }
                 >
-                    <div className="text-neutral-700 w-full flex items-center justify-between p-4 h-16 dark:bg-gray-700 bg-white shadow-md z-10 absolute top-0">
+                    <div
+                        className="text-neutral-700 w-full flex items-center justify-between p-4 h-16 dark:bg-gray-700 bg-white shadow-md z-10 absolute top-0">
                         <Link
                             onClick={() => {
                                 redirect("/home");
@@ -49,7 +50,8 @@ const NavbarComponent: React.FC<ComponentProps> = (props) => {
                                     setMenuOpen(change);
                                 }}
                             >
-                                <DropdownMenu.Trigger className="outline-none flex items-center justify-between px-4 py-2 rounded-md border-2 dark:border-white/20 transition-all dark:hover:bg-white/10 cursor-pointer w-full">
+                                <DropdownMenu.Trigger
+                                    className="outline-none flex items-center justify-between px-4 py-2 rounded-md border-2 dark:border-white/20 transition-all dark:hover:bg-white/10 cursor-pointer w-full">
                                     <div className="flex items-center justify-center">
                                         <div>
                                             <img
@@ -82,14 +84,17 @@ const NavbarComponent: React.FC<ComponentProps> = (props) => {
                                         align="end"
                                         className="dark:text-white text-neutral-700 dark:bg-gray-700 bg-slate-100 transition-all rounded-md border-2 dark:border-white/20 border-slate-400 w-full"
                                     >
-                                        <DropdownMenu.Item className="p-2 transition-all dark:hover:bg-white/20 hover:bg-slate-200 cursor-pointer w-full">
+                                        <DropdownMenu.Item
+                                            className="p-2 transition-all dark:hover:bg-white/20 hover:bg-slate-200 cursor-pointer w-full">
                                             <Link to="/settings">Settings</Link>
                                         </DropdownMenu.Item>
-                                        <DropdownMenu.Item className="p-2 transition-all dark:hover:bg-white/20 hover:bg-slate-200 cursor-pointer w-full">
+                                        <DropdownMenu.Item
+                                            className="p-2 transition-all dark:hover:bg-white/20 hover:bg-slate-200 cursor-pointer w-full">
                                             <Link to="/contacts">Contacts</Link>
                                         </DropdownMenu.Item>
 
-                                        <DropdownMenu.Item className="p-2 transition-all dark:hover:bg-white/20 hover:bg-slate-200 cursor-pointer w-full">
+                                        <DropdownMenu.Item
+                                            className="p-2 transition-all dark:hover:bg-white/20 hover:bg-slate-200 cursor-pointer w-full">
                                             <Link to="/logout">Logout</Link>
                                         </DropdownMenu.Item>
                                     </DropdownMenu.Content>
@@ -100,7 +105,8 @@ const NavbarComponent: React.FC<ComponentProps> = (props) => {
                 </div>
             )}
             {!props.user && (
-                <div className="w-full flex items-center justify-between p-4 h-16 dark:bg-gray-700 bg-white shadow-md z-10 absolute top-0">
+                <div
+                    className="w-full flex items-center justify-between p-4 h-16 dark:bg-gray-700 bg-white shadow-md z-10 absolute top-0">
                     <Link
                         onClick={() => {
                             redirect("/");

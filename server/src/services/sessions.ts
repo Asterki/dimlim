@@ -22,15 +22,17 @@ class SessionManager {
                     usernameField: "emailOrUsername",
                     passwordField: "password",
                     passReqToCallback: true,
-                    session: false
+                    session: false,
                 },
                 async (req: any, _email: string, _password: string, done) => {
                     try {
                         const user: (User & Document) | null = await UserModel.findOne({
-                            $or: [{ "profile.email.value": req.body.emailOrUsername.toLowerCase() }, { "profile.username": req.body.emailOrUsername.toLowerCase() }]
+                            $or: [
+                                { "profile.email.value": req.body.emailOrUsername.toLowerCase() },
+                                { "profile.username": req.body.emailOrUsername.toLowerCase() },
+                            ],
                         });
                         if (!user) return done(null, false, { message: "invalid-credentials" });
-
 
                         // Verify password and TFA code
                         if (!bcrypt.compareSync(req.body.password, user.preferences.security.password))
@@ -42,7 +44,7 @@ class SessionManager {
                             const verified = speakeasy.totp.verify({
                                 secret: user.preferences.security.twoFactor.secret as string,
                                 encoding: "base32",
-                                token: req.body.tfaCode
+                                token: req.body.tfaCode,
                             });
 
                             if (verified == false) return done(null, false, { message: "invalid-tfa-code" });
@@ -54,7 +56,7 @@ class SessionManager {
                         return done(err);
                     }
                 }
-            )
+            ),
         };
         this.loadStrategies();
     }
@@ -76,13 +78,13 @@ class SessionManager {
                     sameSite: "lax",
                     httpOnly: false,
                     path: "/",
-                    domain: "localhost"
+                    domain: "localhost",
                 },
                 store: MongoStore.create({
                     mongoUrl: process.env.MONGODB_URI as string,
                     collectionName: "sessions",
-                    dbName: "dimlim"
-                })
+                    dbName: "dimlim",
+                }),
             })
         );
         server.use(passport.initialize());

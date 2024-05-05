@@ -1,10 +1,10 @@
-import { configureStore } from "@reduxjs/toolkit";
-import pageReducer from "./slices/page";
+import { configureStore } from '@reduxjs/toolkit';
+import pageReducer from './slices/page';
 
 const store = configureStore({
     reducer: {
-        page: pageReducer
-    }
+        page: pageReducer,
+    },
 });
 
 export type RootState = ReturnType<typeof store.getState>;

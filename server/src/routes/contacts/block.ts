@@ -15,13 +15,13 @@ const handler = async (req: Request, res: Response<ResponseData>, next: NextFunc
 
     const parsedBody = z
         .object({
-            username: z.string()
+            username: z.string(),
         })
         .safeParse(req.body);
 
     if (!parsedBody.success)
         return res.status(400).send({
-            status: "invalid-parameters"
+            status: "invalid-parameters",
         });
     const { username } = parsedBody.data;
     if (username == currentUser.profile.username) return res.status(400).send({ status: "cannot-block-self" });
@@ -37,11 +37,11 @@ const handler = async (req: Request, res: Response<ResponseData>, next: NextFunc
             { userID: currentUser.userID },
             {
                 $pull: {
-                    "contacts.accepted": userExists.userID
+                    "contacts.accepted": userExists.userID,
                 },
                 $addToSet: {
-                    "contacts.blocked": userExists.userID
-                }
+                    "contacts.blocked": userExists.userID,
+                },
             },
             { new: true }
         );
@@ -52,18 +52,18 @@ const handler = async (req: Request, res: Response<ResponseData>, next: NextFunc
             {
                 $pull: {
                     "contacts.accepted": currentUser.userID,
-                    "contacts.pending": currentUser.userID
-                }
+                    "contacts.pending": currentUser.userID,
+                },
             },
             { new: true }
         );
 
         return res.status(200).send({
-            status: "success"
+            status: "success",
         });
     } catch (error: unknown) {
         res.status(500).send({
-            status: "internal-error"
+            status: "internal-error",
         });
         Logger.getInstance().error((error as Error).message, true);
     }

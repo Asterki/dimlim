@@ -1,11 +1,11 @@
-import { createSlice } from "@reduxjs/toolkit";
-import { User } from "../../../../shared/types/models";
+import { createSlice } from '@reduxjs/toolkit';
+import { User } from '../../../../shared/types/models';
 
 export const pageSlice = createSlice({
-    name: "page",
+    name: 'page',
     initialState: {
         currentUser: null as User | null,
-        language: "en"
+        language: 'en',
     },
     reducers: {
         setUser: (state, action: { payload: User | null }) => {
@@ -13,8 +13,8 @@ export const pageSlice = createSlice({
         },
         setLanguage: (state, action) => {
             state.language = action.payload;
-        }
-    }
+        },
+    },
 });
 
 export const { setLanguage, setUser } = pageSlice.actions;

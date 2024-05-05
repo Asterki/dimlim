@@ -6,61 +6,61 @@ const User = new Schema({
     userID: {
         type: String,
         required: true,
-        unique: true
+        unique: true,
     },
     created: {
         type: Number,
-        required: true
+        required: true,
     },
 
     profile: {
         username: {
             type: String,
             required: true,
-            unique: true
+            unique: true,
         },
         avatar: {
             type: String,
-            default: ""
+            default: "",
         },
         email: {
             value: {
                 type: String,
                 required: true,
-                unique: true
+                unique: true,
             },
             verified: {
                 type: Boolean,
-                default: false
-            }
+                default: false,
+            },
         },
         imageID: {
             type: String,
-            default: ""
-        }
+            default: "",
+        },
     },
 
     contacts: {
         blocked: {
             type: Array<string>,
-            default: []
+            default: [],
         },
         pending: {
             type: Array<string>,
-            default: []
+            default: [],
         },
         requests: {
             type: Array<string>,
-            default: []
+            default: [],
         },
         accepted: {
             type: Array<string>,
-            default: []
-        }
+            default: [],
+        },
     },
 
     pubKey: {
-        type: Buffer
+        type: Buffer,
     },
 
     preferences: {
@@ -69,39 +69,39 @@ const User = new Schema({
             default: {
                 showOnlineStatus: true,
                 showLastSeen: true,
-                showReadReceipts: true
-            }
+                showReadReceipts: true,
+            },
         },
         notifications: {
             type: Object,
             default: {
                 showNotifications: true,
-                playSound: true
-            }
+                playSound: true,
+            },
         },
         general: {
             type: Object,
             default: {
                 theme: "dark",
-                language: "en"
-            }
+                language: "en",
+            },
         },
         security: {
             twoFactor: {
                 active: {
                     type: Boolean,
-                    default: false
+                    default: false,
                 },
                 secret: {
-                    type: String
-                }
+                    type: String,
+                },
             },
             password: {
                 type: String,
-                required: true
-            }
-        }
-    }
+                required: true,
+            },
+        },
+    },
 });
 
 export default mongoose.model("User", User, "users");

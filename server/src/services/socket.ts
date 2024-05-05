@@ -16,8 +16,8 @@ class SocketServer {
             cors: {
                 origin: "http://localhost:5173",
                 credentials: true,
-                exposedHeaders: ["set-cookie"]
-            }
+                exposedHeaders: ["set-cookie"],
+            },
         });
 
         this.io.on("connection", (socket) => {
@@ -33,8 +33,6 @@ class SocketServer {
         this.io.on("listening", () => {
             console.log("Socket server ready");
         });
-
-
     }
 }
 

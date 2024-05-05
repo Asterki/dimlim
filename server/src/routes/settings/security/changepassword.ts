@@ -20,13 +20,13 @@ const handler = async (req: Request, res: Response<ResponseData>, next: NextFunc
             newPassword: z.string().refine((pass) => {
                 return validator.isStrongPassword(pass);
             }),
-            oldPassword: z.string()
+            oldPassword: z.string(),
         })
         .safeParse(req.body);
 
     if (!parsedBody.success)
         return res.status(400).send({
-            status: "invalid-parameters"
+            status: "invalid-parameters",
         });
 
     try {
@@ -42,17 +42,17 @@ const handler = async (req: Request, res: Response<ResponseData>, next: NextFunc
             { userID: currentUser.userID },
             {
                 $set: {
-                    "preferences.security.password": pass
-                }
+                    "preferences.security.password": pass,
+                },
             }
         ).exec();
 
         return res.status(200).send({
-            status: "success"
+            status: "success",
         });
     } catch (error: unknown) {
         res.status(500).send({
-            status: "internal-error"
+            status: "internal-error",
         });
         Logger.getInstance().error((error as Error).message, true);
     }

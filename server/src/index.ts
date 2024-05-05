@@ -72,7 +72,7 @@ class Server {
                 cors({
                     origin: "http://localhost:5173",
                     credentials: true,
-                    exposedHeaders: ["set-cookie"]
+                    exposedHeaders: ["set-cookie"],
                 })
             );
         }

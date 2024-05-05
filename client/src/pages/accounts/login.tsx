@@ -1,23 +1,23 @@
-import * as React from "react";
-import { Link, useNavigate } from "react-router-dom";
-import axios, { AxiosResponse } from "axios";
+import * as React from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import axios, { AxiosResponse } from 'axios';
 
-import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "../../store";
-import { setUser } from "../../store/slices/page";
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState } from '../../store';
+import { setUser } from '../../store/slices/page';
 
-import NavbarComponent from "../../components/navbar";
-import NotificationComponent from "../../components/notifications";
-import * as Dialog from "@radix-ui/react-dialog";
+import NavbarComponent from '../../components/navbar';
+import NotificationComponent from '../../components/notifications';
+import * as Dialog from '@radix-ui/react-dialog';
 
-import { LoginResponseData } from "../../../../shared/types/api/accounts";
-import { checkLoggedIn } from "../../lib/auth";
+import { LoginResponseData } from '../../../../shared/types/api/accounts';
+import { checkLoggedIn } from '../../lib/auth';
 
 // To be later changed to a translate service
 const messages = {
-    "invalid-credentials": "Invalid email/username or password",
-    "requires-tfa": "Two-factor authentication is required",
-    "invalid-tfa-code": "Invalid two-factor authentication code"
+    'invalid-credentials': 'Invalid email/username or password',
+    'requires-tfa': 'Two-factor authentication is required',
+    'invalid-tfa-code': 'Invalid two-factor authentication code',
 };
 
 const AccountLogin = () => {
@@ -28,35 +28,35 @@ const AccountLogin = () => {
 
     // Notification state
     const [notification, setNotification] = React.useState<{
-        state: "showing" | "hidden";
+        state: 'showing' | 'hidden';
         title: string;
         content: string;
-        type: "error" | "success" | "info" | "warning";
+        type: 'error' | 'success' | 'info' | 'warning';
     }>({
-        state: "hidden",
-        title: "",
-        content: "",
-        type: "info"
+        state: 'hidden',
+        title: '',
+        content: '',
+        type: 'info',
     });
 
     const showNotification = (
         title: string,
         content: string,
-        type: "warning" | "info" | "success" | "error"
+        type: 'warning' | 'info' | 'success' | 'error',
     ) => {
         setNotification({
-            state: "showing",
+            state: 'showing',
             title: title,
             content: content,
-            type: type
+            type: type,
         });
 
         setTimeout(() => {
             setNotification({
-                state: "hidden",
-                title: "",
-                content: "",
-                type: "info"
+                state: 'hidden',
+                title: '',
+                content: '',
+                type: 'info',
             });
         }, 5000);
     };
@@ -71,7 +71,7 @@ const AccountLogin = () => {
     const login = async () => {
         const emailOrUsername = usernameEmailRef.current!.value;
         const password = passwordRef.current!.value;
-        const tfaCode = tfaCodeRef.current ? tfaCodeRef.current.value : "";
+        const tfaCode = tfaCodeRef.current ? tfaCodeRef.current.value : '';
 
         try {
             const response: AxiosResponse<LoginResponseData> = await axios.post(
@@ -79,37 +79,37 @@ const AccountLogin = () => {
                 {
                     emailOrUsername,
                     password,
-                    tfaCode: tfaCode
+                    tfaCode: tfaCode,
                 },
                 {
-                    withCredentials: true
-                }
+                    withCredentials: true,
+                },
             );
 
-            if (response.data.status === "success") {
+            if (response.data.status === 'success') {
                 showNotification(
-                    "Logged in successfully",
-                    "You have been logged in successfully",
-                    "success"
+                    'Logged in successfully',
+                    'You have been logged in successfully',
+                    'success',
                 );
 
                 const serverUser = await checkLoggedIn();
                 if (serverUser) dispatch(setUser(serverUser));
-                redirect("/home");
-            } else if (response.data.status === "requires-tfa") {
+                redirect('/home');
+            } else if (response.data.status === 'requires-tfa') {
                 setTFADialogOpen(true);
             } else {
                 showNotification(
-                    "Failed to login",
+                    'Failed to login',
                     messages[response.data.status as keyof typeof messages],
-                    "error"
+                    'error',
                 );
             }
         } catch (err) {
             showNotification(
-                "Failed to login",
-                "Unable to login at the moment. Please try again later.",
-                "error"
+                'Failed to login',
+                'Unable to login at the moment. Please try again later.',
+                'error',
             );
         }
     };
@@ -121,7 +121,7 @@ const AccountLogin = () => {
                 const currentUser = await checkLoggedIn();
                 if (currentUser) {
                     dispatch(setUser(currentUser));
-                    return redirect("/home");
+                    return redirect('/home');
                 }
             }
         })();
@@ -129,8 +129,7 @@ const AccountLogin = () => {
     }, []);
 
     return (
-        <div
-            className="dark:bg-gray-800 bg-slate-200 min-h-screen dark:text-white text-neutral-700 bg-gradient-to-bl from-blue-400 to-purple-400 dark:from-gray-500 dark:to-gray-700">
+        <div className="dark:bg-gray-800 bg-slate-200 min-h-screen dark:text-white text-neutral-700 bg-gradient-to-bl from-blue-400 to-purple-400 dark:from-gray-500 dark:to-gray-700">
             <NavbarComponent user={null} />
 
             <NotificationComponent
@@ -152,8 +151,7 @@ const AccountLogin = () => {
             >
                 <Dialog.Portal>
                     <Dialog.Overlay className="bg-black/50 data-[state=open]:animate-overlayShow fixed inset-0 z-20" />
-                    <Dialog.Content
-                        className="data-[state=open]:animate-contentShow fixed top-[50%] left-[50%] max-h-[85vh] w-[90vw] max-w-[450px] translate-x-[-50%] translate-y-[-50%] rounded-md dark:bg-gray-700 bg-slate-100 p-4 dark:text-white text-slate-700 focus:outline-none z-30 flex items-center flex-col gap-2">
+                    <Dialog.Content className="data-[state=open]:animate-contentShow fixed top-[50%] left-[50%] max-h-[85vh] w-[90vw] max-w-[450px] translate-x-[-50%] translate-y-[-50%] rounded-md dark:bg-gray-700 bg-slate-100 p-4 dark:text-white text-slate-700 focus:outline-none z-30 flex items-center flex-col gap-2">
                         <h1 className="text-2xl">TFA Code</h1>
                         <input
                             type="password"
@@ -171,12 +169,11 @@ const AccountLogin = () => {
                 </Dialog.Portal>
             </Dialog.Root>
 
-            <div
-                className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 dark:bg-gray-700 bg-white/80 rounded-md shadow-md p-4 w-11/12 md:w-4/12">
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 dark:bg-gray-700 bg-white/80 rounded-md shadow-md p-4 w-11/12 md:w-4/12">
                 <form>
                     <div className="flex flex-col items-center gap-2">
                         <img
-                            src="http://localhost:5173/assets/images/logo-no-background.png"
+                            src="/assets/images/logo-no-background.png"
                             className="w-8"
                         />
                         <h1 className="text-xl font-semibold mb-2">
@@ -215,7 +212,7 @@ const AccountLogin = () => {
                     </div>
 
                     <div className="mt-4">
-                        Don't have an account yet?{" "}
+                        Don't have an account yet?{' '}
                         <Link
                             to="/register"
                             className="text-blue-400 hover:text-purple-400 transition-all"

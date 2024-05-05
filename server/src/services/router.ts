@@ -32,8 +32,7 @@ class Router {
     public utilsRouter: ExpressRouter = express.Router();
     private instance: Router | null = null;
 
-    constructor() {
-    }
+    constructor() {}
 
     getInstance() {
         if (!this.instance) this.instance = new Router();
@@ -54,7 +53,6 @@ class Router {
         this.contactsRouter.post("/unblock", contactsUnblock);
         this.contactsRouter.post("/pending", contactsPending);
         this.contactsRouter.get("/get", contactsGet);
-
 
         // Settings routes
         this.settingsRouter.post("/general", settingsGeneral);

@@ -16,13 +16,13 @@ const handler = async (req: Request, res: Response<ResponseData>, next: NextFunc
     const parsedBody = z
         .object({
             theme: z.enum(["dark", "light"]),
-            language: z.enum(["en", "es"])
+            language: z.enum(["en", "es"]),
         })
         .safeParse(req.body);
 
     if (!parsedBody.success)
         return res.status(400).send({
-            status: "invalid-parameters"
+            status: "invalid-parameters",
         });
 
     try {
@@ -31,17 +31,17 @@ const handler = async (req: Request, res: Response<ResponseData>, next: NextFunc
             {
                 $set: {
                     "preferences.general.theme": parsedBody.data.theme,
-                    "preferences.general.language": parsedBody.data.language
-                }
+                    "preferences.general.language": parsedBody.data.language,
+                },
             }
         ).exec();
 
         return res.status(200).send({
-            status: "success"
+            status: "success",
         });
     } catch (error: unknown) {
         res.status(500).send({
-            status: "internal-error"
+            status: "internal-error",
         });
         Logger.getInstance().error((error as Error).message, true);
     }

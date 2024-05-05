@@ -9,6 +9,8 @@ interface User {
             verified: boolean;
         };
         imageID: string;
+        website: string;
+        bio: string;
     };
     contacts: {
         blocked: string[];

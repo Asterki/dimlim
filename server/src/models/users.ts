@@ -38,6 +38,14 @@ const User = new Schema({
             type: String,
             default: "",
         },
+        website: {
+            type: String,
+            default: "",
+        },
+        bio: {
+            type: String,
+            default: "",
+        },
     },
 
     contacts: {

@@ -19,47 +19,47 @@ import SettingsIndex from './settings';
 import Chat from './chat';
 
 const router = createBrowserRouter([
-    // Main
-    {
-        path: '/',
-        element: <MainIndex />,
-    },
-    {
-        path: '/home',
-        element: <MainHome />,
-    },
+  // Main
+  {
+    path: '/',
+    element: <MainIndex />,
+  },
+  {
+    path: '/home',
+    element: <MainHome />,
+  },
 
-    // Accounts
-    {
-        path: '/login',
-        element: <AccountLogin />,
-    },
-    {
-        path: '/register',
-        element: <AccountRegister />,
-    },
-    {
-        path: '/logout',
-        element: <AccountLogout />,
-    },
+  // Accounts
+  {
+    path: '/login',
+    element: <AccountLogin />,
+  },
+  {
+    path: '/register',
+    element: <AccountRegister />,
+  },
+  {
+    path: '/logout',
+    element: <AccountLogout />,
+  },
 
-    // Contacts
-    {
-        path: '/contacts',
-        element: <ContactsIndex />,
-    },
+  // Contacts
+  {
+    path: '/contacts',
+    element: <ContactsIndex />,
+  },
 
-    // Settings
-    {
-        path: '/settings',
-        element: <SettingsIndex />,
-    },
+  // Settings
+  {
+    path: '/settings',
+    element: <SettingsIndex />,
+  },
 
-    // Chat
-    {
-        path: '/chat/:userid',
-        element: <Chat />,
-    },
+  // Chat
+  {
+    path: '/chat/:userid',
+    element: <Chat />,
+  },
 ]);
 
 export default router;

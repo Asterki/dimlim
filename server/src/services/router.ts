@@ -25,11 +25,16 @@ import settingsTfa from '../routes/settings/security/tfa';
 import generateTFA from '../routes/utils/generate-tfa';
 import verifyTFA from '../routes/utils/verify-tfa';
 
+// Profile routes
+import profileUpdate from '../routes/profile/update';
+import profilePicture from '../routes/profile/picture';
+
 class Router {
   public accountRouter: ExpressRouter = express.Router();
   public contactsRouter: ExpressRouter = express.Router();
   public settingsRouter: ExpressRouter = express.Router();
   public utilsRouter: ExpressRouter = express.Router();
+  public profileRouter: ExpressRouter = express.Router();
   private instance: Router | null = null;
 
   constructor() {}
@@ -65,10 +70,15 @@ class Router {
     this.utilsRouter.post('/verify-tfa', verifyTFA);
     this.utilsRouter.get('/generate-tfa', generateTFA);
 
+    // Profile routes
+    this.profileRouter.post('/update', profileUpdate);
+    this.profileRouter.post('/picture', profilePicture);
+
     server.use('/api/accounts', this.accountRouter);
     server.use('/api/contacts', this.contactsRouter);
     server.use('/api/settings', this.settingsRouter);
     server.use('/api/utils', this.utilsRouter);
+    server.use('/api/profile', this.profileRouter);
   };
 }
 

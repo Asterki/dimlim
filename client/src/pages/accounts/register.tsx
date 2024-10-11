@@ -8,6 +8,10 @@ import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../store';
 import { setUser } from '../../store/slices/page';
 
+// Icons
+import { HiOutlineMail, HiOutlineLockClosed, HiOutlineUserCircle, HiEye, HiEyeOff } from 'react-icons/hi';
+import { FaRocket } from 'react-icons/fa';
+
 import NavbarComponent from '../../components/navbar';
 import NotificationComponent from '../../components/notifications';
 
@@ -53,6 +57,10 @@ const AccountRegister = () => {
   const emailRef = React.useRef<HTMLInputElement>(null);
   const passwordRef = React.useRef<HTMLInputElement>(null);
   const repeatPasswordRef = React.useRef<HTMLInputElement>(null);
+
+  // Visibility status
+  const [passwordVisible, setPasswordVisible] = React.useState(false);
+  const [repeatPasswordVisible, setRepeatPasswordVisible] = React.useState(false);
 
   const register = () => {
     const username = usernameRef.current!.value;
@@ -139,7 +147,10 @@ const AccountRegister = () => {
           </div>
 
           <div className='my-4'>
-            <label className='font-bold'>Username</label>
+            <label className='font-bold'>
+              <HiOutlineUserCircle className='inline-block' />
+              Username
+            </label>
             <input
               type='text'
               ref={usernameRef}
@@ -149,7 +160,10 @@ const AccountRegister = () => {
           </div>
 
           <div className='my-4'>
-            <label className='font-bold'>Email</label>
+            <label className='font-bold'>
+              <HiOutlineMail className='inline-block' />
+              Email
+            </label>
             <input
               type='email'
               ref={emailRef}
@@ -158,24 +172,52 @@ const AccountRegister = () => {
             />
           </div>
 
-          <div className='my-4'>
-            <label className='font-bold'>Password</label>
-            <input
-              type='password'
-              ref={passwordRef}
-              placeholder='••••••••'
-              className='w-full p-2 dark:bg-gray-800 border-2 dark:border-gray-600 border-slate-200  outline-none rounded-md transition-all focus:!border-blue-400 hover:border-slate-300 dark:hover:border-gray-500'
-            />
+          <div className='my-4 relative'>
+            <label className='font-bold'>
+              <HiOutlineLockClosed className='inline-block' />
+              Password
+            </label>
+            <div className='relative'>
+              <input
+                type={passwordVisible ? 'text' : 'password'}
+                ref={passwordRef}
+                placeholder='••••••••'
+                className='w-full p-2 dark:bg-gray-800 border-2 dark:border-gray-600 border-slate-200  outline-none rounded-md transition-all focus:!border-blue-400 hover:border-slate-300 dark:hover:border-gray-500'
+              />
+
+              <button className='absolute right-4 top-1/2 -translate-y-1/2' type='button'
+                onClick={() => {
+                  setPasswordVisible(!passwordVisible);
+                }}
+                >
+                {passwordVisible ? <HiEye /> : <HiEyeOff />}
+              </button>
+            </div>
           </div>
 
-          <div className='my-4'>
-            <label className='font-bold'>Repeat Password</label>
-            <input
-              type='password'
-              ref={repeatPasswordRef}
-              placeholder='••••••••'
-              className='w-full p-2 dark:bg-gray-800 border-2 dark:border-gray-600 border-slate-200  outline-none rounded-md transition-all focus:!border-blue-400 hover:border-slate-300 dark:hover:border-gray-500'
-            />
+          <div className='my-4 relative'>
+            <label className='font-bold'>
+              <HiOutlineLockClosed className='inline-block' />
+              Repeat Password
+            </label>
+            <div className='relative'>
+              <input
+                type={repeatPasswordVisible ? 'text' : 'password'}
+                ref={repeatPasswordRef}
+                placeholder='••••••••'
+                className='w-full p-2 dark:bg-gray-800 border-2 dark:border-gray-600 border-slate-200  outline-none rounded-md transition-all focus:!border-blue-400 hover:border-slate-300 dark:hover:border-gray-500'
+              />
+
+              <button
+                className='absolute right-4 top-1/2 -translate-y-1/2'
+                type='button'
+                onClick={() => {
+                  setRepeatPasswordVisible(!repeatPasswordVisible);
+                }}
+              >
+                {repeatPasswordVisible ? <HiEye /> : <HiEyeOff />}
+              </button>
+            </div>
           </div>
 
           <div className='mt-8'>
@@ -184,7 +226,7 @@ const AccountRegister = () => {
               type='button'
               onClick={register}
             >
-              Register
+              Register  <FaRocket className='inline-block' />
             </button>
           </div>
 

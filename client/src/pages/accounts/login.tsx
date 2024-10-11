@@ -151,16 +151,8 @@ const AccountLogin = () => {
         </Dialog.Portal>
       </Dialog.Root>
 
-      <div className='absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 dark:bg-gray-700 bg-white/80 rounded-md shadow-md p-4 w-11/12 md:w-4/12'>
-        <motion.form
-          variants={{
-            hidden: { opacity: 0, y: -50 },
-            showing: { opacity: 1, y: 0 },
-          }}
-          initial='hidden'
-          animate='showing'
-          transition={{ duration: 0.5 }}
-        >
+      <motion.div className='absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 dark:bg-gray-700 bg-white/80 rounded-md shadow-md p-4 w-11/12 md:w-4/12'>
+        <motion.form>
           <div className='flex flex-col items-center gap-2'>
             <img src='/assets/images/logo-no-background.png' className='w-8' />
             <h1 className='text-xl font-semibold mb-2'>Login to DIMLIM</h1>
@@ -203,7 +195,7 @@ const AccountLogin = () => {
             </Link>
           </div>
         </motion.form>
-      </div>
+      </motion.div>
     </div>
   );
 };

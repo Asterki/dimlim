@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import { motion } from 'framer-motion';
 
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../store';
@@ -89,23 +90,33 @@ const AccountLogout = () => {
             <NavbarComponent user={user} />
 
             <div className='absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 dark:bg-gray-700 bg-slate-100 shadow-md rounded-md p-4 w-11/12 md:w-4/12'>
-              <h1 className='text-2xl font-semibold mb-2'>Are you sure you want to log out?</h1>
-
-              <p>You will be logged out of your account and will have to log back in to access your account.</p>
-
-              <button
-                onClick={logout}
-                className='w-full bg-red-400 text-white rounded-md p-2 mt-4 hover:brightness-125 transition-all'
+              <motion.div
+                variants={{
+                  hidden: { opacity: 0, y: -50 },
+                  showing: { opacity: 1, y: 0 },
+                }}
+                initial='hidden'
+                animate='showing'
+                transition={{ duration: 0.5 }}
               >
-                Logout
-              </button>
+                <h1 className='text-2xl font-semibold mb-2'>Are you sure you want to log out?</h1>
 
-              <Link
-                to='/home'
-                className='text-center w-full block dark:bg-gray-500 bg-slate-500 text-white rounded-md p-2 mt-4 hover:brightness-125 transition-all'
-              >
-                Cancel
-              </Link>
+                <p>You will be logged out of your account and will have to log back in to access your account.</p>
+
+                <button
+                  onClick={logout}
+                  className='w-full bg-red-400 text-white rounded-md p-2 mt-4 hover:brightness-125 transition-all'
+                >
+                  Logout
+                </button>
+
+                <Link
+                  to='/home'
+                  className='text-center w-full block dark:bg-gray-500 bg-slate-500 text-white rounded-md p-2 mt-4 hover:brightness-125 transition-all'
+                >
+                  Cancel
+                </Link>
+              </motion.div>
             </div>
           </div>
         )}

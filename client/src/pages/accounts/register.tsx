@@ -2,6 +2,7 @@ import * as React from 'react';
 import { Link, redirect } from 'react-router-dom';
 import axios from 'axios';
 import validator from 'validator';
+import { motion } from 'framer-motion';
 
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../store';
@@ -123,14 +124,22 @@ const AccountRegister = () => {
       />
 
       <div className='absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 dark:bg-gray-700 bg-slate-100 rounded-md p-4 w-11/12 md:w-4/12 shadow-md'>
-        <form>
+        <motion.form
+          variants={{
+            hidden: { opacity: 0, y: -50 },
+            showing: { opacity: 1, y: 0 },
+          }}
+          initial='hidden'
+          animate='showing'
+          transition={{ duration: 0.5 }}
+        >
           <div className='flex flex-col items-center'>
             <img src='/assets/images/logo-no-background.png' className='w-8' />
             <h1 className='text-xl font-semibold mb-2'>Register to DIMLIM</h1>
           </div>
 
           <div className='my-4'>
-            <label>Username</label>
+            <label className='font-bold'>Username</label>
             <input
               type='text'
               ref={usernameRef}
@@ -140,7 +149,7 @@ const AccountRegister = () => {
           </div>
 
           <div className='my-4'>
-            <label>Email</label>
+            <label className='font-bold'>Email</label>
             <input
               type='email'
               ref={emailRef}
@@ -150,7 +159,7 @@ const AccountRegister = () => {
           </div>
 
           <div className='my-4'>
-            <label>Password</label>
+            <label className='font-bold'>Password</label>
             <input
               type='password'
               ref={passwordRef}
@@ -160,7 +169,7 @@ const AccountRegister = () => {
           </div>
 
           <div className='my-4'>
-            <label>Repeat Password</label>
+            <label className='font-bold'>Repeat Password</label>
             <input
               type='password'
               ref={repeatPasswordRef}
@@ -185,7 +194,7 @@ const AccountRegister = () => {
               Login
             </Link>
           </div>
-        </form>
+        </motion.form>
       </div>
     </div>
   );

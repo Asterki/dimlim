@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import axios, { AxiosResponse } from 'axios';
+import { motion } from 'framer-motion';
 
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../store';
@@ -151,14 +152,22 @@ const AccountLogin = () => {
       </Dialog.Root>
 
       <div className='absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 dark:bg-gray-700 bg-white/80 rounded-md shadow-md p-4 w-11/12 md:w-4/12'>
-        <form>
+        <motion.form
+          variants={{
+            hidden: { opacity: 0, y: -50 },
+            showing: { opacity: 1, y: 0 },
+          }}
+          initial='hidden'
+          animate='showing'
+          transition={{ duration: 0.5 }}
+        >
           <div className='flex flex-col items-center gap-2'>
             <img src='/assets/images/logo-no-background.png' className='w-8' />
             <h1 className='text-xl font-semibold mb-2'>Login to DIMLIM</h1>
           </div>
 
           <div className='my-4'>
-            <label>Email</label>
+            <label className='font-bold'>Email</label>
             <input
               type='email'
               placeholder='email@example.com'
@@ -168,7 +177,7 @@ const AccountLogin = () => {
           </div>
 
           <div className='my-4'>
-            <label>Password</label>
+            <label className='font-bold'>Password</label>
             <input
               type='password'
               placeholder='••••••••'
@@ -193,7 +202,7 @@ const AccountLogin = () => {
               Register
             </Link>
           </div>
-        </form>
+        </motion.form>
       </div>
     </div>
   );

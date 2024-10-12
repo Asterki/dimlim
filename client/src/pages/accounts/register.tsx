@@ -10,7 +10,7 @@ import { setUser } from '../../store/slices/page';
 
 // Icons
 import { HiOutlineMail, HiOutlineLockClosed, HiOutlineUserCircle, HiEye, HiEyeOff } from 'react-icons/hi';
-import { FaRocket } from 'react-icons/fa';
+import { FaSpinner } from 'react-icons/fa';
 
 import NavbarComponent from '../../components/navbar';
 import NotificationComponent from '../../components/notifications';
@@ -61,12 +61,15 @@ const AccountRegister = () => {
   // Visibility status
   const [passwordVisible, setPasswordVisible] = React.useState(false);
   const [repeatPasswordVisible, setRepeatPasswordVisible] = React.useState(false);
+  const [registerLoading, setRegisterLoading] = React.useState(false);
 
   const register = () => {
     const username = usernameRef.current!.value;
     const email = emailRef.current!.value;
     const password = passwordRef.current!.value;
     const repeatPassword = repeatPasswordRef.current!.value;
+
+    setRegisterLoading(true);
 
     if (username.length < 3 || username.length > 20)
       return showNotification('Failed to register', 'Username must be between 3 and 20 characters', 'error');
@@ -102,6 +105,7 @@ const AccountRegister = () => {
         showNotification('Failed to register', 'An error occurred', 'error');
       })
       .finally(() => {
+        setRegisterLoading(false);
         return usernameRef.current!.focus();
       });
   };
@@ -185,11 +189,13 @@ const AccountRegister = () => {
                 className='w-full p-2 dark:bg-gray-800 border-2 dark:border-gray-600 border-slate-200  outline-none rounded-md transition-all focus:!border-blue-400 hover:border-slate-300 dark:hover:border-gray-500'
               />
 
-              <button className='absolute right-4 top-1/2 -translate-y-1/2' type='button'
+              <button
+                className='absolute right-4 top-1/2 -translate-y-1/2'
+                type='button'
                 onClick={() => {
                   setPasswordVisible(!passwordVisible);
                 }}
-                >
+              >
                 {passwordVisible ? <HiEye /> : <HiEyeOff />}
               </button>
             </div>
@@ -226,7 +232,8 @@ const AccountRegister = () => {
               type='button'
               onClick={register}
             >
-              Register  <FaRocket className='inline-block' />
+              {registerLoading && <FaSpinner className='animate-spin inline-block' />}
+              Register
             </button>
           </div>
 

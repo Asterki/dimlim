@@ -3,8 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 
 import { User } from '../../../shared/types/models';
 
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faChevronCircleDown } from '@fortawesome/free-solid-svg-icons';
+import { FaCog, FaUser, FaDoorOpen, FaChevronCircleDown, FaChevronCircleUp } from 'react-icons/fa';
 
 import * as DropdownMenu from '@radix-ui/react-dropdown-menu';
 
@@ -45,20 +44,15 @@ const NavbarComponent: React.FC<ComponentProps> = (props) => {
                     <div>
                       <img
                         width={30}
-                        src='https://www.asterki.com/assets/images/icon.png'
+                        src='https://www.asterki.tech/assets/images/icon.png'
                         alt='wjaoi'
                         className='mr-2 rounded-full'
                       />
                     </div>
                     <div className='dark:text-white'>{props.user.profile.username}</div>
                   </div>
-                  <div>
-                    <FontAwesomeIcon
-                      className={`${
-                        menuOpen ? 'transform rotate-180 px-2' : ''
-                      } transition-all dark:text-white/50 text-slate-400/50 px-2`}
-                      icon={faChevronCircleDown}
-                    />
+                  <div  className={`dark:text-white/40 text-black/30 ${menuOpen ? 'rotate-180' : ''} transition-all `}>
+                    <FaChevronCircleDown />
                   </div>
                 </DropdownMenu.Trigger>
 
@@ -68,14 +62,23 @@ const NavbarComponent: React.FC<ComponentProps> = (props) => {
                     className='dark:text-white text-neutral-700 dark:bg-gray-700 bg-slate-100 transition-all rounded-md border-2 dark:border-white/20 border-slate-400 w-full'
                   >
                     <DropdownMenu.Item className='p-2 transition-all dark:hover:bg-white/20 hover:bg-slate-200 cursor-pointer w-full'>
-                      <Link to='/settings'>Settings</Link>
+                      <Link to='/settings' className='flex gap-2 items-center'>
+                        <FaCog />
+                        Settings
+                      </Link>
                     </DropdownMenu.Item>
                     <DropdownMenu.Item className='p-2 transition-all dark:hover:bg-white/20 hover:bg-slate-200 cursor-pointer w-full'>
-                      <Link to='/contacts'>Contacts</Link>
+                      <Link to='/contacts' className='flex gap-2 items-center'>
+                        <FaUser />
+                        Contacts
+                      </Link>
                     </DropdownMenu.Item>
 
                     <DropdownMenu.Item className='p-2 transition-all dark:hover:bg-white/20 hover:bg-slate-200 cursor-pointer w-full'>
-                      <Link to='/logout'>Logout</Link>
+                      <Link to='/logout' className='flex gap-2 items-center hover:text-red-400'>
+                        <FaDoorOpen />
+                        Logout
+                      </Link>
                     </DropdownMenu.Item>
                   </DropdownMenu.Content>
                 </DropdownMenu.Portal>

@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Link, redirect } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import validator from 'validator';
 import { motion } from 'framer-motion';
@@ -21,6 +21,7 @@ import { RegisterResponseData } from '../../../../shared/types/api/accounts';
 const AccountRegister = () => {
   const user = useSelector((state: RootState) => state.page.currentUser);
   const dispatch = useDispatch();
+  const redirect = useNavigate();
 
   // Notification state
   const [notification, setNotification] = React.useState<{

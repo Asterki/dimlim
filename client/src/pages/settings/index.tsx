@@ -7,7 +7,6 @@ import QRCode from 'qrcode';
 
 import * as Tabs from '@radix-ui/react-tabs';
 import * as Dialog from '@radix-ui/react-dialog';
-import * as Switch from '@radix-ui/react-switch';
 
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../store';
@@ -21,6 +20,7 @@ import { checkLoggedIn } from '../../lib/auth';
 import SettingsGeneralSection from './general';
 import SettingsProfileSection from './profile';
 import SettingsNotificationSection from './notifications';
+import SettingsPrivacySection from './privacy';
 
 const SettingsIndex = () => {
   const user = useSelector((state: RootState) => state.page.currentUser);
@@ -87,8 +87,6 @@ const SettingsIndex = () => {
     showNotifications: true,
     playSound: true,
   });
-
-  console.log(notificationsSettings)
 
   const [privacySettings, setPrivacySettings] = React.useState({
     showOnlineStatus: true,
@@ -308,6 +306,8 @@ const SettingsIndex = () => {
         }),
       );
 
+      console.log(privacySettings);
+
       (async () => {
         const response = await axios.post(
           `${import.meta.env.VITE_SERVER_HOST}/api/settings/privacy`,
@@ -442,51 +442,7 @@ const SettingsIndex = () => {
                     className='w-full rounded-br-md rounded-bl-md bg-slate-100 p-2 text-center shadow-md dark:bg-gray-700'
                     value='tab4'
                   >
-                    <div className='my-2 flex items-center gap-2'>
-                      <Switch.Root
-                        defaultChecked={privacySettings.showOnlineStatus}
-                        onCheckedChange={(val) =>
-                          setPrivacySettings({
-                            ...privacySettings,
-                            showOnlineStatus: val,
-                          })
-                        }
-                        className='w-[42px] h-[25px] rounded-full relative dark:bg-gray-800  data-[state=checked]:bg-blue-400 transition-all outline-none cursor-default'
-                      >
-                        <Switch.Thumb className='block w-[21px] h-[21px] bg-white rounded-full transition-transform duration-100 translate-x-0.5 will-change-transform data-[state=checked]:translate-x-[19px]' />
-                      </Switch.Root>
-                      <h1>Show online status</h1>
-                    </div>
-                    <div className='my-2 flex items-center gap-2'>
-                      <Switch.Root
-                        defaultChecked={privacySettings.showLastSeen}
-                        onCheckedChange={(val) =>
-                          setPrivacySettings({
-                            ...privacySettings,
-                            showLastSeen: val,
-                          })
-                        }
-                        className='w-[42px] h-[25px] rounded-full relative dark:bg-gray-800  data-[state=checked]:bg-blue-400 transition-all outline-none cursor-default'
-                      >
-                        <Switch.Thumb className='block w-[21px] h-[21px] bg-white rounded-full transition-transform duration-100 translate-x-0.5 will-change-transform data-[state=checked]:translate-x-[19px]' />
-                      </Switch.Root>
-                      <h1>Show last seen</h1>
-                    </div>
-                    <div className='my-2 flex items-center gap-2'>
-                      <Switch.Root
-                        defaultChecked={privacySettings.showReadReceipts}
-                        onCheckedChange={(val) =>
-                          setPrivacySettings({
-                            ...privacySettings,
-                            showReadReceipts: val,
-                          })
-                        }
-                        className='w-[42px] h-[25px] rounded-full relative dark:bg-gray-800  data-[state=checked]:bg-blue-400 transition-all outline-none cursor-default'
-                      >
-                        <Switch.Thumb className='block w-[21px] h-[21px] bg-white rounded-full transition-transform duration-100 translate-x-0.5 will-change-transform data-[state=checked]:translate-x-[19px]' />
-                      </Switch.Root>
-                      <h1>Show read receipts</h1>
-                    </div>
+                    <SettingsPrivacySection privacySettings={privacySettings} setPrivacySettings={setPrivacySettings} />
                   </Tabs.Content>
                   <Tabs.Content
                     className='w-full rounded-br-md rounded-bl-md bg-slate-100 p-2 text-center shadow-md dark:bg-gray-700'

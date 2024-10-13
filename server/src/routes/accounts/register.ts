@@ -73,8 +73,9 @@ const handler = async (req: Request, res: Response<ResponseData>, next: NextFunc
       pubKey: Buffer.from(''),
       preferences: {
         privacy: {
-          showEmail: true,
-          showUsername: true,
+          showOnlineStatus: true,
+          showLastSeen: true,
+          showReadReceipts: true,
         },
         security: {
           password: hashedPassword,

@@ -13,6 +13,9 @@ import NavbarComponent from '../../components/navbar';
 import NotificationComponent from '../../components/notifications';
 import { checkLoggedIn } from '../../lib/auth';
 
+// Icons
+import { AiOutlineSetting, AiOutlineUser, AiOutlineBell, AiOutlineLock, AiOutlineSafety } from 'react-icons/ai';
+
 // Sections
 import SettingsGeneralSection from './general';
 import SettingsProfileSection from './profile';
@@ -214,53 +217,58 @@ const SettingsIndex = () => {
                     aria-label='Manage your account'
                   >
                     <Tabs.Trigger
-                      className={`p-2 rounded-tl-md transition-all w-3/12 md:w-1/4 border-r-2 dark:border-gray-800 ${
+                      className={`flex items-center gap-2 p-2 rounded-tl-md transition-all w-3/12 md:w-1/4 border-r-2 dark:border-gray-800 ${
                         tab == 'tab1'
                           ? 'bg-blue-400 shadow-2xl z-20 text-white'
                           : 'dark:bg-gray-700 bg-slate-100 hover:brightness-125'
                       }`}
                       value='tab1'
                     >
+                      <AiOutlineSetting className='text-xl' />
                       General
                     </Tabs.Trigger>
                     <Tabs.Trigger
-                      className={`p-2 transition-all w-3/12 md:w-1/4 border-r-2 dark:border-gray-800 ${
+                      className={`flex items-center gap-2 p-2 transition-all w-3/12 md:w-1/4 border-r-2 dark:border-gray-800 ${
                         tab == 'tab2'
                           ? 'bg-blue-400 shadow-2xl z-20 text-white'
                           : 'dark:bg-gray-700 bg-slate-100 hover:brightness-125'
                       }`}
                       value='tab2'
                     >
+                      <AiOutlineUser className='text-xl' />
                       Profile
                     </Tabs.Trigger>
                     <Tabs.Trigger
-                      className={`p-2 transition-all w-3/12 md:w-1/4 border-r-2 dark:border-gray-800 ${
+                      className={`flex items-center gap-2 p-2 transition-all w-3/12 md:w-1/4 border-r-2 dark:border-gray-800 ${
                         tab == 'tab3'
                           ? 'bg-blue-400 shadow-2xl z-20 text-white'
                           : 'dark:bg-gray-700 bg-slate-100 hover:brightness-125'
                       }`}
                       value='tab3'
                     >
+                      <AiOutlineBell className='text-xl' />
                       Notifications
                     </Tabs.Trigger>
                     <Tabs.Trigger
-                      className={`p-2 transition-all w-3/12 md:w-1/4 ${
+                      className={`flex items-center gap-2 p-2 transition-all w-3/12 md:w-1/4 ${
                         tab == 'tab4'
                           ? 'bg-blue-400 shadow-2xl z-20 text-white'
                           : 'dark:bg-gray-700 bg-slate-100 hover:brightness-125'
                       }`}
                       value='tab4'
                     >
+                      <AiOutlineLock className='text-xl' />
                       Privacy
                     </Tabs.Trigger>
                     <Tabs.Trigger
-                      className={`p-2 transition-all w-3/12 rounded-tr-md  md:w-1/4 border-l-2 dark:border-gray-800 ${
+                      className={`flex items-center gap-2 p-2 transition-all w-3/12 rounded-tr-md  md:w-1/4 border-l-2 dark:border-gray-800 ${
                         tab == 'tab5'
                           ? 'bg-blue-400 shadow-2xl z-20 text-white'
                           : 'dark:bg-gray-700 bg-slate-100 hover:brightness-125'
                       }`}
                       value='tab5'
                     >
+                      <AiOutlineSafety className='text-xl' />
                       Security
                     </Tabs.Trigger>
                   </Tabs.List>
@@ -299,7 +307,11 @@ const SettingsIndex = () => {
                     className='w-full rounded-br-md rounded-bl-md bg-slate-100 p-2 text-center shadow-md dark:bg-gray-700'
                     value='tab5'
                   >
-                    <SettingsSecuritySection TFAActive={TFAActive} setTFAActive={setTFAActive} showNotification={showNotification} />
+                    <SettingsSecuritySection
+                      TFAActive={TFAActive}
+                      setTFAActive={setTFAActive}
+                      showNotification={showNotification}
+                    />
                   </Tabs.Content>
                 </Tabs.Root>
               </div>

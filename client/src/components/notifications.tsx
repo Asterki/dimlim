@@ -1,7 +1,6 @@
 import React from 'react';
 
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCheckCircle, faInfoCircle, faWarning, faXmarkCircle } from '@fortawesome/free-solid-svg-icons';
+import { AiFillCheckCircle, AiFillInfoCircle, AiFillWarning, AiFillCloseCircle } from 'react-icons/ai';
 
 interface ComponentProps {
   state: 'showing' | 'hidden';
@@ -11,11 +10,11 @@ interface ComponentProps {
 }
 
 const NotificationComponent: React.FC<ComponentProps> = (props) => {
-  let icon = faWarning;
+  let IconComponent = AiFillWarning;
 
-  if (props.type === 'error') icon = faXmarkCircle;
-  if (props.type === 'success') icon = faCheckCircle;
-  if (props.type === 'info') icon = faInfoCircle;
+  if (props.type === 'error') IconComponent = AiFillCloseCircle;
+  if (props.type === 'success') IconComponent = AiFillCheckCircle;
+  if (props.type === 'info') IconComponent = AiFillInfoCircle;
 
   return (
     <div
@@ -23,7 +22,7 @@ const NotificationComponent: React.FC<ComponentProps> = (props) => {
       className='z-30 bg-blue-400 transition-all data-[state=hidden]:opacity-0 text-white rounded-md absolute bottom-4 left-4 shadow-md p-4 flex items-center gap-4'
     >
       <div>
-        <FontAwesomeIcon icon={icon} className='text-3xl' />
+        <IconComponent className='text-3xl' />
       </div>
       <div className='flex items-start flex-col'>
         <h1 className='text-xl font-bold'>{props.title}</h1>

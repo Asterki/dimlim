@@ -3,7 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 
 import { User } from '../../../shared/types/models';
 
-import { FaCog, FaUser, FaDoorOpen, FaChevronCircleDown, FaChevronCircleUp } from 'react-icons/fa';
+import { FaCog, FaUser, FaDoorOpen, FaChevronCircleDown } from 'react-icons/fa';
 
 import * as DropdownMenu from '@radix-ui/react-dropdown-menu';
 

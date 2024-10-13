@@ -6,7 +6,6 @@ import { useNavigate } from 'react-router-dom';
 import QRCode from 'qrcode';
 
 import * as Tabs from '@radix-ui/react-tabs';
-import * as Select from '@radix-ui/react-select';
 import * as Dialog from '@radix-ui/react-dialog';
 import * as Switch from '@radix-ui/react-switch';
 
@@ -17,10 +16,11 @@ import { setUser } from '../../store/slices/page';
 import NavbarComponent from '../../components/navbar';
 import NotificationComponent from '../../components/notifications';
 import { checkLoggedIn } from '../../lib/auth';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faChevronDown, faFloppyDisk, faPencil } from '@fortawesome/free-solid-svg-icons';
+
+// Sections
 import SettingsGeneralSection from './general';
 import SettingsProfileSection from './profile';
+import SettingsNotificationSection from './notifications';
 
 const SettingsIndex = () => {
   const user = useSelector((state: RootState) => state.page.currentUser);
@@ -87,6 +87,8 @@ const SettingsIndex = () => {
     showNotifications: true,
     playSound: true,
   });
+
+  console.log(notificationsSettings)
 
   const [privacySettings, setPrivacySettings] = React.useState({
     showOnlineStatus: true,
@@ -431,36 +433,10 @@ const SettingsIndex = () => {
                     className='w-full rounded-br-md rounded-bl-md bg-slate-100 p-2 text-center shadow-md dark:bg-gray-700'
                     value='tab3'
                   >
-                    <div className='my-2 flex items-center gap-2'>
-                      <Switch.Root
-                        defaultChecked={notificationsSettings.showNotifications}
-                        onCheckedChange={(val) =>
-                          setNotificationsSettings({
-                            ...notificationsSettings,
-                            showNotifications: val,
-                          })
-                        }
-                        className='w-[42px] h-[25px] rounded-full relative dark:bg-gray-800  data-[state=checked]:bg-blue-400 transition-all outline-none cursor-default'
-                      >
-                        <Switch.Thumb className='block w-[21px] h-[21px] bg-white rounded-full transition-transform duration-100 translate-x-0.5 will-change-transform data-[state=checked]:translate-x-[19px]' />
-                      </Switch.Root>
-                      <h1>Show notifications</h1>
-                    </div>
-                    <div className='my-2 flex items-center gap-2'>
-                      <Switch.Root
-                        defaultChecked={notificationsSettings.showNotifications}
-                        onCheckedChange={(val) =>
-                          setNotificationsSettings({
-                            ...notificationsSettings,
-                            playSound: val,
-                          })
-                        }
-                        className='w-[42px] h-[25px] rounded-full relative dark:bg-gray-800  data-[state=checked]:bg-blue-400 transition-all outline-none cursor-default'
-                      >
-                        <Switch.Thumb className='block w-[21px] h-[21px] bg-white rounded-full transition-transform duration-100 translate-x-0.5 will-change-transform data-[state=checked]:translate-x-[19px]' />
-                      </Switch.Root>
-                      <h1>Play notification sound</h1>
-                    </div>
+                    <SettingsNotificationSection
+                      notificationsSettings={notificationsSettings}
+                      setNotificationsSettings={setNotificationsSettings}
+                    />
                   </Tabs.Content>
                   <Tabs.Content
                     className='w-full rounded-br-md rounded-bl-md bg-slate-100 p-2 text-center shadow-md dark:bg-gray-700'

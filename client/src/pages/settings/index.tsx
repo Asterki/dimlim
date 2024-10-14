@@ -95,6 +95,24 @@ const SettingsIndex = () => {
     }, 5000);
   };
 
+  const handleResponseCode = (responseCode: number) => {
+    switch (responseCode) {
+      case 200:
+        showNotification('Settings updated', 'Your settings have been updated', 'success');
+        break;
+      case 400:
+        showNotification('Invalid parameters', 'The parameters you provided are invalid', 'warning');
+        break;
+      case 500:
+        showNotification('Internal error', 'An internal error occurred while updating your settings', 'error');
+        break;
+      case 401:
+        showNotification('Unauthenticated', 'You are not authenticated to perform this action', 'error');
+        redirect('/login');
+        break;
+    }
+  };
+
   // Update the user preferences when the settings change
   React.useEffect(() => {
     if (user && userLoaded) {
@@ -109,15 +127,22 @@ const SettingsIndex = () => {
       );
 
       (async () => {
-        const response = await axios.post(
-          `${import.meta.env.VITE_SERVER_HOST}/api/settings/general`,
-          {
-            ...generalSettings,
-          },
-          { withCredentials: true },
-        );
-
-        console.log(response);
+        try {
+          const response = await axios.post(
+            `${import.meta.env.VITE_SERVER_HOST}/api/settings/general`,
+            {
+              ...generalSettings,
+            },
+            { withCredentials: true },
+          );
+          return handleResponseCode(response.status);
+        } catch (error) {
+          if (axios.isAxiosError(error)) {
+            return handleResponseCode(error.response!.status);
+          } else {
+            return handleResponseCode(500);
+          }
+        }
       })();
     }
   }, [generalSettings]);
@@ -135,15 +160,23 @@ const SettingsIndex = () => {
       );
 
       (async () => {
-        const response = await axios.post(
-          `${import.meta.env.VITE_SERVER_HOST}/api/settings/notifications`,
-          {
-            ...notificationsSettings,
-          },
-          { withCredentials: true },
-        );
+        try {
+          const response = await axios.post(
+            `${import.meta.env.VITE_SERVER_HOST}/api/settings/notifications`,
+            {
+              ...notificationsSettings,
+            },
+            { withCredentials: true },
+          );
 
-        console.log(response);
+          return handleResponseCode(response.status);
+        } catch (error) {
+          if (axios.isAxiosError(error)) {
+            return handleResponseCode(error.response!.status);
+          } else {
+            return handleResponseCode(500);
+          }
+        }
       })();
     }
   }, [notificationsSettings]);
@@ -160,18 +193,24 @@ const SettingsIndex = () => {
         }),
       );
 
-      console.log(privacySettings);
-
       (async () => {
-        const response = await axios.post(
-          `${import.meta.env.VITE_SERVER_HOST}/api/settings/privacy`,
-          {
-            ...privacySettings,
-          },
-          { withCredentials: true },
-        );
+        try {
+          const response = await axios.post(
+            `${import.meta.env.VITE_SERVER_HOST}/api/settings/privacy`,
+            {
+              ...privacySettings,
+            },
+            { withCredentials: true },
+          );
 
-        console.log(response);
+          return handleResponseCode(response.status);
+        } catch (error) {
+          if (axios.isAxiosError(error)) {
+            return handleResponseCode(error.response!.status);
+          } else {
+            return handleResponseCode(500);
+          }
+        }
       })();
     }
   }, [privacySettings]);

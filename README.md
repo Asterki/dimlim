@@ -1,6 +1,6 @@
 # DIMLIM
 
-DIMLIM is an end-to-end encryption chat app currently in progress. With DIMLIM, you can securely chat with your friends and family without worrying about your conversations being intercepted by third parties.
+DIMLIM is an end-to-end encryption chat app currently in progress. With DIMLIM, you can securely chat with your friends and family without worrying about your conversations being intercepted by third parties or even the same server.
 
 ## Features
 

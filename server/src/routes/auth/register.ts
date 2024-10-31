@@ -28,6 +28,7 @@ const handler = async (req: Request, res: Response<ResponseData>, next: NextFunc
       password: z
         .string()
         .min(8)
+        .max(100)
         .refine((pass) => {
           return validator.isStrongPassword(pass);
         }),

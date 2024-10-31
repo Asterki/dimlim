@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { z } from 'zod';
 import { Link, useNavigate } from 'react-router-dom';
 
 import NavbarComponent from '../../components/navbar';
@@ -31,6 +32,33 @@ const AccountLogin = () => {
   const [loginLoading, setLoginLoading] = React.useState(false);
 
   const loginButtonPressed = async (emailOrUsername: string, password: string, tfaCode?: string) => {
+    // We avoid sending a request if the data isn't even in the acceptable schema
+    const schema = z.object({
+      emailOrUsername: z
+        .string()
+        .min(3, {
+          message: 'Email or username must be at least 3 characters long',
+        })
+        .max(100, {
+          message: 'Email or username must be at most 100 characters long',
+        }),
+      password: z
+        .string()
+        .min(8, {
+          message: 'Password must be at least 8 characters long',
+        })
+        .max(100, {
+          message: 'Password must be at most 100 characters long',
+        }),
+      tfaCode: z.string().optional(),
+    });
+
+    const parsedData = schema.safeParse({ emailOrUsername, password, tfaCode });
+    if (parsedData.success === false) {
+      showNotification('Failed to login', parsedData.error.errors[0].message, 'error');
+      return;
+    }
+
     setLoginLoading(true);
     const result = await login(emailOrUsername, password, tfaCode);
 

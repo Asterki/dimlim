@@ -15,44 +15,17 @@ import { FaSpinner } from 'react-icons/fa';
 import NavbarComponent from '../../components/navbar';
 import NotificationComponent from '../../components/notifications';
 
+import useNotification from '../../hooks/useNotification';
+
 import { checkLoggedIn } from '../../lib/auth';
 import { RegisterResponseData } from '../../../../shared/types/api/auth';
 
 const AccountRegister = () => {
+  const { notification, showNotification } = useNotification();
+
   const user = useSelector((state: RootState) => state.page.currentUser);
   const dispatch = useDispatch();
   const redirect = useNavigate();
-
-  // Notification state
-  const [notification, setNotification] = React.useState<{
-    state: 'showing' | 'hidden';
-    title: string;
-    content: string;
-    type: 'error' | 'success' | 'info' | 'warning';
-  }>({
-    state: 'hidden',
-    title: '',
-    content: '',
-    type: 'info',
-  });
-
-  const showNotification = (title: string, content: string, type: 'warning' | 'info' | 'success' | 'error') => {
-    setNotification({
-      state: 'showing',
-      title: title,
-      content: content,
-      type: type,
-    });
-
-    setTimeout(() => {
-      setNotification({
-        state: 'hidden',
-        title: '',
-        content: '',
-        type: 'info',
-      });
-    }, 5000);
-  };
 
   const usernameRef = React.useRef<HTMLInputElement>(null);
   const emailRef = React.useRef<HTMLInputElement>(null);

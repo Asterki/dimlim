@@ -1,6 +1,5 @@
 import * as React from 'react';
 import { z } from 'zod';
-import { Link, useNavigate } from 'react-router-dom';
 
 import NotificationComponent from './NotificationComponent';
 
@@ -20,7 +19,6 @@ const messages = {
 const PopUpLogin = () => {
   const { user, authStatus, login } = useAuth();
   const { notification, showNotification } = useNotification();
-  const redirect = useNavigate();
 
   const [emailOrUsername, setEmailOrUsername] = React.useState('');
   const [password, setPassword] = React.useState('');
@@ -32,25 +30,27 @@ const PopUpLogin = () => {
 
   const loginButtonPressed = async (emailOrUsername: string, password: string, tfaCode?: string) => {
     // We avoid sending a request if the data isn't even in the acceptable schema
-    const parsedData = z.object({
-      emailOrUsername: z
-        .string()
-        .min(3, {
-          message: 'Email or username must be at least 3 characters long',
-        })
-        .max(100, {
-          message: 'Email or username must be at most 100 characters long',
-        }),
-      password: z
-        .string()
-        .min(8, {
-          message: 'Password must be at least 8 characters long',
-        })
-        .max(100, {
-          message: 'Password must be at most 100 characters long',
-        }),
-      tfaCode: z.string().optional(),
-    }).safeParse({ emailOrUsername, password, tfaCode });
+    const parsedData = z
+      .object({
+        emailOrUsername: z
+          .string()
+          .min(3, {
+            message: 'Email or username must be at least 3 characters long',
+          })
+          .max(100, {
+            message: 'Email or username must be at most 100 characters long',
+          }),
+        password: z
+          .string()
+          .min(8, {
+            message: 'Password must be at least 8 characters long',
+          })
+          .max(100, {
+            message: 'Password must be at most 100 characters long',
+          }),
+        tfaCode: z.string().optional(),
+      })
+      .safeParse({ emailOrUsername, password, tfaCode });
 
     if (parsedData.success === false) {
       showNotification('Failed to login', parsedData.error.errors[0].message, 'error');
@@ -88,7 +88,6 @@ const PopUpLogin = () => {
 
   return (
     <div className='z-20 absolute top-0 left-0 w-full backdrop-blur-md min-h-screen dark:text-white text-neutral-700'>
-
       <NotificationComponent
         content={notification.content}
         title={notification.title}
@@ -106,7 +105,7 @@ const PopUpLogin = () => {
 
       <div className='absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 dark:bg-gray-700 bg-white/80 rounded-md shadow-md p-4 w-11/12 md:w-4/12'>
         <p className='mb-4 text-center'>
-            The page you're trying to access requires you to be logged in. Please login to continue.
+          The page you're trying to access requires you to be logged in. Please login to continue.
         </p>
         <LoginForm loginLoading={loginLoading} onSubmit={loginButtonPressed} authStatus={authStatus} user={user} />
       </div>

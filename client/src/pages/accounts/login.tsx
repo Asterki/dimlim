@@ -2,8 +2,7 @@ import * as React from 'react';
 import { z } from 'zod';
 import { Link, useNavigate } from 'react-router-dom';
 
-import NavbarComponent from '../../components/NavbarComponent';
-import NotificationComponent from '../../components/NotificationComponent';
+import PageLayout from '../../layouts/PageLayout';
 
 import { useAuth } from '../../features/auth';
 import useNotification from '../../hooks/useNotification';
@@ -33,25 +32,27 @@ const AccountLogin = () => {
 
   const loginButtonPressed = async (emailOrUsername: string, password: string, tfaCode?: string) => {
     // We avoid sending a request if the data isn't even in the acceptable schema
-    const parsedData = z.object({
-      emailOrUsername: z
-        .string()
-        .min(3, {
-          message: 'Email or username must be at least 3 characters long',
-        })
-        .max(100, {
-          message: 'Email or username must be at most 100 characters long',
-        }),
-      password: z
-        .string()
-        .min(8, {
-          message: 'Password must be at least 8 characters long',
-        })
-        .max(100, {
-          message: 'Password must be at most 100 characters long',
-        }),
-      tfaCode: z.string().optional(),
-    }).safeParse({ emailOrUsername, password, tfaCode });
+    const parsedData = z
+      .object({
+        emailOrUsername: z
+          .string()
+          .min(3, {
+            message: 'Email or username must be at least 3 characters long',
+          })
+          .max(100, {
+            message: 'Email or username must be at most 100 characters long',
+          }),
+        password: z
+          .string()
+          .min(8, {
+            message: 'Password must be at least 8 characters long',
+          })
+          .max(100, {
+            message: 'Password must be at most 100 characters long',
+          }),
+        tfaCode: z.string().optional(),
+      })
+      .safeParse({ emailOrUsername, password, tfaCode });
 
     if (parsedData.success === false) {
       showNotification('Failed to login', parsedData.error.errors[0].message, 'error');
@@ -88,16 +89,7 @@ const AccountLogin = () => {
   };
 
   return (
-    <div className='dark:bg-gray-800 bg-slate-200 min-h-screen dark:text-white text-neutral-700 bg-gradient-to-bl from-blue-400 to-purple-400 dark:from-gray-500 dark:to-gray-700'>
-      <NavbarComponent user={null} />
-
-      <NotificationComponent
-        content={notification.content}
-        title={notification.title}
-        state={notification.state}
-        type={notification.type}
-      />
-
+    <PageLayout notification={notification} className='dark:bg-gray-800 bg-slate-200 min-h-screen dark:text-white text-neutral-700 bg-gradient-to-bl from-blue-400 to-purple-400 dark:from-gray-500 dark:to-gray-700'>
       <TFADialog
         open={tfaDialogOpen}
         onClose={() => setTFADialogOpen(false)}
@@ -115,7 +107,7 @@ const AccountLogin = () => {
           </Link>
         </div>
       </div>
-    </div>
+    </PageLayout>
   );
 };
 

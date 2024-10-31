@@ -7,7 +7,8 @@ import accountsLogin from '../controllers/accounts/login';
 import accountsFetch from '../controllers/accounts/fetch';
 import accountsLogout from '../controllers/accounts/logout';
 
-import { validateRequestBody } from '../utils/validation';
+import { validateRequestBody } from '../middleware/validationMiddleware';
+import { ensureAuthenticated } from '../middleware/authMiddleware';
 
 const router = express.Router();
 
@@ -38,7 +39,7 @@ const loginSchema = z.object({
 router.post('/login', validateRequestBody(loginSchema), accountsLogin);
 
 // Body-less routes
-router.get('/fetch', accountsFetch);
-router.get('/logout', accountsLogout);
+router.get('/fetch', ensureAuthenticated, accountsFetch);
+router.get('/logout', ensureAuthenticated, accountsLogout);
 
 export default router;

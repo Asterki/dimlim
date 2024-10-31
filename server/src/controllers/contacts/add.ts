@@ -10,20 +10,9 @@ import Logger from '../../utils/logger';
 
 // Contacts add
 const handler = async (req: Request, res: Response<ResponseData>, next: NextFunction) => {
-  if (req.isUnauthenticated() || !req.user) return res.status(401).send({ status: 'unauthenticated' });
+  const { username } = req.body;
   const currentUser = req.user as User;
 
-  const parsedBody = z
-    .object({
-      username: z.string(),
-    })
-    .safeParse(req.body);
-
-  if (!parsedBody.success)
-    return res.status(400).send({
-      status: 'invalid-parameters',
-    });
-  const { username } = parsedBody.data;
   if (username == currentUser.profile.username) return res.status(400).send({ status: 'cannot-add-self' });
 
   try {
@@ -41,7 +30,7 @@ const handler = async (req: Request, res: Response<ResponseData>, next: NextFunc
 
     // Update the other user's pending contacts, if they're not blocked
     if ((userExists!.contacts!.blocked! as unknown as Array<string>).includes(currentUser.userID))
-      // I swear these type assetions are going to kill me one day
+      // I swear these type assertions are going to kill me one day
       return res.status(200).send({ status: 'success' });
 
     await UserModel.updateOne(

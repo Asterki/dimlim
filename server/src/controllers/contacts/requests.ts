@@ -10,21 +10,9 @@ import Logger from '../../utils/logger';
 
 // Contacts add
 const handler = async (req: Request, res: Response<ResponseData>, next: NextFunction) => {
-  if (req.isUnauthenticated() || !req.user) return res.status(401).send({ status: 'unauthenticated' });
+  const { username, action } = req.body;
   const currentUser = req.user as User;
 
-  const parsedBody = z
-    .object({
-      username: z.string(),
-      action: z.enum(['accept', 'reject']),
-    })
-    .safeParse(req.body);
-
-  if (!parsedBody.success)
-    return res.status(400).send({
-      status: 'invalid-parameters',
-    });
-  const { username, action } = parsedBody.data;
   if (username.toLowerCase() == currentUser.profile.username.toLowerCase())
     return res.status(400).send({ status: 'cannot-add-self' });
 

@@ -10,20 +10,9 @@ import Logger from '../../utils/logger';
 
 // Contacts remove
 const handler = async (req: Request, res: Response<ResponseData>, next: NextFunction) => {
-  if (req.isUnauthenticated() || !req.user) return res.status(401).send({ status: 'unauthenticated' });
+  const { username } = req.body;
   const currentUser = req.user as User;
 
-  const parsedBody = z
-    .object({
-      username: z.string(),
-    })
-    .safeParse(req.body);
-
-  if (!parsedBody.success)
-    return res.status(400).send({
-      status: 'invalid-parameters',
-    });
-  const { username } = parsedBody.data;
   if (username == currentUser.profile.username) return res.status(400).send({ status: 'cannot-remove-self' });
 
   try {

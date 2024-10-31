@@ -12,12 +12,6 @@ interface User {
         website: string;
         bio: string;
     };
-    contacts: {
-        blocked: string[];
-        pending: string[];
-        requests: string[];
-        accepted: string[];
-    };
     pubKey: Buffer;
     preferences: {
         privacy: {

@@ -16,7 +16,7 @@ import NavbarComponent from '../../components/navbar';
 import NotificationComponent from '../../components/notifications';
 
 import { checkLoggedIn } from '../../lib/auth';
-import { RegisterResponseData } from '../../../../shared/types/api/accounts';
+import { RegisterResponseData } from '../../../../shared/types/api/auth';
 
 const AccountRegister = () => {
   const user = useSelector((state: RootState) => state.page.currentUser);

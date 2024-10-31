@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-import { MeResponseData } from '../../../shared/types/api/accounts';
+import { MeResponseData } from '../../../shared/types/api/auth';
 
 const checkLoggedIn = async () => {
   try {

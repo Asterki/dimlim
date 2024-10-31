@@ -14,7 +14,7 @@ import NavbarComponent from '../../components/navbar';
 import NotificationComponent from '../../components/notifications';
 import * as Dialog from '@radix-ui/react-dialog';
 
-import { LoginResponseData } from '../../../../shared/types/api/accounts';
+import { LoginResponseData } from '../../../../shared/types/api/auth';
 import { checkLoggedIn } from '../../lib/auth';
 
 // To be later changed to a translate service

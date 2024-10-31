@@ -1,10 +1,10 @@
 import express, { Express, Router as ExpressRouter } from 'express';
 
 // Account routes
-import accountsRegister from '../routes/accounts/register';
-import accountsLogin from '../routes/accounts/login';
-import accountsMe from '../routes/accounts/me';
-import accountsLogout from '../routes/accounts/logout';
+import authRegister from '../routes/auth/register';
+import authLogin from '../routes/auth/login';
+import authFetch from '../routes/auth/fetch';
+import authLogout from '../routes/auth/logout';
 
 // Contact routes
 import contactsAdd from '../routes/contacts/add';
@@ -30,7 +30,7 @@ import profileUpdate from '../routes/profile/update';
 import profilePicture from '../routes/profile/picture';
 
 class Router {
-  public accountRouter: ExpressRouter = express.Router();
+  public authRouter: ExpressRouter = express.Router();
   public contactsRouter: ExpressRouter = express.Router();
   public settingsRouter: ExpressRouter = express.Router();
   public utilsRouter: ExpressRouter = express.Router();
@@ -46,10 +46,10 @@ class Router {
 
   public registerRoutes = (server: Express) => {
     // Account routes
-    this.accountRouter.post('/register', accountsRegister);
-    this.accountRouter.post('/login', accountsLogin);
-    this.accountRouter.get('/me', accountsMe);
-    this.accountRouter.get('/logout', accountsLogout);
+    this.authRouter.post('/register', authRegister);
+    this.authRouter.post('/login', authLogin);
+    this.authRouter.get('/me', authFetch);
+    this.authRouter.get('/logout', authLogout);
 
     // Contact routes
     this.contactsRouter.post('/add', contactsAdd);
@@ -74,7 +74,7 @@ class Router {
     this.profileRouter.post('/update', profileUpdate);
     this.profileRouter.post('/picture', profilePicture);
 
-    server.use('/api/accounts', this.accountRouter);
+    server.use('/api/accounts', this.authRouter);
     server.use('/api/contacts', this.contactsRouter);
     server.use('/api/settings', this.settingsRouter);
     server.use('/api/utils', this.utilsRouter);

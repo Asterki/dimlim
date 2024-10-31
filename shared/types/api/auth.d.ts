@@ -27,7 +27,7 @@ interface LoginResponseData {
 }
 
 // Me
-interface MeResponseData {
+interface FetchResponseData {
     status: "success" | "unauthenticated";
     user?: User;
 }
@@ -42,6 +42,6 @@ export type {
     RegisterResponseData,
     LoginRequestBody,
     LoginResponseData,
-    MeResponseData,
+    FetchResponseData,
     LogoutResponseData,
 };

@@ -1,4 +1,4 @@
-import { LogoutResponseData as ResponseData } from '../../../../shared/types/api/accounts';
+import { FetchResponseData as ResponseData } from '../../../../shared/types/api/auth';
 import { NextFunction, Request, Response } from 'express';
 
 const handler = async (req: Request, res: Response<ResponseData>, next: NextFunction) => {
@@ -8,11 +8,9 @@ const handler = async (req: Request, res: Response<ResponseData>, next: NextFunc
       status: 'unauthenticated',
     });
 
-  req.logOut({ keepSessionInfo: false }, (err) => {
-    if (err) return next(err);
-    return res.send({
-      status: 'success',
-    });
+  return res.status(200).send({
+    status: 'success',
+    user: user as any,
   });
 };
 

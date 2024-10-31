@@ -9,7 +9,7 @@ import UserModel from '../../models/users';
 import {
   RegisterRequestBody as RequestBody,
   RegisterResponseData as ResponseData,
-} from '../../../../shared/types/api/accounts';
+} from '../../../../shared/types/api/auth';
 import { NextFunction, Request, Response } from 'express';
 
 import Logger from '../../services/logger';

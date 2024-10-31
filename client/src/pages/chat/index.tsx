@@ -3,21 +3,19 @@ import { io, Socket } from 'socket.io-client';
 import axios from 'axios';
 import { useNavigate, useParams } from 'react-router-dom';
 
-import { useDispatch, useSelector } from 'react-redux';
-import { RootState } from '../../store';
-import { setUser } from '../../store/slices/page';
+import PageLayout from '../../layouts/PageLayout';
 
-import NavbarComponent from '../../components/NavbarComponent';
-import { checkLoggedIn } from '../../lib/auth';
+import { useAuth } from '../../features/auth';
+import useNotification from '../../hooks/useNotification';
 
 import { GetResponseData } from '../../../../shared/types/api/contacts';
 
 const ChatIndex = () => {
-  const user = useSelector((state: RootState) => state.page.currentUser);
-  const dispatch = useDispatch();
+  const { user, authStatus } = useAuth();
+  const { notification, showNotification } = useNotification();
 
   const redirect = useNavigate();
-  const { userid } = useParams();
+  const { userid: userID } = useParams();
 
   const [contact, setContact] = React.useState<{
     profile: {
@@ -29,25 +27,20 @@ const ChatIndex = () => {
   const [socket, setSocket] = React.useState<Socket | null>(null);
 
   React.useEffect(() => {
-    (async () => {
-      if (!user) {
-        const currentUser = await checkLoggedIn();
-        if (currentUser) dispatch(setUser(currentUser));
-        else return redirect('/login');
-      }
+    if (authStatus !== 'authenticated') return;
 
+    (async () => {
       // Fetch contact
       const response = await axios.get<GetResponseData>(`${import.meta.env.VITE_SERVER_HOST}/api/contacts/get`, {
         withCredentials: true,
       });
       if (response.data.status === 'success' && response.data.contacts) {
-        const currentContact = response.data.contacts.accepted.find((contact) => contact.userID === userid);
+        const currentContact = response.data.contacts.accepted.find((contact) => contact.userID === userID);
         if (currentContact) setContact(currentContact);
         else redirect('/contacts');
       }
     })();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [authStatus, redirect, userID]);
 
   React.useEffect(() => {
     if (contact !== null) {
@@ -78,11 +71,13 @@ const ChatIndex = () => {
   };
 
   return (
-    <div className='dark:bg-gray-800 bg-slate-200 min-h-screen dark:text-white text-neutral-700'>
+    <PageLayout
+      notification={notification}
+      requiresLogin={true}
+      className='dark:bg-gray-800 bg-slate-200 min-h-screen dark:text-white text-neutral-700'
+    >
       {user && contact && (
         <div>
-          <NavbarComponent user={user} />
-
           <div className='pt-20 flex flex-col items-center justify-center'>
             <div className='flex flex-col gap-2 justify-center md:w-7/12 w-11/12 h-[calc(100vh-7rem)]'>
               <div className=' dark:bg-gray-700 bg-slate-100 rounded-md shadow-md p-4'>
@@ -174,7 +169,7 @@ const ChatIndex = () => {
           </div>
         </div>
       )}
-    </div>
+    </PageLayout>
   );
 };
 

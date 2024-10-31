@@ -1,18 +1,19 @@
-import { z } from 'zod';
-
 import UserModel from '../../models/users';
 
-import { BlockResponseData as ResponseData } from '../../../../shared/types/api/contacts';
 import { NextFunction, Request, Response } from 'express';
+import {
+  BlockResponseData as ResponseData,
+  AddRemoveBlockUnblockRequestBody as RequestBody,
+} from '../../../../shared/types/api/contacts';
 import { User } from '../../../../shared/types/models';
 
 import Logger from '../../utils/logger';
 
 // Contacts block
-const handler = async (req: Request, res: Response<ResponseData>, next: NextFunction) => {
+const handler = async (req: Request<{}, {}, RequestBody>, res: Response<ResponseData>, next: NextFunction) => {
   const { username } = req.body;
   const currentUser = req.user as User;
-  
+
   if (username == currentUser.profile.username) return res.status(400).send({ status: 'cannot-block-self' });
 
   try {

@@ -1,9 +1,9 @@
 import passport from 'passport';
 
-import { LoginResponseData as ResponseData } from '../../../../shared/types/api/accounts';
 import { NextFunction, Request, Response } from 'express';
+import { LoginResponseData as ResponseData, LoginRequestBody as RequestBody } from '../../../../shared/types/api/accounts';
 
-const handler = (req: Request, res: Response<ResponseData>, next: NextFunction) => {
+const handler = (req: Request<{}, {}, RequestBody>, res: Response<ResponseData>, next: NextFunction) => {
   passport.authenticate('local', (err: any, user: any, info: any) => {
     if (err) return next(err);
     if (!user)

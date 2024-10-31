@@ -1,9 +1,7 @@
-import { z } from 'zod';
-
 import UserModel from '../../models/users';
 
-import { GeneralResponseData as ResponseData, NotificationsRequestData as RequestData } from '../../../../shared/types/api/settings';
 import { NextFunction, Request, Response } from 'express';
+import { GeneralResponseData as ResponseData, NotificationsRequestData as RequestData } from '../../../../shared/types/api/settings';
 import { User } from '../../../../shared/types/models';
 
 import Logger from '../../utils/logger';

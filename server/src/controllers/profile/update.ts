@@ -1,13 +1,16 @@
 import UserModel from '../../models/users';
 
-import { GeneralResponseData as ResponseData } from '../../../../shared/types/api/settings';
 import { NextFunction, Request, Response } from 'express';
+import {
+  UpdateResponseData as ResponseData,
+  UpdateRequestBody as RequestBody,
+} from '../../../../shared/types/api/profile';
 import { User } from '../../../../shared/types/models';
 
 import Logger from '../../utils/logger';
 
 // Profile Update
-const handler = async (req: Request, res: Response<ResponseData>, next: NextFunction) => {
+const handler = async (req: Request<{}, {}, RequestBody>, res: Response<ResponseData>, next: NextFunction) => {
   const { bio, website } = req.body;
   const currentUser = req.user as User;
 

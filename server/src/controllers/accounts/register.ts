@@ -3,16 +3,16 @@ import { v4 as uuidv4 } from 'uuid';
 
 import UserModel from '../../models/users';
 
+import { NextFunction, Request, Response } from 'express';
 import {
   RegisterRequestBody as RequestBody,
   RegisterResponseData as ResponseData,
 } from '../../../../shared/types/api/accounts';
-import { NextFunction, Request, Response } from 'express';
 
 import Logger from '../../utils/logger';
 
-const handler = async (req: Request, res: Response<ResponseData>, next: NextFunction) => {
-  const { email, username, password } = req.body as RequestBody;
+const handler = async (req: Request<{}, {}, RequestBody>, res: Response<ResponseData>, next: NextFunction) => {
+  const { email, username, password } = req.body;
 
   // Check if the user exists
   const userExists = await UserModel.findOne({

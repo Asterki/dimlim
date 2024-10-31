@@ -8,13 +8,14 @@ import UserModel from '../../models/users';
 
 import UploadService from '../../services/upload';
 
-import { NextFunction, Request, Response } from 'express';
-import { User } from '../../../../shared/types/models';
-
 import Logger from '../../utils/logger';
 
+import { NextFunction, Request, Response } from 'express';
+import { PictureResponseData as ResponseData, PictureRequestBody as RequestData  } from '../../../../shared/types/api/profile';
+import { User } from '../../../../shared/types/models';
+
 // Profile picture upload
-const handler = async (req: Request, res: Response, next: NextFunction) => {
+const handler = async (req: Request<{}, {}, RequestData>, res: Response<ResponseData>, next: NextFunction) => {
   const { action } = req.body;
   const currentUser = req.user as User;
 
@@ -31,7 +32,7 @@ const handler = async (req: Request, res: Response, next: NextFunction) => {
         });
       });
 
-      if (!data.files.profile) return res.status(400).json({ message: 'bad-request' });
+      if (!data.files.profile) return res.status(400).json({ status: 'bad-request', message: 'Profile picture is required.' });
       let file = data.files.profile[0];
 
       // Create the directory if it doesn't exist

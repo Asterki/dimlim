@@ -2,11 +2,11 @@ import bcrypt from 'bcrypt';
 
 import UserModel from '../../../models/users';
 
+import { NextFunction, Request, Response } from 'express';
 import {
   SecurityResponseData as ResponseData,
   SecurityChangePasswordRequestData as RequestData,
 } from '../../../../../shared/types/api/settings';
-import { NextFunction, Request, Response } from 'express';
 import { User } from '../../../../../shared/types/models';
 
 import Logger from '../../../utils/logger';

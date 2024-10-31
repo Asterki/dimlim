@@ -1,10 +1,10 @@
 import UserModel from '../../models/users';
 
+import { NextFunction, Request, Response } from 'express';
 import {
   PrivacyResponseData as ResponseData,
   PrivacyRequestData as RequestData,
 } from '../../../../shared/types/api/settings';
-import { NextFunction, Request, Response } from 'express';
 
 import { User } from '../../../../shared/types/models';
 

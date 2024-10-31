@@ -2,8 +2,8 @@ import { z } from 'zod';
 
 import UserModel from '../../models/users';
 
-import { PendingResponseData as ResponseData } from '../../../../shared/types/api/contacts';
 import { NextFunction, Request, Response } from 'express';
+import { PendingResponseData as ResponseData } from '../../../../shared/types/api/contacts';
 import { User } from '../../../../shared/types/models';
 
 import Logger from '../../utils/logger';

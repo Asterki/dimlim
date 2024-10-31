@@ -8,7 +8,7 @@ import cookie from 'cookie-parser';
 
 // Services
 import Router from './routes';
-import MongoDBClient from './services/mongodb';
+import MongoDBClient from './config/mongodb';
 import SessionController from './services/sessions';
 import SocketServer from './services/socket';
 

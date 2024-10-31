@@ -1,22 +1,9 @@
 import passport from 'passport';
-import { z } from 'zod';
 
 import { LoginResponseData as ResponseData } from '../../../../shared/types/api/accounts';
 import { NextFunction, Request, Response } from 'express';
 
 const handler = (req: Request, res: Response<ResponseData>, next: NextFunction) => {
-  const parsedBody = z
-    .object({
-      emailOrUsername: z.string().max(100).min(3),
-      password: z.string().max(100).min(8),
-    })
-    .safeParse(req.body);
-
-  if (!parsedBody.success)
-    return res.status(400).send({
-      status: 'invalid-parameters',
-    });
-
   passport.authenticate('local', (err: any, user: any, info: any) => {
     if (err) return next(err);
     if (!user)

@@ -5,11 +5,7 @@ const handler = async (req: Request, res: Response<ResponseData>, next: NextFunc
   const user = req.user;
   if (!user)
     return res.status(401).send({
-      status: 'unauthenticated',import express from 'express';
-
-const router = express.Router();
-
-export default router;
+      status: 'unauthenticated',
     });
 
   return res.status(200).send({

@@ -1,12 +1,10 @@
 import { Link, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 
-import NavbarComponent from '../../components/NavbarComponent';
-import NotificationComponent from '../../components/NotificationComponent';
+import PageLayout from '../../layouts/PageLayout';
 
 import { useAuth } from '../../features/auth';
 import useNotification from '../../hooks/useNotification';
-import PopUpLogin from '../../components/PopUpLoginComponent';
 
 const AccountLogout = () => {
   const { user, logout, authStatus } = useAuth();
@@ -25,18 +23,13 @@ const AccountLogout = () => {
   };
 
   return (
-    <div className={user?.preferences.general.theme == 'dark' ? 'dark' : ''}>
+    <PageLayout
+      notification={notification}
+      requiresLogin={true}
+      className={user?.preferences.general.theme == 'dark' ? 'dark' : ''}
+    >
       <div className='dark:bg-gray-800 bg-slate-200 min-h-screen dark:text-white text-slate-700 bg-gradient-to-bl from-blue-400 to-purple-400 dark:from-gray-500 dark:to-gray-700'>
-        <NotificationComponent
-          content={notification.content}
-          title={notification.title}
-          state={notification.state}
-          type={notification.type}
-        />
-
         <div>
-          <NavbarComponent user={user} />
-
           <div className='absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 dark:bg-gray-700 bg-slate-100 shadow-md rounded-md p-4 w-11/12 md:w-4/12'>
             <motion.div
               variants={{
@@ -68,20 +61,8 @@ const AccountLogout = () => {
             </motion.div>
           </div>
         </div>
-        
-        {authStatus == 'loading' && (
-          <div>
-            <h1>Authenticating</h1>
-          </div>
-        )}
-
-        {authStatus == 'unauthenticated' && (
-          <div className='sticky max-w-11/12 bg-black/30 h-[80vh]'>
-            <PopUpLogin />
-          </div>
-        )}
       </div>
-    </div>
+    </PageLayout>
   );
 };
 

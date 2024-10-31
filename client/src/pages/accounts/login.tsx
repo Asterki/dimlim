@@ -101,9 +101,13 @@ const AccountLogin = () => {
       <div className='absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 dark:bg-gray-700 bg-white/80 rounded-md shadow-md p-4 w-11/12 md:w-4/12'>
         <LoginForm loginLoading={loginLoading} onSubmit={loginButtonPressed} authStatus={authStatus} user={user} />
 
-        <div className='text-center mt-4'>
+        <div className='text-center mt-4 flex gap-2 items-center justify-center'>
           <Link to='/register' className='text-blue-500 hover:underline'>
             Create an account
+          </Link>
+          <span>or</span>
+          <Link to='/forgot-password' className='text-blue-500 hover:underline'>
+            Forgot Password
           </Link>
         </div>
       </div>

@@ -1,9 +1,9 @@
-// components/PageLayout.tsx
-import React from 'react';
+import React, { useState } from 'react';
 import NavbarComponent from '../components/NavbarComponent';
 import FooterComponent from '../components/FooterComponent';
 import NotificationComponent from '../components/NotificationComponent';
 import PopUpLogin from '../components/PopUpLoginComponent';
+import DialogComponent from '../components/DialogComponent';
 
 import { useAuth } from '../features/auth';
 
@@ -20,7 +20,12 @@ interface LayoutProps {
 }
 
 const PageLayout: React.FC<LayoutProps> = ({ children, requiresLogin = false, notification, className }) => {
-  const { user } = useAuth();
+  const { user, authStatus } = useAuth();
+  const [isDialogOpen, setIsDialogOpen] = useState(authStatus === 'error' && requiresLogin && !!user);
+
+  const closeDialog = () => {
+    setIsDialogOpen(false);
+  };
 
   return (
     <div className={`flex flex-col min-h-screen ${className}`}>
@@ -40,6 +45,12 @@ const PageLayout: React.FC<LayoutProps> = ({ children, requiresLogin = false, no
       <FooterComponent />
 
       {requiresLogin && !user && <PopUpLogin />}
+
+      {authStatus === 'error' && requiresLogin && user && (
+        <DialogComponent open={isDialogOpen} onClose={closeDialog} title="Authentication Error">
+          <p>Failed to authenticate, please clear your cookies and try again.</p>
+        </DialogComponent>
+      )}
     </div>
   );
 };

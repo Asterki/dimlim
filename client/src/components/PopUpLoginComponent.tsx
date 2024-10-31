@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { z } from 'zod';
+import { Link } from 'react-router-dom';
 
 import NotificationComponent from './NotificationComponent';
 
@@ -108,6 +109,16 @@ const PopUpLogin = () => {
           The page you're trying to access requires you to be logged in. Please login to continue.
         </p>
         <LoginForm loginLoading={loginLoading} onSubmit={loginButtonPressed} authStatus={authStatus} user={user} />
+
+        <div className='text-center mt-4 flex gap-2 items-center justify-center'>
+          <Link to='/register' className='text-blue-500 hover:underline'>
+            Create an account
+          </Link>
+          <span>or</span>
+          <Link to='/forgot-password' className='text-blue-500 hover:underline'>
+            Forgot Password
+          </Link>
+        </div>
       </div>
     </div>
   );

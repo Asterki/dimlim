@@ -1,34 +1,24 @@
-import { z } from 'zod';
-
 import UserModel from '../../models/users';
+
+import { FetchResponseData as ResponseData, FetchRequestBody as RequestBody } from '../../../../shared/types/api/users';
 import { NextFunction, Request, Response } from 'express';
 import { User } from '../../../../shared/types/models';
 
 import Logger from '../../utils/logger';
 
 // Fetch user
-const handler = async (req: Request, res: Response, next: NextFunction) => {
-  if (req.isUnauthenticated() || !req.user) return res.status(401).send({ status: 'unauthenticated' });
+const handler = async (req: Request<{}, {}, RequestBody>, res: Response<ResponseData>, next: NextFunction) => {
   const currentUser = req.user as User;
+  const username = req.body.username;
 
-  const parsedBody = z
-    .object({
-      username: z.string(),
-    })
-    .safeParse(req.body);
-
-  if (!parsedBody.success)
-    return res.status(400).send({
-      status: 'invalid-parameters',
-    });
-  if (parsedBody.data.username == currentUser.profile.username)
+  if (username == currentUser.profile.username)
     return res.status(401).send({
       status: 'cannot-check-self',
     });
 
   try {
-    const user = await UserModel.findOne({ username: parsedBody.data.username }).select(
-      'profile.username profile.avatar profile.bio profile.location profile.website profile.joined',
+    const user = await UserModel.findOne({ username: username }).select(
+      'profile.username profile.avatar profile.bio profile.website',
     );
 
     if (!user || user == null || !user.profile || user.profile == undefined)
@@ -41,10 +31,8 @@ const handler = async (req: Request, res: Response, next: NextFunction) => {
       data: {
         username: user.profile.username,
         avatar: user.profile.avatar,
-        // bio: user.profile.bio,
-        // location: user.profile.location,
-        // website: user.profile.website,
-        // joined: user.profile.joined,
+        bio: user.profile.bio,
+        website: user.profile.website,
       },
     });
   } catch (error: unknown) {

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link } from 'react-router-dom'; 
+import { Link } from 'react-router-dom';
 
 // Icons
 import { HiOutlineMail, HiOutlineLockClosed, HiOutlineUserCircle, HiEye, HiEyeOff } from 'react-icons/hi';
@@ -140,7 +140,10 @@ const RegisterForm: React.FC<LoginFormProps> = ({ onSubmit, registerLoading, use
         <div className='mt-4'>
           <span className='font-bold'>Important Notice:</span> You're already logged in as{' '}
           <span className='font-semibold'>{user?.profile.username}</span>, by registering a new account you will be
-          logged out from this account.
+          logged out from this account.{' '}
+          <Link to='/home' className='text-blue-500 hover:underline'>
+            Return Home
+          </Link>
         </div>
       )}
     </motion.form>

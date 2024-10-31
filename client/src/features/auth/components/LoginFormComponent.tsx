@@ -1,4 +1,5 @@
 import React, { useRef, useState } from 'react';
+import { Link } from 'react-router-dom';
 
 import { HiOutlineMail, HiOutlineLockClosed, HiEye, HiEyeOff } from 'react-icons/hi';
 import { FaSpinner } from 'react-icons/fa';
@@ -8,7 +9,7 @@ import { motion } from 'framer-motion';
 import { User } from '../../../../../shared/types/models';
 
 interface LoginFormProps {
-  onSubmit: (emailOrUsername: string, password: string, tfaCode?: string) => Promise<void>
+  onSubmit: (emailOrUsername: string, password: string, tfaCode?: string) => Promise<void>;
   loginLoading: boolean;
   user?: User | null;
   authStatus: string;
@@ -94,7 +95,10 @@ const LoginForm: React.FC<LoginFormProps> = ({ onSubmit, loginLoading, user, aut
         <div className='mt-4'>
           <span className='font-bold'>Important Notice:</span> You're already logged in as{' '}
           <span className='font-semibold'>{user?.profile.username}</span>, by logging to another account you will be
-          logged out from this account.
+          logged out from this account.{' '}
+          <Link to='/home' className='text-blue-500 hover:underline'>
+            Return Home
+          </Link>
         </div>
       )}
     </motion.form>

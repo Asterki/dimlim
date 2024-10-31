@@ -79,9 +79,10 @@ const useAuth = () => {
 
   // Sends a request to the server to log out the current user
   const logout = async () => {
-    await authApi.logout();
+    const result = await authApi.logout();
     dispatch(setUser(null)); // Remove the user from the state
     dispatch(setAuthStatus('unauthenticated'));
+    return result
   };
 
   // Checks if the user is authenticated on component mount

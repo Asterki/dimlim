@@ -11,10 +11,10 @@ interface LoginFormProps {
   onSubmit: (emailOrUsername: string, password: string, tfaCode?: string) => Promise<void>
   loginLoading: boolean;
   user?: User | null;
-  authState: string;
+  authStatus: string;
 }
 
-const LoginForm: React.FC<LoginFormProps> = ({ onSubmit, loginLoading, user, authState: authStatus }) => {
+const LoginForm: React.FC<LoginFormProps> = ({ onSubmit, loginLoading, user, authStatus }) => {
   const [passwordVisible, setPasswordVisible] = useState(false);
   const usernameEmailRef = useRef<HTMLInputElement>(null);
   const passwordRef = useRef<HTMLInputElement>(null);

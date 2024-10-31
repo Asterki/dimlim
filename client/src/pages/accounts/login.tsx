@@ -33,7 +33,7 @@ const AccountLogin = () => {
 
   const loginButtonPressed = async (emailOrUsername: string, password: string, tfaCode?: string) => {
     // We avoid sending a request if the data isn't even in the acceptable schema
-    const schema = z.object({
+    const parsedData = z.object({
       emailOrUsername: z
         .string()
         .min(3, {
@@ -51,9 +51,8 @@ const AccountLogin = () => {
           message: 'Password must be at most 100 characters long',
         }),
       tfaCode: z.string().optional(),
-    });
+    }).safeParse({ emailOrUsername, password, tfaCode });
 
-    const parsedData = schema.safeParse({ emailOrUsername, password, tfaCode });
     if (parsedData.success === false) {
       showNotification('Failed to login', parsedData.error.errors[0].message, 'error');
       return;
@@ -108,7 +107,7 @@ const AccountLogin = () => {
       />
 
       <div className='absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 dark:bg-gray-700 bg-white/80 rounded-md shadow-md p-4 w-11/12 md:w-4/12'>
-        <LoginForm loginLoading={loginLoading} onSubmit={loginButtonPressed} authState={authStatus} user={user} />
+        <LoginForm loginLoading={loginLoading} onSubmit={loginButtonPressed} authStatus={authStatus} user={user} />
 
         <div className='text-center mt-4'>
           <Link to='/register' className='text-blue-500 hover:underline'>

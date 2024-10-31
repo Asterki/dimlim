@@ -44,9 +44,10 @@ const useAuth = () => {
         const currentUser = await authApi.fetchUser();
         dispatch(setUser(currentUser!));
         dispatch(setAuthStatus('authenticated'));
+        return "success"
       } else {
         dispatch(setAuthStatus('unauthenticated'));
-        return status;
+        return status || 'unknown-error';
       }
     } catch (err) {
       dispatch(setAuthStatus('error'));

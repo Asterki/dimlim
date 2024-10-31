@@ -1,37 +1,10 @@
-import * as React from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
-import { useDispatch, useSelector } from 'react-redux';
-import { RootState } from '../../store';
-import { setUser } from '../../store/slices/page';
-
-import NavbarComponent from '../../components/NavbarComponent';
-import { checkLoggedIn } from '../../lib/auth';
+import PageLayout from '../../layouts/PageLayout';
 
 const IndexPage = () => {
-  const user = useSelector((state: RootState) => state.page.currentUser);
-  const dispatch = useDispatch();
-
-  const redirect = useNavigate();
-
-  // Login-protect the page
-  React.useEffect(() => {
-    (async () => {
-      if (!user) {
-        const currentUser = await checkLoggedIn();
-        if (currentUser) {
-          dispatch(setUser(currentUser));
-          return redirect('/home');
-        }
-      }
-    })();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
   return (
-    <div className='dark:bg-gray-800 bg-white min-h-screen'>
-      <NavbarComponent user={null} />
-
+    <PageLayout requiresLogin={false} className='dark:bg-gray-800 bg-white min-h-screen'>
       <section className=''>
         <img
           src='/assets/images/bg-2.png'
@@ -58,7 +31,7 @@ const IndexPage = () => {
           </div>
         </div>
       </section>
-    </div>
+    </PageLayout>
   );
 };
 

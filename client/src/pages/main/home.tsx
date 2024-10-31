@@ -37,6 +37,8 @@ const HomePage = () => {
       { username: username },
       { withCredentials: true },
     );
+
+    console.log(res)
   };
 
   return (

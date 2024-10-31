@@ -6,7 +6,7 @@ import { PendingResponseData as ResponseData } from '../../../../shared/types/ap
 import { NextFunction, Request, Response } from 'express';
 import { User } from '../../../../shared/types/models';
 
-import Logger from '../../services/logger';
+import Logger from '../../utils/logger';
 
 // Contacts add
 const handler = async (req: Request, res: Response<ResponseData>, next: NextFunction) => {

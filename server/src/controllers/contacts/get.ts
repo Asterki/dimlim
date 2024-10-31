@@ -4,7 +4,7 @@ import { GetResponseData as ResponseData } from '../../../../shared/types/api/co
 import { NextFunction, Request, Response } from 'express';
 import { User } from '../../../../shared/types/models';
 
-import Logger from '../../services/logger';
+import Logger from '../../utils/logger';
 
 // Contacts get
 const handler = async (req: Request, res: Response<ResponseData>, next: NextFunction) => {

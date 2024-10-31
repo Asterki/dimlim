@@ -1,11 +1,15 @@
-import { FetchResponseData as ResponseData } from '../../../../shared/types/api/auth';
+import { FetchResponseData as ResponseData } from '../../../../shared/types/api/accounts';
 import { NextFunction, Request, Response } from 'express';
 
 const handler = async (req: Request, res: Response<ResponseData>, next: NextFunction) => {
   const user = req.user;
   if (!user)
     return res.status(401).send({
-      status: 'unauthenticated',
+      status: 'unauthenticated',import express from 'express';
+
+const router = express.Router();
+
+export default router;
     });
 
   return res.status(200).send({

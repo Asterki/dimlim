@@ -2,20 +2,22 @@ import { z } from 'zod';
 
 import UserModel from '../../models/users';
 
-import { RemoveResponseData as ResponseData } from '../../../../shared/types/api/contacts';
+import { PrivacyResponseData as ResponseData } from '../../../../shared/types/api/settings';
 import { NextFunction, Request, Response } from 'express';
 import { User } from '../../../../shared/types/models';
 
-import Logger from '../../services/logger';
+import Logger from '../../utils/logger';
 
-// Contacts remove
+// Settings Privacy
 const handler = async (req: Request, res: Response<ResponseData>, next: NextFunction) => {
   if (req.isUnauthenticated() || !req.user) return res.status(401).send({ status: 'unauthenticated' });
   const currentUser = req.user as User;
 
   const parsedBody = z
     .object({
-      username: z.string(),
+      showOnlineStatus: z.boolean(),
+      showLastSeen: z.boolean(),
+      showReadReceipts: z.boolean(),
     })
     .safeParse(req.body);
 
@@ -23,28 +25,18 @@ const handler = async (req: Request, res: Response<ResponseData>, next: NextFunc
     return res.status(400).send({
       status: 'invalid-parameters',
     });
-  const { username } = parsedBody.data;
-  if (username == currentUser.profile.username) return res.status(400).send({ status: 'cannot-remove-self' });
 
   try {
-    const userExists = await UserModel.findOne({ 'profile.username': username.toLowerCase() })
-      .select('username userID')
-      .lean();
-    if (!userExists) return res.status(404).send({ status: 'user-not-found' });
-
-    // Update current user's contacts
     await UserModel.updateOne(
       { userID: currentUser.userID },
-      { $pull: { 'contacts.accepted': userExists.userID } },
-      { new: true },
-    );
-
-    // Update the other user's contacts
-    await UserModel.updateOne(
-      { userID: userExists.userID },
-      { $pull: { 'contacts.accepted': currentUser.userID } },
-      { new: true },
-    );
+      {
+        $set: {
+          'preferences.privacy.showOnlineStatus': parsedBody.data.showOnlineStatus,
+          'preferences.privacy.showLastSeen': parsedBody.data.showLastSeen,
+          'preferences.privacy.showReadReceipts': parsedBody.data.showReadReceipts,
+        },
+      },
+    ).exec();
 
     return res.status(200).send({
       status: 'success',

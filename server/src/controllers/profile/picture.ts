@@ -12,7 +12,7 @@ import UploadService from '../../services/upload';
 import { NextFunction, Request, Response } from 'express';
 import { User } from '../../../../shared/types/models';
 
-import Logger from '../../services/logger';
+import Logger from '../../utils/logger';
 
 // Profile picture upload
 const handler = async (req: Request, res: Response, next: NextFunction) => {

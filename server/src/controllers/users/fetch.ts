@@ -4,7 +4,7 @@ import UserModel from '../../models/users';
 import { NextFunction, Request, Response } from 'express';
 import { User } from '../../../../shared/types/models';
 
-import Logger from '../../services/logger';
+import Logger from '../../utils/logger';
 
 // Fetch user
 const handler = async (req: Request, res: Response, next: NextFunction) => {

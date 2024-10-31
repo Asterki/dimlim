@@ -9,10 +9,10 @@ import UserModel from '../../models/users';
 import {
   RegisterRequestBody as RequestBody,
   RegisterResponseData as ResponseData,
-} from '../../../../shared/types/api/auth';
+} from '../../../../shared/types/api/accounts';
 import { NextFunction, Request, Response } from 'express';
 
-import Logger from '../../services/logger';
+import Logger from '../../utils/logger';
 
 const handler = async (req: Request, res: Response<ResponseData>, next: NextFunction) => {
   const parsedBody = z

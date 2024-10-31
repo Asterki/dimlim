@@ -7,7 +7,7 @@ import cors from 'cors';
 import cookie from 'cookie-parser';
 
 // Services
-import Router from './services/router';
+import Router from './routes';
 import MongoDBClient from './services/mongodb';
 import SessionController from './services/sessions';
 import SocketServer from './services/socket';

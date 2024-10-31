@@ -1,4 +1,4 @@
-import { LogoutResponseData as ResponseData } from '../../../../shared/types/api/auth';
+import { LogoutResponseData as ResponseData } from '../../../../shared/types/api/accounts';
 import { NextFunction, Request, Response } from 'express';
 
 const handler = async (req: Request, res: Response<ResponseData>, next: NextFunction) => {

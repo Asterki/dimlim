@@ -2,13 +2,13 @@ import { z } from 'zod';
 
 import UserModel from '../../models/users';
 
-import { UnblockResponseData as ResponseData } from '../../../../shared/types/api/contacts';
+import { RemoveResponseData as ResponseData } from '../../../../shared/types/api/contacts';
 import { NextFunction, Request, Response } from 'express';
 import { User } from '../../../../shared/types/models';
 
-import Logger from '../../services/logger';
+import Logger from '../../utils/logger';
 
-// Contacts unblock
+// Contacts remove
 const handler = async (req: Request, res: Response<ResponseData>, next: NextFunction) => {
   if (req.isUnauthenticated() || !req.user) return res.status(401).send({ status: 'unauthenticated' });
   const currentUser = req.user as User;
@@ -24,7 +24,7 @@ const handler = async (req: Request, res: Response<ResponseData>, next: NextFunc
       status: 'invalid-parameters',
     });
   const { username } = parsedBody.data;
-  if (username == currentUser.profile.username) return res.status(400).send({ status: 'cannot-unblock-self' });
+  if (username == currentUser.profile.username) return res.status(400).send({ status: 'cannot-remove-self' });
 
   try {
     const userExists = await UserModel.findOne({ 'profile.username': username.toLowerCase() })
@@ -35,11 +35,14 @@ const handler = async (req: Request, res: Response<ResponseData>, next: NextFunc
     // Update current user's contacts
     await UserModel.updateOne(
       { userID: currentUser.userID },
-      {
-        $pull: {
-          'contacts.blocked': userExists.userID,
-        },
-      },
+      { $pull: { 'contacts.accepted': userExists.userID } },
+      { new: true },
+    );
+
+    // Update the other user's contacts
+    await UserModel.updateOne(
+      { userID: userExists.userID },
+      { $pull: { 'contacts.accepted': currentUser.userID } },
       { new: true },
     );
 

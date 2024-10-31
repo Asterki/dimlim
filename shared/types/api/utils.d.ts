@@ -1,8 +1,14 @@
+import type { GeneratedSecret } from "speakeasy";
+
 interface GenerateTFAResponseData {
     status: "success";
-    data: speakeasy.GeneratedSecret;
+    data: GeneratedSecret;
 }
 
+interface VerifyTFARequestBody {
+    code: string;
+    secret: string;
+}
 interface VerifyTFAResponseData {
     status: "success" | "invalid-parameters";
     valid?: boolean;
@@ -10,5 +16,6 @@ interface VerifyTFAResponseData {
 
 export type {
     GenerateTFAResponseData,
-    VerifyTFAResponseData
+    VerifyTFAResponseData,
+    VerifyTFARequestBody
 };

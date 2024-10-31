@@ -1,39 +1,28 @@
-import { z } from 'zod';
-
 import UserModel from '../../models/users';
 
-import { PrivacyResponseData as ResponseData } from '../../../../shared/types/api/settings';
+import {
+  PrivacyResponseData as ResponseData,
+  PrivacyRequestData as RequestData,
+} from '../../../../shared/types/api/settings';
 import { NextFunction, Request, Response } from 'express';
+
 import { User } from '../../../../shared/types/models';
 
 import Logger from '../../utils/logger';
 
 // Settings Privacy
-const handler = async (req: Request, res: Response<ResponseData>, next: NextFunction) => {
-  if (req.isUnauthenticated() || !req.user) return res.status(401).send({ status: 'unauthenticated' });
+const handler = async (req: Request<{}, {}, RequestData>, res: Response<ResponseData>, next: NextFunction) => {
+  const { showOnlineStatus, showLastSeen, showReadReceipts } = req.body;
   const currentUser = req.user as User;
-
-  const parsedBody = z
-    .object({
-      showOnlineStatus: z.boolean(),
-      showLastSeen: z.boolean(),
-      showReadReceipts: z.boolean(),
-    })
-    .safeParse(req.body);
-
-  if (!parsedBody.success)
-    return res.status(400).send({
-      status: 'invalid-parameters',
-    });
 
   try {
     await UserModel.updateOne(
       { userID: currentUser.userID },
       {
         $set: {
-          'preferences.privacy.showOnlineStatus': parsedBody.data.showOnlineStatus,
-          'preferences.privacy.showLastSeen': parsedBody.data.showLastSeen,
-          'preferences.privacy.showReadReceipts': parsedBody.data.showReadReceipts,
+          'preferences.privacy.showOnlineStatus': showOnlineStatus,
+          'preferences.privacy.showLastSeen': showLastSeen,
+          'preferences.privacy.showReadReceipts': showReadReceipts,
         },
       },
     ).exec();

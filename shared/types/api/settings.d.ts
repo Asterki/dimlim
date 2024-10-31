@@ -52,6 +52,17 @@ interface SecurityResponseData {
         | "invalid-password"
 }
 
+interface SecurityChangePasswordRequestData {
+    newPassword: string;
+    oldPassword: string;
+}
+
+interface TFARequestData {
+    password: string;
+    action: "activate" | "deactivate";
+    secret?: string
+}
+
 
 export type {
     GeneralRequestData,
@@ -61,5 +72,7 @@ export type {
     PrivacyRequestData,
     PrivacyResponseData,
     SecurityRequestData,
-    SecurityResponseData
+    SecurityResponseData,
+    SecurityChangePasswordRequestData,
+    TFARequestData
 };

@@ -3,44 +3,33 @@ import bcrypt from 'bcrypt';
 
 import UserModel from '../../../models/users';
 
-import { SecurityResponseData as ResponseData } from '../../../../../shared/types/api/settings';
+import { SecurityResponseData as ResponseData, TFARequestData as RequestData } from '../../../../../shared/types/api/settings';
 import { NextFunction, Request, Response } from 'express';
 import { User } from '../../../../../shared/types/models';
 
 import Logger from '../../../utils/logger';
 
 // Activate/Deactivate TFA
-const handler = async (req: Request, res: Response<ResponseData>, next: NextFunction) => {
-  if (req.isUnauthenticated() || !req.user) return res.status(401).send({ status: 'unauthenticated' });
+const handler = async (req: Request<{}, {}, RequestData>, res: Response<ResponseData>, next: NextFunction) => {
+  const { password, action, secret } = req.body;
   const currentUser = req.user as User;
-
-  const parsedBody = z
-    .object({
-      password: z.string(),
-      action: z.enum(['activate', 'deactivate']),
-      secret: z.string().optional(),
-    })
-    .safeParse(req.body);
-
-  if (!parsedBody.success)
-    return res.status(400).send({
-      status: 'invalid-parameters',
-    });
 
   try {
     const user = await UserModel.findOne({ userID: currentUser.userID }).exec();
     if (!user) return res.status(404).send({ status: 'not-found' });
 
-    const validPassword = bcrypt.compareSync(parsedBody.data.password, currentUser.preferences.security.password);
+    const validPassword = bcrypt.compareSync(password, currentUser.preferences.security.password);
     if (!validPassword) return res.status(200).send({ status: 'invalid-password' });
 
-    if (parsedBody.data.action === 'activate') {
+    if (action === 'activate') {
+      if (!secret) return res.status(200).send({ status: 'invalid-parameters' });
+
       UserModel.updateOne(
         { userID: currentUser.userID },
         {
           $set: {
             'preferences.security.twoFactor.active': true,
-            'preferences.security.twoFactor.secret': parsedBody.data.secret,
+            'preferences.security.twoFactor.secret': secret,
           },
         },
       ).exec();

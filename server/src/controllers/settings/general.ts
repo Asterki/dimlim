@@ -1,37 +1,24 @@
-import { z } from 'zod';
 
 import UserModel from '../../models/users';
 
-import { GeneralResponseData as ResponseData } from '../../../../shared/types/api/settings';
+import { GeneralResponseData as ResponseData, GeneralRequestData as RequestData } from '../../../../shared/types/api/settings';
 import { NextFunction, Request, Response } from 'express';
 import { User } from '../../../../shared/types/models';
 
 import Logger from '../../utils/logger';
 
 // Settings General
-const handler = async (req: Request, res: Response<ResponseData>, next: NextFunction) => {
-  if (req.isUnauthenticated() || !req.user) return res.status(401).send({ status: 'unauthenticated' });
+const handler = async (req: Request<{}, {}, RequestData>, res: Response<ResponseData>, next: NextFunction) => {
+  const { theme, language } = req.body;
   const currentUser = req.user as User;
-
-  const parsedBody = z
-    .object({
-      theme: z.enum(['dark', 'light']),
-      language: z.enum(['en', 'es']),
-    })
-    .safeParse(req.body);
-
-  if (!parsedBody.success)
-    return res.status(400).send({
-      status: 'invalid-parameters',
-    });
 
   try {
     await UserModel.updateOne(
       { userID: currentUser.userID },
       {
         $set: {
-          'preferences.general.theme': parsedBody.data.theme,
-          'preferences.general.language': parsedBody.data.language,
+          'preferences.general.theme': theme,
+          'preferences.general.language': language,
         },
       },
     ).exec();

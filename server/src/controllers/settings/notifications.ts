@@ -2,36 +2,24 @@ import { z } from 'zod';
 
 import UserModel from '../../models/users';
 
-import { GeneralResponseData as ResponseData } from '../../../../shared/types/api/settings';
+import { GeneralResponseData as ResponseData, NotificationsRequestData as RequestData } from '../../../../shared/types/api/settings';
 import { NextFunction, Request, Response } from 'express';
 import { User } from '../../../../shared/types/models';
 
 import Logger from '../../utils/logger';
 
 // Settings Notifications
-const handler = async (req: Request, res: Response<ResponseData>, next: NextFunction) => {
-  if (req.isUnauthenticated() || !req.user) return res.status(401).send({ status: 'unauthenticated' });
+const handler = async (req: Request<{}, {}, RequestData>, res: Response<ResponseData>, next: NextFunction) => {
+  const { showNotifications, playSound } = req.body;
   const currentUser = req.user as User;
-
-  const parsedBody = z
-    .object({
-      showNotifications: z.boolean(),
-      playSound: z.boolean(),
-    })
-    .safeParse(req.body);
-
-  if (!parsedBody.success)
-    return res.status(400).send({
-      status: 'invalid-parameters',
-    });
 
   try {
     await UserModel.updateOne(
       { userID: currentUser.userID },
       {
         $set: {
-          'preferences.notifications.showNotifications': parsedBody.data.showNotifications,
-          'preferences.notifications.playSound': parsedBody.data.playSound,
+          'preferences.notifications.showNotifications': showNotifications,
+          'preferences.notifications.playSound': playSound,
         },
       },
     ).exec();

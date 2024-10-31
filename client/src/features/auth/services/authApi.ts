@@ -68,4 +68,4 @@ const register = async (email: string, password: string) => {
   }
 };
 
-export { fetchUser, logout, login, register };
+export default { fetchUser, logout, login, register };

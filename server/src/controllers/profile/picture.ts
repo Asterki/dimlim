@@ -1,5 +1,4 @@
 import formidable, { IncomingForm } from 'formidable';
-import { z } from 'zod';
 import path from 'path';
 import sharp from 'sharp';
 import { v4 as uuidv4 } from 'uuid';
@@ -16,22 +15,11 @@ import Logger from '../../utils/logger';
 
 // Profile picture upload
 const handler = async (req: Request, res: Response, next: NextFunction) => {
-  if (req.isUnauthenticated() || !req.user) return res.status(401).send({ status: 'unauthenticated' });
+  const { action } = req.body;
   const currentUser = req.user as User;
 
-  const parsedBody = z
-    .object({
-      action: z.enum(['upload', 'remove']),
-    })
-    .safeParse(req.body);
-
-  if (!parsedBody.success)
-    return res.status(400).send({
-      status: 'invalid-parameters',
-    });
-
   try {
-    if (parsedBody.data.action === 'upload') {
+    if (action === 'upload') {
       // Read the file
       const data: { files: formidable.Files; fields: formidable.Fields } = await new Promise((resolve, reject) => {
         const form = new IncomingForm();
@@ -67,7 +55,7 @@ const handler = async (req: Request, res: Response, next: NextFunction) => {
           rawData = data;
         });
 
-      fs.writeFile(newPath, rawData, function (err) {
+      fs.writeFile(newPath, new Uint8Array(rawData), function (err) {
         if (err) console.log(err);
       });
 
@@ -95,7 +83,7 @@ const handler = async (req: Request, res: Response, next: NextFunction) => {
           },
         },
       );
-    } else if (parsedBody.data.action === 'remove') {
+    } else {
       // Delete the user's profile picture
       const userProfile = await UserModel.findOne({
         userID: currentUser.userID,

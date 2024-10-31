@@ -1,5 +1,3 @@
-import { z } from 'zod';
-
 import UserModel from '../../models/users';
 
 import { GeneralResponseData as ResponseData } from '../../../../shared/types/api/settings';
@@ -10,29 +8,17 @@ import Logger from '../../utils/logger';
 
 // Profile Update
 const handler = async (req: Request, res: Response<ResponseData>, next: NextFunction) => {
-  if (req.isUnauthenticated() || !req.user) return res.status(401).send({ status: 'unauthenticated' });
+  const { bio, website } = req.body;
   const currentUser = req.user as User;
-
-  const parsedBody = z
-    .object({
-      bio: z.string().max(100),
-      website: z.string().url().max(100),
-    })
-    .safeParse(req.body);
-
-  if (!parsedBody.success)
-    return res.status(400).send({
-      status: 'invalid-parameters',
-    });
 
   try {
     await UserModel.updateOne(
       { userID: currentUser.userID },
       {
         $set: {
-          "profile.bio": parsedBody.data.bio,
-          "profile.website": parsedBody.data.website,
-        }
+          'profile.bio': bio,
+          'profile.website': website,
+        },
       },
     ).exec();
 

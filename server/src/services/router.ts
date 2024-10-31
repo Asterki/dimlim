@@ -48,7 +48,7 @@ class Router {
     // Account routes
     this.authRouter.post('/register', authRegister);
     this.authRouter.post('/login', authLogin);
-    this.authRouter.get('/me', authFetch);
+    this.authRouter.get('/fetch', authFetch);
     this.authRouter.get('/logout', authLogout);
 
     // Contact routes
@@ -74,7 +74,7 @@ class Router {
     this.profileRouter.post('/update', profileUpdate);
     this.profileRouter.post('/picture', profilePicture);
 
-    server.use('/api/accounts', this.authRouter);
+    server.use('/api/auth', this.authRouter);
     server.use('/api/contacts', this.contactsRouter);
     server.use('/api/settings', this.settingsRouter);
     server.use('/api/utils', this.utilsRouter);

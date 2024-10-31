@@ -87,7 +87,7 @@ const AccountRegister = () => {
     if (password !== repeatPassword) return showNotification('Failed to register', 'Passwords do not match', 'error');
 
     axios
-      .post<RegisterResponseData>(`${import.meta.env.VITE_SERVER_HOST}/api/accounts/register`, {
+      .post<RegisterResponseData>(`${import.meta.env.VITE_SERVER_HOST}/api/auth/register`, {
         username: username,
         email: email,
         password: password,

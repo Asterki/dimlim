@@ -1,3 +1,27 @@
+/**
+ * authApi Service
+ * 
+ * This module provides functions to interact with the authentication API, including:
+ * - Fetching the current authenticated user
+ * - Logging in a user
+ * - Logging out the current user
+ * - Registering a new user
+ * 
+ * Functions:
+ * - fetchUser: Fetches the current authenticated user from the server.
+ * - login: Logs in a user with email/username, password, and optional TFA code.
+ * - logout: Logs out the current user.
+ * - register: Registers a new user with username, email, and password.
+ * 
+ * Usage:
+ * import authApi from './authApi';
+ * 
+ * const user = await authApi.fetchUser();
+ * const loginStatus = await authApi.login(emailOrUsername, password, tfaCode);
+ * const logoutStatus = await authApi.logout();
+ * const registerStatus = await authApi.register(username, email, password);
+ */
+
 import axios from 'axios';
 
 import type {
@@ -11,7 +35,7 @@ import type {
 
 const fetchUser = async () => {
   try {
-    const res = await axios.get<FetchResponseData>(`${import.meta.env.VITE_SERVER_HOST}/api/auth/check`, {
+    const res = await axios.get<FetchResponseData>(`${import.meta.env.VITE_SERVER_HOST}/api/auth/fetch`, {
       withCredentials: true,
     });
     return res.data.user;
@@ -50,11 +74,12 @@ const login = async (emailOrUsername: string, password: string, tfaCode: string 
   }
 };
 
-const register = async (email: string, password: string) => {
+const register = async (username: string, email: string, password: string) => {
   try {
     const res = await axios.post<RegisterResponseData>(
       `${import.meta.env.VITE_SERVER_HOST}/api/auth/register`,
       {
+        username,
         email,
         password,
       } as RegisterRequestBody,

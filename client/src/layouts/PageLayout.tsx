@@ -21,11 +21,15 @@ interface LayoutProps {
 
 const PageLayout: React.FC<LayoutProps> = ({ children, requiresLogin = false, notification, className }) => {
   const { user, authStatus } = useAuth();
-  const [isDialogOpen, setIsDialogOpen] = useState(authStatus === 'error' && requiresLogin && !!user);
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
 
   const closeDialog = () => {
     setIsDialogOpen(false);
   };
+
+  React.useEffect(() => {
+    setIsDialogOpen(authStatus === 'error' && requiresLogin && !!user);
+  }, []);
 
   return (
     <div className={`flex flex-col min-h-screen ${className}`}>
@@ -44,7 +48,7 @@ const PageLayout: React.FC<LayoutProps> = ({ children, requiresLogin = false, no
 
       <FooterComponent />
 
-      {requiresLogin && !user && <PopUpLogin />}
+      {requiresLogin && !user && authStatus == "unauthenticated" && <PopUpLogin />}
 
       {authStatus === 'error' && requiresLogin && user && (
         <DialogComponent open={isDialogOpen} onClose={closeDialog} title="Authentication Error">

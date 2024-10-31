@@ -4,14 +4,15 @@ import * as Dialog from '@radix-ui/react-dialog';
 
 import { FaPencilAlt } from 'react-icons/fa';
 import { FaSave } from 'react-icons/fa';
-import { User } from '../../../../shared/types/models';
+import { useAuth } from '../../features/auth';
 
 interface SectionProps {
   page: React.RefObject<HTMLDivElement>;
-  user: User;
 }
 
 const SettingsProfileSection: React.FC<SectionProps> = (props) => {
+  const { user, authStatus } = useAuth();
+
   const [profilePictureModalOpen, setProfilePictureModalOpen] = React.useState(false);
   const profilePictureInput = React.useRef<HTMLInputElement>(null);
 
@@ -52,90 +53,92 @@ const SettingsProfileSection: React.FC<SectionProps> = (props) => {
         </Dialog.Portal>
       </Dialog.Root>
 
-      <div className='flex items-center p-4 gap-4'>
-        <div
-          className='group relative rounded-full cursor-pointer'
-          onClick={() => {
-            profilePictureInput.current!.click();
-          }}
-        >
-          <img
-            src='https://placehold.co/400'
-            alt=''
-            className='rounded-full w-64 md:w-32 group-hover:brightness-75 transition-all'
-          />
-          <FaPencilAlt className='opacity-0 transition-all group-hover:opacity-100 text-2xl absolute top-1/2 left-1/2 translate-y-[-50%] translate-x-[-50%]' />
-        </div>
-        <div className='flex flex-col items-start'>
-          <h1 className='text-3xl font-bold'>{props.user.profile.username}</h1>
+      {authStatus == 'authenticated' && user && (
+        <div className='flex items-center p-4 gap-4'>
           <div
-            className='group flex items-center gap-2 cursor-pointer'
+            className='group relative rounded-full cursor-pointer'
             onClick={() => {
-              if (!updatingBio) {
-                setUpdatingBio(true);
-                bioInput.current?.focus();
-              }
+              profilePictureInput.current!.click();
             }}
           >
-            <p className={updatingBio ? 'hidden' : 'block'}>{props.user.profile.bio || 'No bio'}</p>
-            <input
-              type='text'
-              ref={bioInput}
-              defaultValue={props.user.profile.bio}
-              placeholder='Write your bio'
-              className={`${
-                updatingBio ? 'block' : 'hidden'
-              } p-2 dark:bg-gray-800 border-2 dark:border-gray-600 border-slate-200  outline-none rounded-md transition-all focus:!border-blue-400 hover:border-slate-300 dark:hover:border-gray-500`}
+            <img
+              src='https://placehold.co/400'
+              alt=''
+              className='rounded-full w-64 md:w-32 group-hover:brightness-75 transition-all'
             />
-            {updatingBio ? (
-              <FaSave
-                onClick={() => {
-                  setUpdatingBio(false);
-                }}
-                className='opacity-0 group-hover:opacity-100 text-xl transition-all'
-              />
-            ) : (
-              <FaPencilAlt className='opacity-0 group-hover:opacity-100 text-xl transition-all' />
-            )}
+            <FaPencilAlt className='opacity-0 transition-all group-hover:opacity-100 text-2xl absolute top-1/2 left-1/2 translate-y-[-50%] translate-x-[-50%]' />
           </div>
-          <div
-            className='group flex items-center gap-2 cursor-pointer'
-            onClick={() => {
-              if (!updatingWebsite) {
-                setUpdatingWebsite(true);
-                websiteInput.current?.focus();
-              }
-            }}
-          >
-            <p
-              className={`${
-                updatingWebsite ? 'hidden' : 'block'
-              } text-blue-400 hover:text-purple-400 transition-all cursor-pointer`}
+          <div className='flex flex-col items-start'>
+            <h1 className='text-3xl font-bold'>{user.profile.username}</h1>
+            <div
+              className='group flex items-center gap-2 cursor-pointer'
+              onClick={() => {
+                if (!updatingBio) {
+                  setUpdatingBio(true);
+                  bioInput.current?.focus();
+                }
+              }}
             >
-              {props.user.profile.bio || 'No website'}
-            </p>
-            <input
-              type='text'
-              ref={websiteInput}
-              defaultValue={props.user.profile.website}
-              placeholder='www.example.com'
-              className={`${
-                updatingWebsite ? 'block' : 'hidden'
-              } p-2 dark:bg-gray-800 border-2 dark:border-gray-600 border-slate-200  outline-none rounded-md transition-all focus:!border-blue-400 hover:border-slate-300 dark:hover:border-gray-500"`}
-            />
-            {updatingWebsite ? (
-              <FaSave
-                onClick={() => {
-                  setUpdatingWebsite(false);
-                }}
-                className='opacity-0 group-hover:opacity-100 text-xl transition-all'
+              <p className={updatingBio ? 'hidden' : 'block'}>{user.profile.bio || 'No bio'}</p>
+              <input
+                type='text'
+                ref={bioInput}
+                defaultValue={user.profile.bio}
+                placeholder='Write your bio'
+                className={`${
+                  updatingBio ? 'block' : 'hidden'
+                } p-2 dark:bg-gray-800 border-2 dark:border-gray-600 border-slate-200  outline-none rounded-md transition-all focus:!border-blue-400 hover:border-slate-300 dark:hover:border-gray-500`}
               />
-            ) : (
-              <FaPencilAlt className='opacity-0 group-hover:opacity-100 text-xl transition-all' />
-            )}
+              {updatingBio ? (
+                <FaSave
+                  onClick={() => {
+                    setUpdatingBio(false);
+                  }}
+                  className='opacity-0 group-hover:opacity-100 text-xl transition-all'
+                />
+              ) : (
+                <FaPencilAlt className='opacity-0 group-hover:opacity-100 text-xl transition-all' />
+              )}
+            </div>
+            <div
+              className='group flex items-center gap-2 cursor-pointer'
+              onClick={() => {
+                if (!updatingWebsite) {
+                  setUpdatingWebsite(true);
+                  websiteInput.current?.focus();
+                }
+              }}
+            >
+              <p
+                className={`${
+                  updatingWebsite ? 'hidden' : 'block'
+                } text-blue-400 hover:text-purple-400 transition-all cursor-pointer`}
+              >
+                {user.profile.bio || 'No website'}
+              </p>
+              <input
+                type='text'
+                ref={websiteInput}
+                defaultValue={user.profile.website}
+                placeholder='www.example.com'
+                className={`${
+                  updatingWebsite ? 'block' : 'hidden'
+                } p-2 dark:bg-gray-800 border-2 dark:border-gray-600 border-slate-200  outline-none rounded-md transition-all focus:!border-blue-400 hover:border-slate-300 dark:hover:border-gray-500"`}
+              />
+              {updatingWebsite ? (
+                <FaSave
+                  onClick={() => {
+                    setUpdatingWebsite(false);
+                  }}
+                  className='opacity-0 group-hover:opacity-100 text-xl transition-all'
+                />
+              ) : (
+                <FaPencilAlt className='opacity-0 group-hover:opacity-100 text-xl transition-all' />
+              )}
+            </div>
           </div>
         </div>
-      </div>
+      )}
     </div>
   );
 };

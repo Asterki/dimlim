@@ -16,7 +16,7 @@ const AccountLogout = () => {
     const result = await logout();
     if (result) {
       showNotification('Logged out', 'You have been logged out', 'success');
-      redirect('/home');
+      redirect('/login');
     } else {
       showNotification('Failed to log out', 'Failed to log out', 'error');
     }

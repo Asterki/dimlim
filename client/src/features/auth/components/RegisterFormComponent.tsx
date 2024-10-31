@@ -82,7 +82,7 @@ const RegisterForm: React.FC<LoginFormProps> = ({ onSubmit, registerLoading, use
         </label>
         <div className='relative'>
           <input
-            type={passwordVisible ? 'text' : 'password'}
+            type={passwordVisible ? 'text' : 'new-password'}
             ref={passwordRef}
             placeholder='••••••••'
             className='w-full p-2 dark:bg-gray-800 border-2 dark:border-gray-600 border-slate-200  outline-none rounded-md transition-all focus:!border-blue-400 hover:border-slate-300 dark:hover:border-gray-500'
@@ -107,7 +107,7 @@ const RegisterForm: React.FC<LoginFormProps> = ({ onSubmit, registerLoading, use
         </label>
         <div className='relative'>
           <input
-            type={repeatPasswordVisible ? 'text' : 'password'}
+            type={repeatPasswordVisible ? 'text' : 'new-password'}
             ref={repeatPasswordRef}
             placeholder='••••••••'
             className='w-full p-2 dark:bg-gray-800 border-2 dark:border-gray-600 border-slate-200  outline-none rounded-md transition-all focus:!border-blue-400 hover:border-slate-300 dark:hover:border-gray-500'

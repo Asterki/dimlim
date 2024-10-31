@@ -89,6 +89,7 @@ const useAuth = () => {
   const checkAuth = async () => {
     if (user) return;
     const currentUser = await authApi.fetchUser();
+    console.log(currentUser)
     if (currentUser) {
       dispatch(setUser(currentUser)); // Set the user to the state
       dispatch(setAuthStatus('authenticated'));
@@ -99,6 +100,7 @@ const useAuth = () => {
 
   useEffect(() => {
     checkAuth(); // Check authentication status on component mount only if the user is not authenticated
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return { user, authStatus, login, logout, register };

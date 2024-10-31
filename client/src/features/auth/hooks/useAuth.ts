@@ -89,7 +89,6 @@ const useAuth = () => {
   const checkAuth = async () => {
     if (user) return;
     const currentUser = await authApi.fetchUser();
-    console.log(currentUser)
     if (currentUser) {
       dispatch(setUser(currentUser)); // Set the user to the state
       dispatch(setAuthStatus('authenticated'));

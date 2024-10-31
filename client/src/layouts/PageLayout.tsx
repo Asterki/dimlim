@@ -29,7 +29,7 @@ const PageLayout: React.FC<LayoutProps> = ({ children, requiresLogin = false, no
 
   React.useEffect(() => {
     setIsDialogOpen(authStatus === 'error' && requiresLogin && !!user);
-  }, []);
+  }, [authStatus, requiresLogin, user]);
 
   return (
     <div className={`flex flex-col min-h-screen ${className}`}>

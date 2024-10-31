@@ -2,7 +2,7 @@ import * as React from 'react';
 import { z } from 'zod';
 import { Link, useNavigate } from 'react-router-dom';
 
-import NotificationComponent from '../components/notifications';
+import NotificationComponent from './NotificationComponent';
 
 import { useAuth } from '../features/auth';
 import useNotification from '../hooks/useNotification';

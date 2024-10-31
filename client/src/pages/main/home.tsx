@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../store';
 import { setUser } from '../../store/slices/page';
 
-import NavbarComponent from '../../components/navbar';
+import NavbarComponent from '../../components/NavbarComponent';
 
 import { checkLoggedIn } from '../../lib/auth';
 

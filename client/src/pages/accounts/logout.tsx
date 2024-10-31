@@ -1,12 +1,12 @@
 import { Link, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 
-import NavbarComponent from '../../components/navbar';
-import NotificationComponent from '../../components/notifications';
+import NavbarComponent from '../../components/NavbarComponent';
+import NotificationComponent from '../../components/NotificationComponent';
 
 import { useAuth } from '../../features/auth';
 import useNotification from '../../hooks/useNotification';
-import PopUpLogin from '../../components/PopUpLogin';
+import PopUpLogin from '../../components/PopUpLoginComponent';
 
 const AccountLogout = () => {
   const { user, logout, authStatus } = useAuth();

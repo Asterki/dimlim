@@ -9,8 +9,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../store';
 import { setUser } from '../../store/slices/page';
 
-import NavbarComponent from '../../components/navbar';
-import NotificationComponent from '../../components/notifications';
+import NavbarComponent from '../../components/NavbarComponent';
+import NotificationComponent from '../../components/NotificationComponent';
 import { checkLoggedIn } from '../../lib/auth';
 
 // Icons

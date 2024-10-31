@@ -3,8 +3,8 @@ import { z } from 'zod';
 import { Link, useNavigate } from 'react-router-dom';
 import validator from 'validator';
 
-import NavbarComponent from '../../components/navbar';
-import NotificationComponent from '../../components/notifications';
+import NavbarComponent from '../../components/NavbarComponent';
+import NotificationComponent from '../../components/NotificationComponent';
 
 import RegisterForm from '../../features/auth/components/RegisterFormComponent';
 

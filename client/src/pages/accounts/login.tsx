@@ -1,22 +1,14 @@
 import * as React from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import { motion } from 'framer-motion';
-
-import { useDispatch, useSelector } from 'react-redux';
-import { RootState } from '../../store';
-import { setUser } from '../../store/slices/page';
-
-import { HiOutlineMail, HiOutlineLockClosed, HiOutlineUserCircle, HiEye, HiEyeOff } from 'react-icons/hi';
-import { FaSpinner } from 'react-icons/fa';
+import { useNavigate } from 'react-router-dom';
 
 import NavbarComponent from '../../components/navbar';
 import NotificationComponent from '../../components/notifications';
-import * as Dialog from '@radix-ui/react-dialog';
-
-import { LoginResponseData } from '../../../../shared/types/api/auth';
-import { checkLoggedIn } from '../../lib/auth';
 
 import { useAuth } from '../../features/auth';
+import useNotification from '../../hooks/useNotification';
+
+import TFADialog from '../../features/auth/components/TFADialogComponent';
+import LoginForm from '../../features/auth/components/LoginFormComponent';
 
 // To be later changed to a translate service
 const messages = {
@@ -27,55 +19,18 @@ const messages = {
 
 const AccountLogin = () => {
   const { user, authStatus, login } = useAuth();
-  const dispatch = useDispatch();
+  const { notification, showNotification } = useNotification();
   const redirect = useNavigate();
 
-  // Notification state
-  const [notification, setNotification] = React.useState<{
-    state: 'showing' | 'hidden';
-    title: string;
-    content: string;
-    type: 'error' | 'success' | 'info' | 'warning';
-  }>({
-    state: 'hidden',
-    title: '',
-    content: '',
-    type: 'info',
-  });
-
-  const showNotification = (title: string, content: string, type: 'warning' | 'info' | 'success' | 'error') => {
-    setNotification({
-      state: 'showing',
-      title: title,
-      content: content,
-      type: type,
-    });
-
-    setTimeout(() => {
-      setNotification({
-        state: 'hidden',
-        title: '',
-        content: '',
-        type: 'info',
-      });
-    }, 5000);
-  };
+  const [emailOrUsername, setEmailOrUsername] = React.useState('');
+  const [password, setPassword] = React.useState('');
 
   // Dialog State
   const [tfaDialogOpen, setTFADialogOpen] = React.useState(false);
 
   const [loginLoading, setLoginLoading] = React.useState(false);
-  const [passwordVisible, setPasswordVisible] = React.useState(false);
 
-  const usernameEmailRef = React.useRef<HTMLInputElement>(null);
-  const passwordRef = React.useRef<HTMLInputElement>(null);
-  const tfaCodeRef = React.useRef<HTMLInputElement>(null);
-
-  const loginButtonPressed = async () => {
-    const emailOrUsername = usernameEmailRef.current!.value;
-    const password = passwordRef.current!.value;
-    const tfaCode = tfaCodeRef.current ? tfaCodeRef.current.value : '';
-
+  const loginButtonPressed = async (emailOrUsername: string, password: string, tfaCode?: string) => {
     setLoginLoading(true);
     const result = await login(emailOrUsername, password, tfaCode);
 
@@ -84,6 +39,9 @@ const AccountLogin = () => {
         redirect('/');
         break;
       case 'requires-tfa':
+        // Since the TFA modal doesn't have access to the LoginForm state, we need to store the email/username and password in the component state
+        setEmailOrUsername(emailOrUsername);
+        setPassword(password);
         setTFADialogOpen(true);
         break;
       case 'invalid-credentials':
@@ -91,6 +49,7 @@ const AccountLogin = () => {
         break;
       case 'invalid-tfa-code':
         showNotification('Failed to login', messages['invalid-tfa-code'], 'error');
+        setTFADialogOpen(true);
         break;
       default:
         showNotification('Failed to login', 'An unknown error occurred', 'error');
@@ -98,6 +57,7 @@ const AccountLogin = () => {
     }
 
     setLoginLoading(false);
+    setTFADialogOpen(false);
   };
 
   return (
@@ -111,121 +71,12 @@ const AccountLogin = () => {
         type={notification.type}
       />
 
-      <Dialog.Root
-        onOpenChange={(state) => {
-          if (state) {
-            tfaCodeRef.current?.focus();
-          } else {
-            setTFADialogOpen(false);
-          }
-        }}
-        open={tfaDialogOpen}
-      >
-        <Dialog.Portal>
-          <Dialog.Overlay className='bg-black/50 data-[state=open]:animate-overlayShow fixed inset-0 z-20' />
-          <Dialog.Content className='data-[state=open]:animate-contentShow fixed top-[50%] left-[50%] max-h-[85vh] w-[90vw] max-w-[450px] translate-x-[-50%] translate-y-[-50%] rounded-md dark:bg-gray-700 bg-slate-100 p-4 dark:text-white text-slate-700 focus:outline-none z-30 flex items-center flex-col gap-2'>
-            <h1 className='text-2xl'>
-              <HiOutlineUserCircle className='inline-block' />
-              TFA Code
-            </h1>
-            <input
-              type='password'
-              className='dark:bg-gray-800 bg-slate-200 rounded-md p-2 dark:text-white w-full'
-              placeholder='Code generated by your authenticator app'
-              ref={tfaCodeRef}
-            />
-            <button className='p-2 bg-blue-400 rounded-md mt-2 w-1/2 text-white' onClick={loginButtonPressed}>
-              Submit
-            </button>
-          </Dialog.Content>
-        </Dialog.Portal>
-      </Dialog.Root>
+      <TFADialog open={tfaDialogOpen} onClose={() => setTFADialogOpen(false)} onSubmit={(tfaCode) => {
+        loginButtonPressed(emailOrUsername, password, tfaCode);
+      }} />
 
       <div className='absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 dark:bg-gray-700 bg-white/80 rounded-md shadow-md p-4 w-11/12 md:w-4/12'>
-        <motion.form
-          variants={{
-            hidden: { opacity: 0, y: -50 },
-            showing: { opacity: 1, y: 0 },
-          }}
-          initial='hidden'
-          animate='showing'
-          transition={{ duration: 0.5 }}
-        >
-          <div className='flex flex-col items-center gap-2'>
-            <img src='/assets/images/logo-no-background.png' className='w-8' />
-            <h1 className='text-xl font-semibold mb-2'>Login to DIMLIM</h1>
-          </div>
-
-          <label className='font-bold'>
-            <HiOutlineMail className='inline-block' />
-            Email
-          </label>
-          <div className='relative'>
-            <input
-              type='email'
-              placeholder='email@example.com'
-              ref={usernameEmailRef}
-              className='w-full p-2 dark:bg-gray-800 border-2 dark:border-gray-600 border-slate-200  outline-none rounded-md transition-all focus:!border-blue-400 hover:border-slate-300 dark:hover:border-gray-500'
-            />
-          </div>
-
-          <br />
-
-          <label className='font-bold'>
-            <HiOutlineLockClosed className='inline-block' />
-            Password
-          </label>
-          <div className='relative'>
-            <input
-              type={passwordVisible ? 'text' : 'password'}
-              placeholder='••••••••'
-              ref={passwordRef}
-              className='w-full p-2 dark:bg-gray-800 border-2 dark:border-gray-600 border-slate-200  outline-none rounded-md transition-all focus:!border-blue-400 hover:border-slate-300 dark:hover:border-gray-500'
-            />
-
-            <button
-              className='absolute right-4 top-1/2 -translate-y-1/2'
-              type='button'
-              onClick={() => {
-                setPasswordVisible(!passwordVisible);
-              }}
-            >
-              {passwordVisible ? <HiEye /> : <HiEyeOff />}
-            </button>
-          </div>
-
-          <div className='mt-8'>
-            <button
-              type='button'
-              onClick={loginButtonPressed}
-              className='w-full p-2 bg-blue-400 hover:bg-purple-400 rounded-md text-white shadow-md shadow-blue-300 hover:shadow-lg hover:shadow-purple-300 transition-all dark:shadow-none dark:hover:shadow-none'
-            >
-              {loginLoading && <FaSpinner className='animate-spin inline-block' />}
-              Login
-            </button>
-          </div>
-
-          <div className='mt-4'>
-            Don't have an account yet?{' '}
-            <Link to='/register' className='text-blue-400 hover:text-purple-400 transition-all'>
-              Register
-            </Link>
-          </div>
-
-          {authStatus == 'authenticated' && (
-            <div className='mt-4'>
-              <p>
-                <span className='font-bold'>Important Note:</span> You're already logged in as{' '}
-                <span className='font-bold'>{user?.profile.username}</span>, by logging in to a different account you
-                will be logged out of this account. and your chats will be deleted.
-              </p>
-
-              <Link to='/home' className='text-blue-400 hover:text-purple-400 transition-all'>
-                Go to Home
-              </Link>
-            </div>
-          )}
-        </motion.form>
+        <LoginForm loginLoading={loginLoading} onSubmit={loginButtonPressed} authState={authStatus} user={user} />
       </div>
     </div>
   );

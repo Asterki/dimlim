@@ -50,12 +50,14 @@ const RegisterForm: React.FC<LoginFormProps> = ({ onSubmit, registerLoading, use
       </div>
 
       <div className='my-4'>
-        <label className='font-bold'>
+        <label className='font-bold' htmlFor='username-input'>
           <HiOutlineUserCircle className='inline-block' />
           Username
         </label>
         <input
+          id='username-input'
           type='text'
+          autoComplete='username'
           ref={usernameRef}
           placeholder='Your username'
           className='w-full p-2 dark:bg-gray-800 border-2 dark:border-gray-600 border-slate-200  outline-none rounded-md transition-all focus:!border-blue-400 hover:border-slate-300 dark:hover:border-gray-500'
@@ -63,12 +65,14 @@ const RegisterForm: React.FC<LoginFormProps> = ({ onSubmit, registerLoading, use
       </div>
 
       <div className='my-4'>
-        <label className='font-bold'>
+        <label className='font-bold' htmlFor='email-input'>
           <HiOutlineMail className='inline-block' />
           Email
         </label>
         <input
           type='email'
+          autoComplete='email'
+          id='email-input'
           ref={emailRef}
           placeholder='Your email (will be verified)'
           className='w-full p-2 dark:bg-gray-800 border-2 dark:border-gray-600 border-slate-200  outline-none rounded-md transition-all focus:!border-blue-400 hover:border-slate-300 dark:hover:border-gray-500'
@@ -76,13 +80,15 @@ const RegisterForm: React.FC<LoginFormProps> = ({ onSubmit, registerLoading, use
       </div>
 
       <div className='my-4 relative'>
-        <label className='font-bold'>
+        <label className='font-bold' htmlFor='password-input'>
           <HiOutlineLockClosed className='inline-block' />
           Password
         </label>
         <div className='relative'>
           <input
-            type={passwordVisible ? 'text' : 'new-password'}
+            id='password-input'
+            autoComplete='new-password'
+            type={passwordVisible ? 'text' : 'password'}
             ref={passwordRef}
             placeholder='••••••••'
             className='w-full p-2 dark:bg-gray-800 border-2 dark:border-gray-600 border-slate-200  outline-none rounded-md transition-all focus:!border-blue-400 hover:border-slate-300 dark:hover:border-gray-500'
@@ -101,13 +107,15 @@ const RegisterForm: React.FC<LoginFormProps> = ({ onSubmit, registerLoading, use
       </div>
 
       <div className='my-4 relative'>
-        <label className='font-bold'>
+        <label className='font-bold' htmlFor='repeat-password-input'>
           <HiOutlineLockClosed className='inline-block' />
           Repeat Password
         </label>
         <div className='relative'>
           <input
-            type={repeatPasswordVisible ? 'text' : 'new-password'}
+            type={repeatPasswordVisible ? 'text' : 'password'}
+            id='repeat-password-input'
+            autoComplete='new-password'
             ref={repeatPasswordRef}
             placeholder='••••••••'
             className='w-full p-2 dark:bg-gray-800 border-2 dark:border-gray-600 border-slate-200  outline-none rounded-md transition-all focus:!border-blue-400 hover:border-slate-300 dark:hover:border-gray-500'

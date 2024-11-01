@@ -68,7 +68,6 @@ const useAuth = () => {
         dispatch(setAuthStatus('authenticated'));
         return 'success';
       } else {
-        dispatch(setAuthStatus('unauthenticated'));
         return status ?? 'unknown-error';
       }
     } catch (err) {

@@ -41,12 +41,13 @@ const LoginForm: React.FC<LoginFormProps> = ({ onSubmit, loginLoading, user, aut
         <h1 className='text-xl font-semibold mb-2'>Login to DIMLIM</h1>
       </div>
 
-      <label className='font-bold'>
+      <label className='font-bold' htmlFor='email-input'>
         <HiOutlineMail className='inline-block' />
         Email
       </label>
       <div className='relative'>
         <input
+          id='email-input'
           type='email'
           placeholder='email@example.com'
           ref={usernameEmailRef}
@@ -56,13 +57,15 @@ const LoginForm: React.FC<LoginFormProps> = ({ onSubmit, loginLoading, user, aut
 
       <br />
 
-      <label className='font-bold'>
+      <label className='font-bold' htmlFor='password-input'>
         <HiOutlineLockClosed className='inline-block' />
         Password
       </label>
       <div className='relative'>
         <input
-          type={passwordVisible ? 'text' : 'new-password'}
+          id='password-input'
+          autoComplete="new-password"
+          type={passwordVisible ? 'text' : 'password'}
           placeholder='••••••••'
           ref={passwordRef}
           className='w-full p-2 dark:bg-gray-800 border-2 dark:border-gray-600 border-slate-200  outline-none rounded-md transition-all focus:!border-blue-400 hover:border-slate-300 dark:hover:border-gray-500'

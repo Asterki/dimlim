@@ -9,14 +9,7 @@ import Logger from '../utils/logger';
 
 import type { User } from '../../../shared/types/models';
 
-const registerUser = async (
-  email: string,
-  username: string,
-  password: string,
-): Promise<{
-  status: 'success' | 'user-exists' | 'internal-error';
-  user?: User;
-}> => {
+const registerUser = async (email: string, username: string, password: string) => {
   try {
     const isUsernameOrEmailTaken = await UserModel.findOne({
       $or: [{ 'profile.email.value': email }, { 'profile.username': username }],
@@ -56,13 +49,7 @@ const registerUser = async (
   }
 };
 
-const deleteUser = async (
-  userID: string,
-  password: string,
-  tfaCode?: string,
-): Promise<{
-  status: 'success' | 'invalid-password' | 'invalid-tfa' | 'internal-error';
-}> => {
+const deleteUser = async (userID: string, password: string, tfaCode?: string) => {
   try {
     const user: HydratedDocument<User> | null = await UserModel.findOne({ userID });
     if (!user) return { status: 'internal-error' };

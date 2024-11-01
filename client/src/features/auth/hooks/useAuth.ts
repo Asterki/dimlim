@@ -25,9 +25,9 @@
 
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { RootState } from '../../../store'; // Adjust the path as necessary
-import { setUser, setAuthStatus } from '../slices/auth'; // Adjust the path as necessary
-import authApi from '../services/authApi'; // Adjust the path as necessary
+import { RootState } from '../../../store';
+import { setUser, setAuthStatus } from '../slices/auth';
+import authApi from '../services/authApi';
 
 const useAuth = () => {
   const dispatch = useDispatch();

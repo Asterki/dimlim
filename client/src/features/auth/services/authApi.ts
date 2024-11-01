@@ -33,9 +33,11 @@ import type {
   RegisterResponseData,
 } from '../../../../../shared/types/api/accounts';
 
+const apiEndpoint = `${import.meta.env.VITE_SERVER_HOST}/api/accounts`
+
 const fetchUser = async () => {
   try {
-    const res = await axios.get<FetchResponseData>(`${import.meta.env.VITE_SERVER_HOST}/api/accounts/fetch`, {
+    const res = await axios.get<FetchResponseData>(`${apiEndpoint}/fetch`, {
       withCredentials: true,
     });
     return res.data.user;
@@ -46,7 +48,7 @@ const fetchUser = async () => {
 
 const logout = async () => {
   try {
-    await axios.get<LogoutResponseData>(`${import.meta.env.VITE_SERVER_HOST}/api/accounts/logout`, {
+    await axios.get<LogoutResponseData>(`${apiEndpoint}/logout`, {
       withCredentials: true,
     });
     return true;
@@ -58,7 +60,7 @@ const logout = async () => {
 const login = async (emailOrUsername: string, password: string, tfaCode: string = '') => {
   try {
     const res = await axios.post<LoginResponseData>(
-      `${import.meta.env.VITE_SERVER_HOST}/api/accounts/login`,
+      `${apiEndpoint}/login`,
       {
         emailOrUsername,
         password,
@@ -77,7 +79,7 @@ const login = async (emailOrUsername: string, password: string, tfaCode: string 
 const register = async (username: string, email: string, password: string) => {
   try {
     const res = await axios.post<RegisterResponseData>(
-      `${import.meta.env.VITE_SERVER_HOST}/api/accounts/register`,
+      `${apiEndpoint}/register`,
       {
         username,
         email,

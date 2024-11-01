@@ -1,5 +1,7 @@
 import mongoose from 'mongoose';
 
+import Logger from '../utils/logger';
+
 class MongoDBClient {
   connectionString: string;
 
@@ -22,12 +24,11 @@ class MongoDBClient {
   }
 
   private onError(error: Error) {
-    console.error(`There was an error trying to connect to MongoDB`);
-    console.error(error);
+    Logger.error(`MongoDB connection error: ${error.message}`);
   }
 
   private onConnect() {
-    console.log(`MongoDB database connected`);
+    Logger.info('MongoDB connected');
   }
 }
 

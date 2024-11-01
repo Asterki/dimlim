@@ -24,7 +24,7 @@ class ContactService {
       });
       return user;
     } catch (error: unknown) {
-      Logger.getInstance().error((error as Error).message, true);
+      Logger.error((error as Error).message, true);
       return null;
     }
   }
@@ -36,7 +36,7 @@ class ContactService {
       });
       return user;
     } catch (error: unknown) {
-      Logger.getInstance().error((error as Error).message, true);
+      Logger.error((error as Error).message, true);
       return null;
     }
   }
@@ -59,7 +59,7 @@ class ContactService {
 
       return 'success';
     } catch (error: unknown) {
-      Logger.getInstance().error((error as Error).message, true);
+      Logger.error((error as Error).message, true);
       return 'internal-error';
     }
   }
@@ -82,7 +82,7 @@ class ContactService {
 
       return 'success';
     } catch (error: unknown) {
-      Logger.getInstance().error((error as Error).message, true);
+      Logger.error((error as Error).message, true);
       return 'internal-error';
     }
   }
@@ -105,7 +105,7 @@ class ContactService {
 
       return 'success';
     } catch (error: unknown) {
-      Logger.getInstance().error((error as Error).message, true);
+      Logger.error((error as Error).message, true);
       return 'internal-error';
     }
   }
@@ -120,7 +120,7 @@ class ContactService {
 
       return user.profile;
     } catch (error: unknown) {
-      Logger.getInstance().error((error as Error).message, true);
+      Logger.error((error as Error).message, true);
       return 'internal-error';
     }
   }
@@ -161,7 +161,7 @@ class ContactService {
 
       return 'success';
     } catch (error: unknown) {
-      Logger.getInstance().error((error as Error).message, true);
+      Logger.error((error as Error).message, true);
       return 'internal-error';
     }
   }
@@ -201,7 +201,7 @@ class ContactService {
 
       return 'success';
     } catch (error: unknown) {
-      Logger.getInstance().error((error as Error).message, true);
+      Logger.error((error as Error).message, true);
       return 'internal-error';
     }
   }

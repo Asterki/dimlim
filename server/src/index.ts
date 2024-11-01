@@ -11,6 +11,11 @@ import Router from './routes';
 import MongoDBClient from './config/mongodb';
 import SessionsService from './services/sessions';
 import SocketServer from './services/socket';
+import MailerService from './services/email';
+
+import Logger from './utils/logger';
+
+MailerService.getEmailHTMLTemplate('reset-password', { resetLink: 'http://localhost:3000/reset-password' });
 
 import 'dotenv/config';
 import { Connection } from 'mongoose';
@@ -47,7 +52,7 @@ class Server {
     this.router.registerRoutes(this.app);
 
     this.httpServer.listen(this.port, () => {
-      console.log(`Server running on port ${this.port}`);
+      Logger.info(`Server listening on port ${this.port}`);
     });
     this.socketServer.loadToServer(this.httpServer);
   }
@@ -56,7 +61,8 @@ class Server {
     const requiredKeys = ['MONGODB_URI', 'SESSION_SECRET'];
     for (const key of requiredKeys) {
       if (!process.env[key]) {
-        throw new Error(`Missing environment variable: ${key}`);
+        Logger.error(`Missing ${key} in .env file`);
+        process.exit(1);
       }
     }
   }

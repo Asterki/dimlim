@@ -32,7 +32,7 @@ const handler = async (req: Request<{}, {}, RequestBody>, res: Response<Response
     res.status(500).send({
       status: 'internal-error',
     });
-    Logger.getInstance().error((error as Error).message, true);
+    Logger.error((error as Error).message, true);
   }
 };
 

@@ -54,7 +54,7 @@ class AccountService {
       };
     } catch (error) {
       console.log(error);
-      Logger.getInstance().error((error as Error).message, true);
+      Logger.error((error as Error).message, true);
       return {
         status: 'internal-error',
       };
@@ -89,7 +89,7 @@ class AccountService {
         status: 'success',
       };
     } catch (error) {
-      Logger.getInstance().error((error as Error).message, true);
+      Logger.error((error as Error).message, true);
       return {
         status: 'internal-error',
       };

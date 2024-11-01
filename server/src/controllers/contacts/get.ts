@@ -40,7 +40,7 @@ const handler = async (req: Request, res: Response<ResponseData>, next: NextFunc
     res.status(500).send({
       status: 'internal-error',
     });
-    Logger.getInstance().error((error as Error).message, true);
+    Logger.error((error as Error).message, true);
   }
 };
 

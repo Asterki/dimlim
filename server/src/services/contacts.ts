@@ -2,6 +2,7 @@ import UserModel from '../models/Users';
 import { HydratedDocument } from 'mongoose';
 
 import Logger from '../utils/logger';
+import { fetchUserByID, fetchUserByUsername } from '../utils/users';
 
 import { User } from '../../../shared/types/models';
 
@@ -17,36 +18,12 @@ class ContactService {
     return ContactService.instance;
   }
 
-  private async fetchUserByUsername(username: string): Promise<HydratedDocument<User> | null> {
-    try {
-      const user: HydratedDocument<User> | null = await UserModel.findOne({
-        'profile.username': username.toLowerCase(),
-      });
-      return user;
-    } catch (error: unknown) {
-      Logger.error((error as Error).message, true);
-      return null;
-    }
-  }
-
-  private async fetchUserByID(userID: string): Promise<HydratedDocument<User> | null> {
-    try {
-      const user: HydratedDocument<User> | null = await UserModel.findOne({
-        userID,
-      });
-      return user;
-    } catch (error: unknown) {
-      Logger.error((error as Error).message, true);
-      return null;
-    }
-  }
-
   public async removeContact(userID: string, contactUsername: string): Promise<string> {
     try {
-      const user = await this.fetchUserByID(userID);
+      const user = await fetchUserByID(userID);
       if (!user) return 'user-not-found';
 
-      const contact = await this.fetchUserByUsername(contactUsername);
+      const contact = await fetchUserByUsername(contactUsername);
       if (!contact) return 'contact-not-found';
 
       if (!user.contacts.accepted.includes(contact.userID)) return 'not-contact';
@@ -66,10 +43,10 @@ class ContactService {
 
   public async blockContact(userID: string, contactUsername: string): Promise<string> {
     try {
-      const user = await this.fetchUserByID(userID);
+      const user = await fetchUserByID(userID);
       if (!user) return 'user-not-found';
 
-      const contact = await this.fetchUserByUsername(contactUsername);
+      const contact = await fetchUserByUsername(contactUsername);
       if (!contact) return 'contact-not-found';
 
       if (!user.contacts.accepted.includes(contact.userID)) return 'not-contact';
@@ -89,10 +66,10 @@ class ContactService {
 
   public async unblockContact(userID: string, contactUsername: string): Promise<string> {
     try {
-      const user = await this.fetchUserByID(userID);
+      const user = await fetchUserByID(userID);
       if (!user) return 'user-not-found';
 
-      const contact = await this.fetchUserByUsername(contactUsername);
+      const contact = await fetchUserByUsername(contactUsername);
       if (!contact) return 'contact-not-found';
 
       if (!user.contacts.blocked.includes(contact.userID)) return 'not-contact';
@@ -112,7 +89,7 @@ class ContactService {
 
   public async getProfile(contactUsername: string): Promise<any> {
     try {
-      const user = await this.fetchUserByUsername(contactUsername);
+      const user = await fetchUserByUsername(contactUsername);
       if (!user) return 'user-not-found';
 
       if (user.contacts.blocked.includes(user.userID)) return 'contact-blocked';
@@ -127,10 +104,10 @@ class ContactService {
 
   public async acceptContact(userID: string, contactUsername: string): Promise<string> {
     try {
-      const user = await this.fetchUserByID(userID);
+      const user = await fetchUserByID(userID);
       if (!user) return 'user-not-found';
 
-      const contact = await this.fetchUserByUsername(contactUsername);
+      const contact = await fetchUserByUsername(contactUsername);
       if (!contact) return 'contact-not-found';
 
       if (!contact.contacts.requests.includes(user.userID)) return 'no-request';
@@ -168,10 +145,10 @@ class ContactService {
 
   public async addContact(userID: string, contactUsername: string): Promise<string> {
     try {
-      const user = await this.fetchUserByID(userID);
+      const user = await fetchUserByID(userID);
       if (!user) return 'user-not-found';
 
-      const contact = await this.fetchUserByUsername(contactUsername);
+      const contact = await fetchUserByUsername(contactUsername);
       if (!contact) return 'contact-not-found';
 
       if (contact.contacts.blocked.includes(contact.userID)) return 'user-blocked';

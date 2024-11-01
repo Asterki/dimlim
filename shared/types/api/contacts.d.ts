@@ -1,5 +1,5 @@
 interface AddRemoveBlockUnblockRequestBody {
-  username: string;
+  contactID: string;
 }
 
 interface AddResponseData {
@@ -35,12 +35,12 @@ interface GetResponseData {
   };
 }
 
-interface PendingRequestBody {
-  username: string;
+interface RequestsRequestBody {
+  contactID: string;
   action: 'accept' | 'reject';
 }
 
-interface PendingResponseData {
+interface RequestsResponseData {
   status:
     | 'success'
     | 'user-not-found'
@@ -68,8 +68,8 @@ export type {
   BlockResponseData,
   Contact,
   GetResponseData,
-  PendingRequestBody,
-  PendingResponseData,
+  RequestsRequestBody,
+  RequestsResponseData,
   RemoveResponseData,
   AddRemoveBlockUnblockRequestBody,
   UnblockResponseData,

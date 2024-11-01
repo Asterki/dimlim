@@ -11,11 +11,11 @@ import Logger from '../../utils/logger';
 
 // Contacts block
 const handler = async (req: Request<{}, {}, RequestBody>, res: Response<ResponseData>, next: NextFunction) => {
-  const { username } = req.body;
+  const { contactID } = req.body;
   const currentUser = req.user as User;
 
   try {
-    const result = await ContactsService.blockContact(currentUser.userID, username);
+    const result = await ContactsService.blockContact(currentUser.userID, contactID);
 
     if (result == 'internal-error') throw new Error('Internal error');
     if (result !== 'success') {

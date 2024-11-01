@@ -2,8 +2,8 @@ import ContactsService from '../../services/contacts';
 
 import { NextFunction, Request, Response } from 'express';
 import {
-  PendingResponseData as ResponseData,
-  PendingRequestBody as RequestBody,
+  RequestsResponseData as ResponseData,
+  RequestsRequestBody as RequestBody,
 } from '../../../../shared/types/api/contacts';
 import { User } from '../../../../shared/types/models';
 
@@ -11,14 +11,14 @@ import Logger from '../../utils/logger';
 
 // Contacts add
 const handler = async (req: Request<{}, {}, RequestBody>, res: Response<ResponseData>, next: NextFunction) => {
-  const { username, action } = req.body;
+  const { contactID, action } = req.body;
   const currentUser = req.user as User;
 
   try {
     const result =
       action == 'accept'
-        ? await ContactsService.addContact(currentUser.userID, username)
-        : await ContactsService.rejectContact(currentUser.userID, username);
+        ? await ContactsService.addContact(currentUser.userID, contactID)
+        : await ContactsService.rejectContact(currentUser.userID, contactID);
 
     if (result == 'internal-error') throw new Error('Internal error');
     if (result !== 'success') {

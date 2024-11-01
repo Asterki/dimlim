@@ -16,7 +16,7 @@ const router = express.Router();
 
 const addRemoveBlockUnBlockSchema = z.object({
   // That's a pretty handy schema!
-  username: z.string().min(2).max(24),
+  contactID: z.string().min(36, { message: 'Invalid contact ID' }).max(36, { message: 'Invalid contact ID' }),
 });
 router.post('/add', [validateRequestBody(addRemoveBlockUnBlockSchema), ensureAuthenticated], contactsAdd);
 router.post('/remove', [validateRequestBody(addRemoveBlockUnBlockSchema), ensureAuthenticated], contactsRemove);
@@ -24,10 +24,10 @@ router.post('/block', [validateRequestBody(addRemoveBlockUnBlockSchema), ensureA
 router.post('/unblock', [validateRequestBody(addRemoveBlockUnBlockSchema), ensureAuthenticated], contactsUnblock);
 
 const requestSchema = z.object({
-  username: z.string(),
+  contactID: z.string().min(36, { message: 'Invalid contact ID' }).max(36, { message: 'Invalid contact ID' }),
   action: z.enum(['accept', 'reject']),
 });
-router.get('/pending', [validateRequestBody(requestSchema), ensureAuthenticated], contactsRequest);
+router.post('/requests', [validateRequestBody(requestSchema), ensureAuthenticated], contactsRequest);
 
 router.get('/get', ensureAuthenticated, contactsGet);
 

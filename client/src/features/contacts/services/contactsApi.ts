@@ -7,22 +7,36 @@ import type {
   RemoveResponseData,
   RequestsResponseData,
   UnblockResponseData,
+  FetchContactResponse,
 } from '../../../../../shared/types/api/contacts';
 
 const apiEndpoint = `${import.meta.env.VITE_SERVER_HOST}/api/contacts`;
 
 const fetchContacts = async () => {
   try {
-    const { data } = await axios.get<GetResponseData>(`${apiEndpoint}/get`);
+    const { data } = await axios.get<GetResponseData>(`${apiEndpoint}/get`, { withCredentials: true });
     return data.contacts;
   } catch (err) {
     return [];
   }
 };
 
+const fetchContactByUsername = async (username: string) => {
+  try {
+    const { data } = await axios.post<FetchContactResponse>(
+      `${apiEndpoint}/fetch`,
+      { username },
+      { withCredentials: true },
+    );
+    return data;
+  } catch (err) {
+    return null;
+  }
+};
+
 const addContact = async (contactID: string) => {
   try {
-    const { data } = await axios.post<AddResponseData>(`${apiEndpoint}/add`, { contactID });
+    const { data } = await axios.post<AddResponseData>(`${apiEndpoint}/add`, { contactID }, { withCredentials: true });
     return data.status;
   } catch (err) {
     return 'internal-error';
@@ -31,7 +45,11 @@ const addContact = async (contactID: string) => {
 
 const removeContact = async (contactID: string) => {
   try {
-    const { data } = await axios.post<RemoveResponseData>(`${apiEndpoint}/remove`, { contactID });
+    const { data } = await axios.post<RemoveResponseData>(
+      `${apiEndpoint}/remove`,
+      { contactID },
+      { withCredentials: true },
+    );
     return data.status;
   } catch (err) {
     return 'internal-error';
@@ -40,7 +58,11 @@ const removeContact = async (contactID: string) => {
 
 const blockContact = async (contactID: string) => {
   try {
-    const { data } = await axios.post<BlockResponseData>(`${apiEndpoint}/block`, { contactID });
+    const { data } = await axios.post<BlockResponseData>(
+      `${apiEndpoint}/block`,
+      { contactID },
+      { withCredentials: true },
+    );
     return data.status;
   } catch (err) {
     return 'internal-error';
@@ -49,7 +71,11 @@ const blockContact = async (contactID: string) => {
 
 const unblockContact = async (contactID: string) => {
   try {
-    const { data } = await axios.post<UnblockResponseData>(`${apiEndpoint}/unblock`, { contactID });
+    const { data } = await axios.post<UnblockResponseData>(
+      `${apiEndpoint}/unblock`,
+      { contactID },
+      { withCredentials: true },
+    );
     return data.status;
   } catch (err) {
     return 'internal-error';
@@ -58,7 +84,11 @@ const unblockContact = async (contactID: string) => {
 
 const contactRequests = async (contactID: string, action: 'accept' | 'reject') => {
   try {
-    const { data } = await axios.post<RequestsResponseData>(`${apiEndpoint}/requests`, { contactID, action });
+    const { data } = await axios.post<RequestsResponseData>(
+      `${apiEndpoint}/requests`,
+      { contactID, action },
+      { withCredentials: true },
+    );
     return data.status;
   } catch (err) {
     return 'internal-error';
@@ -72,4 +102,5 @@ export default {
   blockContact,
   unblockContact,
   contactRequests,
+  fetchContactByUsername,
 };

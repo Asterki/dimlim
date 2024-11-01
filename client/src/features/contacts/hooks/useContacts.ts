@@ -14,6 +14,13 @@ const useContacts = () => {
     dispatch(setContacts(contacts));
   };
 
+  const addContactByUsername = async (username: string) => {
+    const result = await contactsApi.fetchContactByUsername(username);
+    if (result?.status !== "success") return result?.status
+
+    return await contactsApi.addContact(result.contact!.userID);
+  }
+
   const addContact = async (contactID: string) => {
     return await contactsApi.addContact(contactID);
   };
@@ -50,7 +57,8 @@ const useContacts = () => {
     blockContact,
     unblockContact,
     acceptRequest,
-    rejectRequest
+    rejectRequest,
+    addContactByUsername
   };
 };
 

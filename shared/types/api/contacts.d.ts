@@ -1,4 +1,4 @@
-import  { User } from '../models';
+import { User } from '../models';
 
 interface AddRemoveBlockUnblockRequestBody {
   contactID: string;
@@ -55,6 +55,18 @@ interface UnblockResponseData {
   status: 'success' | 'user-not-found' | 'internal-error' | 'contact-not-found' | 'not-contact';
 }
 
+interface FetchContactRequestBody {
+  username: string;
+}
+
+interface FetchContactResponse {
+  status: 'success' | 'user-not-found' | 'internal-error' | "blocked";
+  contact?: {
+    userID: string;
+    profile: User.Profile;
+  };
+}
+
 export type {
   AddResponseData,
   BlockResponseData,
@@ -64,4 +76,6 @@ export type {
   RemoveResponseData,
   AddRemoveBlockUnblockRequestBody,
   UnblockResponseData,
+  FetchContactRequestBody,
+  FetchContactResponse
 };

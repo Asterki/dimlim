@@ -5,40 +5,16 @@ import axios from 'axios';
 import PageLayout from '../../layouts/PageLayout';
 
 import { useAuth } from '../../features/auth';
+import { useContacts } from '../../features/contacts';
 
 const HomePage = () => {
   const { user, authStatus } = useAuth();
+  const { contacts, addContactByUsername } = useContacts();
 
-  type Contact = {
-    userID: string;
-    profile: {
-      username: string;
-    };
-  };
-  const [contacts, setContacts] = React.useState<Contact[]>([]);
-
-  React.useEffect(() => {
-    if (!user || authStatus !== 'authenticated') return;
-
-    (async () => {
-      const { data } = await axios.get(`${import.meta.env.VITE_SERVER_HOST}/api/contacts/get`, {
-        withCredentials: true,
-      });
-      setContacts(data.contacts.accepted);
-    })();
-  }, [user, authStatus]);
-
-  const addContact = async () => {
+  const addContaect = async () => {
     const username = prompt('Enter the username of the user you want to add');
-    if (!username) return;
-
-    const res = await axios.post(
-      `${import.meta.env.VITE_SERVER_HOST}/api/contacts/add`,
-      { username: username },
-      { withCredentials: true },
-    );
-
-    console.log(res)
+    const result = await addContactByUsername(username!);
+    console.log(result)
   };
 
   return (
@@ -47,7 +23,7 @@ const HomePage = () => {
         <div>
           <div className='pt-20'>
             <div className='text-center'>
-              <button onClick={addContact} className='w-11/12 p-2 bg-blue-400 text-white rounded-md shadow-md'>
+              <button onClick={addContaect} className='w-11/12 p-2 bg-blue-400 text-white rounded-md shadow-md'>
                 Search or start chat
               </button>
 

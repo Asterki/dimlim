@@ -1,13 +1,13 @@
 interface User {
   userID: string;
   created: number;
+  email: {
+    value: string;
+    verified: boolean;
+  };
   profile: {
     username: string;
     avatar: string;
-    email: {
-      value: string;
-      verified: boolean;
-    };
     imageID: string;
     website: string;
     bio: string;

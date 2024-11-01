@@ -16,13 +16,13 @@ class ContactService {
 
   public async getUserByID(userID: string) {
     const user = await fetchUserByID(userID);
-    if (!user) throw new Error('user-not-found');
+    if (!user) return 'user-not-found';
     return user;
   }
 
   public async getUserByUsername(username: string) {
     const user = await fetchUserByUsername(username);
-    if (!user) throw new Error('user-not-found');
+    if (!user) return 'user-not-found';
     return user;
   }
 
@@ -33,6 +33,8 @@ class ContactService {
   public async removeContact(userID: string, contactID: string) {
     try {
       const user = await this.getUserByID(userID);
+      if (user == "user-not-found") return "user-not-found";
+
       const contact = await fetchUserByID(contactID);
 
       if (!contact) {
@@ -59,6 +61,8 @@ class ContactService {
   public async blockContact(userID: string, contactID: string) {
     try {
       const user = await this.getUserByID(userID);
+      if (user == "user-not-found") return "user-not-found";
+
 
       if (!user.contacts.accepted.includes(contactID)) return 'not-contact';
 
@@ -77,6 +81,8 @@ class ContactService {
   public async unblockContact(userID: string, contactID: string) {
     try {
       const user = await this.getUserByID(userID);
+      if (user == "user-not-found") return "user-not-found";
+
 
       if (!user.contacts.blocked.includes(contactID)) return 'not-contact';
 
@@ -111,7 +117,10 @@ class ContactService {
   public async acceptContact(userID: string, contactID: string) {
     try {
       const user = await this.getUserByID(userID);
+      if (user == "user-not-found") return "user-not-found";
+
       const contact = await this.getUserByUsername(contactID);
+      if (contact == "user-not-found") return 'user-not-found';
 
       if (!contact.contacts.pending.includes(user.userID)) return 'no-request';
 
@@ -134,6 +143,8 @@ class ContactService {
   public async rejectContact(userID: string, contactID: string) {
     try {
       const user = await this.getUserByID(userID);
+      if (user == "user-not-found") return "user-not-found";
+
       const contact = await fetchUserByID(contactID);
 
       if (!contact) {
@@ -157,7 +168,10 @@ class ContactService {
   public async addContact(userID: string, contactUsername: string) {
     try {
       const user = await this.getUserByID(userID);
+      if (user == "user-not-found") return "user-not-found";
+
       const contact = await this.getUserByUsername(contactUsername);
+      if (contact == "user-not-found") return 'user-not-found';
 
       if (contact.contacts.blocked.includes(contact.userID)) return 'user-blocked';
       if (contact.contacts.requests.includes(contact.userID)) return 'request-pending';

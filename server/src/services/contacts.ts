@@ -52,7 +52,7 @@ class ContactService {
       return 'success';
     } catch (error: unknown) {
       Logger.error((error as Error).message, true);
-      return (error as Error).message;
+      return "internal-error"
     }
   }
 
@@ -70,7 +70,7 @@ class ContactService {
       return 'success';
     } catch (error: unknown) {
       Logger.error((error as Error).message, true);
-      return (error as Error).message;
+      return "internal-error"
     }
   }
 
@@ -88,7 +88,7 @@ class ContactService {
       return 'success';
     } catch (error: unknown) {
       Logger.error((error as Error).message, true);
-      return (error as Error).message;
+      return "internal-error"
     }
   }
 
@@ -102,7 +102,7 @@ class ContactService {
       return user.profile;
     } catch (error: unknown) {
       Logger.error((error as Error).message, true);
-      return (error as Error).message;
+      return "internal-error"
     }
   }
 
@@ -125,7 +125,7 @@ class ContactService {
       return 'success';
     } catch (error: unknown) {
       Logger.error((error as Error).message, true);
-      return (error as Error).message;
+      return "internal-error"
     }
   }
 
@@ -148,7 +148,7 @@ class ContactService {
       return 'success';
     } catch (error: unknown) {
       Logger.error((error as Error).message, true);
-      return (error as Error).message;
+      return "internal-error"
     }
   }
 
@@ -175,7 +175,7 @@ class ContactService {
       return 'success';
     } catch (error: unknown) {
       Logger.error((error as Error).message, true);
-      return (error as Error).message;
+      return "internal-error"
     }
   }
 }

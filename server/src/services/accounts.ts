@@ -24,7 +24,7 @@ class AccountService {
   public async registerUser(email: string, username: string, password: string) {
     try {
       const isUsernameOrEmailTaken = await UserModel.findOne({
-        $or: [{ 'profile.email.value': email }, { 'profile.username': username }],
+        $or: [{ 'email.value': email }, { 'profile.username': username }],
       });
       if (isUsernameOrEmailTaken) return { status: 'user-exists' };
 

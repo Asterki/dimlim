@@ -15,11 +15,12 @@ interface AddResponseData {
     | 'request-sent'
     | 'already-contact'
     | 'contact-blocked'
-    | 'contact-request-sent';
+    | 'contact-request-sent'
+    | 'self-add';
 }
 
 interface BlockResponseData {
-  status: 'success' | 'user-not-found' | 'internal-error' | 'contact-not-found' | 'not-contact';
+  status: 'success' | 'internal-error' | 'user-not-found' | 'self-remove' | 'not-contact' | 'self-block';
 }
 
 interface GetResponseData {
@@ -35,24 +36,24 @@ interface RequestsRequestBody {
 interface RequestsResponseData {
   status:
     | 'success'
-    | 'user-not-found'
     | 'internal-error'
-    | 'contact-not-found'
+    | 'user-not-found'
+    | 'no-request'
+    | 'self-reject'
+    | 'self-add'
     | 'user-blocked'
     | 'request-pending'
-    | 'request-sent'
     | 'already-contact'
     | 'contact-blocked'
-    | 'contact-request-sent'
-    | 'no-request';
+    | 'contact-request-sent';
 }
 
 interface RemoveResponseData {
-  status: 'user-not-found' | 'contact-not-found' | 'not-contact' | 'success' | 'internal-error';
+  status: 'user-not-found' | 'contact-not-found' | 'not-contact' | 'success' | 'internal-error' | 'self-remove';
 }
 
 interface UnblockResponseData {
-  status: 'success' | 'user-not-found' | 'internal-error' | 'contact-not-found' | 'not-contact';
+  status: 'success' | 'internal-error' | 'user-not-found' | 'self-remove' | 'not-contact' | 'self-unblock';
 }
 
 interface FetchContactRequestBody {
@@ -60,7 +61,7 @@ interface FetchContactRequestBody {
 }
 
 interface FetchContactResponse {
-  status: 'success' | 'user-not-found' | 'internal-error' | "blocked";
+  status: 'success' | 'user-not-found' | 'internal-error' | 'blocked';
   contact?: {
     userID: string;
     profile: User.Profile;
@@ -77,5 +78,5 @@ export type {
   AddRemoveBlockUnblockRequestBody,
   UnblockResponseData,
   FetchContactRequestBody,
-  FetchContactResponse
+  FetchContactResponse,
 };

@@ -32,6 +32,8 @@ class ContactService {
 
   public async removeContact(userID: string, contactID: string) {
     try {
+      if (userID == contactID) return 'self-remove';
+
       const user = await this.getUserByID(userID);
       if (user == "user-not-found") return "user-not-found";
 
@@ -60,9 +62,10 @@ class ContactService {
 
   public async blockContact(userID: string, contactID: string) {
     try {
+      if (userID == contactID) return 'self-block';
+
       const user = await this.getUserByID(userID);
       if (user == "user-not-found") return "user-not-found";
-
 
       if (!user.contacts.accepted.includes(contactID)) return 'not-contact';
 
@@ -80,9 +83,10 @@ class ContactService {
 
   public async unblockContact(userID: string, contactID: string) {
     try {
+      if (userID == contactID) return 'self-unblock';
+
       const user = await this.getUserByID(userID);
       if (user == "user-not-found") return "user-not-found";
-
 
       if (!user.contacts.blocked.includes(contactID)) return 'not-contact';
 
@@ -116,6 +120,8 @@ class ContactService {
 
   public async acceptContact(userID: string, contactID: string) {
     try {
+      if (userID == contactID) return 'self-accept';
+
       const user = await this.getUserByID(userID);
       if (user == "user-not-found") return "user-not-found";
 
@@ -142,6 +148,8 @@ class ContactService {
 
   public async rejectContact(userID: string, contactID: string) {
     try {
+      if (userID == contactID) return 'self-reject';
+
       const user = await this.getUserByID(userID);
       if (user == "user-not-found") return "user-not-found";
 
@@ -165,28 +173,30 @@ class ContactService {
     }
   }
 
-  public async addContact(userID: string, contactUsername: string) {
+  public async addContact(userID: string, contactID: string) {
     try {
+      if (userID == contactID) return 'self-add';
+
       const user = await this.getUserByID(userID);
       if (user == "user-not-found") return "user-not-found";
 
-      const contact = await this.getUserByUsername(contactUsername);
+      const contact = await this.getUserByID(contactID);
       if (contact == "user-not-found") return 'user-not-found';
 
       if (contact.contacts.blocked.includes(contact.userID)) return 'user-blocked';
-      if (contact.contacts.requests.includes(contact.userID)) return 'request-pending';
+      if (contact.contacts.pending.includes(contact.userID)) return 'request-pending';
       if (contact.contacts.accepted.includes(contact.userID)) return 'already-contact';
 
       if (contact.contacts.blocked.includes(user.userID)) return 'contact-blocked';
-      if (contact.contacts.pending.includes(user.userID)) return 'contact-request-sent';
+      if (contact.contacts.requests.includes(user.userID)) return 'contact-request-sent';
       if (contact.contacts.accepted.includes(user.userID)) return 'already-contact';
 
-      if (contact.contacts.requests.includes(user.userID) || contact.contacts.pending.includes(contact.userID)) {
+      if (contact.contacts.pending.includes(user.userID) || contact.contacts.requests.includes(contact.userID)) {
         await this.acceptContact(user.userID, contact.profile.username);
       }
 
-      await this.updateUserContacts(user.userID, { $addToSet: { 'contacts.requests': contact.userID } });
-      await this.updateUserContacts(contact.userID, { $addToSet: { 'contacts.pending': user.userID } });
+      await this.updateUserContacts(user.userID, { $addToSet: { 'contacts.pending': contact.userID } });
+      await this.updateUserContacts(contact.userID, { $addToSet: { 'contacts.requests': user.userID } });
 
       return 'success';
     } catch (error: unknown) {

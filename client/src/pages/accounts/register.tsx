@@ -23,21 +23,21 @@ const AccountRegister = () => {
         email: z.string().email(),
         username: z
           .string()
-          .min(3)
-          .max(24)
+          .min(3, { message: 'Username must be at least 3 characters long' })
+          .max(24 , { message: 'Username must be at most 24 characters long' })
           .refine((username) => {
             return validator.isAlphanumeric(username, 'en-US', { ignore: '_.' });
-          }),
+          }, { message: 'Username must be alphanumeric' }),
         password: z
           .string()
-          .min(8)
-          .max(100)
+          .min(8, { message: 'Password must be at least 8 characters long' })
+          .max(100, { message: 'Password must be at most 100 characters long' })
           .refine((pass) => {
             return validator.isStrongPassword(pass);
-          }),
+          }, { message: 'Password must be strong' }),
         repeatPassword: z.string().refine((repeatPassword) => {
           return repeatPassword === password;
-        }),
+        }, { message: 'Passwords do not match' }),
       })
       .safeParse({
         email,
@@ -49,7 +49,7 @@ const AccountRegister = () => {
     setRegisterLoading(true);
 
     if (!parsedBody.success) {
-      showNotification('Failed to register', 'Please check the fields and try again', 'error');
+      showNotification('Failed to register', JSON.parse(parsedBody.error.message)[0].message, 'error');
       setRegisterLoading(false);
       return;
     }

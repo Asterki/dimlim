@@ -12,7 +12,7 @@ const handler = async (req: Request<{}, {}, RequestBody>, res: Response<Response
   const username = req.body.username;
 
   if (username == currentUser.profile.username)
-    return res.status(401).send({
+    return res.status(200).send({
       status: 'cannot-check-self',
     });
 

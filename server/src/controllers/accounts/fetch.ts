@@ -4,7 +4,7 @@ import { FetchResponseData as ResponseData } from '../../../../shared/types/api/
 const handler = async (req: Request, res: Response<ResponseData>, next: NextFunction) => {
   const user = req.user;
   if (!user)
-    return res.status(401).send({
+    return res.status(200).send({
       status: 'unauthenticated',
     });
 

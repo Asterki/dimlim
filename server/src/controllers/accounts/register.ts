@@ -15,7 +15,7 @@ const handler = async (req: Request<{}, {}, RequestBody>, res: Response<Response
     const result = await AccountService.registerUser(email, username, password);
 
     if (result.status === 'user-exists') {
-      return res.status(400).send({
+      return res.status(200).send({
         status: 'user-exists',
       });
     }

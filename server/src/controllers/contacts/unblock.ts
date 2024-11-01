@@ -19,7 +19,7 @@ const handler = async (req: Request<{}, {}, RequestBody>, res: Response<Response
 
     if (result == 'internal-error') throw new Error('Internal error');
     if (result !== 'success') {
-      return res.status(400).send({
+      return res.status(200).send({
         status: result,
       });
     } else {

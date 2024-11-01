@@ -16,7 +16,7 @@ const handler = async (req: Request<{}, {}, RequestBody>, res: Response<Response
 
   try {
     const userResult = await ContactsService.getUserByUsername(username);
-    if (userResult === 'user-not-found') return res.status(400).send({ status: 'user-not-found' });
+    if (userResult === 'user-not-found') return res.status(200).send({ status: 'user-not-found' });
 
     const result = {
       userID: userResult.userID,

@@ -32,7 +32,7 @@ const handler = async (req: Request<{}, {}, RequestData>, res: Response<Response
         });
       });
 
-      if (!data.files.profile) return res.status(400).json({ status: 'bad-request', message: 'Profile picture is required.' });
+      if (!data.files.profile) return res.status(200).json({ status: 'bad-request', message: 'Profile picture is required.' });
       let file = data.files.profile[0];
 
       // Create the directory if it doesn't exist

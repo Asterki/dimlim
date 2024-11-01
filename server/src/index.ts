@@ -9,7 +9,7 @@ import cookie from 'cookie-parser';
 // Services
 import Router from './routes';
 import MongoDBClient from './config/mongodb';
-import SessionController from './services/sessions';
+import SessionsService from './services/sessions';
 import SocketServer from './services/socket';
 
 import 'dotenv/config';
@@ -26,7 +26,7 @@ class Server {
 
   // Services
   mongooseClient: Connection = new MongoDBClient(process.env.MONGODB_URI as string).getClient();
-  sessions: SessionController = SessionController.prototype.getInstance();
+  sessions: SessionsService = SessionsService.prototype.getInstance();
   router: Router = Router.prototype.getInstance();
   socketServer: SocketServer = SocketServer.getInstance();
 

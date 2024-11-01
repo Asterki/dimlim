@@ -1,4 +1,4 @@
-import { registerUser } from '../../services/accounts';
+import AccountService from '../../services/accounts';
 
 import { NextFunction, Request, Response } from 'express';
 import {
@@ -12,7 +12,7 @@ const handler = async (req: Request<{}, {}, RequestBody>, res: Response<Response
   const { email, username, password } = req.body;
 
   try {
-    const result = await registerUser(email, username, password);
+    const result = await AccountService.registerUser(email, username, password);
 
     if (result.status === 'user-exists') {
       return res.status(400).send({

@@ -13,6 +13,18 @@ const User = new Schema({
     required: true,
   },
 
+  email: {
+    value: {
+      type: String,
+      required: true,
+      unique: true,
+    },
+    verified: {
+      type: Boolean,
+      default: false,
+    },
+  },
+
   profile: {
     username: {
       type: String,
@@ -22,17 +34,6 @@ const User = new Schema({
     avatar: {
       type: String,
       default: '',
-    },
-    email: {
-      value: {
-        type: String,
-        required: true,
-        unique: true,
-      },
-      verified: {
-        type: Boolean,
-        default: false,
-      },
     },
     imageID: {
       type: String,

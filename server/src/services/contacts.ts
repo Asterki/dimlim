@@ -14,13 +14,13 @@ class ContactService {
     return ContactService.instance;
   }
 
-  private async getUserByID(userID: string) {
+  public async getUserByID(userID: string) {
     const user = await fetchUserByID(userID);
     if (!user) throw new Error('user-not-found');
     return user;
   }
 
-  private async getUserByUsername(username: string) {
+  public async getUserByUsername(username: string) {
     const user = await fetchUserByUsername(username);
     if (!user) throw new Error('user-not-found');
     return user;

@@ -33,12 +33,12 @@ class AccountService {
         userID: uuidv4(),
         pubKey: Buffer.from(''),
         created: Date.now(),
+        email: {
+          value: email,
+          verified: false,
+        },
         profile: {
           username,
-          email: {
-            value: email,
-            verified: false,
-          },
         },
         preferences: {
           security: {

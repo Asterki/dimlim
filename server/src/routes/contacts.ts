@@ -8,6 +8,7 @@ import contactsBlock from '../controllers/contacts/block';
 import contactsUnblock from '../controllers/contacts/unblock';
 import contactsRequest from '../controllers/contacts/requests';
 import contactsGet from '../controllers/contacts/get';
+import contactFetch from '../controllers/contacts/fetch';
 
 import { validateRequestBody } from '../middleware/validationMiddleware';
 import { ensureAuthenticated } from '../middleware/authMiddleware';
@@ -30,5 +31,10 @@ const requestSchema = z.object({
 router.post('/requests', [validateRequestBody(requestSchema), ensureAuthenticated], contactsRequest);
 
 router.get('/get', ensureAuthenticated, contactsGet);
+
+const fetchSchema = z.object({
+  username: z.string().min(3, { message: 'Invalid username' }).max(16, { message: 'Invalid username' }),
+});
+router.post('/fetch', [validateRequestBody(fetchSchema), ensureAuthenticated], contactFetch);
 
 export default router;

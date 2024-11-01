@@ -28,7 +28,7 @@ class SessionManager {
           try {
             const user: (User & Document) | null = await UserModel.findOne({
               $or: [
-                { 'profile.email.value': req.body.emailOrUsername.toLowerCase() },
+                { 'email.value': req.body.emailOrUsername.toLowerCase() },
                 { 'profile.username': req.body.emailOrUsername.toLowerCase() },
               ],
             });

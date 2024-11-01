@@ -1,4 +1,4 @@
-import UserModel from '../../models/Users';
+import ContactsService from '../../services/contacts';
 
 import { NextFunction, Request, Response } from 'express';
 import {
@@ -14,43 +14,19 @@ const handler = async (req: Request<{}, {}, RequestBody>, res: Response<Response
   const { username } = req.body;
   const currentUser = req.user as User;
 
-  if (username == currentUser.profile.username) return res.status(400).send({ status: 'cannot-block-self' });
-
   try {
-    const userExists = await UserModel.findOne({ 'profile.username': username.toLowerCase() })
-      .select('username userID')
-      .lean();
-    if (!userExists) return res.status(404).send({ status: 'user-not-found' });
+    const result = await ContactsService.blockContact(currentUser.userID, username);
 
-    // Update current user's contacts
-    await UserModel.updateOne(
-      { userID: currentUser.userID },
-      {
-        $pull: {
-          'contacts.accepted': userExists.userID,
-        },
-        $addToSet: {
-          'contacts.blocked': userExists.userID,
-        },
-      },
-      { new: true },
-    );
-
-    // Update the other user's contacts
-    await UserModel.updateOne(
-      { userID: userExists.userID },
-      {
-        $pull: {
-          'contacts.accepted': currentUser.userID,
-          'contacts.pending': currentUser.userID,
-        },
-      },
-      { new: true },
-    );
-
-    return res.status(200).send({
-      status: 'success',
-    });
+    if (result == 'internal-error') throw new Error('Internal error');
+    if (result !== 'success') {
+      return res.status(400).send({
+        status: result,
+      });
+    } else {
+      return res.status(200).send({
+        status: 'success',
+      });
+    }
   } catch (error: unknown) {
     res.status(500).send({
       status: 'internal-error',

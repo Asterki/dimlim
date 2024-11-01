@@ -4,24 +4,20 @@ interface AddRemoveBlockUnblockRequestBody {
 
 interface AddResponseData {
   status:
-    | 'unauthenticated'
     | 'success'
-    | 'invalid-parameters'
-    | 'user-exists'
-    | 'cannot-add-self'
     | 'user-not-found'
-    | 'internal-error';
+    | 'contact-not-found'
+    | 'user-blocked'
+    | 'internal-error'
+    | 'request-pending'
+    | 'request-sent'
+    | 'already-contact'
+    | 'contact-blocked'
+    | 'contact-request-sent';
 }
 
 interface BlockResponseData {
-  status:
-    | 'unauthenticated'
-    | 'success'
-    | 'invalid-parameters'
-    | 'user-exists'
-    | 'cannot-block-self'
-    | 'user-not-found'
-    | 'internal-error';
+  status: 'success' | 'user-not-found' | 'internal-error' | 'contact-not-found' | 'not-contact';
 }
 
 interface Contact {
@@ -32,10 +28,10 @@ interface Contact {
 interface GetResponseData {
   status: 'unauthenticated' | 'success' | 'internal-error';
   contacts?: {
-    accepted: Contact[];
-    pending: Contact[];
-    requests: Contact[];
-    blocked: Contact[];
+    accepted: String[];
+    pending: String[];
+    requests: String[];
+    blocked: String[];
   };
 }
 
@@ -46,32 +42,25 @@ interface PendingRequestBody {
 
 interface PendingResponseData {
   status:
-    | 'unauthenticated'
     | 'success'
-    | 'invalid-parameters'
-    | 'cannot-add-self'
     | 'user-not-found'
-    | 'internal-error';
+    | 'internal-error'
+    | 'contact-not-found'
+    | 'user-blocked'
+    | 'request-pending'
+    | 'request-sent'
+    | 'already-contact'
+    | 'contact-blocked'
+    | 'contact-request-sent'
+    | 'no-request';
 }
 
 interface RemoveResponseData {
-  status:
-    | 'unauthenticated'
-    | 'success'
-    | 'invalid-parameters'
-    | 'cannot-remove-self'
-    | 'user-not-found'
-    | 'internal-error';
+  status: 'user-not-found' | 'contact-not-found' | 'not-contact' | 'success' | 'internal-error';
 }
 
 interface UnblockResponseData {
-  status:
-    | 'unauthenticated'
-    | 'success'
-    | 'invalid-parameters'
-    | 'cannot-unblock-self'
-    | 'user-not-found'
-    | 'internal-error';
+  status: 'success' | 'user-not-found' | 'internal-error' | 'contact-not-found' | 'not-contact';
 }
 
 export type {

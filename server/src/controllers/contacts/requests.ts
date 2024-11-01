@@ -1,70 +1,35 @@
-import { z } from 'zod';
-
-import UserModel from '../../models/Users';
+import ContactsService from '../../services/contacts';
 
 import { NextFunction, Request, Response } from 'express';
-import { PendingResponseData as ResponseData } from '../../../../shared/types/api/contacts';
+import {
+  PendingResponseData as ResponseData,
+  PendingRequestBody as RequestBody,
+} from '../../../../shared/types/api/contacts';
 import { User } from '../../../../shared/types/models';
 
 import Logger from '../../utils/logger';
 
 // Contacts add
-const handler = async (req: Request, res: Response<ResponseData>, next: NextFunction) => {
+const handler = async (req: Request<{}, {}, RequestBody>, res: Response<ResponseData>, next: NextFunction) => {
   const { username, action } = req.body;
   const currentUser = req.user as User;
 
-  if (username.toLowerCase() == currentUser.profile.username.toLowerCase())
-    return res.status(400).send({ status: 'cannot-add-self' });
-
   try {
-    const userExists = await UserModel.findOne({ 'profile.username': username.toLowerCase() }).select(
-      'profile.username userID contacts',
-    );
-    if (!userExists) return res.status(404).send({ status: 'user-not-found' });
+    const result =
+      action == 'accept'
+        ? await ContactsService.addContact(currentUser.userID, username)
+        : await ContactsService.rejectContact(currentUser.userID, username);
 
-    if (action == 'reject') {
-      // Update current user's pending contacts
-      await UserModel.updateOne(
-        { userID: currentUser.userID },
-        {
-          $pull: { 'contacts.requests': userExists.userID },
-        },
-        { new: true },
-      );
-
-      // Update the other user's pending contacts
-      await UserModel.updateOne(
-        { userID: userExists.userID },
-        {
-          $pull: { 'contacts.pending': currentUser.userID },
-        },
-        { new: true },
-      );
+    if (result == 'internal-error') throw new Error('Internal error');
+    if (result !== 'success') {
+      return res.status(400).send({
+        status: result,
+      });
     } else {
-      // Update current user's pending contacts
-      await UserModel.updateOne(
-        { userID: currentUser.userID },
-        {
-          $pull: { 'contacts.requests': userExists.userID },
-          $addToSet: { 'contacts.accepted': userExists.userID },
-        },
-        { new: true },
-      );
-
-      // Update the other user's pending contacts
-      await UserModel.updateOne(
-        { userID: userExists.userID },
-        {
-          $pull: { 'contacts.pending': currentUser.userID },
-          $addToSet: { 'contacts.accepted': currentUser.userID },
-        },
-        { new: true },
-      );
+      return res.status(200).send({
+        status: 'success',
+      });
     }
-
-    return res.status(200).send({
-      status: 'success',
-    });
   } catch (error: unknown) {
     res.status(500).send({
       status: 'internal-error',

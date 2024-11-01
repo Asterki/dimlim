@@ -1,10 +1,7 @@
 import UserModel from '../models/Users';
-import { HydratedDocument } from 'mongoose';
 
 import Logger from '../utils/logger';
 import { fetchUserByID, fetchUserByUsername } from '../utils/users';
-
-import { User } from '../../../shared/types/models';
 
 class ContactService {
   private static instance: ContactService;
@@ -18,7 +15,7 @@ class ContactService {
     return ContactService.instance;
   }
 
-  public async removeContact(userID: string, contactUsername: string): Promise<string> {
+  public async removeContact(userID: string, contactUsername: string) {
     try {
       const user = await fetchUserByID(userID);
       if (!user) return 'user-not-found';
@@ -41,7 +38,7 @@ class ContactService {
     }
   }
 
-  public async blockContact(userID: string, contactUsername: string): Promise<string> {
+  public async blockContact(userID: string, contactUsername: string) {
     try {
       const user = await fetchUserByID(userID);
       if (!user) return 'user-not-found';
@@ -64,7 +61,7 @@ class ContactService {
     }
   }
 
-  public async unblockContact(userID: string, contactUsername: string): Promise<string> {
+  public async unblockContact(userID: string, contactUsername: string) {
     try {
       const user = await fetchUserByID(userID);
       if (!user) return 'user-not-found';
@@ -102,7 +99,7 @@ class ContactService {
     }
   }
 
-  public async acceptContact(userID: string, contactUsername: string): Promise<string> {
+  public async acceptContact(userID: string, contactUsername: string) {
     try {
       const user = await fetchUserByID(userID);
       if (!user) return 'user-not-found';
@@ -143,7 +140,36 @@ class ContactService {
     }
   }
 
-  public async addContact(userID: string, contactUsername: string): Promise<string> {
+  public async rejectContact(userID: string, contactUsername: string) {
+    try {
+      const user = await fetchUserByID(userID);
+      if (!user) return 'user-not-found';
+
+      const contact = await fetchUserByUsername(contactUsername);
+      if (!contact) return 'contact-not-found';
+
+      if (!contact.contacts.requests.includes(user.userID)) return 'no-request';
+
+      await UserModel.updateOne(
+        { userID: user.userID },
+        { $pull: { 'contacts.requests': contact.userID } },
+        { new: true },
+      );
+
+      await UserModel.updateOne(
+        { userID: contact.userID },
+        { $pull: { 'contacts.pending': user.userID } },
+        { new: true },
+      );
+
+      return 'success';
+    } catch (error: unknown) {
+      Logger.error((error as Error).message, true);
+      return 'internal-error';
+    }
+  }
+
+  public async addContact(userID: string, contactUsername: string) {
     try {
       const user = await fetchUserByID(userID);
       if (!user) return 'user-not-found';

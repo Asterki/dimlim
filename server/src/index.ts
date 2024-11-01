@@ -11,11 +11,8 @@ import Router from './routes';
 import MongoDBClient from './config/mongodb';
 import SessionsService from './services/sessions';
 import SocketServer from './services/socket';
-import MailerService from './services/email';
 
 import Logger from './utils/logger';
-
-MailerService.getEmailHTMLTemplate('reset-password', { resetLink: 'http://localhost:3000/reset-password' });
 
 import 'dotenv/config';
 import { Connection } from 'mongoose';

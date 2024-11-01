@@ -1,5 +1,4 @@
 import UserModel from '../models/Users';
-
 import Logger from '../utils/logger';
 import { fetchUserByID, fetchUserByUsername } from '../utils/users';
 
@@ -15,14 +14,28 @@ class ContactService {
     return ContactService.instance;
   }
 
+  private async getUserByID(userID: string) {
+    const user = await fetchUserByID(userID);
+    if (!user) throw new Error('user-not-found');
+    return user;
+  }
+
+  private async getUserByUsername(username: string) {
+    const user = await fetchUserByUsername(username);
+    if (!user) throw new Error('user-not-found');
+    return user;
+  }
+
+  private async updateUserContacts(userID: string, update: any) {
+    await UserModel.updateOne({ userID }, update, { new: true });
+  }
+
   public async removeContact(userID: string, contactID: string) {
     try {
-      const user = await fetchUserByID(userID);
-      if (!user) return 'user-not-found'; // You wouldn't get here without an account so...
-
+      const user = await this.getUserByID(userID);
       const contact = await fetchUserByID(contactID);
+
       if (!contact) {
-        // If the contact deleted their account
         user.contacts.accepted = user.contacts.accepted.filter((id) => id !== contactID);
         await user.save();
         return 'success';
@@ -31,7 +44,7 @@ class ContactService {
       if (!user.contacts.accepted.includes(contactID)) return 'not-contact';
 
       user.contacts.accepted = user.contacts.accepted.filter((id) => id !== contactID);
-      contact.contacts.accepted = contact.contacts.accepted.filter((id) => id !== contact.userID);
+      contact.contacts.accepted = contact.contacts.accepted.filter((id) => id !== user.userID);
 
       await contact.save();
       await user.save();
@@ -39,60 +52,49 @@ class ContactService {
       return 'success';
     } catch (error: unknown) {
       Logger.error((error as Error).message, true);
-      return 'internal-error';
+      return (error as Error).message;
     }
   }
 
   public async blockContact(userID: string, contactID: string) {
     try {
-      const user = await fetchUserByID(userID);
-      if (!user) return 'user-not-found';
+      const user = await this.getUserByID(userID);
 
       if (!user.contacts.accepted.includes(contactID)) return 'not-contact';
 
       const contact = await fetchUserByID(contactID);
-      if (!contact) return this.removeContact(userID, contactID); // If the contact deleted their account
+      if (!contact) return this.removeContact(userID, contactID);
 
-      await UserModel.updateOne(
-        { userID: user.userID },
-        { $addToSet: { 'contacts.blocked': contact.userID } },
-        { new: true },
-      );
+      await this.updateUserContacts(user.userID, { $addToSet: { 'contacts.blocked': contact.userID } });
 
       return 'success';
     } catch (error: unknown) {
       Logger.error((error as Error).message, true);
-      return 'internal-error';
+      return (error as Error).message;
     }
   }
 
   public async unblockContact(userID: string, contactID: string) {
     try {
-      const user = await fetchUserByID(userID);
-      if (!user) return 'user-not-found';
+      const user = await this.getUserByID(userID);
 
       if (!user.contacts.blocked.includes(contactID)) return 'not-contact';
 
       const contact = await fetchUserByID(contactID);
       if (!contact) return this.removeContact(userID, contactID);
 
-      await UserModel.updateOne(
-        { userID: user.userID },
-        { $pull: { 'contacts.blocked': contact.userID } },
-        { new: true },
-      );
+      await this.updateUserContacts(user.userID, { $pull: { 'contacts.blocked': contact.userID } });
 
       return 'success';
     } catch (error: unknown) {
       Logger.error((error as Error).message, true);
-      return 'internal-error';
+      return (error as Error).message;
     }
   }
 
   public async getProfile(contactUsername: string): Promise<any> {
     try {
-      const user = await fetchUserByUsername(contactUsername);
-      if (!user) return 'user-not-found';
+      const user = await this.getUserByUsername(contactUsername);
 
       if (user.contacts.blocked.includes(user.userID)) return 'contact-blocked';
       if (!user.contacts.accepted.includes(user.userID)) return 'not-contact';
@@ -100,65 +102,38 @@ class ContactService {
       return user.profile;
     } catch (error: unknown) {
       Logger.error((error as Error).message, true);
-      return 'internal-error';
+      return (error as Error).message;
     }
   }
 
   public async acceptContact(userID: string, contactID: string) {
     try {
-      const user = await fetchUserByID(userID);
-      if (!user) return 'user-not-found';
-
-      const contact = await fetchUserByUsername(contactID);
-      if (!contact) {
-        user.contacts.requests = user.contacts.requests.filter((id) => id !== contactID);
-        await user.save();
-        return 'user-not-found';
-      }
+      const user = await this.getUserByID(userID);
+      const contact = await this.getUserByUsername(contactID);
 
       if (!contact.contacts.pending.includes(user.userID)) return 'no-request';
 
-      // Add contact to "accepted" list
-      await UserModel.updateOne(
-        { userID: user.userID },
-        { $addToSet: { 'contacts.accepted': contact.userID } },
-        { new: true },
-      );
-
-      // Add user to "accepted" list
-      await UserModel.updateOne(
-        { userID: contact.userID },
-        { $addToSet: { 'contacts.accepted': user.userID } },
-        { new: true },
-      );
-
-      // Remove contact from "requests" list
-      await UserModel.updateOne(
-        { userID: user.userID },
-        { $pull: { 'contacts.requests': contact.userID } },
-        { new: true },
-      );
-
-      // Remove user from "pending" list
-      await UserModel.updateOne(
-        { userID: contact.userID },
-        { $pull: { 'contacts.pending': user.userID } },
-        { new: true },
-      );
+      await this.updateUserContacts(user.userID, {
+        $addToSet: { 'contacts.accepted': contact.userID },
+        $pull: { 'contacts.requests': contact.userID },
+      });
+      await this.updateUserContacts(contact.userID, {
+        $addToSet: { 'contacts.accepted': user.userID },
+        $pull: { 'contacts.pending': user.userID },
+      });
 
       return 'success';
     } catch (error: unknown) {
       Logger.error((error as Error).message, true);
-      return 'internal-error';
+      return (error as Error).message;
     }
   }
 
   public async rejectContact(userID: string, contactID: string) {
     try {
-      const user = await fetchUserByID(userID);
-      if (!user) return 'user-not-found';
-
+      const user = await this.getUserByID(userID);
       const contact = await fetchUserByID(contactID);
+
       if (!contact) {
         user.contacts.requests = user.contacts.requests.filter((id) => id !== contactID);
         await user.save();
@@ -167,32 +142,20 @@ class ContactService {
 
       if (!contact.contacts.requests.includes(user.userID)) return 'no-request';
 
-      await UserModel.updateOne(
-        { userID: user.userID },
-        { $pull: { 'contacts.requests': contact.userID } },
-        { new: true },
-      );
-
-      await UserModel.updateOne(
-        { userID: contact.userID },
-        { $pull: { 'contacts.pending': user.userID } },
-        { new: true },
-      );
+      await this.updateUserContacts(user.userID, { $pull: { 'contacts.requests': contact.userID } });
+      await this.updateUserContacts(contact.userID, { $pull: { 'contacts.pending': user.userID } });
 
       return 'success';
     } catch (error: unknown) {
       Logger.error((error as Error).message, true);
-      return 'internal-error';
+      return (error as Error).message;
     }
   }
 
   public async addContact(userID: string, contactUsername: string) {
     try {
-      const user = await fetchUserByID(userID);
-      if (!user) return 'user-not-found';
-
-      const contact = await fetchUserByUsername(contactUsername);
-      if (!contact) return 'contact-not-found';
+      const user = await this.getUserByID(userID);
+      const contact = await this.getUserByUsername(contactUsername);
 
       if (contact.contacts.blocked.includes(contact.userID)) return 'user-blocked';
       if (contact.contacts.requests.includes(contact.userID)) return 'request-pending';
@@ -206,22 +169,13 @@ class ContactService {
         await this.acceptContact(user.userID, contact.profile.username);
       }
 
-      await UserModel.updateOne(
-        { userID: user.userID },
-        { $addToSet: { 'contacts.requests': contact.userID } },
-        { new: true },
-      );
-
-      await UserModel.updateOne(
-        { userID: contact.userID },
-        { $addToSet: { 'contacts.pending': user.userID } },
-        { new: true },
-      );
+      await this.updateUserContacts(user.userID, { $addToSet: { 'contacts.requests': contact.userID } });
+      await this.updateUserContacts(contact.userID, { $addToSet: { 'contacts.pending': user.userID } });
 
       return 'success';
     } catch (error: unknown) {
       Logger.error((error as Error).message, true);
-      return 'internal-error';
+      return (error as Error).message;
     }
   }
 }

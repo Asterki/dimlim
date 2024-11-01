@@ -1,36 +1,23 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { User } from '../../../../../shared/types/models';
+import { Contact } from '../../../../../shared/types/models';
 
 interface ContactsState {
-  currentUser: User | null;
-  authStatus: 'authenticated' | 'unauthenticated' | 'loading' | 'error';
+  contacts: Contact[];
 }
 
 const initialState: ContactsState = {
-  currentUser: null,
-  authStatus: 'loading',
+  contacts: []
 };
 
-export const authSlice = createSlice({
-  name: 'auth',
+export const contactsSlice = createSlice({
+  name: 'contacts',
   initialState,
   reducers: {
-    setUser: (state, action: PayloadAction<User | null>) => {
-      state.currentUser = action.payload;
-    },
-    login: (state, action: PayloadAction<User>) => {
-      state.currentUser = action.payload;
-      state.authStatus = 'authenticated';
-    },
-    logout: (state) => {
-      state.currentUser = null;
-      state.authStatus = 'unauthenticated';
-    },
-    setAuthStatus: (state, action: PayloadAction<'authenticated' | 'unauthenticated' | 'loading' | 'error'>) => {
-      state.authStatus = action.payload;
+    setContacts: (state, action: PayloadAction<Contact[]>) => {
+      state.contacts = action.payload;
     },
   },
 });
 
-export const { setUser, login, logout, setAuthStatus } = authSlice.actions;
-export default authSlice.reducer;
+export const { setContacts } = contactsSlice.actions;
+export default contactsSlice.reducer;

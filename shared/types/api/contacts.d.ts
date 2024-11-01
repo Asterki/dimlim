@@ -22,11 +22,6 @@ interface BlockResponseData {
   status: 'success' | 'user-not-found' | 'internal-error' | 'contact-not-found' | 'not-contact';
 }
 
-interface Contact {
-  profile: { username: string };
-  userID: string;
-}
-
 interface GetResponseData {
   status: 'unauthenticated' | 'success' | 'internal-error';
   contacts?: User.Profile[];
@@ -63,7 +58,6 @@ interface UnblockResponseData {
 export type {
   AddResponseData,
   BlockResponseData,
-  Contact,
   GetResponseData,
   RequestsRequestBody,
   RequestsResponseData,

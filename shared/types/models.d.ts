@@ -43,4 +43,6 @@ interface User {
   };
 }
 
-export type { User };
+type Contact = User.Profile;
+
+export type { User, Contact };

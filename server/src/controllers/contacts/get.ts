@@ -1,4 +1,4 @@
-import UserModel from '../../models/users';
+import UserModel from '../../models/Users';
 
 import { NextFunction, Request, Response } from 'express';
 import { GetResponseData as ResponseData } from '../../../../shared/types/api/contacts';
@@ -8,7 +8,6 @@ import Logger from '../../utils/logger';
 
 // Contacts get
 const handler = async (req: Request, res: Response<ResponseData>, next: NextFunction) => {
-  if (req.isUnauthenticated() || !req.user) return res.status(401).send({ status: 'unauthenticated' });
   const currentUser = req.user as User;
 
   try {

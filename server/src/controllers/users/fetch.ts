@@ -1,4 +1,4 @@
-import UserModel from '../../models/users';
+import UserModel from '../../models/Users';
 
 import { FetchResponseData as ResponseData, FetchRequestBody as RequestBody } from '../../../../shared/types/api/users';
 import { NextFunction, Request, Response } from 'express';
@@ -29,10 +29,10 @@ const handler = async (req: Request<{}, {}, RequestBody>, res: Response<Response
     return res.status(200).send({
       status: 'success',
       data: {
-        username: user.profile.username,
-        avatar: user.profile.avatar,
-        bio: user.profile.bio,
-        website: user.profile.website,
+        username: "user.profile.username",
+        avatar: "user.profile.avatar",
+        bio: "user.profile.bio",
+        website: "user.profile.website",
       },
     });
   } catch (error: unknown) {

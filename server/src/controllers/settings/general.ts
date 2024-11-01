@@ -1,5 +1,5 @@
 
-import UserModel from '../../models/users';
+import UserModel from '../../models/Users';
 
 import { NextFunction, Request, Response } from 'express';
 import { GeneralResponseData as ResponseData, GeneralRequestData as RequestData } from '../../../../shared/types/api/settings';

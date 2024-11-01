@@ -1,6 +1,6 @@
 import bcrypt from 'bcrypt';
 
-import UserModel from '../../../models/users';
+import UserModel from '../../../models/Users';
 
 import { NextFunction, Request, Response } from 'express';
 import {

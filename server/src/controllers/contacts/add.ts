@@ -1,4 +1,4 @@
-import UserModel from '../../models/users';
+import UserModel from '../../models/Users';
 
 import { NextFunction, Request, Response } from 'express';
 import {
@@ -30,7 +30,7 @@ const handler = async (req: Request<{}, {}, RequestBody>, res: Response<Response
     );
 
     // Update the other user's pending contacts, if they're not blocked
-    if ((userExists!.contacts!.blocked! as unknown as Array<string>).includes(currentUser.userID))
+    if (("userExists!.contacts!.blocked!" as unknown as Array<string>).includes(currentUser.userID))
       // I swear these type assertions are going to kill me one day
       return res.status(200).send({ status: 'success' });
 

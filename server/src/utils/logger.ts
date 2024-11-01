@@ -5,7 +5,13 @@ import path from 'path';
 class Logger {
   private static instance: Logger;
 
-  private constructor() {}
+  private constructor() {
+    // Create logs directory if it doesn't exist, and the files too
+    fsExtra.ensureDirSync(path.join(__dirname, '../../logs'));
+    fsExtra.ensureFileSync(path.join(__dirname, '../../logs', 'info.txt'));
+    fsExtra.ensureFileSync(path.join(__dirname, '../../logs', 'warn.txt'));
+    fsExtra.ensureFileSync(path.join(__dirname, '../../logs', 'error.txt'));
+  }
 
   public static getInstance() {
     if (!Logger.instance) Logger.instance = new Logger();

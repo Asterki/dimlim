@@ -7,7 +7,7 @@ import bcrypt from 'bcrypt';
 import speakeasy from 'speakeasy';
 import MongoStore from 'connect-mongo';
 
-import UserModel from '../models/users';
+import UserModel from '../models/Users';
 
 import { User } from '../../../shared/types/models';
 

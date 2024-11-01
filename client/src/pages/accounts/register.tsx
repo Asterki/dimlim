@@ -54,7 +54,7 @@ const AccountRegister = () => {
       return;
     }
 
-    const result = await register(parsedBody.data.email, parsedBody.data.username, parsedBody.data.password);
+    const result = await register(parsedBody.data.username, parsedBody.data.email, parsedBody.data.password);
     switch (result) {
       case 'success':
         showNotification('Successfully registered', 'You have successfully registered', 'success');

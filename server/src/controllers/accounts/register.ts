@@ -1,7 +1,4 @@
-import bcrypt from 'bcrypt';
-import { v4 as uuidv4 } from 'uuid';
-
-import UserModel from '../../models/users';
+import { registerUser } from '../../services/accounts';
 
 import { NextFunction, Request, Response } from 'express';
 import {
@@ -14,55 +11,22 @@ import Logger from '../../utils/logger';
 const handler = async (req: Request<{}, {}, RequestBody>, res: Response<ResponseData>, next: NextFunction) => {
   const { email, username, password } = req.body;
 
-  // Check if the user exists
-  const userExists = await UserModel.findOne({
-    $or: [{ 'profile.email.value': email.toLowerCase() }, { 'profile.username': username.toLowerCase() }],
-  });
-  if (userExists)
-    return res.status(200).send({
-      status: 'user-exists',
-    });
-
   try {
-    // Create the user object
-    let userID = uuidv4();
-    const hashedPassword = await bcrypt.hash(password, 10);
+    const result = await registerUser(email, username, password);
 
-    const user = new UserModel({
-      userID,
-      created: Date.now(),
-      profile: {
-        username,
-        email: {
-          value: email,
-          verified: false,
-        },
-      },
-      contacts: {
-        blocked: [],
-        pending: [],
-        accepted: [],
-      },
-      pubKey: Buffer.from(''),
-      preferences: {
-        privacy: {
-          showOnlineStatus: true,
-          showLastSeen: true,
-          showReadReceipts: true,
-        },
-        security: {
-          password: hashedPassword,
-          twoFactor: {
-            active: false,
-            secret: '',
-          },
-        },
-      },
-    });
+    if (result.status === 'user-exists') {
+      return res.status(400).send({
+        status: 'user-exists',
+      });
+    }
 
-    await user.save();
+    if (result.status === 'internal-error') {
+      return res.status(500).send({
+        status: 'internal-error',
+      });
+    }
 
-    req.login(user, (err) => {
+    req.login(result.user!, (err) => {
       res.status(200).send({
         status: 'success',
       });

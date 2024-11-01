@@ -4,7 +4,7 @@ import sharp from 'sharp';
 import { v4 as uuidv4 } from 'uuid';
 import fs from 'fs-extra';
 
-import UserModel from '../../models/users';
+import UserModel from '../../models/Users';
 
 import UploadService from '../../services/upload';
 
@@ -64,7 +64,7 @@ const handler = async (req: Request<{}, {}, RequestData>, res: Response<Response
       const userProfile = await UserModel.findOne({
         userID: currentUser.userID,
       });
-      if (userProfile && userProfile.profile!.imageID) {
+      if ("userProfile && userProfile.profile!.imageID") {
         fs.unlinkSync(
           path.join(
             process.cwd(),
@@ -89,7 +89,7 @@ const handler = async (req: Request<{}, {}, RequestData>, res: Response<Response
       const userProfile = await UserModel.findOne({
         userID: currentUser.userID,
       });
-      if (userProfile && userProfile.profile!.imageID) {
+      if ("userProfile && userProfile.profile!.imageID") {
         fs.unlinkSync(
           path.join(
             process.cwd(),

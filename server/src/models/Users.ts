@@ -1,11 +1,8 @@
 import mongoose from 'mongoose';
-import Profile from './Profiles';
-import Contacts from './Contacts';
-import Preferences from './Preferences';
 
 const Schema = mongoose.Schema;
 
-const UserSchema = new Schema({
+const User = new Schema({
   userID: {
     type: String,
     required: true,
@@ -15,24 +12,104 @@ const UserSchema = new Schema({
     type: Number,
     required: true,
   },
+
   profile: {
-    type: Schema.Types.ObjectId,
-    ref: 'Profile',
-    required: true,
+    username: {
+      type: String,
+      required: true,
+      unique: true,
+    },
+    avatar: {
+      type: String,
+      default: '',
+    },
+    email: {
+      value: {
+        type: String,
+        required: true,
+        unique: true,
+      },
+      verified: {
+        type: Boolean,
+        default: false,
+      },
+    },
+    imageID: {
+      type: String,
+      default: '',
+    },
+    website: {
+      type: String,
+      default: '',
+    },
+    bio: {
+      type: String,
+      default: '',
+    },
   },
+
   contacts: {
-    type: Schema.Types.ObjectId,
-    ref: 'Contacts',
-    required: true,
+    blocked: {
+      type: Array<string>,
+      default: [],
+    },
+    pending: {
+      type: Array<string>,
+      default: [],
+    },
+    requests: {
+      type: Array<string>,
+      default: [],
+    },
+    accepted: {
+      type: Array<string>,
+      default: [],
+    },
   },
+
   pubKey: {
     type: Buffer,
   },
+
   preferences: {
-    type: Schema.Types.ObjectId,
-    ref: 'Preferences',
-    required: true,
+    privacy: {
+      type: Object,
+      default: {
+        showOnlineStatus: true,
+        showLastSeen: true,
+        showReadReceipts: true,
+      },
+    },
+    notifications: {
+      type: Object,
+      default: {
+        showNotifications: true,
+        playSound: true,
+      },
+    },
+    general: {
+      type: Object,
+      default: {
+        theme: 'dark',
+        language: 'en',
+      },
+    },
+    security: {
+      twoFactor: {
+        active: {
+          type: Boolean,
+          default: false,
+        },
+        secret: {
+          type: String,
+        },
+      },
+      password: {
+        type: String,
+        required: true,
+      },
+    },
   },
 });
 
-export default mongoose.model('User', UserSchema, 'users');
+export default mongoose.model('User', User, 'users');

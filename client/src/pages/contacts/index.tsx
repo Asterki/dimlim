@@ -38,6 +38,7 @@ const ContactsIndex = () => {
       const { data } = await axios.get(`${import.meta.env.VITE_SERVER_HOST}/api/contacts/get`, {
         withCredentials: true,
       });
+      console.log(data)
       setContacts(data.contacts);
     })();
   }, [authStatus]);

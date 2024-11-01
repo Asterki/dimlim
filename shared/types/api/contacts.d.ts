@@ -1,3 +1,5 @@
+import  { User } from '../models';
+
 interface AddRemoveBlockUnblockRequestBody {
   contactID: string;
 }
@@ -27,12 +29,7 @@ interface Contact {
 
 interface GetResponseData {
   status: 'unauthenticated' | 'success' | 'internal-error';
-  contacts?: {
-    accepted: String[];
-    pending: String[];
-    requests: String[];
-    blocked: String[];
-  };
+  contacts?: User.Profile[];
 }
 
 interface RequestsRequestBody {

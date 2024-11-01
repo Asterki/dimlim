@@ -52,7 +52,7 @@ class ContactService {
       return 'success';
     } catch (error: unknown) {
       Logger.error((error as Error).message, true);
-      return "internal-error"
+      return 'internal-error';
     }
   }
 
@@ -70,7 +70,7 @@ class ContactService {
       return 'success';
     } catch (error: unknown) {
       Logger.error((error as Error).message, true);
-      return "internal-error"
+      return 'internal-error';
     }
   }
 
@@ -88,21 +88,23 @@ class ContactService {
       return 'success';
     } catch (error: unknown) {
       Logger.error((error as Error).message, true);
-      return "internal-error"
+      return 'internal-error';
     }
   }
 
-  public async getProfile(contactUsername: string): Promise<any> {
+  public async getProfile(contactID: string | string[]) {
     try {
-      const user = await this.getUserByUsername(contactUsername);
+      if (!Array.isArray(contactID)) contactID = [contactID];
 
-      if (user.contacts.blocked.includes(user.userID)) return 'contact-blocked';
-      if (!user.contacts.accepted.includes(user.userID)) return 'not-contact';
+      const contacts = await UserModel.find({ userID: { $in: contactID } });
 
-      return user.profile;
+      return contacts.map((contact) => ({
+        userID: contact.userID,
+        profile: contact.profile,
+      }));
     } catch (error: unknown) {
       Logger.error((error as Error).message, true);
-      return "internal-error"
+      return 'internal-error';
     }
   }
 
@@ -125,7 +127,7 @@ class ContactService {
       return 'success';
     } catch (error: unknown) {
       Logger.error((error as Error).message, true);
-      return "internal-error"
+      return 'internal-error';
     }
   }
 
@@ -148,7 +150,7 @@ class ContactService {
       return 'success';
     } catch (error: unknown) {
       Logger.error((error as Error).message, true);
-      return "internal-error"
+      return 'internal-error';
     }
   }
 
@@ -175,7 +177,7 @@ class ContactService {
       return 'success';
     } catch (error: unknown) {
       Logger.error((error as Error).message, true);
-      return "internal-error"
+      return 'internal-error';
     }
   }
 }

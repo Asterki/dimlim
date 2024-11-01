@@ -51,7 +51,25 @@ class MailerService {
     });
   }
 
-  public async getEmailHTMLTemplate(template: string, data: any) {}
+  public async getEmailHTMLTemplate(
+    template: string,
+    data: {
+      [key: string]: string;
+    },
+  ) {
+    // @ts-ignore We're creating the keys and not necessarily expect them to be there
+    let emailTemplate = this.emailTemplates[template];
+    if (!emailTemplate) {
+      Logger.error(`Email template ${template} not found`);
+      return '';
+    }
+
+    for (const key in data) {
+      emailTemplate = emailTemplate.replace(`{{${key}}}`, data[key]);
+    }
+
+    return emailTemplate;
+  }
 }
 
 export default MailerService.getInstance();

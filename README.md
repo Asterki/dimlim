@@ -1,153 +1,153 @@
 # DIMLIM
 
-DIMLIM is an end-to-end encryption chat app currently in progress. With DIMLIM, you can securely chat with your friends and family without worrying about your conversations being intercepted by third parties or even the same server that the app is being hosted at.
+DIMLIM is a secure, end-to-end encrypted messaging app designed to protect user privacy and provide a safe space for communication. With DIMLIM, your messages are encrypted from the moment they leave your device until they reach the intended recipient, preventing any third parties—including the server hosting the app—from accessing your private conversations. DIMLIM is built with a modular infrastructure and is optimized for seamless performance, offering users a robust and reliable messaging experience.
 
 ## Features
 
-- End-to-end encryption to ensure secure messaging
-- Ability to send text messages, images, and videos
-- Push notifications to ensure you never miss a message
-- User profile customization options to make your account unique
-- Ability to block unwanted contacts to prevent them from messaging you
+- **End-to-End Encryption**: Messages are encrypted with SHA512 to ensure secure communication.
+- **Group Chats**: Easily set up secure group conversations to communicate with multiple people at once.
+- **File Sharing**: Share files and media securely within chats.
+- **Customizable User Profiles**: Personalize your account with profile pictures and status updates.
+- **Message Blocking**: Block unwanted contacts from messaging you.
 
-## In Progress
+## Upcoming Features
 
-- Option to delete messages from both sender and receiver's device
-- Group chat functionality to easily communicate with multiple people
-- Voice and video call functionality
-- GIF support for more expressive messaging
-- Integration with other encrypted messaging apps
-- Ability to share documents and other file types
+- **Message Deletion**: Delete messages from both sender and receiver’s devices.
+- **Voice and Video Calls**: Secure voice and video calling functionality.
+- **GIF Support**: Enhance expressiveness with GIF support.
+- **Multi-App Integration**: Connect with users on other encrypted messaging platforms.
+- **Extended File Sharing**: Share documents and other file types with encrypted protection.
 
-**We regret to inform that the current code of our app may not accurately reflect the features that were previously mentioned. The app is currently being refactored to improve its performance and security.**
+**Note**: Some features are in progress, and future updates will bring new functionalities and improvements.
 
 ## Table of Contents
 - [DIMLIM](#dimlim)
   - [Features](#features)
-  - [In Progress](#in-progress)
+  - [Upcoming Features](#upcoming-features)
   - [Table of Contents](#table-of-contents)
-- [Screenshots](#screenshots)
-  - [Chat](#chat)
-  - [Account](#account)
-  - [Settings](#settings)
-- [Setup](#setup)
-  - [Requirements](#requirements)
-  - [Environment Variables](#environment-variables)
-  - [Running on development mode](#running-on-development-mode)
-  - [Running on production mode](#running-on-production-mode)
-- [Technologies Used](#technologies-used)
-  - [Frontend](#frontend)
-  - [Backend](#backend)
-- [Extra information](#extra-information)
-  - [Borwsers tested in](#borwsers-tested-in)
-  - [Operative systems tested in](#operative-systems-tested-in)
-- [License](#license)
+  - [Setup](#setup)
+    - [Requirements](#requirements)
+    - [Environment Variables](#environment-variables)
+      - [Server Environment Variables (`server/.env`)](#server-environment-variables-serverenv)
+      - [Client Environment Variables (`client/.env`)](#client-environment-variables-clientenv)
+    - [Running on Development Mode](#running-on-development-mode)
+    - [Running on Production Mode](#running-on-production-mode)
+  - [Technologies Used](#technologies-used)
+    - [Frontend](#frontend)
+    - [Backend](#backend)
+  - [Compatibility](#compatibility)
+    - [Browsers Tested](#browsers-tested)
+    - [Operating Systems Tested](#operating-systems-tested)
 
-<br>
-<br>
+## Setup
 
-# Screenshots
-## Chat
-![Chat](screenshots/chat.png)
+### Requirements
 
-## Account
-![Accounts Login](screenshots/accounts-login.png)
-![Accounts Register](screenshots/accounts-register.png)
+To get started with DIMLIM, ensure you have the following prerequisites installed:
 
-## Settings
-![Settings Account](screenshots/settings-account.png)
-![Settings Message](screenshots/settings-messages.png)
-![Settings Profile](screenshots/settings-profile.png)
-![Setting Security](screenshots/settings-security.png)
+- **Node.js** (v18.13.0 or later)
+- **MongoDB** (v4.4 or later)
+- **NPM** (v8.19.3 or later)
+- A **Linux**, **macOS**, or **WSL** environment is recommended for optimal performance.
 
-# Setup
+### Environment Variables
 
-Ensure that you have the requirements, installed dependencies, and have set the environment variables before you run the code
+DIMLIM requires specific environment variables to be set up for the server and client. These variables can be configured by creating `.env` files in the respective directories based on the `.env.example` files provided.
 
-## Requirements
-- Node >v18.13.0
-- MongoDB >4.4 
-- Linux, macOS or WSL (Recommended)
-- NPM >8.19.3 
+#### Server Environment Variables (`server/.env`)
 
-<br>
+| Variable        | Description                                       | Required | Default                    |
+|-----------------|---------------------------------------------------|----------|----------------------------|
+| MONGODB_URI     | MongoDB connection string                         | Yes      | `mongodb://localhost:27017/dimlim` |
+| SESSION_SECRET  | Secret key for session encryption                 | Yes      | No Default                 |
+| SERVER_PORT     | Port for the server to listen on                  | No       | 3000                       |
 
-## Environment Variables
-The following variables must be stored in a file named `.env.local`, these variables are prone to change
-| Variable             | Description                                             | Required | Default              |
-|----------------------|---------------------------------------------------------|----------|----------------------|
-| MONGODB_URI          | MongoDB URI String                                      | false    | mongodb://127.0.0.1/ |
-| PORT                 | The port client will listen to in production mode       | false    | 8080                 |
-| SESSION_SECRET       | The secret the sessions will be encrypted with          | true     | No Default           |
-| COOKIE_SECURE        | Wether the cookie is under HTTPS or not                 | false    | false                |
-| COOKIE_MAX_AGE       | How long the sessions will last (in milliseconds)       | false    | 604800000            |
-| SERVER_PORT          | The port the server will listen to on dev and prod mode | false    | 3030                 |
+#### Client Environment Variables (`client/.env`)
 
-<br>
+| Variable         | Description                                       | Required | Default                    |
+|------------------|---------------------------------------------------|----------|----------------------------|
+| VITE_SERVER_HOST | URL for the server to connect to                  | Yes      | `http://localhost:3000`    |
 
-## Running on development mode
+### Running on Development Mode
 
-On a terminal, run the following command
-```bash
-$ npm run dev
-``` 
+To start DIMLIM in development mode:
 
-Then you can access the site at the specified port
+1. **Install dependencies**:
+   - **Server**:
+     ```bash
+     cd server
+     npm install
+     ```
 
-<br>
+   - **Client**:
+     ```bash
+     cd ../client
+     npm install
+     ```
 
-## Running on production mode
+2. **Run the development server**:
+   - In the server folder:
+     ```bash
+     npm run dev
+     ```
+   - In the client folder:
+     ```bash
+     npm run dev
+     ```
 
-On a console, run the following command:
-```bash
-$ npm run start
-``` 
+You can now access the DIMLIM application at the specified local ports.
 
-This will automatically build and run the server on production mode
+### Running on Production Mode
 
-<br>
-<br>
+For production, use the following commands to start the app in a production-ready environment:
 
-# Technologies Used
-If you want to edit the code, you may want to be familiar with the following programming languages and libraries
+1. **Server**:
+   ```bash
+   npm run start
+   ```
 
-## Frontend
-- TSX
-- Next.js
-- Redux
-- SCSS
+This command will build and start the server, making it ready for production deployment.
 
-<br>
+## Technologies Used
 
-## Backend
-- TypeScript
-- Node.js
-- Express.js
-- Mongoose
-- Passport.js
+DIMLIM is developed with a modern tech stack for optimal performance, maintainability, and scalability.
 
-<br>
-<br>
+### Frontend
 
-# Extra information
+- **React**: A JavaScript library for building user interfaces.
+- **TypeScript**: A superset of JavaScript for type-safe code.
+- **Tailwind CSS**: Utility-first CSS framework for styling.
+- **Radix UI**: Component library for building accessible user interfaces.
+- **Vite**: Next-generation frontend tooling for fast builds.
 
-## Borwsers tested in
-![Brave](https://img.shields.io/badge/Brave-FB542B?style=for-the-badge&logo=Brave&logoColor=white) ![Edge](https://img.shields.io/badge/Edge-0078D7?style=for-the-badge&logo=Microsoft-edge&logoColor=white) ![Firefox](https://img.shields.io/badge/Firefox-FF7139?style=for-the-badge&logo=Firefox-Browser&logoColor=white) ![Google Chrome](https://img.shields.io/badge/Google%20Chrome-4285F4?style=for-the-badge&logo=GoogleChrome&logoColor=white) ![Opera](https://img.shields.io/badge/Opera-FF1B2D?style=for-the-badge&logo=Opera&logoColor=white) 
-<br>
+### Backend
 
-## Operative systems tested in
+- **Node.js**: JavaScript runtime for building scalable server-side applications.
+- **Express**: A fast, unopinionated, minimalist web framework for Node.js.
+- **MongoDB**: NoSQL database for high scalability and flexibility.
+- **Mongoose**: ODM for MongoDB and Node.js.
+- **Zod**: TypeScript-first schema declaration and validation library.
+- **Nodemailer**: Email library for Node.js.
 
-![Debian](https://img.shields.io/badge/Debian-D70A53?style=for-the-badge&logo=debian&logoColor=white) ![Windows](https://img.shields.io/badge/Windows-0078D6?style=for-the-badge&logo=windows&logoColor=white) ![Android](https://img.shields.io/badge/Android-3DDC84?style=for-the-badge&logo=android&logoColor=white) ![Kali](https://img.shields.io/badge/Kali-268BEE?style=for-the-badge&logo=kalilinux&logoColor=white) 
+## Compatibility
 
-<br>
-<br>
+DIMLIM has been tested across multiple browsers and operating systems to ensure a consistent experience.
 
-# License
+### Browsers Tested
 
-Copyright 2023 Fernando Rivera
+![Brave](https://img.shields.io/badge/Brave-FB542B?style=for-the-badge&logo=Brave&logoColor=white)
+![Edge](https://img.shields.io/badge/Edge-0078D7?style=for-the-badge&logo=Microsoft-edge&logoColor=white)
+![Firefox](https://img.shields.io/badge/Firefox-FF7139?style=for-the-badge&logo=Firefox-Browser&logoColor=white)
+![Google Chrome](https://img.shields.io/badge/Google%20Chrome-4285F4?style=for-the-badge&logo=GoogleChrome&logoColor=white)
+![Opera](https://img.shields.io/badge/Opera-FF1B2D?style=for-the-badge&logo=Opera&logoColor=white)
 
-Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+### Operating Systems Tested
 
-The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+![Debian](https://img.shields.io/badge/Debian-D70A53?style=for-the-badge&logo=debian&logoColor=white)
+![Windows](https://img.shields.io/badge/Windows-0078D6?style=for-the-badge&logo=windows&logoColor=white)
+![Android](https://img.shields.io/badge/Android-3DDC84?style=for-the-badge&logo=android&logoColor=white)
+![Kali](https://img.shields.io/badge/Kali-268BEE?style=for-the-badge&logo=kalilinux&logoColor=white)
 
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+---
+
+DIMLIM is committed to providing a secure, user-friendly platform for private communication. Thank you for using DIMLIM, and enjoy the peace of mind that comes with end-to-end encryption!

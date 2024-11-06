@@ -3,78 +3,34 @@ import axios from 'axios';
 import * as Tabs from '@radix-ui/react-tabs';
 
 import PageLayout from '../../layouts/PageLayout';
-import { useAuth } from '../../features/auth';
 import useNotification from '../../hooks/useNotification';
+import { useAuth } from '../../features/auth';
+import { useContacts } from '../../features/contacts';
 
 import NavbarComponent from '../../components/NavbarComponent';
 
 const ContactsIndex = () => {
   const { user, authStatus } = useAuth();
+  const { contacts,  } = useContacts()
   const { notification, showNotification } = useNotification();
-
-  type Contact = {
-    userID: string;
-    profile: {
-      username: string;
-    };
-  };
-  const [contacts, setContacts] = React.useState<{
-    accepted: Contact[];
-    blocked: Contact[];
-    pending: Contact[];
-    requests: Contact[];
-  }>({
-    accepted: [],
-    blocked: [],
-    pending: [],
-    requests: [],
-  });
 
   const [tab, setTab] = React.useState('tab1');
 
+  const [contactsWithProfile, setContactsWithProfile] = React.useState([]);
+
   React.useEffect(() => {
-    if (authStatus !== 'authenticated') return;
-    (async () => {
-      const { data } = await axios.get(`${import.meta.env.VITE_SERVER_HOST}/api/contacts/get`, {
-        withCredentials: true,
-      });
-      console.log(data)
-      setContacts(data.contacts);
-    })();
-  }, [authStatus]);
-
-  const pending = async (username: string, action: 'accept' | 'reject') => {
-    const { data } = await axios.post(
-      `${import.meta.env.VITE_SERVER_HOST}/api/contacts/pending`,
-      { action: action, username },
-      { withCredentials: true },
-    );
-    console.log(data);
-  };
-
-  const remove = async (username: string) => {
-    const { data } = await axios.post(
-      `${import.meta.env.VITE_SERVER_HOST}/api/contacts/remove`,
-      { username },
-      { withCredentials: true },
-    );
-  };
-
-  const block = async (username: string) => {
-    const { data } = await axios.post(
-      `${import.meta.env.VITE_SERVER_HOST}/api/contacts/block`,
-      { username },
-      { withCredentials: true },
-    );
-  };
-
-  const unblock = async (username: string) => {
-    const { data } = await axios.post(
-      `${import.meta.env.VITE_SERVER_HOST}/api/contacts/unblock`,
-      { username },
-      { withCredentials: true },
-    );
-  };
+    if (user) {
+      axios
+        .get('/api/contacts')
+        .then((res) => {
+          console.log(res.data);
+          setContactsWithProfile(res.data);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
+  }, [user]);
 
   return (
     <PageLayout
@@ -145,21 +101,21 @@ const ContactsIndex = () => {
                 >
                   <p className='text-2xl'>Contact Requests</p>
                   <div className='flex flex-col items-center'>
-                    {contacts.requests.length === 0 && (
+                    {user && user.contacts.requests.length === 0 && (
                       <div className='text-lg h-64 flex items-center justify-center dark:text-white/50'>
                         No requests
                       </div>
                     )}
-                    {contacts.requests.length > 0 && (
+                    {user && user.contacts.requests.length > 0 && (
                       <div className='w-11/12 min-h-64'>
-                        {contacts.requests.map((contact) => (
+                        {user.contacts.requests.map((contact) => (
                           <div
-                            key={contact.userID as string}
+                            key={contact}
                             className='dark:bg-gray-600 bg-slate-200 rounded-md p-2 my-2 flex justify-between items-center'
                           >
-                            <p>{contact.profile!.username}</p>
+                            <p>{contact}</p>
                             <div className='flex w-7/12 md:w-4/12'>
-                              <button
+                              {/* <button
                                 className='p-2 bg-blue-400 transition-all hover:brightness-110 rounded-md text-white mx-2 w-1/2'
                                 onClick={() => pending(contact.profile!.username, 'accept')}
                               >
@@ -170,7 +126,7 @@ const ContactsIndex = () => {
                                 onClick={() => pending(contact.profile!.username, 'reject')}
                               >
                                 Decline
-                              </button>
+                              </button> */}
                             </div>
                           </div>
                         ))}
@@ -178,7 +134,7 @@ const ContactsIndex = () => {
                     )}
                   </div>
                 </Tabs.Content>
-                <Tabs.Content
+                {/* <Tabs.Content
                   className='rounded-br-md rounded-bl-md dark:bg-gray-700 bg-slate-100 w-full text-center p-2 shadow-md'
                   value='tab2'
                 >
@@ -280,7 +236,7 @@ const ContactsIndex = () => {
                       </div>
                     )}
                   </div>
-                </Tabs.Content>
+                </Tabs.Content> */}
               </Tabs.Root>
             </div>
           </div>

@@ -25,7 +25,60 @@ interface BlockResponseData {
 
 interface GetResponseData {
   status: 'unauthenticated' | 'success' | 'internal-error';
-  contacts?: User.Profile[];
+  contacts?: {
+    accepted: {
+      userID: string;
+      profile:
+        | {
+            username: string;
+            avatar: string;
+            imageID: string;
+            website: string;
+            bio: string;
+          }
+        | null
+        | undefined;
+    }[];
+    pending: {
+      userID: string;
+      profile:
+        | {
+            username: string;
+            avatar: string;
+            imageID: string;
+            website: string;
+            bio: string;
+          }
+        | null
+        | undefined;
+    }[];
+    blocked: {
+      userID: string;
+      profile:
+        | {
+            username: string;
+            avatar: string;
+            imageID: string;
+            website: string;
+            bio: string;
+          }
+        | null
+        | undefined;
+    }[];
+    requests: {
+      userID: string;
+      profile:
+        | {
+            username: string;
+            avatar: string;
+            imageID: string;
+            website: string;
+            bio: string;
+          }
+        | null
+        | undefined;
+    }[];
+  };
 }
 
 interface RequestsRequestBody {

@@ -11,26 +11,44 @@ import NavbarComponent from '../../components/NavbarComponent';
 
 const ContactsIndex = () => {
   const { user, authStatus } = useAuth();
-  const { contacts,  } = useContacts()
+  const { fetchContactsWithProfile, acceptRequest, rejectRequest, removeContact, blockContact, unblockContact } =
+    useContacts();
   const { notification, showNotification } = useNotification();
 
   const [tab, setTab] = React.useState('tab1');
 
-  const [contactsWithProfile, setContactsWithProfile] = React.useState([]);
+  interface ContactProfile {
+    userID: string;
+    profile: {
+      username: string;
+      avatar: string;
+      imageID: string;
+      website: string;
+      bio: string;
+    };
+  }
+
+  const [contactsWithProfile, setContactsWithProfile] = React.useState<{
+    requests: ContactProfile[];
+    pending: ContactProfile[];
+    accepted: ContactProfile[];
+    blocked: ContactProfile[];
+  }>({
+    requests: [],
+    pending: [],
+    accepted: [],
+    blocked: [],
+  });
 
   React.useEffect(() => {
     if (user) {
-      axios
-        .get('/api/contacts')
-        .then((res) => {
-          console.log(res.data);
-          setContactsWithProfile(res.data);
-        })
-        .catch((err) => {
-          console.log(err);
-        });
+      (async () => {
+        const result = await fetchContactsWithProfile();
+        if (!result) return;
+        setContactsWithProfile(result);
+      })();
     }
-  }, [user]);
+  }, [fetchContactsWithProfile, user]);
 
   return (
     <PageLayout
@@ -101,32 +119,38 @@ const ContactsIndex = () => {
                 >
                   <p className='text-2xl'>Contact Requests</p>
                   <div className='flex flex-col items-center'>
-                    {user && user.contacts.requests.length === 0 && (
+                    {user && authStatus == 'authenticated' && user.contacts.requests.length === 0 && (
                       <div className='text-lg h-64 flex items-center justify-center dark:text-white/50'>
                         No requests
                       </div>
                     )}
-                    {user && user.contacts.requests.length > 0 && (
+                    {user && authStatus == 'authenticated' && user.contacts.requests.length > 0 && (
                       <div className='w-11/12 min-h-64'>
-                        {user.contacts.requests.map((contact) => (
+                        {contactsWithProfile.requests.map((contact) => (
                           <div
-                            key={contact}
+                            key={contact.userID}
                             className='dark:bg-gray-600 bg-slate-200 rounded-md p-2 my-2 flex justify-between items-center'
                           >
-                            <p>{contact}</p>
+                            <p>{contact.profile.username}</p>
                             <div className='flex w-7/12 md:w-4/12'>
-                              {/* <button
+                              <button
                                 className='p-2 bg-blue-400 transition-all hover:brightness-110 rounded-md text-white mx-2 w-1/2'
-                                onClick={() => pending(contact.profile!.username, 'accept')}
+                                onClick={() => {
+                                  acceptRequest(contact.userID);
+                                  showNotification('Success', 'Request accepted', 'success');
+                                }}
                               >
                                 Accept
                               </button>
                               <button
                                 className='p-2 bg-red-400 transition-all hover:brightness-110 rounded-md text-white w-1/2'
-                                onClick={() => pending(contact.profile!.username, 'reject')}
+                                onClick={() => {
+                                  rejectRequest(contact.userID);
+                                  showNotification('Success', 'Request rejected', 'success');
+                                }}
                               >
                                 Decline
-                              </button> */}
+                              </button>
                             </div>
                           </div>
                         ))}
@@ -134,20 +158,20 @@ const ContactsIndex = () => {
                     )}
                   </div>
                 </Tabs.Content>
-                {/* <Tabs.Content
+                <Tabs.Content
                   className='rounded-br-md rounded-bl-md dark:bg-gray-700 bg-slate-100 w-full text-center p-2 shadow-md'
                   value='tab2'
                 >
                   <p className='text-2xl'>Request Sent</p>
                   <div className='flex flex-col items-center'>
-                    {contacts.pending.length === 0 && (
+                    {user && authStatus == 'authenticated' && contactsWithProfile.requests.length === 0 && (
                       <div className='text-lg h-64 flex items-center justify-center dark:text-white/50'>
-                        No requests
+                        No requests sent
                       </div>
                     )}
-                    {contacts.pending.length > 0 && (
+                    {user && authStatus == 'authenticated' && user.contacts.pending.length > 0 && (
                       <div className='w-11/12 min-h-64'>
-                        {contacts.pending.map((contact) => (
+                        {contactsWithProfile.pending.map((contact) => (
                           <div
                             key={contact.userID as string}
                             className='dark:bg-gray-600 bg-slate-200 rounded-md p-2 my-2 flex justify-between items-center'
@@ -156,7 +180,7 @@ const ContactsIndex = () => {
                             <div className='flex justify-end w-7/12 md:w-4/12'>
                               <button
                                 className='p-2 bg-red-400 transition-all hover:brightness-110 rounded-md text-white w-1/2'
-                                onClick={() => pending(contact.profile!.username, 'reject')}
+                                // onClick={() => pending(contact.profile!.username, 'reject')}
                               >
                                 Cancel
                               </button>
@@ -173,14 +197,14 @@ const ContactsIndex = () => {
                 >
                   <p className='text-2xl'>Current Contacts</p>
                   <div className='flex flex-col items-center'>
-                    {contacts.accepted.length === 0 && (
+                    {user && authStatus == 'authenticated' && user.contacts.accepted.length === 0 && (
                       <div className='text-lg h-64 flex items-center justify-center dark:text-white/50'>
                         No contacts
                       </div>
                     )}
-                    {contacts.accepted.length > 0 && (
+                    {user && authStatus == 'authenticated' && user.contacts.accepted.length > 0 && (
                       <div className='w-11/12 min-h-64'>
-                        {contacts.accepted.map((contact) => (
+                        {contactsWithProfile.accepted.map((contact) => (
                           <div
                             key={contact.userID as string}
                             className='dark:bg-gray-600 bg-slate-200 rounded-md p-2 my-2 flex justify-between items-center'
@@ -189,13 +213,19 @@ const ContactsIndex = () => {
                             <div className='flex gap-2 justify-end w-7/12 md:w-4/12'>
                               <button
                                 className='p-2 bg-red-400 transition-all hover:brightness-110 rounded-md text-white w-1/2'
-                                onClick={() => remove(contact.profile!.username)}
+                                onClick={() => {
+                                  removeContact(contact.userID);
+                                  showNotification('Success', 'Contact removed', 'success');
+                                }}
                               >
                                 Remove
                               </button>
                               <button
                                 className='p-2 bg-red-400 transition-all hover:brightness-110 rounded-md text-white w-1/2'
-                                onClick={() => block(contact.profile!.username)}
+                                onClick={() => {
+                                  blockContact(contact.profile!.username);
+                                  showNotification('Success', 'Contact blocked', 'success');
+                                }}
                               >
                                 Block
                               </button>
@@ -212,22 +242,25 @@ const ContactsIndex = () => {
                 >
                   <p className='text-2xl'>Blocked Contacts</p>
                   <div className='flex flex-col items-center'>
-                    {contacts.blocked.length === 0 && (
+                    {user && authStatus == 'authenticated' && user.contacts.blocked.length === 0 && (
                       <div className='text-lg h-64 flex items-center justify-center dark:text-white/50'>
                         No blocked contacts
                       </div>
                     )}
-                    {contacts.blocked.length > 0 && (
+                    {user && authStatus == 'authenticated' && user.contacts.blocked.length > 0 && (
                       <div className='w-11/12 min-h-64'>
-                        {contacts.blocked.map((contact) => (
+                        {contactsWithProfile.blocked.map((contact) => (
                           <div
-                            key={contact.userID as string}
+                            key={contact.userID}
                             className='dark:bg-gray-600 bg-slate-200 rounded-md p-2 my-2 flex justify-between items-center w-full'
                           >
                             <p>{contact.profile!.username}</p>
                             <button
                               className='p-2 bg-blue-400 transition-all hover:brightness-110 rounded-md text-white w-1/2'
-                              onClick={() => unblock(contact.profile!.username)}
+                              onClick={() => {
+                                unblockContact(contact.profile!.username);
+                                showNotification('Success', 'Contact unblocked', 'success');
+                              }}
                             >
                               Unblock
                             </button>
@@ -236,7 +269,7 @@ const ContactsIndex = () => {
                       </div>
                     )}
                   </div>
-                </Tabs.Content> */}
+                </Tabs.Content>
               </Tabs.Root>
             </div>
           </div>

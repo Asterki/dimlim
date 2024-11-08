@@ -87,7 +87,7 @@ const unblockContact = async (contactID: string) => {
   }
 };
 
-const contactRequests = async (contactID: string, action: 'accept' | 'reject') => {
+const contactRequests = async (contactID: string, action: 'accept' | 'reject' | 'cancel') => {
   try {
     const { data } = await axios.post<RequestsResponseData>(
       `${apiEndpoint}/requests`,

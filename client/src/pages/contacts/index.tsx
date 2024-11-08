@@ -1,5 +1,4 @@
 import * as React from 'react';
-import axios from 'axios';
 import * as Tabs from '@radix-ui/react-tabs';
 
 import PageLayout from '../../layouts/PageLayout';
@@ -11,8 +10,15 @@ import NavbarComponent from '../../components/NavbarComponent';
 
 const ContactsIndex = () => {
   const { user, authStatus } = useAuth();
-  const { fetchContactsWithProfile, acceptRequest, rejectRequest, removeContact, blockContact, unblockContact } =
-    useContacts();
+  const {
+    fetchContactsWithProfile,
+    acceptRequest,
+    rejectRequest,
+    removeContact,
+    blockContact,
+    unblockContact,
+    cancelRequest,
+  } = useContacts();
   const { notification, showNotification } = useNotification();
 
   const [tab, setTab] = React.useState('tab1');
@@ -180,7 +186,10 @@ const ContactsIndex = () => {
                             <div className='flex justify-end w-7/12 md:w-4/12'>
                               <button
                                 className='p-2 bg-red-400 transition-all hover:brightness-110 rounded-md text-white w-1/2'
-                                // onClick={() => pending(contact.profile!.username, 'reject')}
+                                onClick={() => {
+                                  cancelRequest(contact.userID);
+                                  showNotification('Success', 'Request cancelled', 'success');
+                                }}
                               >
                                 Cancel
                               </button>

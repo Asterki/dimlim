@@ -35,7 +35,7 @@ class ContactService {
       if (userID == contactID) return 'self-remove';
 
       const user = await this.getUserByID(userID);
-      if (user == "user-not-found") return "user-not-found";
+      if (user == 'user-not-found') return 'user-not-found';
 
       const contact = await fetchUserByID(contactID);
 
@@ -65,7 +65,7 @@ class ContactService {
       if (userID == contactID) return 'self-block';
 
       const user = await this.getUserByID(userID);
-      if (user == "user-not-found") return "user-not-found";
+      if (user == 'user-not-found') return 'user-not-found';
 
       if (!user.contacts.accepted.includes(contactID)) return 'not-contact';
 
@@ -86,7 +86,7 @@ class ContactService {
       if (userID == contactID) return 'self-unblock';
 
       const user = await this.getUserByID(userID);
-      if (user == "user-not-found") return "user-not-found";
+      if (user == 'user-not-found') return 'user-not-found';
 
       if (!user.contacts.blocked.includes(contactID)) return 'not-contact';
 
@@ -110,7 +110,13 @@ class ContactService {
 
       return contacts.map((contact) => ({
         userID: contact.userID,
-        profile: contact.profile,
+        profile: contact.profile as {
+          username: string;
+          avatar: string;
+          imageID: string;
+          website: string;
+          bio: string;
+        },
       }));
     } catch (error: unknown) {
       Logger.error((error as Error).message, true);
@@ -123,10 +129,10 @@ class ContactService {
       if (userID == contactID) return 'self-accept';
 
       const user = await this.getUserByID(userID);
-      if (user == "user-not-found") return "user-not-found";
+      if (user == 'user-not-found') return 'user-not-found';
 
       const contact = await this.getUserByUsername(contactID);
-      if (contact == "user-not-found") return 'user-not-found';
+      if (contact == 'user-not-found') return 'user-not-found';
 
       if (!contact.contacts.pending.includes(user.userID)) return 'no-request';
 
@@ -151,7 +157,7 @@ class ContactService {
       if (userID == contactID) return 'self-reject';
 
       const user = await this.getUserByID(userID);
-      if (user == "user-not-found") return "user-not-found";
+      if (user == 'user-not-found') return 'user-not-found';
 
       const contact = await fetchUserByID(contactID);
 
@@ -178,10 +184,10 @@ class ContactService {
       if (userID == contactID) return 'self-add';
 
       const user = await this.getUserByID(userID);
-      if (user == "user-not-found") return "user-not-found";
+      if (user == 'user-not-found') return 'user-not-found';
 
       const contact = await this.getUserByID(contactID);
-      if (contact == "user-not-found") return 'user-not-found';
+      if (contact == 'user-not-found') return 'user-not-found';
 
       if (contact.contacts.blocked.includes(contact.userID)) return 'user-blocked';
       if (contact.contacts.pending.includes(contact.userID)) return 'request-pending';

@@ -17,7 +17,12 @@ const fetchContacts = async () => {
     const { data } = await axios.get<GetResponseData>(`${apiEndpoint}/get`, { withCredentials: true });
     return data.contacts;
   } catch (err) {
-    return [];
+    return {
+      accepted: [],
+      pending: [],
+      blocked: [],
+      requests: [],
+    };
   }
 };
 

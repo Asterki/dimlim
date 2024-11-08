@@ -28,55 +28,43 @@ interface GetResponseData {
   contacts?: {
     accepted: {
       userID: string;
-      profile:
-        | {
-            username: string;
-            avatar: string;
-            imageID: string;
-            website: string;
-            bio: string;
-          }
-        | null
-        | undefined;
+      profile: {
+        username: string;
+        avatar: string;
+        imageID: string;
+        website: string;
+        bio: string;
+      };
     }[];
     pending: {
       userID: string;
-      profile:
-        | {
-            username: string;
-            avatar: string;
-            imageID: string;
-            website: string;
-            bio: string;
-          }
-        | null
-        | undefined;
+      profile: {
+        username: string;
+        avatar: string;
+        imageID: string;
+        website: string;
+        bio: string;
+      };
     }[];
     blocked: {
       userID: string;
-      profile:
-        | {
-            username: string;
-            avatar: string;
-            imageID: string;
-            website: string;
-            bio: string;
-          }
-        | null
-        | undefined;
+      profile: {
+        username: string;
+        avatar: string;
+        imageID: string;
+        website: string;
+        bio: string;
+      };
     }[];
     requests: {
       userID: string;
-      profile:
-        | {
-            username: string;
-            avatar: string;
-            imageID: string;
-            website: string;
-            bio: string;
-          }
-        | null
-        | undefined;
+      profile: {
+        username: string;
+        avatar: string;
+        imageID: string;
+        website: string;
+        bio: string;
+      };
     }[];
   };
 }

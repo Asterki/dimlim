@@ -10,7 +10,7 @@ const useContacts = () => {
 
   const fetchContacts = async () => {
     const contacts = await contactsApi.fetchContacts();
-    if (!contacts.accepted) return;
+    if (!contacts) return;
     dispatch(setContacts(contacts.accepted));
   };
 

@@ -13,15 +13,19 @@ const handler = async (req: Request, res: Response<ResponseData>, next: NextFunc
   try {
     const acceptedContactsID = currentUser.contacts.accepted;
     const acceptedContacts = await ContactsService.getProfile(acceptedContactsID);
+    if (acceptedContacts == 'internal-error') throw new Error('internal-error');
 
     const pendingContactsID = currentUser.contacts.pending;
     const pendingContacts = await ContactsService.getProfile(pendingContactsID);
+    if (pendingContacts == 'internal-error') throw new Error('internal-error');
 
     const blockedContactsID = currentUser.contacts.blocked;
     const blockedContacts = await ContactsService.getProfile(blockedContactsID);
+    if (blockedContacts == 'internal-error') throw new Error('internal-error');
 
     const requestContactsID = currentUser.contacts.requests;
     const requestContacts = await ContactsService.getProfile(requestContactsID);
+    if (requestContacts == 'internal-error') throw new Error('internal-error');
 
     const userContacts = {
       accepted: acceptedContacts,
@@ -29,11 +33,6 @@ const handler = async (req: Request, res: Response<ResponseData>, next: NextFunc
       blocked: blockedContacts,
       requests: requestContacts,
     };
-
-    if (acceptedContacts == 'internal-error') throw new Error('internal-error');
-    if (pendingContacts == 'internal-error') throw new Error('internal-error');
-    if (blockedContacts == 'internal-error') throw new Error('internal-error');
-    if (requestContacts == 'internal-error') throw new Error('internal-error');
 
     return res.status(200).send({
       status: 'success',

@@ -29,6 +29,7 @@ const handler = async (req: Request<{}, {}, RequestBody>, res: Response<Response
     req.login(result.user!, (err) => {
       res.status(200).send({
         status: 'success',
+        keyPair: result.keyPair,
       });
     });
   } catch (error: unknown) {

@@ -18,7 +18,7 @@ interface User {
     requests: string[];
     accepted: string[];
   };
-  pubKey: Buffer;
+  pubKey: String;
   preferences: {
     privacy: {
       showOnlineStatus: boolean;

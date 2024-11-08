@@ -69,7 +69,7 @@ const User = new Schema({
   },
 
   pubKey: {
-    type: Buffer,
+    type: String,
   },
 
   preferences: {

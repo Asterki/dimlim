@@ -1,4 +1,4 @@
-import { User } from "../models";
+import { User } from '../models';
 
 interface RegisterRequestBody {
   email: string;
@@ -6,7 +6,11 @@ interface RegisterRequestBody {
   password: string;
 }
 interface RegisterResponseData {
-  status: "success" | "invalid-parameters" | "user-exists" | "internal-error";
+  status: 'success' | 'invalid-parameters' | 'user-exists' | 'internal-error';
+  keyPair?: {
+    publicKey: string;
+    privateKey: string;
+  };
 }
 
 interface LoginRequestBody {
@@ -15,16 +19,22 @@ interface LoginRequestBody {
   tfaCode?: string;
 }
 interface LoginResponseData {
-  status: "success" | "invalid-parameters" | "invalid-credentials" | "requires-tfa" | "invalid-tfa-code" | "internal-error";
+  status:
+    | 'success'
+    | 'invalid-parameters'
+    | 'invalid-credentials'
+    | 'requires-tfa'
+    | 'invalid-tfa-code'
+    | 'internal-error';
 }
 
 interface FetchResponseData {
-  status: "success" | "unauthenticated";
+  status: 'success' | 'unauthenticated';
   user?: User;
 }
 
 interface LogoutResponseData {
-  status: "success" | "unauthenticated";
+  status: 'success' | 'unauthenticated';
 }
 
 export type {

@@ -18,6 +18,9 @@ import SettingsIndex from './settings';
 // Chat
 import Chat from './chat';
 
+// Admin
+import AdminTest from './admin/tests';
+
 const router = createBrowserRouter([
   // Main
   {
@@ -60,6 +63,12 @@ const router = createBrowserRouter([
     path: '/chat/:userid',
     element: <Chat />,
   },
+
+  // Admin
+  {
+    path: '/admin',
+    element: <AdminTest />,
+  }
 ]);
 
 export default router;

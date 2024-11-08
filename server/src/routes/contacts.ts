@@ -26,7 +26,7 @@ router.post('/unblock', [validateRequestBody(addRemoveBlockUnBlockSchema), ensur
 
 const requestSchema = z.object({
   contactID: z.string().min(36, { message: 'Invalid contact ID' }).max(36, { message: 'Invalid contact ID' }),
-  action: z.enum(['accept', 'reject']),
+  action: z.enum(['accept', 'reject', 'cancel']),
 });
 router.post('/requests', [validateRequestBody(requestSchema), ensureAuthenticated], contactsRequest);
 

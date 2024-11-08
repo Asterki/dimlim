@@ -210,6 +210,19 @@ class ContactService {
       return 'internal-error';
     }
   }
+
+  public async cancelRequest(userID: string, contactID: string) {
+    if (userID == contactID) return 'self-remove';
+
+    const user = await this.getUserByID(userID);
+    if (user == 'user-not-found') return 'user-not-found';
+
+    if (!user.contacts.pending.includes(contactID)) return 'not-contact';
+
+    user.contacts.requests = user.contacts.requests.filter((id) => id !== contactID);
+    await user.save();
+    return 'success';
+  }
 }
 
 export default ContactService.getInstance();

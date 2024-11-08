@@ -15,10 +15,19 @@ const handler = async (req: Request<{}, {}, RequestBody>, res: Response<Response
   const currentUser = req.user as User;
 
   try {
-    const result =
-      action == 'accept'
-        ? await ContactsService.addContact(currentUser.userID, contactID)
-        : await ContactsService.rejectContact(currentUser.userID, contactID);
+    let result: string;
+
+    switch (action) {
+      case "accept":
+        result = await ContactsService.addContact(currentUser.userID, contactID)
+        break;
+      case "reject":
+        result = await ContactsService.rejectContact(currentUser.userID, contactID)
+        break;
+      case "cancel":
+        result = await ContactsService.cancelRequest(currentUser.userID, contactID)
+        break;
+    }
 
     if (result == 'internal-error') throw new Error('Internal error');
     if (result !== 'success') {

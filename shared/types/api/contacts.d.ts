@@ -71,22 +71,11 @@ interface GetResponseData {
 
 interface RequestsRequestBody {
   contactID: string;
-  action: 'accept' | 'reject';
+  action: 'accept' | 'reject' | 'cancel';
 }
 
 interface RequestsResponseData {
-  status:
-    | 'success'
-    | 'internal-error'
-    | 'user-not-found'
-    | 'no-request'
-    | 'self-reject'
-    | 'self-add'
-    | 'user-blocked'
-    | 'request-pending'
-    | 'already-contact'
-    | 'contact-blocked'
-    | 'contact-request-sent';
+  status: string  // TODO: Add the possible values
 }
 
 interface RemoveResponseData {

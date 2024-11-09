@@ -26,7 +26,7 @@
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../../store';
-import { setUser, setAuthStatus } from '../slices/auth';
+import { setUser, setAuthStatus, setPrivKey } from '../slices/auth';
 import authApi from '../services/authApi';
 
 import { generateKeyPair } from '../../../utils/crypto';
@@ -48,6 +48,11 @@ const useAuth = () => {
         const currentUser = await authApi.fetchUser();
         dispatch(setUser(currentUser!));
         dispatch(setAuthStatus('authenticated'));
+        dispatch(setPrivKey(keyPair.privateKey));
+
+        // Save the private key to local storage
+        localStorage.setItem('privKey', keyPair.privateKey);
+
         return 'success';
       } else {
         dispatch(setAuthStatus('unauthenticated'));
@@ -95,6 +100,14 @@ const useAuth = () => {
     if (currentUser) {
       dispatch(setUser(currentUser)); // Set the user to the state
       dispatch(setAuthStatus('authenticated'));
+
+      // Get the private key from local storage
+      const privKey = localStorage.getItem('privKey');
+      if (privKey) {
+        dispatch(setPrivKey(privKey));
+      } else {
+        // We're fucked
+      }
     } else {
       dispatch(setAuthStatus('unauthenticated'));
     }

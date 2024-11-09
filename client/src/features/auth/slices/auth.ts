@@ -3,11 +3,13 @@ import { User } from '../../../../../shared/types/models';
 
 interface AuthState {
   currentUser: User | null;
+  privKey: string | null;
   authStatus: 'authenticated' | 'unauthenticated' | 'loading' | 'error';
 }
 
 const initialState: AuthState = {
   currentUser: null,
+  privKey: null,
   authStatus: 'loading',
 };
 
@@ -25,12 +27,16 @@ export const authSlice = createSlice({
     logout: (state) => {
       state.currentUser = null;
       state.authStatus = 'unauthenticated';
+      state.privKey = null;
     },
     setAuthStatus: (state, action: PayloadAction<'authenticated' | 'unauthenticated' | 'loading' | 'error'>) => {
       state.authStatus = action.payload;
     },
+    setPrivKey: (state, action: PayloadAction<string>) => {
+      state.privKey = action.payload;
+    },
   },
 });
 
-export const { setUser, login, logout, setAuthStatus } = authSlice.actions;
+export const { setUser, login, logout, setAuthStatus, setPrivKey } = authSlice.actions;
 export default authSlice.reducer;

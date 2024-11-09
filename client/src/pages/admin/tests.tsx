@@ -1,15 +1,23 @@
 import axios from 'axios';
 
+import { useAuth } from '../../features/auth';
+
+import { encryptMessage, decryptMessage } from "../../utils/crypto"
+
 const TestPage = () => {
+  const { user, privKey } = useAuth();
+
   const test = async () => {
-    try {
-      const res = await axios.get('http://localhost:3000/api/crypto/generateKeys', {
-        withCredentials: true,
-      });
-      console.log(res.data);
-    } catch (error) {
-      console.error(error);
-    }
+    if (!user || !privKey) return;
+
+    const message = 'Hello, world!';
+    const encryptedMessage = encryptMessage(message, user.pubKey);
+
+    console.log(encryptedMessage);
+
+    const decryptedMessage = decryptMessage(encryptedMessage, privKey);
+    console.log(decryptedMessage);
+    
   };
 
   return (

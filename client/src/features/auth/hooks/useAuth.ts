@@ -34,6 +34,7 @@ import { generateKeyPair } from '../../../utils/crypto';
 const useAuth = () => {
   const dispatch = useDispatch();
   const user = useSelector((state: RootState) => state.auth.currentUser);
+  const privKey = useSelector((state: RootState) => state.auth.privKey);
   const authStatus = useSelector((state: RootState) => state.auth.authStatus);
 
   // Sends a request to the server to register a new user
@@ -118,7 +119,7 @@ const useAuth = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  return { user, authStatus, login, logout, register };
+  return { user, privKey, authStatus, login, logout, register };
 };
 
 export default useAuth;

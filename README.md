@@ -4,7 +4,7 @@ DIMLIM is a secure, end-to-end encrypted messaging app designed to protect user 
 
 ## Features
 
-- **End-to-End Encryption**: Messages are encrypted with SHA512 to ensure secure communication.
+- **End-to-End Encryption**: Messages are encrypted with SHA256 to ensure secure communication.
 - **Group Chats**: Easily set up secure group conversations to communicate with multiple people at once.
 - **File Sharing**: Share files and media securely within chats.
 - **Customizable User Profiles**: Personalize your account with profile pictures and status updates.

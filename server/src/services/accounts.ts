@@ -6,7 +6,6 @@ import UserModel from '../models/Users';
 import { HydratedDocument } from 'mongoose';
 
 import Logger from '../utils/logger';
-import { generateKeyPair } from '../utils/crypto';
 
 import type { User } from '../../../shared/types/models';
 
@@ -22,19 +21,17 @@ class AccountService {
     return AccountService.instance;
   }
 
-  public async registerUser(email: string, username: string, password: string) {
+  public async registerUser(email: string, username: string, password: string, pubKey: string) {
     try {
       const isUsernameOrEmailTaken = await UserModel.findOne({
         $or: [{ 'email.value': email }, { 'profile.username': username }],
       });
       if (isUsernameOrEmailTaken) return { status: 'user-exists' };
 
-      const keyPair = generateKeyPair();
-
       // Create the user
       const user = new UserModel({
         userID: uuidv4(),
-        pubKey: keyPair.publicKey,
+        pubKey: pubKey,
         created: Date.now(),
         email: {
           value: email,
@@ -54,7 +51,6 @@ class AccountService {
       return {
         status: 'success',
         user: user as unknown as User,
-        keyPair,
       };
     } catch (error) {
       console.log(error);

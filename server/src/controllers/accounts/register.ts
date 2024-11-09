@@ -9,10 +9,10 @@ import {
 import Logger from '../../utils/logger';
 
 const handler = async (req: Request<{}, {}, RequestBody>, res: Response<ResponseData>, next: NextFunction) => {
-  const { email, username, password } = req.body;
+  const { email, username, password, pubKey } = req.body;
 
   try {
-    const result = await AccountService.registerUser(email, username, password);
+    const result = await AccountService.registerUser(email, username, password, pubKey);
 
     if (result.status === 'user-exists') {
       return res.status(200).send({
@@ -29,7 +29,6 @@ const handler = async (req: Request<{}, {}, RequestBody>, res: Response<Response
     req.login(result.user!, (err) => {
       res.status(200).send({
         status: 'success',
-        keyPair: result.keyPair,
       });
     });
   } catch (error: unknown) {

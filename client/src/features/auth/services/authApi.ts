@@ -33,7 +33,7 @@ import type {
   RegisterResponseData,
 } from '../../../../../shared/types/api/accounts';
 
-const apiEndpoint = `${import.meta.env.VITE_SERVER_HOST}/api/accounts`
+const apiEndpoint = `${import.meta.env.VITE_SERVER_HOST}/api/accounts`;
 
 const fetchUser = async () => {
   try {
@@ -76,7 +76,7 @@ const login = async (emailOrUsername: string, password: string, tfaCode: string 
   }
 };
 
-const register = async (username: string, email: string, password: string) => {
+const register = async (username: string, email: string, password: string, pubKey: string) => {
   try {
     const res = await axios.post<RegisterResponseData>(
       `${apiEndpoint}/register`,
@@ -84,6 +84,7 @@ const register = async (username: string, email: string, password: string) => {
         username,
         email,
         password,
+        pubKey,
       } as RegisterRequestBody,
       {
         withCredentials: true,

@@ -29,6 +29,8 @@ import { RootState } from '../../../store';
 import { setUser, setAuthStatus } from '../slices/auth';
 import authApi from '../services/authApi';
 
+import { generateKeyPair } from '../../../utils/crypto';
+
 const useAuth = () => {
   const dispatch = useDispatch();
   const user = useSelector((state: RootState) => state.auth.currentUser);
@@ -39,12 +41,14 @@ const useAuth = () => {
     dispatch(setAuthStatus('loading'));
 
     try {
-      const status = await authApi.register(username, email, password);
+      const keyPair = generateKeyPair();
+
+      const status = await authApi.register(username, email, password, keyPair.publicKey);
       if (status === 'success') {
         const currentUser = await authApi.fetchUser();
         dispatch(setUser(currentUser!));
         dispatch(setAuthStatus('authenticated'));
-        return "success"
+        return 'success';
       } else {
         dispatch(setAuthStatus('unauthenticated'));
         return status || 'unknown-error';
@@ -81,7 +85,7 @@ const useAuth = () => {
     const result = await authApi.logout();
     dispatch(setUser(null)); // Remove the user from the state
     dispatch(setAuthStatus('unauthenticated'));
-    return result
+    return result;
   };
 
   // Checks if the user is authenticated on component mount
@@ -98,7 +102,7 @@ const useAuth = () => {
 
   useEffect(() => {
     checkAuth(); // Check authentication status on component mount only if the user is not authenticated
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return { user, authStatus, login, logout, register };

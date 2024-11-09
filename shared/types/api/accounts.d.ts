@@ -4,6 +4,7 @@ interface RegisterRequestBody {
   email: string;
   username: string;
   password: string;
+  pubKey: string;
 }
 interface RegisterResponseData {
   status: 'success' | 'invalid-parameters' | 'user-exists' | 'internal-error';

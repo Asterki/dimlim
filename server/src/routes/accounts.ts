@@ -28,6 +28,7 @@ const registerSchema = z.object({
     .refine((pass) => {
       return validator.isStrongPassword(pass);
     }),
+  pubKey: z.string().min(1),
 });
 router.post('/register', validateRequestBody(registerSchema), accountsRegister);
 

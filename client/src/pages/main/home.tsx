@@ -49,37 +49,37 @@ const HomePage = () => {
         onClose={() => setIsAddContactDialogOpen(false)}
         onSubmit={addContactButtonPressed}
       />
+      <div className='pt-20 dark:bg-gray-800 bg-slate-200 min-h-screen dark:text-white text-neutral-700'>
+        <div className='flex items-center justify-between gap-2 mx-10'>
+          <div className='md:w-4/12 w-full'>
+            <div className='text-center'>
+              <button
+                onClick={() => setIsAddContactDialogOpen(true)}
+                className='w-11/12 p-2 bg-blue-400 text-white rounded-md shadow-md'
+              >
+                Add a contact
+              </button>
 
-      <div className='mt-20 flex items-center justify-between gap-2'>
-        <div className='md:w-4/12 w-full '>
-          <div className='text-center'>
-            <button
-              onClick={() => setIsAddContactDialogOpen(true)}
-              className='w-11/12 p-2 bg-blue-400 text-white rounded-md shadow-md'
-            >
-              Add a contact
-            </button>
-
-            <div>
-              <h1 className='text-2xl mt-5'>Contacts</h1>
-              {contacts.map((contact) => (
-                <div key={contact.userID}>
-                  <Link to={`/chat/${contact.userID}`}>
-                    <div className='flex items-center justify-between p-2 dark:bg-gray-600 bg-slate-100 rounded-md mt-2'>
-                      <p>{contact.profile.username}</p>
-                      <p>Online</p>
-                    </div>
-                  </Link>
-                </div>
-              ))}
+              <div>
+                <h1 className='text-2xl mt-5'>Contacts</h1>
+                {contacts.map((contact) => (
+                  <div key={contact.userID}>
+                    <Link to={`/chat/${contact.userID}`}>
+                      <div className='flex items-center justify-between p-2 dark:bg-gray-700 transition-all hover:brightness-110 bg-slate-100 rounded-md mt-2'>
+                        <p>{contact.profile.username}</p>
+                      </div>
+                    </Link>
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
-        </div>
 
-        <div className='w-full hidden md:block'>
-          <div className='flex flex-col items-center'>
-            <h1 className='text-2xl'>Welcome to DIMLIM</h1>
-            <p className='text-center'>Select a contact to start chatting</p>
+          <div className='w-full hidden md:block'>
+            <div className='flex flex-col items-center'>
+              <h1 className='text-2xl'>Welcome to DIMLIM</h1>
+              <p className='text-center'>Select a contact to start chatting</p>
+            </div>
           </div>
         </div>
       </div>

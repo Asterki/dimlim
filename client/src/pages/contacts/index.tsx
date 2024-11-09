@@ -50,11 +50,14 @@ const ContactsIndex = () => {
     if (user) {
       (async () => {
         const result = await fetchContactsWithProfile();
+        console.log(result);
         if (!result) return;
         setContactsWithProfile(result);
       })();
     }
-  }, [fetchContactsWithProfile, user]);
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [user]);
 
   return (
     <PageLayout
@@ -170,7 +173,7 @@ const ContactsIndex = () => {
                 >
                   <p className='text-2xl'>Request Sent</p>
                   <div className='flex flex-col items-center'>
-                    {user && authStatus == 'authenticated' && contactsWithProfile.requests.length === 0 && (
+                    {user && authStatus == 'authenticated' && contactsWithProfile.pending.length === 0 && (
                       <div className='text-lg h-64 flex items-center justify-center dark:text-white/50'>
                         No requests sent
                       </div>
@@ -213,34 +216,37 @@ const ContactsIndex = () => {
                     )}
                     {user && authStatus == 'authenticated' && user.contacts.accepted.length > 0 && (
                       <div className='w-11/12 min-h-64'>
-                        {contactsWithProfile.accepted.map((contact) => (
-                          <div
-                            key={contact.userID as string}
-                            className='dark:bg-gray-600 bg-slate-200 rounded-md p-2 my-2 flex justify-between items-center'
-                          >
-                            <p>{contact.profile!.username}</p>
-                            <div className='flex gap-2 justify-end w-7/12 md:w-4/12'>
-                              <button
-                                className='p-2 bg-red-400 transition-all hover:brightness-110 rounded-md text-white w-1/2'
-                                onClick={() => {
-                                  removeContact(contact.userID);
-                                  showNotification('Success', 'Contact removed', 'success');
-                                }}
-                              >
-                                Remove
-                              </button>
-                              <button
-                                className='p-2 bg-red-400 transition-all hover:brightness-110 rounded-md text-white w-1/2'
-                                onClick={() => {
-                                  blockContact(contact.profile!.username);
-                                  showNotification('Success', 'Contact blocked', 'success');
-                                }}
-                              >
-                                Block
-                              </button>
+                        {contactsWithProfile.accepted.map((contact) => {
+                          if (user.contacts.blocked.includes(contact.userID)) return;
+                          return (
+                            <div
+                              key={contact.userID as string}
+                              className='dark:bg-gray-600 bg-slate-200 rounded-md p-2 my-2 flex justify-between items-center'
+                            >
+                              <p>{contact.profile!.username}</p>
+                              <div className='flex gap-2 justify-end w-7/12 md:w-4/12'>
+                                <button
+                                  className='p-2 bg-red-400 transition-all hover:brightness-110 rounded-md text-white w-1/2'
+                                  onClick={() => {
+                                    removeContact(contact.userID);
+                                    showNotification('Success', 'Contact removed', 'success');
+                                  }}
+                                >
+                                  Remove
+                                </button>
+                                <button
+                                  className='p-2 bg-red-400 transition-all hover:brightness-110 rounded-md text-white w-1/2'
+                                  onClick={() => {
+                                    blockContact(contact.userID);
+                                    showNotification('Success', 'Contact blocked', 'success');
+                                  }}
+                                >
+                                  Block
+                                </button>
+                              </div>
                             </div>
-                          </div>
-                        ))}
+                          );
+                        })}
                       </div>
                     )}
                   </div>

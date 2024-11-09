@@ -131,7 +131,7 @@ class ContactService {
       const user = await this.getUserByID(userID);
       if (user == 'user-not-found') return 'user-not-found';
 
-      const contact = await this.getUserByUsername(contactID);
+      const contact = await this.getUserByID(contactID);
       if (contact == 'user-not-found') return 'user-not-found';
 
       if (!contact.contacts.pending.includes(user.userID)) return 'no-request';
@@ -167,7 +167,7 @@ class ContactService {
         return 'user-not-found';
       }
 
-      if (!contact.contacts.requests.includes(user.userID)) return 'no-request';
+      if (!contact.contacts.pending.includes(user.userID)) return 'no-request';
 
       await this.updateUserContacts(user.userID, { $pull: { 'contacts.requests': contact.userID } });
       await this.updateUserContacts(contact.userID, { $pull: { 'contacts.pending': user.userID } });
@@ -197,8 +197,9 @@ class ContactService {
       if (contact.contacts.requests.includes(user.userID)) return 'contact-request-sent';
       if (contact.contacts.accepted.includes(user.userID)) return 'already-contact';
 
-      if (contact.contacts.pending.includes(user.userID) || contact.contacts.requests.includes(contact.userID)) {
+      if (contact.contacts.pending.includes(user.userID)) {
         await this.acceptContact(user.userID, contact.profile.username);
+        await this.acceptContact(contact.profile.username, user.userID);
       }
 
       await this.updateUserContacts(user.userID, { $addToSet: { 'contacts.pending': contact.userID } });
@@ -217,10 +218,21 @@ class ContactService {
     const user = await this.getUserByID(userID);
     if (user == 'user-not-found') return 'user-not-found';
 
-    if (!user.contacts.pending.includes(contactID)) return 'not-contact';
+    const contact = await fetchUserByID(contactID);
+    if (!contact) {
+      user.contacts.requests = user.contacts.requests.filter((id) => id !== contactID);
+      await user.save();
+      return 'success';
+    }
 
-    user.contacts.requests = user.contacts.requests.filter((id) => id !== contactID);
+    if (!user.contacts.pending.includes(contactID)) return 'not-contact';
+    user.contacts.pending = user.contacts.pending.filter((id) => id !== contactID);
+
+    contact.contacts.requests = contact.contacts.requests.filter((id) => id !== user.userID);
+
+    await contact.save();
     await user.save();
+
     return 'success';
   }
 }

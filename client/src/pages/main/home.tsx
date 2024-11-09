@@ -57,7 +57,7 @@ const HomePage = () => {
               onClick={() => setIsAddContactDialogOpen(true)}
               className='w-11/12 p-2 bg-blue-400 text-white rounded-md shadow-md'
             >
-              Search or start chat
+              Add a contact
             </button>
 
             <div>

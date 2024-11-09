@@ -19,7 +19,7 @@ const handler = async (req: Request<{}, {}, RequestBody>, res: Response<Response
 
     switch (action) {
       case "accept":
-        result = await ContactsService.addContact(currentUser.userID, contactID)
+        result = await ContactsService.acceptContact(currentUser.userID, contactID)
         break;
       case "reject":
         result = await ContactsService.rejectContact(currentUser.userID, contactID)

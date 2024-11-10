@@ -61,7 +61,18 @@ const ChatIndex = () => {
   }, [authStatus]);
 
   const a = () => {
-    sendMessage(roomID!, 'This is a test message', contactPubKey!);
+    sendMessage(roomID!, contactPubKey!, {
+      id: '1',
+      content: 'This is a test message',
+      createdAt: new Date(Date.now()),
+      isRead: false,
+      receiverId: contact!.userID,
+      senderId: user!.userID,
+      updatedAt: new Date(Date.now()),
+      attachments: [],
+      editHistory: [],
+      reactions: [],
+    });
   };
 
   return (

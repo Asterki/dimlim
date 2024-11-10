@@ -33,9 +33,10 @@ class SocketServer {
 
       socket.on("message", (data: {
         roomId: string;
+        author: string;
+        recipient: string;
         encryptedMessageData: string;
       }) => {
-          console.log(data)
         this.io.to(data.roomId).emit("message", data);
       })
     });

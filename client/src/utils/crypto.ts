@@ -47,8 +47,12 @@ const deriveKey = (password: string, salt: string): string => {
   return forge.util.encode64(key);
 };
 
+const generateSymmetricKey = (): string => {
+  return forge.random.getBytesSync(32); // 256-bit key for AES-256
+};
+
 const encryptSymmetric = (message: string, key: string): string => {
-  const cipher = forge.cipher.createCipher('AES-CBC', forge.util.decode64(key));
+  const cipher = forge.cipher.createCipher('AES-CBC', key);
   const iv = forge.random.getBytesSync(16);
   cipher.start({ iv });
   cipher.update(forge.util.createBuffer(message, 'utf8'));
@@ -61,11 +65,24 @@ const decryptSymmetric = (encryptedMessage: string, key: string): string => {
   const decodedMessage = forge.util.decode64(encryptedMessage);
   const iv = decodedMessage.slice(0, 16);
   const encrypted = decodedMessage.slice(16);
-  const decipher = forge.cipher.createDecipher('AES-CBC', forge.util.decode64(key));
+  const decipher = forge.cipher.createDecipher('AES-CBC', key);
   decipher.start({ iv });
   decipher.update(forge.util.createBuffer(encrypted));
   decipher.finish();
   return decipher.output.toString();
+};
+
+const encryptKey = (key: string, publicKeyPem: string): string => {
+  const publicKey = forge.pki.publicKeyFromPem(publicKeyPem);
+  const encryptedKey = publicKey.encrypt(key, 'RSA-OAEP');
+  return forge.util.encode64(encryptedKey);
+};
+
+const decryptKey = (encryptedKey: string, privateKeyPem: string): string => {
+  const privateKey = forge.pki.privateKeyFromPem(privateKeyPem);
+  const decodedKey = forge.util.decode64(encryptedKey);
+  const decryptedKey = privateKey.decrypt(decodedKey, 'RSA-OAEP');
+  return decryptedKey;
 };
 
 export {
@@ -76,6 +93,9 @@ export {
   verifySignature,
   hashMessage,
   deriveKey,
+  generateSymmetricKey,
   encryptSymmetric,
   decryptSymmetric,
+  encryptKey,
+  decryptKey,
 };

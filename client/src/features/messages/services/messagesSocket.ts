@@ -1,7 +1,7 @@
 import { io, Socket } from 'socket.io-client';
-// import { Message } from '../../../../../shared/types/models';
+import { EncryptedMessage } from '../../../../../shared/types/models';
 
-type MessageCallback = (message: string) => void;
+type MessageCallback = (message: EncryptedMessage) => void;
 
 const MessageSocketService = (() => {
   let socket: Socket | null = null;
@@ -23,8 +23,8 @@ const MessageSocketService = (() => {
       reconnectAttempts = 0;
     });
 
-    socket.on('message', (data: { roomID: string; message: string }) => {
-      notifySubscribers(data.message);
+    socket.on('message', (data: EncryptedMessage) => {
+      notifySubscribers(data);
     });
 
     socket.on('disconnect', () => {
@@ -73,9 +73,9 @@ const MessageSocketService = (() => {
     }
   };
 
-  const sendMessage = (roomId: string, message: string) => {
+  const sendMessage = (roomId: string, message: EncryptedMessage) => {
     if (socket && socket.connected) {
-      socket.emit('message', { roomId, message });
+      socket.emit('message', message);
     } else {
       console.error('Socket.io is not connected. Message not sent.');
     }
@@ -92,7 +92,7 @@ const MessageSocketService = (() => {
     }
   };
 
-  const notifySubscribers = (message: string) => {
+  const notifySubscribers = (message: EncryptedMessage) => {
     messageCallbacks.forEach((callback) => callback(message));
   };
 

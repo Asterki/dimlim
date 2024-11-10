@@ -76,4 +76,13 @@ export interface Message {
   isRead: boolean;
 }
 
-export type { User, Contact, Attachment, Reaction, EditHistory, Message };
+interface EncryptedMessage {
+  roomId: string;
+  author: string;
+  recipient: string;
+  encryptedSymmetricKey: string; // Encrypted symmetric key
+  encryptedMessage: string; // Encrypted message data
+  timestamp: Date; // Timestamp of the message
+}
+
+export type { User, Contact, Attachment, Reaction, EditHistory, Message, EncryptedMessage };

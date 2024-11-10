@@ -10,10 +10,10 @@ import { useMessages } from '../../features/messages';
 import useNotification from '../../hooks/useNotification';
 
 const ChatIndex = () => {
-  const { user, authStatus } = useAuth();
+  const { user, authStatus, privKey } = useAuth();
   const { notification, showNotification } = useNotification();
   const { getContactProfile, getContactPubKey } = useContacts();
-  const { joinRoom, sendMessage } = useMessages();
+  const { joinRoom, sendMessage, onMessage } = useMessages();
 
   const redirect = useNavigate();
   const { user_id: contactID } = useParams();
@@ -52,8 +52,12 @@ const ChatIndex = () => {
 
       setContactPubKey(pubKey);
 
-      // Connect to the room
+      // Add the message listener
+      onMessage(privKey as string, (message) => {
+        console.log(message);
+      });
     })();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [authStatus]);
 
   const a = () => {

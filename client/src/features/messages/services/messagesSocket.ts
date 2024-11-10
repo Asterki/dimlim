@@ -1,7 +1,7 @@
 import { io, Socket } from 'socket.io-client';
-import { Message } from '../../../../../shared/types/models';
+// import { Message } from '../../../../../shared/types/models';
 
-type MessageCallback = (message: Message) => void;
+type MessageCallback = (message: string) => void;
 
 const MessageSocketService = (() => {
   let socket: Socket | null = null;
@@ -9,7 +9,7 @@ const MessageSocketService = (() => {
   const reconnectInterval = 5000; // 5 seconds
   let reconnectAttempts = 0;
   const maxReconnectAttempts = 10;
-  const url = import.meta.env.VITE_SERVER_HOST 
+  const url = import.meta.env.VITE_SERVER_HOST;
 
   const connect = () => {
     if (socket) {
@@ -23,8 +23,8 @@ const MessageSocketService = (() => {
       reconnectAttempts = 0;
     });
 
-    socket.on('message', (message: Message) => {
-      notifySubscribers(message);
+    socket.on('message', (data: { roomID: string; message: string }) => {
+      notifySubscribers(data.message);
     });
 
     socket.on('disconnect', () => {
@@ -92,7 +92,7 @@ const MessageSocketService = (() => {
     }
   };
 
-  const notifySubscribers = (message: Message) => {
+  const notifySubscribers = (message: string) => {
     messageCallbacks.forEach((callback) => callback(message));
   };
 

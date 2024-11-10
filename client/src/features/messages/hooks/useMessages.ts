@@ -1,5 +1,5 @@
 import MessageSocketService from "../services/messagesSocket"
-import { encryptMessage } from "../../../utils/crypto";
+import { encryptMessage, decryptMessage } from "../../../utils/crypto";
 
 const useMessages = () => {
     const joinRoom = (userID: string, contactID: string) => {
@@ -19,10 +19,19 @@ const useMessages = () => {
         MessageSocketService.sendMessage(roomID, encryptedMessage);
     }
 
+    const onMessage = (privKey: string, callback: (message: string) => void) => {
+        MessageSocketService.subscribe((message) => {
+            // Decrypt message
+            const decryptedMessage = decryptMessage(message, privKey);
+            callback(decryptedMessage);
+        });
+    }
+
     return {
         joinRoom,
         leaveRoom,
         sendMessage,
+        onMessage
     }
 }
 

@@ -75,7 +75,7 @@ interface RequestsRequestBody {
 }
 
 interface RequestsResponseData {
-  status: string  // TODO: Add the possible values
+  status: string; // TODO: Add the possible values
 }
 
 interface RemoveResponseData {
@@ -98,6 +98,14 @@ interface FetchContactResponse {
   };
 }
 
+interface GetPubKeyRequestData {
+  contactID: string;
+}
+interface GetPubKeyResponseData {
+  status: 'success' | 'server-error' | 'unauthenticated' | 'contact-not-found'
+  key?: string;
+}
+
 export type {
   AddResponseData,
   BlockResponseData,
@@ -109,4 +117,6 @@ export type {
   UnblockResponseData,
   FetchContactRequestBody,
   FetchContactResponse,
+  GetPubKeyRequestData,
+  GetPubKeyResponseData,
 };

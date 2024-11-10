@@ -59,6 +59,10 @@ const useContacts = () => {
     return await contactsApi.fetchContactByUsername(username);
   }
 
+  const getContactPubKey = async (contactID: string) => {
+    return await contactsApi.getContactPubKey(contactID);
+  }
+
   useEffect(() => {
     fetchContacts();
   // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -75,7 +79,8 @@ const useContacts = () => {
     addContactByUsername,
     fetchContactsWithProfile,
     cancelRequest,
-    getContactProfile
+    getContactProfile,
+    getContactPubKey
   };
 };
 

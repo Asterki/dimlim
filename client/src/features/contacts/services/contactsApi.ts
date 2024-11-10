@@ -8,6 +8,7 @@ import type {
   RequestsResponseData,
   UnblockResponseData,
   FetchContactResponse,
+  GetPubKeyResponseData,
 } from '../../../../../shared/types/api/contacts';
 
 const apiEndpoint = `${import.meta.env.VITE_SERVER_HOST}/api/contacts`;
@@ -100,6 +101,15 @@ const contactRequests = async (contactID: string, action: 'accept' | 'reject' | 
   }
 };
 
+const getContactPubKey = async (contactID: string) => {
+  try {
+    const { data } = await axios.post<GetPubKeyResponseData>(`${apiEndpoint}/getPubKey`, { contactID }, { withCredentials: true });
+    return data.key;
+  } catch (err) {
+    return null;
+  }
+};
+
 export default {
   fetchContacts,
   addContact,
@@ -108,4 +118,5 @@ export default {
   unblockContact,
   contactRequests,
   fetchContactByUsername,
+  getContactPubKey
 };

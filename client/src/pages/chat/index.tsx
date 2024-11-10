@@ -6,13 +6,14 @@ import PageLayout from '../../layouts/PageLayout';
 
 import { useAuth } from '../../features/auth';
 import { useContacts } from '../../features/contacts';
-import { SocketService } from '../../features/socket';
+import { useMessages } from '../../features/messages';
 import useNotification from '../../hooks/useNotification';
 
 const ChatIndex = () => {
   const { user, authStatus } = useAuth();
   const { notification, showNotification } = useNotification();
-  const { getContactProfile } = useContacts();
+  const { getContactProfile, getContactPubKey } = useContacts();
+  const { joinRoom, sendMessage } = useMessages();
 
   const redirect = useNavigate();
   const { user_id: contactID } = useParams();
@@ -28,7 +29,8 @@ const ChatIndex = () => {
     };
   } | null>(null);
 
-  const [socket, setSocket] = React.useState<Socket | null>(null);
+  const [roomID, setRoomID] = React.useState<string | null>(null);
+  const [contactPubKey, setContactPubKey] = React.useState<string | null>(null);
 
   React.useEffect(() => {
     if (contactID === undefined) return redirect('/home');
@@ -41,36 +43,21 @@ const ChatIndex = () => {
       if (result.status !== 'success') return redirect('/home'); // TODO: Handle for blocked etc
       setContact(result.contact!);
 
+      const roomName = joinRoom(user!.userID, result.contact!.userID);
+      setRoomID(roomName);
+
+      // Fetch contact's public key
+      const pubKey = await getContactPubKey(result.contact!.userID);
+      if (!pubKey) return redirect('/home');
+
+      setContactPubKey(pubKey);
+
       // Connect to the room
     })();
-  }, []);
-
-  React.useEffect(() => {
-    if (contact !== null) {
-      const newSocket = io(import.meta.env.VITE_SERVER_HOST, {
-        withCredentials: true,
-        autoConnect: true,
-      });
-
-      newSocket.on('connect', () => {
-        setSocket(newSocket);
-
-        newSocket.emit('messageewq', {
-          to: 'jewioqejoqiwe',
-          message: 'Hello',
-        });
-      });
-    }
-  }, [contact]);
+  }, [authStatus]);
 
   const a = () => {
-    if (socket && socket.connected) {
-      console.log('weqewqeqw');
-      socket.emit('messageewq', {
-        to: 'jewioqejoqiwe',
-        message: 'Hello',
-      });
-    }
+    sendMessage(roomID!, 'This is a test message', contactPubKey!);
   };
 
   return (

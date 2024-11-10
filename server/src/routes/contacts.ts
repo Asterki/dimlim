@@ -9,6 +9,7 @@ import contactsUnblock from '../controllers/contacts/unblock';
 import contactsRequest from '../controllers/contacts/requests';
 import contactsGet from '../controllers/contacts/get';
 import contactFetch from '../controllers/contacts/fetch';
+import contactGetPubKey from '../controllers/contacts/getPubKey';
 
 import { validateRequestBody } from '../middleware/validationMiddleware';
 import { ensureAuthenticated } from '../middleware/authMiddleware';
@@ -36,5 +37,10 @@ const fetchSchema = z.object({
   username: z.string().min(3, { message: 'Invalid username' }).max(16, { message: 'Invalid username' }),
 });
 router.post('/fetch', [validateRequestBody(fetchSchema), ensureAuthenticated], contactFetch);
+
+const getPubKeySchema = z.object({
+  contactID: z.string(),
+});
+router.post('/getPubKey', [ensureAuthenticated, validateRequestBody(getPubKeySchema)], contactGetPubKey);
 
 export default router;

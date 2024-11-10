@@ -23,21 +23,20 @@ class SocketServer {
     this.io.on('connection', (socket) => {
       console.log('Socket connected');
 
-      socket.on("start_room", (data: {
-        userID: string;
-        contactID: string
-      }) => {
-        const roomName = [data.userID, data.contactID].sort().join('_');
-        socket.join(roomName); 
+      socket.on("joinRoom", (roomId: string) => {
+        socket.join(roomId); 
+      })
+      
+      socket.on("leaveRoom", (roomId: string) => {
+        socket.leave(roomId); 
       })
 
       socket.on("message", (data: {
-        userID: string;
-        contactID: string;
-        message: string;
+        roomId: string;
+        encryptedMessageData: string;
       }) => {
-        const roomName = [data.userID, data.contactID].sort().join('_');
-        this.io.to(roomName).emit("message", data);
+          console.log(data)
+        this.io.to(data.roomId).emit("message", data);
       })
     });
 

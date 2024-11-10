@@ -9,7 +9,7 @@ const MessageSocketService = (() => {
   const reconnectInterval = 5000; // 5 seconds
   let reconnectAttempts = 0;
   const maxReconnectAttempts = 10;
-  const url = process.env.VITE_SERVER_HOST as string;
+  const url = import.meta.env.VITE_SERVER_HOST 
 
   const connect = () => {
     if (socket) {
@@ -73,7 +73,7 @@ const MessageSocketService = (() => {
     }
   };
 
-  const sendMessage = (roomId: string, message: Message) => {
+  const sendMessage = (roomId: string, message: string) => {
     if (socket && socket.connected) {
       socket.emit('message', { roomId, message });
     } else {

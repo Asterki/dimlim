@@ -24,20 +24,20 @@ const handler = async (req: Request<{}, {}, RequestBody>, res: Response<Response
     };
 
     if (userResult.contacts.blocked.includes(currentUser.userID)) {
-      res.send({
+      return res.send({
         status: 'blocked',
       });
     }
 
-    res.send({
+    return res.send({
       status: 'success',
       contact: result,
     });
   } catch (error: unknown) {
-    res.status(500).send({
+    Logger.error((error as Error).message, true);
+    return res.status(500).send({
       status: 'internal-error',
     });
-    Logger.error((error as Error).message, true);
   }
 };
 

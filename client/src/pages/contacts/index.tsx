@@ -273,7 +273,7 @@ const ContactsIndex = () => {
                             <button
                               className='p-2 bg-blue-400 transition-all hover:brightness-110 rounded-md text-white w-1/2'
                               onClick={() => {
-                                unblockContact(contact.profile!.username);
+                                unblockContact(contact.userID);
                                 showNotification('Success', 'Contact unblocked', 'success');
                               }}
                             >

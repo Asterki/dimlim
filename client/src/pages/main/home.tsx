@@ -64,7 +64,7 @@ const HomePage = () => {
                 <h1 className='text-2xl mt-5'>Contacts</h1>
                 {contacts.map((contact) => (
                   <div key={contact.userID}>
-                    <Link to={`/chat/${contact.userID}`}>
+                    <Link to={`/chat/${contact.profile.username}`}>
                       <div className='flex items-center justify-between p-2 dark:bg-gray-700 transition-all hover:brightness-110 bg-slate-100 rounded-md mt-2'>
                         <p>{contact.profile.username}</p>
                       </div>

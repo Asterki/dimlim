@@ -4,7 +4,7 @@ import { FaFacebook, FaTwitter, FaInstagram, FaLinkedin } from 'react-icons/fa';
 
 const FooterComponent: React.FC = () => {
   return (
-    <footer className='text-neutral-700 w-full flex flex-col items-center justify-between p-4 h-auto dark:bg-gray-700 bg-white shadow-md z-10'>
+    <footer className='text-neutral-700 dark:text-white w-full flex flex-col items-center justify-between p-4 h-auto dark:bg-gray-700 bg-white shadow-md z-10'>
       <div className='w-full flex justify-between items-center mb-4'>
         <div className='text-lg font-bold'>
           &copy; {new Date().getFullYear()} DIMLIM

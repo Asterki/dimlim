@@ -45,4 +45,35 @@ interface User {
 
 type Contact = User.Profile;
 
-export type { User, Contact };
+export interface Attachment {
+  id: string;
+  type: 'image' | 'video' | 'file';
+  url: string;
+  name: string;
+  size: number;
+}
+
+export interface Reaction {
+  userId: string;
+  type: 'like' | 'love' | 'laugh' | 'surprise' | 'sad' | 'angry';
+}
+
+export interface EditHistory {
+  editedAt: Date;
+  previousContent: string;
+}
+
+export interface Message {
+  id: string;
+  senderId: string;
+  receiverId: string;
+  content: string;
+  createdAt: Date;
+  updatedAt: Date;
+  attachments?: Attachment[];
+  reactions?: Reaction[];
+  editHistory?: EditHistory[];
+  isRead: boolean;
+}
+
+export type { User, Contact, Attachment, Reaction, EditHistory, Message };

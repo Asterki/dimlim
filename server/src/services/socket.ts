@@ -23,10 +23,22 @@ class SocketServer {
     this.io.on('connection', (socket) => {
       console.log('Socket connected');
 
-      socket.on('messageewq', (data) => {
-        console.log('Message received');
-        this.io.send('Message received');
-      });
+      socket.on("start_room", (data: {
+        userID: string;
+        contactID: string
+      }) => {
+        const roomName = [data.userID, data.contactID].sort().join('_');
+        socket.join(roomName); 
+      })
+
+      socket.on("message", (data: {
+        userID: string;
+        contactID: string;
+        message: string;
+      }) => {
+        const roomName = [data.userID, data.contactID].sort().join('_');
+        this.io.to(roomName).emit("message", data);
+      })
     });
 
     // Once the server is ready

@@ -55,6 +55,10 @@ const useContacts = () => {
     return await contactsApi.contactRequests(contactID, 'cancel');
   }
 
+  const getContactProfile = async (username: string) => {
+    return await contactsApi.fetchContactByUsername(username);
+  }
+
   useEffect(() => {
     fetchContacts();
   // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -70,7 +74,8 @@ const useContacts = () => {
     rejectRequest,
     addContactByUsername,
     fetchContactsWithProfile,
-    cancelRequest
+    cancelRequest,
+    getContactProfile
   };
 };
 

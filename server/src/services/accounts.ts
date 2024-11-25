@@ -5,7 +5,7 @@ import { v4 as uuidv4 } from 'uuid';
 import UserModel from '../models/Users';
 import { HydratedDocument } from 'mongoose';
 
-import Logger from '../utils/logger';
+import Logger from 'file-error-logging';
 
 import type { User } from '../../../shared/types/models';
 
@@ -53,8 +53,7 @@ class AccountService {
         user: user as unknown as User,
       };
     } catch (error) {
-      console.log(error);
-      Logger.error((error as Error).message, true);
+      Logger.log("error", (error as Error).message);
       return {
         status: 'internal-error',
       };
@@ -89,7 +88,7 @@ class AccountService {
         status: 'success',
       };
     } catch (error) {
-      Logger.error((error as Error).message, true);
+      Logger.log("error", (error as Error).message);
       return {
         status: 'internal-error',
       };

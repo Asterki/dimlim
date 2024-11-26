@@ -34,6 +34,8 @@ const ChatIndex = () => {
 
   const inputRef = React.useRef<HTMLInputElement>(null);
 
+  const [messages, setMessages] = React.useState<any[]>([]);
+
   React.useEffect(() => {
     if (contactID === undefined) return redirect('/home');
     if (authStatus !== 'authenticated') return;
@@ -56,8 +58,8 @@ const ChatIndex = () => {
 
       // Add the message listener
       onMessage(privKey as string, (message) => {
-        console.log(message);
-        alert("New message received");
+        setMessages((prev) => [...prev, message]);
+        console.log('New message:', message);
       });
     })();
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -97,10 +99,7 @@ const ChatIndex = () => {
 
               <div className='mt-2 rounded-md shadow-md p-4 dark:bg-gray-700 bg-slate-100 h-[calc(100%-3rem)] relative'>
                 <div className='flex flex-col gap-2 overflow-y-scroll pb-4 min-h-[calc(100%-3.5rem)] px-4 shadow-md'>
-                  <div className=' shadow-md rounded-md bg-blue-400 w-max max-w-xl text-white p-2 my-2 ml-auto text-right'>
-                    <div>This is a test message</div>
-                    <div className='text-sm text-white/50'>{new Date(Date.now()).toLocaleTimeString()}</div>
-                  </div>
+                  
                 </div>
 
                 <div className='flex items-center w-full justify-center gap-2'>

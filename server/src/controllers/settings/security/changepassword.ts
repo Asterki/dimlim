@@ -9,7 +9,7 @@ import {
 } from '../../../../../shared/types/api/settings';
 import { User } from '../../../../../shared/types/models';
 
-import Logger from '../../../utils/logger';
+import Logger from 'file-error-logging/dist/cjs';
 
 // Activate TFA
 const handler = async (req: Request<{}, {}, RequestData>, res: Response<ResponseData>, next: NextFunction) => {
@@ -41,7 +41,7 @@ const handler = async (req: Request<{}, {}, RequestData>, res: Response<Response
     res.status(500).send({
       status: 'internal-error',
     });
-    Logger.error((error as Error).message, true);
+    Logger.log("error", (error as Error).message);
   }
 };
 

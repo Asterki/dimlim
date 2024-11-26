@@ -7,7 +7,7 @@ import {
 } from '../../../../shared/types/api/contacts';
 import { User } from '../../../../shared/types/models';
 
-import Logger from '../../utils/logger';
+import Logger from 'file-error-logging/dist/cjs';
 
 // Contacts block
 const handler = async (req: Request<{}, {}, RequestBody>, res: Response<ResponseData>, next: NextFunction) => {
@@ -34,7 +34,7 @@ const handler = async (req: Request<{}, {}, RequestBody>, res: Response<Response
       contact: result,
     });
   } catch (error: unknown) {
-    Logger.error((error as Error).message, true);
+    Logger.log("error", (error as Error).message);
     return res.status(500).send({
       status: 'internal-error',
     });

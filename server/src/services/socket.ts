@@ -1,5 +1,6 @@
 import { Server } from 'socket.io';
 import { createServer } from 'http';
+import Logger from 'file-error-logging/dist/cjs';
 
 class SocketServer {
   private static instance: SocketServer | null = null;
@@ -21,7 +22,7 @@ class SocketServer {
     });
 
     this.io.on('connection', (socket) => {
-      console.log('Socket connected');
+      Logger.log("info", `Socket connected: ${socket.id}`);
 
       socket.on("joinRoom", (roomId: string) => {
         socket.join(roomId); 
@@ -43,7 +44,7 @@ class SocketServer {
 
     // Once the server is ready
     this.io.on('listening', () => {
-      console.log('Socket server ready');
+      Logger.log("info", 'Socket server listening');
     });
   }
 }

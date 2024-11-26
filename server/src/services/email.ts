@@ -2,7 +2,7 @@ import nodeMailer from 'nodemailer';
 import fsExtra from 'fs-extra';
 import path from 'path';
 
-import Logger from '../utils/logger';
+import Logger from 'file-error-logging/dist/cjs';
 
 class MailerService {
   private static instance: MailerService;
@@ -34,7 +34,7 @@ class MailerService {
       this.emailTemplates[file.replace('.html', '') as string] = template;
     }
 
-    Logger.info('Email templates loaded');
+    Logger.log("info", 'Email templates loaded');
   }
 
   public static getInstance() {
@@ -60,7 +60,7 @@ class MailerService {
     // @ts-ignore We're creating the keys and not necessarily expect them to be there
     let emailTemplate = this.emailTemplates[template];
     if (!emailTemplate) {
-      Logger.error(`Email template ${template} not found`);
+      Logger.log("error", `Email template ${template} not found`);
       return '';
     }
 

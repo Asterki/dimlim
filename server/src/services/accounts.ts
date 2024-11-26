@@ -5,7 +5,7 @@ import { v4 as uuidv4 } from 'uuid';
 import UserModel from '../models/Users';
 import { HydratedDocument } from 'mongoose';
 
-import Logger from 'file-error-logging';
+import Logger from 'file-error-logging/dist/cjs';
 
 import type { User } from '../../../shared/types/models';
 

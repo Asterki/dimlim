@@ -4,7 +4,7 @@ import { User } from '../../../../shared/types/models';
 
 import ContactsService from '../../services/contacts';
 
-import Logger from '../../utils/logger';
+import Logger from 'file-error-logging/dist/cjs';
 
 // Contacts get
 const handler = async (req: Request, res: Response<ResponseData>, next: NextFunction) => {
@@ -42,7 +42,7 @@ const handler = async (req: Request, res: Response<ResponseData>, next: NextFunc
     res.status(500).send({
       status: 'internal-error',
     });
-    Logger.error((error as Error).message, true);
+    Logger.log("error", (error as Error).message);
   }
 };
 

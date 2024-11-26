@@ -6,7 +6,7 @@ import {
   RegisterResponseData as ResponseData,
 } from '../../../../shared/types/api/accounts';
 
-import Logger from '../../utils/logger';
+import Logger from 'file-error-logging/dist/cjs';
 
 const handler = async (req: Request<{}, {}, RequestBody>, res: Response<ResponseData>, next: NextFunction) => {
   const { email, username, password, pubKey } = req.body;
@@ -35,7 +35,7 @@ const handler = async (req: Request<{}, {}, RequestBody>, res: Response<Response
     res.status(500).send({
       status: 'internal-error',
     });
-    Logger.error((error as Error).message, true);
+    Logger.log("error", (error as Error).message);
   }
 };
 

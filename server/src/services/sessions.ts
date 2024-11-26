@@ -2,6 +2,7 @@ import { Express } from 'express';
 import passport from 'passport';
 import passportLocal from 'passport-local';
 import session from 'express-session';
+import Logger from 'file-error-logging/dist/cjs';
 
 import bcrypt from 'bcrypt';
 import speakeasy from 'speakeasy';
@@ -52,7 +53,7 @@ class SessionManager {
 
             return done(null, user);
           } catch (err: unknown) {
-            console.log(err);
+            Logger.log('error', (err as Error).message);
             return done(err);
           }
         },

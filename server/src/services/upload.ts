@@ -1,3 +1,4 @@
+import Logger from 'file-error-logging/dist/cjs';
 import fsExtra from 'fs-extra';
 import path from 'path';
 
@@ -11,7 +12,7 @@ class UploadService {
 
   async uploadFile(folderPath: string, fileName: string, rawData: any) {
     fsExtra.writeFile(path.join(__dirname, folderPath, fileName), rawData, function (err: any) {
-      if (err) console.log(err);
+      if (err) Logger.log("error", err);
     });
   }
 
@@ -53,10 +54,10 @@ class UploadService {
     fsExtra
       .writeFile(filePath, data)
       .then(() => {
-        console.log('File written successfully');
+        Logger.log("info", 'File written successfully');
       })
       .catch((error) => {
-        console.log('Error writing file: ', error);
+        Logger.log("error", error);
       });
   }
 }

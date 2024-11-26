@@ -80,7 +80,8 @@ interface EncryptedMessage {
   roomId: string;
   author: string;
   recipient: string;
-  encryptedSymmetricKey: string; // Encrypted symmetric key
+  encryptedAESKey: string; // Encrypted symmetric key
+  iv: string; // Initialization vector
   encryptedMessage: string; // Encrypted message data
   timestamp: Date; // Timestamp of the message
 }

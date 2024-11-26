@@ -1,6 +1,13 @@
 import MessageSocketService from '../services/messagesSocket';
-import { generateSymmetricKey, encryptSymmetric, decryptSymmetric, encryptKey, decryptKey } from '../../../utils/crypto';
 import { EncryptedMessage, Message } from '../../../../../shared/types/models';
+
+import {
+  generateAESKey,
+  encryptWithAES,
+  decryptKeyWithRSA,
+  decryptWithAES,
+  encryptKeyWithRSA,
+} from '../../../utils/crypto';
 
 const useMessages = () => {
   const joinRoom = (userID: string, contactID: string) => {
@@ -16,38 +23,41 @@ const useMessages = () => {
   };
 
   const sendMessage = (roomID: string, publicKey: string, message: Message) => {
-    const messageString = JSON.stringify(message);
+    const messageString = JSON.stringify(message); // The message object must be converted to a string
 
-    // Generate a random symmetric key for AES encryption
-    const symmetricKey = generateSymmetricKey();
+    const aesKey = generateAESKey();
+    const aesResult = encryptWithAES(messageString, aesKey);
 
-    // Encrypt the message with the symmetric key
-    const encryptedMessage = encryptSymmetric(messageString, symmetricKey);
-
-    // Encrypt the symmetric key with the recipient's RSA public key
-    const encryptedSymmetricKey = encryptKey(symmetricKey, publicKey);
+    const encryptedAESKey = encryptKeyWithRSA(aesKey, publicKey);
 
     // Send both the encrypted symmetric key and the encrypted message
     MessageSocketService.sendMessage(roomID, {
-        encryptedSymmetricKey,
-        encryptedMessage,
-        roomId: roomID,
-        author: message.senderId,
-        recipient: message.receiverId,
-        timestamp: message.createdAt,
+      iv: aesResult.iv,
+      encryptedAESKey: encryptedAESKey,
+      encryptedMessage: aesResult.ciphertext,
+      roomId: roomID,
+      author: message.senderId,
+      recipient: message.receiverId,
+      timestamp: message.createdAt,
     });
   };
 
-  const onMessage = (privKey: string, callback: (message: Message) => void) => {
+  const onMessage = (privateKeyPem: string, callback: (message: Message) => void) => {
     MessageSocketService.subscribe((encryptedMessage: EncryptedMessage) => {
-      // Decrypt the symmetric key using the recipient's RSA private key
-      const symmetricKey = decryptKey(encryptedMessage.encryptedSymmetricKey, privKey);
+      try {
+        const decryptedAESKey = decryptKeyWithRSA(encryptedMessage.encryptedAESKey, privateKeyPem);
+        const decryptedMessage = decryptWithAES(
+          encryptedMessage.encryptedMessage,
+          decryptedAESKey,
+          encryptedMessage.iv,
+        );
 
-      // Decrypt the message using the symmetric key
-      const decryptedMessageContent = decryptSymmetric(encryptedMessage.encryptedMessage, symmetricKey);
-      const decryptedMessage: Message = JSON.parse(decryptedMessageContent);
-
-      callback(decryptedMessage);
+        const result = JSON.parse(decryptedMessage) as Message; // The decrypted message must be converted back to an object
+        callback(result);
+      } catch (err) {
+        // Prob means that the message was not meant for this user
+        // console.error('Error decrypting message:', err);
+      }
     });
   };
 

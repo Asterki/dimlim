@@ -3,7 +3,7 @@ import { HydratedDocument } from 'mongoose';
 import UserModel from '../models/Users';
 import { User } from '../../../shared/types/models';
 
-import Logger from './logger';
+import Logger from 'file-error-logging/dist/cjs';
 
 const fetchUserByID = async (userID: string): Promise<HydratedDocument<User> | null> => {
   try {
@@ -12,7 +12,7 @@ const fetchUserByID = async (userID: string): Promise<HydratedDocument<User> | n
     });
     return user;
   } catch (error: unknown) {
-    Logger.error((error as Error).message, true);
+    Logger.log("error", (error as Error).message);
     return null;
   }
 };
@@ -24,7 +24,7 @@ const fetchUserByUsername = async (username: string): Promise<HydratedDocument<U
     });
     return user;
   } catch (error: unknown) {
-    Logger.error((error as Error).message, true);
+    Logger.log("error", (error as Error).message);
     return null;
   }
 };

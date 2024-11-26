@@ -3,12 +3,11 @@ import path from 'path';
 import sharp from 'sharp';
 import { v4 as uuidv4 } from 'uuid';
 import fs from 'fs-extra';
+import Logger from 'file-error-logging/dist/cjs';
 
 import UserModel from '../../models/Users';
 
 import UploadService from '../../services/upload';
-
-import Logger from '../../utils/logger';
 
 import { NextFunction, Request, Response } from 'express';
 import { PictureResponseData as ResponseData, PictureRequestBody as RequestData  } from '../../../../shared/types/api/profile';
@@ -57,7 +56,7 @@ const handler = async (req: Request<{}, {}, RequestData>, res: Response<Response
         });
 
       fs.writeFile(newPath, new Uint8Array(rawData), function (err) {
-        if (err) console.log(err);
+        if (err) Logger.log("error", err);
       });
 
       // Delete the old user profile picture
@@ -118,7 +117,7 @@ const handler = async (req: Request<{}, {}, RequestData>, res: Response<Response
     res.status(500).send({
       status: 'internal-error',
     });
-    Logger.error((error as Error).message, true);
+    Logger.log("error", (error as Error).message);
   }
 };
 

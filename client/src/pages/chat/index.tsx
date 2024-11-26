@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { io, Socket } from 'socket.io-client';
+import { v4 as uuidv4 } from 'uuid';
 
 import PageLayout from '../../layouts/PageLayout';
 
@@ -32,6 +32,8 @@ const ChatIndex = () => {
   const [roomID, setRoomID] = React.useState<string | null>(null);
   const [contactPubKey, setContactPubKey] = React.useState<string | null>(null);
 
+  const inputRef = React.useRef<HTMLInputElement>(null);
+
   React.useEffect(() => {
     if (contactID === undefined) return redirect('/home');
     if (authStatus !== 'authenticated') return;
@@ -55,15 +57,16 @@ const ChatIndex = () => {
       // Add the message listener
       onMessage(privKey as string, (message) => {
         console.log(message);
+        alert("New message received");
       });
     })();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [authStatus]);
 
-  const a = () => {
+  const sendMessageButtonClicked = () => {
     sendMessage(roomID!, contactPubKey!, {
-      id: '1',
-      content: 'This is a test message',
+      id: uuidv4(),
+      content: inputRef.current!.value,
       createdAt: new Date(Date.now()),
       isRead: false,
       receiverId: contact!.userID,
@@ -103,10 +106,11 @@ const ChatIndex = () => {
                 <div className='flex items-center w-full justify-center gap-2'>
                   <input
                     type='text'
+                    ref={inputRef}
                     className='w-full rounded-md p-2 dark:bg-gray-800 bg-slate-200 outline-none border-2 dark:border-gray-800 transition-all border-slate-200 dark:focus:border-blue-400'
                     placeholder='Type a message...'
                   />
-                  <button className='bg-blue-400 rounded-md p-2 w-2/12 text-white' onClick={a}>
+                  <button className='bg-blue-400 rounded-md p-2 w-2/12 text-white' onClick={sendMessageButtonClicked}>
                     Send
                   </button>
                 </div>

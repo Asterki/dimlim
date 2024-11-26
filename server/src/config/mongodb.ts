@@ -1,6 +1,6 @@
 import mongoose from 'mongoose';
 
-import Logger from '../utils/logger';
+import Logger from 'file-error-logging/dist/cjs';
 
 class MongoDBClient {
   connectionString: string;
@@ -24,11 +24,11 @@ class MongoDBClient {
   }
 
   private onError(error: Error) {
-    Logger.error(`MongoDB connection error: ${error.message}`);
+    Logger.log("error", `MongoDB connection error: ${error.message}`);
   }
 
   private onConnect() {
-    Logger.info('MongoDB connected');
+    Logger.log("info", 'MongoDB connected');
   }
 }
 

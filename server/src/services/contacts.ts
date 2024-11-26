@@ -1,5 +1,5 @@
 import UserModel from '../models/Users';
-import Logger from '../utils/logger';
+import Logger from 'file-error-logging/dist/cjs';
 import { fetchUserByID, fetchUserByUsername } from '../utils/users';
 
 class ContactService {
@@ -55,7 +55,7 @@ class ContactService {
 
       return 'success';
     } catch (error: unknown) {
-      Logger.error((error as Error).message, true);
+      Logger.log("error", (error as Error).message);
       return 'internal-error';
     }
   }
@@ -76,7 +76,7 @@ class ContactService {
 
       return 'success';
     } catch (error: unknown) {
-      Logger.error((error as Error).message, true);
+      Logger.log("error", (error as Error).message);
       return 'internal-error';
     }
   }
@@ -97,7 +97,7 @@ class ContactService {
 
       return 'success';
     } catch (error: unknown) {
-      Logger.error((error as Error).message, true);
+      Logger.log("error", (error as Error).message);
       return 'internal-error';
     }
   }
@@ -119,7 +119,7 @@ class ContactService {
         },
       }));
     } catch (error: unknown) {
-      Logger.error((error as Error).message, true);
+      Logger.log("error", (error as Error).message);
       return 'internal-error';
     }
   }
@@ -147,7 +147,7 @@ class ContactService {
 
       return 'success';
     } catch (error: unknown) {
-      Logger.error((error as Error).message, true);
+      Logger.log("error", (error as Error).message);
       return 'internal-error';
     }
   }
@@ -174,7 +174,7 @@ class ContactService {
 
       return 'success';
     } catch (error: unknown) {
-      Logger.error((error as Error).message, true);
+      Logger.log("error", (error as Error).message);
       return 'internal-error';
     }
   }
@@ -207,7 +207,7 @@ class ContactService {
 
       return 'success';
     } catch (error: unknown) {
-      Logger.error((error as Error).message, true);
+      Logger.log("error", (error as Error).message);
       return 'internal-error';
     }
   }

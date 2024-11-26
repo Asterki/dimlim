@@ -4,7 +4,7 @@ import { FetchResponseData as ResponseData, FetchRequestBody as RequestBody } fr
 import { NextFunction, Request, Response } from 'express';
 import { User } from '../../../../shared/types/models';
 
-import Logger from '../../utils/logger';
+import Logger from 'file-error-logging/dist/cjs';
 
 // Fetch user
 const handler = async (req: Request<{}, {}, RequestBody>, res: Response<ResponseData>, next: NextFunction) => {
@@ -39,7 +39,7 @@ const handler = async (req: Request<{}, {}, RequestBody>, res: Response<Response
     res.status(500).send({
       status: 'internal-error',
     });
-    Logger.error((error as Error).message, true);
+    Logger.log("error", (error as Error).message);
   }
 };
 

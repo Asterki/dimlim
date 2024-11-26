@@ -7,7 +7,7 @@ import {
 } from '../../../../shared/types/api/profile';
 import { User } from '../../../../shared/types/models';
 
-import Logger from '../../utils/logger';
+import Logger from 'file-error-logging/dist/cjs';
 
 // Profile Update
 const handler = async (req: Request<{}, {}, RequestBody>, res: Response<ResponseData>, next: NextFunction) => {
@@ -32,7 +32,7 @@ const handler = async (req: Request<{}, {}, RequestBody>, res: Response<Response
     res.status(500).send({
       status: 'internal-error',
     });
-    Logger.error((error as Error).message, true);
+    Logger.log("error", (error as Error).message);
   }
 };
 

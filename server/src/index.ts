@@ -12,10 +12,16 @@ import MongoDBClient from './config/mongodb';
 import SessionsService from './services/sessions';
 import SocketServer from './services/socket';
 
-import Logger from './utils/logger';
+import Logger from 'file-error-logging/dist/cjs';
 
 import 'dotenv/config';
 import { Connection } from 'mongoose';
+
+Logger.setConfig({
+  development: process.env.NODE_ENV !== 'production',
+  logsDir: path.join(__dirname, '../../logs'),  
+  rotation: 'daily',
+})
 
 class Server {
   private static instance: Server | null = null;
@@ -49,7 +55,7 @@ class Server {
     this.router.registerRoutes(this.app);
 
     this.httpServer.listen(this.port, () => {
-      Logger.info(`Server listening on port ${this.port}`);
+      Logger.log("info", `Server listening on port ${this.port}`);
     });
     this.socketServer.loadToServer(this.httpServer);
   }
@@ -58,7 +64,7 @@ class Server {
     const requiredKeys = ['MONGODB_URI', 'SESSION_SECRET'];
     for (const key of requiredKeys) {
       if (!process.env[key]) {
-        Logger.error(`Missing ${key} in .env file`);
+        Logger.log("error", `Missing ${key} in .env file`);
         process.exit(1);
       }
     }

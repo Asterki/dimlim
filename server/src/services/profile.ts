@@ -32,7 +32,7 @@ class ProfileService {
 
       return 'success';
     } catch (error: unknown) {
-      Logger.error((error as Error).message, true);
+      Logger.log("error", (error as Error).message);
       return 'error';
     }
   }
@@ -44,7 +44,7 @@ class ProfileService {
 
       return user;
     } catch (error: unknown) {
-      Logger.error((error as Error).message, true);
+      Logger.log("error", (error as Error).message);
       return null;
     }
   }
@@ -56,7 +56,7 @@ class ProfileService {
 
       return user;
     } catch (error: unknown) {
-      Logger.error((error as Error).message, true);
+      Logger.log("error", (error as Error).message);
       return null;
     }
   }

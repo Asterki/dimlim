@@ -60,7 +60,7 @@ const ChatIndex = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [authStatus]);
 
-  const a = () => {
+  const sendMessageButtonClicked = () => {
     sendMessage(roomID!, contactPubKey!, {
       id: '1',
       content: 'This is a test message',
@@ -106,7 +106,7 @@ const ChatIndex = () => {
                     className='w-full rounded-md p-2 dark:bg-gray-800 bg-slate-200 outline-none border-2 dark:border-gray-800 transition-all border-slate-200 dark:focus:border-blue-400'
                     placeholder='Type a message...'
                   />
-                  <button className='bg-blue-400 rounded-md p-2 w-2/12 text-white' onClick={a}>
+                  <button className='bg-blue-400 rounded-md p-2 w-2/12 text-white' onClick={sendMessageButtonClicked}>
                     Send
                   </button>
                 </div>

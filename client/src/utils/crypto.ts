@@ -7,95 +7,57 @@ const generateKeyPair = () => {
   return { privateKey: privateKeyPem, publicKey: publicKeyPem };
 };
 
-const encryptMessage = (message: string, publicKeyPem: string): string => {
-  const publicKey = forge.pki.publicKeyFromPem(publicKeyPem);
-  const encrypted = publicKey.encrypt(forge.util.encodeUtf8(message), 'RSA-OAEP');
-  return forge.util.encode64(encrypted);
+// Generate a random AES key
+const generateAESKey = () => {
+  return forge.random.getBytesSync(32); // 256-bit AES key
 };
 
-const decryptMessage = (encryptedMessage: string, privateKeyPem: string): string => {
-  const privateKey = forge.pki.privateKeyFromPem(privateKeyPem);
-  const decodedMessage = forge.util.decode64(encryptedMessage);
-  const decrypted = privateKey.decrypt(decodedMessage, 'RSA-OAEP');
-  return forge.util.decodeUtf8(decrypted);
-};
-
-const signMessage = (message: string, privateKeyPem: string): string => {
-  const privateKey = forge.pki.privateKeyFromPem(privateKeyPem);
-  const md = forge.md.sha256.create();
-  md.update(message, 'utf8');
-  const signature = privateKey.sign(md);
-  return forge.util.encode64(signature);
-};
-
-const verifySignature = (message: string, signature: string, publicKeyPem: string): boolean => {
-  const publicKey = forge.pki.publicKeyFromPem(publicKeyPem);
-  const md = forge.md.sha256.create();
-  md.update(message, 'utf8');
-  const decodedSignature = forge.util.decode64(signature);
-  return publicKey.verify(md.digest().bytes(), decodedSignature);
-};
-
-const hashMessage = (message: string): string => {
-  const md = forge.md.sha256.create();
-  md.update(message, 'utf8');
-  return md.digest().toHex();
-};
-
-const deriveKey = (password: string, salt: string): string => {
-  const key = forge.pkcs5.pbkdf2(password, salt, 10000, 32);
-  return forge.util.encode64(key);
-};
-
-const generateSymmetricKey = (): string => {
-  return forge.random.getBytesSync(32); // 256-bit key for AES-256
-};
-
-const encryptSymmetric = (message: string, key: string): string => {
+// Encrypt large data with AES
+const encryptWithAES = (data: string, key: string) => {
+  const iv = forge.random.getBytesSync(16); // 128-bit IV
   const cipher = forge.cipher.createCipher('AES-CBC', key);
-  const iv = forge.random.getBytesSync(16);
   cipher.start({ iv });
-  cipher.update(forge.util.createBuffer(message, 'utf8'));
+  cipher.update(forge.util.createBuffer(data, 'utf8'));
   cipher.finish();
-  const encrypted = cipher.output.getBytes();
-  return forge.util.encode64(iv + encrypted);
+  return {
+    ciphertext: forge.util.encode64(cipher.output.getBytes()),
+    iv: forge.util.encode64(iv),
+  };
 };
 
-const decryptSymmetric = (encryptedMessage: string, key: string): string => {
-  const decodedMessage = forge.util.decode64(encryptedMessage);
-  const iv = decodedMessage.slice(0, 16);
-  const encrypted = decodedMessage.slice(16);
+// Decrypt AES-encrypted data
+const decryptWithAES = (encryptedData: string, key: string, ivBase64: string) => {
+  const iv = forge.util.decode64(ivBase64);
   const decipher = forge.cipher.createDecipher('AES-CBC', key);
   decipher.start({ iv });
-  decipher.update(forge.util.createBuffer(encrypted));
+  decipher.update(forge.util.createBuffer(forge.util.decode64(encryptedData)));
   decipher.finish();
   return decipher.output.toString();
 };
 
-const encryptKey = (key: string, publicKeyPem: string): string => {
+// RSA-OAEP for key encryption
+const encryptKeyWithRSA = (key: string, publicKeyPem: string) => {
   const publicKey = forge.pki.publicKeyFromPem(publicKeyPem);
-  const encryptedKey = publicKey.encrypt(key, 'RSA-OAEP');
+  const encryptedKey = publicKey.encrypt(key, 'RSA-OAEP', {
+    md: forge.md.sha256.create(),
+  });
   return forge.util.encode64(encryptedKey);
 };
 
-const decryptKey = (encryptedKey: string, privateKeyPem: string): string => {
+const decryptKeyWithRSA = (encryptedKeyBase64: string, privateKeyPem: string) => {
   const privateKey = forge.pki.privateKeyFromPem(privateKeyPem);
-  const decodedKey = forge.util.decode64(encryptedKey);
-  const decryptedKey = privateKey.decrypt(decodedKey, 'RSA-OAEP');
+  const encryptedKey = forge.util.decode64(encryptedKeyBase64);
+  const decryptedKey = privateKey.decrypt(encryptedKey, 'RSA-OAEP', {
+    md: forge.md.sha256.create(),
+  });
   return decryptedKey;
 };
 
 export {
   generateKeyPair,
-  encryptMessage,
-  decryptMessage,
-  signMessage,
-  verifySignature,
-  hashMessage,
-  deriveKey,
-  generateSymmetricKey,
-  encryptSymmetric,
-  decryptSymmetric,
-  encryptKey,
-  decryptKey,
+  generateAESKey,
+  encryptWithAES,
+  decryptWithAES,
+  encryptKeyWithRSA,
+  decryptKeyWithRSA,
 };

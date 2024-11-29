@@ -19,6 +19,10 @@ interface User {
     accepted: string[];
   };
   pubKey: string;
+  privKey: {
+    iv: string;
+    ciphertext: string;
+  };
   preferences: {
     privacy: {
       showOnlineStatus: boolean;

@@ -9,10 +9,10 @@ import {
 import Logger from 'file-error-logging/dist/cjs';
 
 const handler = async (req: Request<{}, {}, RequestBody>, res: Response<ResponseData>, next: NextFunction) => {
-  const { email, username, password, pubKey } = req.body;
+  const { email, username, password, pubKey, encryptedPrivKey } = req.body;
 
   try {
-    const result = await AccountService.registerUser(email, username, password, pubKey);
+    const result = await AccountService.registerUser(email, username, password, pubKey, encryptedPrivKey);
 
     if (result.status === 'user-exists') {
       return res.status(200).send({

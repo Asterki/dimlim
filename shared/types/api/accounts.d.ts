@@ -5,6 +5,10 @@ interface RegisterRequestBody {
   username: string;
   password: string;
   pubKey: string;
+  encryptedPrivKey: {
+    iv: string;
+    ciphertext: string;
+  }
 }
 interface RegisterResponseData {
   status: 'success' | 'invalid-parameters' | 'user-exists' | 'internal-error';

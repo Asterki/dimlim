@@ -29,6 +29,10 @@ const registerSchema = z.object({
       return validator.isStrongPassword(pass);
     }),
   pubKey: z.string().min(1),
+  encryptedPrivKey: z.object({
+    iv: z.string().min(1),
+    ciphertext: z.string().min(1),
+  }),
 });
 router.post('/register', validateRequestBody(registerSchema), accountsRegister);
 

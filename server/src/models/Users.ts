@@ -72,6 +72,15 @@ const User = new Schema({
     type: String,
   },
 
+  privKey: {
+    iv: {
+      type: String,
+    },
+    ciphertext: {
+      type: String,
+    },
+  },
+
   preferences: {
     privacy: {
       type: Object,

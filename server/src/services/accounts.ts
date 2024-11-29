@@ -21,7 +21,10 @@ class AccountService {
     return AccountService.instance;
   }
 
-  public async registerUser(email: string, username: string, password: string, pubKey: string) {
+  public async registerUser(email: string, username: string, password: string, pubKey: string, encryptedPrivKey: {
+    iv: string;
+    ciphertext: string
+  }) {
     try {
       const isUsernameOrEmailTaken = await UserModel.findOne({
         $or: [{ 'email.value': email }, { 'profile.username': username }],
@@ -32,6 +35,7 @@ class AccountService {
       const user = new UserModel({
         userID: uuidv4(),
         pubKey: pubKey,
+        privKey: encryptedPrivKey,
         created: Date.now(),
         email: {
           value: email,

@@ -55,8 +55,9 @@ const useMessages = () => {
         const result = JSON.parse(decryptedMessage) as Message; // The decrypted message must be converted back to an object
         callback(result);
       } catch (err) {
-        // Prob means that the message was not meant for this user
-        // console.error('Error decrypting message:', err);
+        // The user deleted their own private key, so guess what, they can't read their messages anymore
+        // We'll make them pay by logging them out
+        
       }
     });
   };

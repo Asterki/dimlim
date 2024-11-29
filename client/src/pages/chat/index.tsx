@@ -16,7 +16,7 @@ const ChatIndex = () => {
   const { user, authStatus, privKey } = useAuth();
   const { notification, showNotification } = useNotification();
   const { getContactProfile, getContactPubKey } = useContacts();
-  const { joinRoom, sendMessage } = useMessages();
+  const { joinRoom, leaveRoom, sendMessage } = useMessages();
 
   const redirect = useNavigate();
   const { user_id: contactID } = useParams();
@@ -59,6 +59,13 @@ const ChatIndex = () => {
 
       setContactPubKey(pubKey);
     })();
+
+    return () => {
+      if (roomID) {
+        leaveRoom(user!.userID, contactID);
+      }
+    };
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [authStatus]);
 

@@ -30,10 +30,9 @@ const AccountRegister = () => {
           }, { message: 'Username must be alphanumeric' }),
         password: z
           .string()
-          .min(8, { message: 'Password must be at least 8 characters long' })
-          .max(100, { message: 'Password must be at most 100 characters long' })
+          .length(16, { message: 'Password must be 16 characters long' })
           .refine((pass) => {
-            return validator.isStrongPassword(pass);
+            return !validator.isStrongPassword(pass);
           }, { message: 'Password must be strong' }),
         repeatPassword: z.string().refine((repeatPassword) => {
           return repeatPassword === password;
@@ -64,6 +63,7 @@ const AccountRegister = () => {
         showNotification('Failed to register', 'Email/Username is already taken', 'error');
         break;
       default:
+        console.log(result)
         showNotification('Failed to register', 'An unexpected error occurred', 'error');
         break;
     }

@@ -1,4 +1,4 @@
-interface User {
+export type User = {
   userID: string;
   created: number;
   email: {
@@ -47,7 +47,13 @@ interface User {
   };
 }
 
-type Contact = User.Profile;
+export type Contact = {
+  username: string;
+  avatar: string;
+  imageID: string;
+  website: string;
+  bio: string;
+};
 
 export interface Attachment {
   id: string;
@@ -80,7 +86,7 @@ export interface Message {
   isRead: boolean;
 }
 
-interface EncryptedMessage {
+export interface EncryptedMessage {
   roomId: string;
   author: string;
   recipient: string;
@@ -89,5 +95,3 @@ interface EncryptedMessage {
   encryptedMessage: string; // Encrypted message data
   timestamp: Date; // Timestamp of the message
 }
-
-export type { User, Contact, Attachment, Reaction, EditHistory, Message, EncryptedMessage };

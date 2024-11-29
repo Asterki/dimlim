@@ -6,14 +6,17 @@ import PageLayout from '../../layouts/PageLayout';
 
 import { useAuth } from '../../features/auth';
 import { useContacts } from '../../features/contacts';
-import { useMessages } from '../../features/messages';
+import { useMessageListener, useMessages } from '../../features/messages';
 import useNotification from '../../hooks/useNotification';
+
+import { Message } from '../../../../shared/types/models';
+import MessageComponent from '../../features/messages/components/MessageComponent';
 
 const ChatIndex = () => {
   const { user, authStatus, privKey } = useAuth();
   const { notification, showNotification } = useNotification();
   const { getContactProfile, getContactPubKey } = useContacts();
-  const { joinRoom, sendMessage, onMessage } = useMessages();
+  const { joinRoom, sendMessage } = useMessages();
 
   const redirect = useNavigate();
   const { user_id: contactID } = useParams();
@@ -34,7 +37,7 @@ const ChatIndex = () => {
 
   const inputRef = React.useRef<HTMLInputElement>(null);
 
-  const [messages, setMessages] = React.useState<any[]>([]);
+  const [messages, setMessages] = React.useState<Message[]>([]);
 
   React.useEffect(() => {
     if (contactID === undefined) return redirect('/home');
@@ -55,18 +58,15 @@ const ChatIndex = () => {
       if (!pubKey) return redirect('/home');
 
       setContactPubKey(pubKey);
-
-      // Add the message listener
-      onMessage(privKey as string, (message) => {
-        setMessages((prev) => [...prev, message]);
-        console.log('New message:', message);
-      });
     })();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [authStatus]);
 
   const sendMessageButtonClicked = () => {
-    sendMessage(roomID!, contactPubKey!, {
+    if (!inputRef.current?.value) return showNotification('Error', 'Message cannot be empty', 'error');
+    if (!roomID || !contactPubKey) return showNotification('Error', 'An error occurred', 'error');
+
+    const message = {
       id: uuidv4(),
       content: inputRef.current!.value,
       createdAt: new Date(Date.now()),
@@ -77,8 +77,16 @@ const ChatIndex = () => {
       attachments: [],
       editHistory: [],
       reactions: [],
-    });
+    };
+
+    setMessages((prev) => [...prev, message]);
+    sendMessage(roomID!, contactPubKey!, message);
   };
+
+  useMessageListener(privKey as string, (message) => {
+    setMessages((prev) => [...prev, message]);
+    console.log('New message:', message);
+  });
 
   return (
     <PageLayout
@@ -98,8 +106,10 @@ const ChatIndex = () => {
               </div>
 
               <div className='mt-2 rounded-md shadow-md p-4 dark:bg-gray-700 bg-slate-100 h-[calc(100%-3rem)] relative'>
-                <div className='flex flex-col gap-2 overflow-y-scroll pb-4 min-h-[calc(100%-3.5rem)] px-4 shadow-md'>
-                  
+                <div className='flex flex-col gap-2 overflow-y-scroll pb-4 min-h-[calc(100%-3.5rem)] px-4'>
+                  {messages.map((message) => (
+                    <MessageComponent key={message.id} message={message} userID={user.userID} />
+                  ))}
                 </div>
 
                 <div className='flex items-center w-full justify-center gap-2'>

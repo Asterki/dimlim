@@ -1,8 +1,15 @@
-const MessageComponent = () => {
+import { Message } from "../../../../../shared/types/models";
+
+interface ComponentProps {
+  message: Message;
+  userID: string;
+}
+
+const MessageComponent: React.FC<ComponentProps> = (props) => {
   return (
-    <div className=' shadow-md rounded-md bg-blue-400 w-max max-w-xl text-white p-2 my-2 ml-auto text-right'>
-      <div>This is a test message</div>
-      <div className='text-sm text-white/50'>{new Date(Date.now()).toLocaleTimeString()}</div>
+    <div className={`p-2 rounded-lg ${props.message.senderId === props.userID ? 'bg-blue-500' : 'bg-gray-800'}`}>
+      <div>{props.message.content}</div>
+      <div className='text-sm text-white/50'>{new Date(props.message.createdAt).toLocaleTimeString()}</div>
     </div>
   );
 };

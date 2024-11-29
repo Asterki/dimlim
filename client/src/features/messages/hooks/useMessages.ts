@@ -38,7 +38,7 @@ const useMessages = () => {
       roomId: roomID,
       author: message.senderId,
       recipient: message.receiverId,
-      timetamp: message.createdAt,
+      timestamp: message.createdAt,
     } as EncryptedMessage);
   };
 

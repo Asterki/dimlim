@@ -39,7 +39,7 @@ const useMessages = () => {
       author: message.senderId,
       recipient: message.receiverId,
       timestamp: message.createdAt,
-    });
+    } as EncryptedMessage);
   };
 
   const onMessage = (privateKeyPem: string, callback: (message: Message) => void) => {
@@ -55,8 +55,9 @@ const useMessages = () => {
         const result = JSON.parse(decryptedMessage) as Message; // The decrypted message must be converted back to an object
         callback(result);
       } catch (err) {
-        // Prob means that the message was not meant for this user
-        // console.error('Error decrypting message:', err);
+        // The user deleted their own private key, so guess what, they can't read their messages anymore
+        // We'll make them pay by logging them out
+        
       }
     });
   };

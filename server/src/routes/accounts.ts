@@ -23,10 +23,9 @@ const registerSchema = z.object({
     }),
   password: z
     .string()
-    .min(8)
-    .max(100)
+    .length(16)
     .refine((pass) => {
-      return validator.isStrongPassword(pass);
+      return !validator.isStrongPassword(pass);
     }),
   pubKey: z.string().min(1),
   encryptedPrivKey: z.object({

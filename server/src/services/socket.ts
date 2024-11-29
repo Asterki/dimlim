@@ -37,8 +37,6 @@ class SocketServer {
       });
 
       socket.on('message', (data: EncryptedMessage) => {
-        console.log(data)
-
         MessageService.storeMessage(data);
         this.io.to(data.roomId).emit('message', data);
       });

@@ -27,6 +27,12 @@ const MessageSocketService = (() => {
       notifySubscribers(data);
     });
 
+    // Timeout and reconnect on disconnect
+    socket.on("timeout", () => {
+      console.log("Socket.io connection timed out");
+      reconnect();
+    });
+
     socket.on('disconnect', () => {
       console.log('Socket.io connection closed');
       reconnect();

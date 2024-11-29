@@ -29,7 +29,7 @@ import { RootState } from '../../../store';
 import { setUser, setAuthStatus, setPrivKey } from '../slices/auth';
 import authApi from '../services/authApi';
 
-import { generateKeyPair } from '../../../utils/crypto';
+import { generateKeyPair, encryptWithAES, decryptWithAES } from '../../../utils/crypto';
 
 const useAuth = () => {
   const dispatch = useDispatch();
@@ -44,7 +44,9 @@ const useAuth = () => {
     try {
       const keyPair = generateKeyPair();
 
-      const status = await authApi.register(username, email, password, keyPair.publicKey);
+      const encryptedPrivKey = encryptWithAES(keyPair.privateKey, password);
+
+      const status = await authApi.register(username, email, password, keyPair.publicKey, encryptedPrivKey);
       if (status === 'success') {
         const currentUser = await authApi.fetchUser();
         dispatch(setUser(currentUser!));
@@ -76,6 +78,13 @@ const useAuth = () => {
         const currentUser = await authApi.fetchUser();
         dispatch(setUser(currentUser!));
         dispatch(setAuthStatus('authenticated'));
+
+        // Decrypt the private key and set it to the state
+        const encryptedPrivKey = currentUser!.privKey;
+        const decryptedPrivKey = decryptWithAES(encryptedPrivKey?.ciphertext, password, encryptedPrivKey?.iv);
+        dispatch(setPrivKey(decryptedPrivKey));
+        localStorage.setItem('privKey', decryptedPrivKey);
+
         return 'success';
       } else {
         return status ?? 'unknown-error';
@@ -96,19 +105,17 @@ const useAuth = () => {
 
   // Checks if the user is authenticated on component mount
   const checkAuth = async () => {
-    if (user) return;
+    if (user && privKey) return;
     const currentUser = await authApi.fetchUser();
     if (currentUser) {
       dispatch(setUser(currentUser)); // Set the user to the state
-      dispatch(setAuthStatus('authenticated'));
 
-      // Get the private key from local storage
-      const privKey = localStorage.getItem('privKey');
-      if (privKey) {
-        dispatch(setPrivKey(privKey));
-      } else {
-        // We're fucked
+      const privKeyFromLocalStorage = localStorage.getItem('privKey');
+      if (privKeyFromLocalStorage) {
+        dispatch(setPrivKey(privKeyFromLocalStorage));
       }
+
+      dispatch(setAuthStatus('authenticated'));
     } else {
       dispatch(setAuthStatus('unauthenticated'));
     }

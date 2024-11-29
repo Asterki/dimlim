@@ -76,7 +76,16 @@ const login = async (emailOrUsername: string, password: string, tfaCode: string 
   }
 };
 
-const register = async (username: string, email: string, password: string, pubKey: string) => {
+const register = async (
+  username: string,
+  email: string,
+  password: string,
+  pubKey: string,
+  encryptedPrivKey: {
+    iv: string;
+    ciphertext: string;
+  },
+) => {
   try {
     const res = await axios.post<RegisterResponseData>(
       `${apiEndpoint}/register`,
@@ -85,6 +94,7 @@ const register = async (username: string, email: string, password: string, pubKe
         email,
         password,
         pubKey,
+        encryptedPrivKey, // Yes I know what it sounds like, but it's not what you think
       } as RegisterRequestBody,
       {
         withCredentials: true,

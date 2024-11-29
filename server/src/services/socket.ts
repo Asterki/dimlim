@@ -2,6 +2,10 @@ import { Server } from 'socket.io';
 import { createServer } from 'http';
 import Logger from 'file-error-logging/dist/cjs';
 
+import MessageService from './messages';
+
+import { EncryptedMessage } from '../../../shared/types/models';
+
 class SocketServer {
   private static instance: SocketServer | null = null;
 
@@ -22,29 +26,27 @@ class SocketServer {
     });
 
     this.io.on('connection', (socket) => {
-      Logger.log("info", `Socket connected: ${socket.id}`);
+      Logger.log('info', `Socket connected: ${socket.id}`);
 
-      socket.on("joinRoom", (roomId: string) => {
-        socket.join(roomId); 
-      })
-      
-      socket.on("leaveRoom", (roomId: string) => {
-        socket.leave(roomId); 
-      })
+      socket.on('joinRoom', (roomId: string) => {
+        socket.join(roomId);
+      });
 
-      socket.on("message", (data: {
-        roomId: string;
-        author: string;
-        recipient: string;
-        encryptedMessageData: string;
-      }) => {
-        this.io.to(data.roomId).emit("message", data);
-      })
+      socket.on('leaveRoom', (roomId: string) => {
+        socket.leave(roomId);
+      });
+
+      socket.on('message', (data: EncryptedMessage) => {
+        console.log(data)
+
+        MessageService.storeMessage(data);
+        this.io.to(data.roomId).emit('message', data);
+      });
     });
 
     // Once the server is ready
     this.io.on('listening', () => {
-      Logger.log("info", 'Socket server listening');
+      Logger.log('info', 'Socket server listening');
     });
   }
 }

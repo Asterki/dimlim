@@ -38,8 +38,8 @@ const useMessages = () => {
       roomId: roomID,
       author: message.senderId,
       recipient: message.receiverId,
-      timestamp: message.createdAt,
-    });
+      timetamp: message.createdAt,
+    } as EncryptedMessage);
   };
 
   const onMessage = (privateKeyPem: string, callback: (message: Message) => void) => {

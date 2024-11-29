@@ -27,10 +27,11 @@ const EncryptedMessages = new Schema({
     type: String,
     required: true,
   },
-  timeStamp: {
+  timestamp: {
     type: Date,
-    required: true,
+    required: false,
+    default: Date.now,
   },
 });
 
-export default mongoose.model('EncryptedMessages', EncryptedMessages, 'encryptedMEssages');
+export default mongoose.model('EncryptedMessages', EncryptedMessages, 'encryptedMessages');

@@ -3,11 +3,11 @@ import type { Express } from 'express';
 // Import the routers
 import AccountsRouter from './accounts';
 import ContactsRouter from './contacts';
-
 import ProfileRouter from './profile';
 import SettingsRouter from './settings';
 import UsersRouter from './users';
 import UtilsRouter from './utils';
+import MessagesRouter from './messages';
 
 class Router {
   private instance: Router | null = null;
@@ -25,7 +25,8 @@ class Router {
     server.use('/api/profile', ProfileRouter);
     server.use('/api/settings', SettingsRouter);
     server.use('/api/users', UsersRouter);
-    server.use('/api/profile', UtilsRouter);
+    server.use('/api/utils', UtilsRouter);
+    server.use('/api/messages', MessagesRouter);
   };
 }
 

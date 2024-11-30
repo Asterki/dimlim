@@ -29,8 +29,7 @@ const EncryptedMessages = new Schema({
   },
   timestamp: {
     type: Date,
-    required: false,
-    default: Date.now,
+    required: true,
   },
 });
 

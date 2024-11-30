@@ -85,11 +85,11 @@ const LoginForm: React.FC<LoginFormProps> = ({ onSubmit, loginLoading, user, aut
       <div className='mt-8'>
         <button
           type='button'
-          disabled={loginLoading || authStatus == 'loading'}
+          disabled={loginLoading}
           onClick={handleSubmit}
           className='w-full p-2 bg-blue-400 hover:bg-purple-400 rounded-md text-white shadow-md shadow-blue-300 hover:shadow-lg hover:shadow-purple-300 transition-all dark:shadow-none dark:hover:shadow-none'
         >
-          {(loginLoading || authStatus == 'loading') && <FaSpinner className='animate-spin inline-block' />}
+          {(loginLoading) && <FaSpinner className='animate-spin inline-block' />}
           Login
         </button>
       </div>

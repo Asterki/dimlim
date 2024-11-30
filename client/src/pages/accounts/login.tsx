@@ -31,6 +31,8 @@ const AccountLogin = () => {
   const [loginLoading, setLoginLoading] = React.useState(false);
 
   const loginButtonPressed = async (emailOrUsername: string, password: string, tfaCode?: string) => {
+    setLoginLoading(true);
+
     // We avoid sending a request if the data isn't even in the acceptable schema
     const parsedData = z
       .object({
@@ -56,10 +58,11 @@ const AccountLogin = () => {
 
     if (parsedData.success === false) {
       showNotification('Failed to login', parsedData.error.errors[0].message, 'error');
+      setLoginLoading(false);
+
       return;
     }
 
-    setLoginLoading(true);
     const result = await login(emailOrUsername, password, tfaCode);
 
     switch (result) {
@@ -74,13 +77,16 @@ const AccountLogin = () => {
         break;
       case 'invalid-credentials':
         showNotification('Failed to login', messages['invalid-credentials'], 'error');
+        setLoginLoading(false);
         break;
       case 'invalid-tfa-code':
         showNotification('Failed to login', messages['invalid-tfa-code'], 'error');
         setTFADialogOpen(true);
+        setLoginLoading(false);
         break;
       default:
         showNotification('Failed to login', 'An unknown error occurred', 'error');
+        setLoginLoading(false);
         break;
     }
 

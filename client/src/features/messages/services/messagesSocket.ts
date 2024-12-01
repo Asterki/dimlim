@@ -16,7 +16,11 @@ const MessageSocketService = (() => {
       socket.disconnect();
     }
 
-    socket = io(url);
+    socket = io(url, {
+      autoConnect: true,
+      reconnection: false,
+      withCredentials: true,
+    });
 
     socket.on('connect', () => {
       console.log('Socket.io connection established');

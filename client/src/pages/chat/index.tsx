@@ -115,7 +115,7 @@ const ChatIndex = () => {
               <div className='mt-2 rounded-md shadow-md p-4 dark:bg-gray-700 bg-slate-100 h-[calc(100%-3rem)] relative'>
                 <div className='flex flex-col gap-2 overflow-y-scroll pb-4 min-h-[calc(100%-3.5rem)] px-4'>
                   {messages.map((message) => (
-                    <MessageComponent key={message.id} message={message} userID={user.userID} />
+                    <MessageComponent messageStatus='sent' key={message.id} message={message} userID={user.userID} />
                   ))}
                 </div>
 

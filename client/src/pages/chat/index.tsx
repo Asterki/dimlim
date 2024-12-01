@@ -16,7 +16,7 @@ const ChatIndex = () => {
   const { user, authStatus, privKey } = useAuth();
   const { notification, showNotification } = useNotification();
   const { getContactProfile, getContactPubKey } = useContacts();
-  const { joinRoom, leaveRoom, sendMessage } = useMessages();
+  const { joinRoom, leaveRoom, sendMessage, currentMessages, fetchMessages } = useMessages();
 
   const redirect = useNavigate();
   const { user_id: contactID } = useParams();
@@ -39,6 +39,8 @@ const ChatIndex = () => {
 
   const [messages, setMessages] = React.useState<Message[]>([]);
 
+  const [currentMessageOffset, setCurrentMessageOffset] = React.useState<number>(0);
+
   React.useEffect(() => {
     if (contactID === undefined) return redirect('/home');
     if (authStatus !== 'authenticated') return;
@@ -58,11 +60,13 @@ const ChatIndex = () => {
       if (!pubKey) return redirect('/home');
 
       setContactPubKey(pubKey);
+      
+      console.log(await fetchMessages(currentMessageOffset))
     })();
 
     return () => {
       if (roomID) {
-        leaveRoom(user!.userID, contactID);
+        leaveRoom();
       }
     };
 
@@ -87,7 +91,7 @@ const ChatIndex = () => {
     };
 
     setMessages((prev) => [...prev, message]);
-    sendMessage(roomID!, contactPubKey!, message);
+    sendMessage(contactPubKey!, message);
   };
 
   useMessageListener(privKey as string, (message) => {
@@ -114,7 +118,7 @@ const ChatIndex = () => {
 
               <div className='mt-2 rounded-md shadow-md p-4 dark:bg-gray-700 bg-slate-100 h-[calc(100%-3rem)] relative'>
                 <div className='flex flex-col gap-2 overflow-y-scroll pb-4 min-h-[calc(100%-3.5rem)] px-4'>
-                  {messages.map((message) => (
+                  {currentMessages.map((message) => (
                     <MessageComponent messageStatus='sent' key={message.id} message={message} userID={user.userID} />
                   ))}
                 </div>

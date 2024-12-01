@@ -1,4 +1,7 @@
+import * as React from 'react';
+
 import MessageSocketService from '../services/messagesSocket';
+import MessageStorage from '../services/messageStorage';
 import { EncryptedMessage, Message } from '../../../../../shared/types/models';
 
 import {
@@ -10,19 +13,29 @@ import {
 } from '../../../utils/crypto';
 
 const useMessages = () => {
+  const [currentRoom, setCurrentRoom] = React.useState<string>('');
+  const [currentMessages, setCurrentMessages] = React.useState<Message[]>([]);
+  const [loading, setLoading] = React.useState<boolean>(false);
+
+  const [currentMessageOffset, setCurrentMessageOffset] = React.useState<number>(0);
+
   const joinRoom = (userID: string, contactID: string) => {
     const roomID = userID < contactID ? `${userID}-${contactID}` : `${contactID}-${userID}`;
     MessageSocketService.joinRoom(roomID);
+    setCurrentRoom(roomID);
+
+    setCurrentMessageOffset(0);
+    setCurrentMessages([]);
+
     return roomID;
   };
 
-  const leaveRoom = (userID: string, contactID: string) => {
-    const roomID = userID < contactID ? `${userID}-${contactID}` : `${contactID}-${userID}`;
-    MessageSocketService.leaveRoom(roomID);
-    return roomID;
+  const leaveRoom = () => {
+    MessageSocketService.leaveRoom(currentRoom);
+    return currentRoom;
   };
 
-  const sendMessage = (roomID: string, publicKey: string, message: Message) => {
+  const sendMessage = async (publicKey: string, message: Message) => {
     const messageString = JSON.stringify(message); // The message object must be converted to a string
 
     const aesKey = generateAESKey();
@@ -31,15 +44,18 @@ const useMessages = () => {
     const encryptedAESKey = encryptKeyWithRSA(aesKey, publicKey);
 
     // Send both the encrypted symmetric key and the encrypted message
-    MessageSocketService.sendMessage(roomID, {
+    MessageSocketService.sendMessage(currentRoom, {
       iv: aesResult.iv,
       encryptedAESKey: encryptedAESKey,
       encryptedMessage: aesResult.ciphertext,
-      roomId: roomID,
+      roomId: currentRoom,
       author: message.senderId,
       recipient: message.receiverId,
       timestamp: message.createdAt,
     } as EncryptedMessage);
+
+    // Save the message to indexedDB
+    console.log(await MessageStorage.createMessage(currentRoom, message))
   };
 
   const onMessage = (privateKeyPem: string, callback: (message: Message) => void) => {
@@ -57,9 +73,14 @@ const useMessages = () => {
       } catch (err) {
         // The user deleted their own private key, so guess what, they can't read their messages anymore
         // We'll make them pay by logging them out
-        
       }
     });
+  };
+
+  const fetchMessages = async (offset: number) => {
+    const messages = await MessageStorage.fetchMessaes(currentRoom, offset);
+    if (!messages) return [];
+    return messages;
   };
 
   return {
@@ -67,6 +88,10 @@ const useMessages = () => {
     leaveRoom,
     sendMessage,
     onMessage,
+    fetchMessages,
+    currentRoom,
+    currentMessages,
+    loading,
   };
 };
 

@@ -2,8 +2,6 @@ import { Server } from 'socket.io';
 import { createServer } from 'http';
 import Logger from 'file-error-logging/dist/cjs';
 
-import MessageService from './messages';
-
 import { EncryptedMessage } from '../../../shared/types/models';
 
 class SocketServer {
@@ -37,7 +35,6 @@ class SocketServer {
       });
 
       socket.on('message', (data: EncryptedMessage) => {
-        MessageService.storeMessage(data);
         this.io.to(data.roomId).emit('message', data);
       });
     });

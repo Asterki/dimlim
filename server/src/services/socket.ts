@@ -28,8 +28,6 @@ class SocketServer {
     this.io.on('connection', (socket) => {
       Logger.log('info', `Socket connected: ${socket.id}`);
 
-      console.log(socket)
-
       socket.on('joinRoom', (roomId: string) => {
         socket.join(roomId);
       });

@@ -6,8 +6,19 @@ const TestPage = () => {
   const { user, privKey } = useAuth();
 
   const test = async () => {
-    console.log(user);
-    console.log(privKey);
+    const response = await axios.post(
+      'http://localhost:3000/api/messages/fetch-messages-from-chat',
+      {
+        chatId: '74aaf945-17c2-4ad9-9555-0e46857abb25-f4c3566c-bbcf-4376-a785-0b1949e2b774',
+        limit: 50,
+        offset: 0,
+      },
+      {
+        withCredentials: true,
+      },
+    );
+
+    console.log(response);
   };
 
   return (

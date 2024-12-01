@@ -2,6 +2,8 @@ import { Server } from 'socket.io';
 import { createServer } from 'http';
 import Logger from 'file-error-logging/dist/cjs';
 
+import { z } from 'zod';
+
 import { EncryptedMessage } from '../../../shared/types/models';
 
 class SocketServer {
@@ -27,7 +29,12 @@ class SocketServer {
       Logger.log('info', `Socket connected: ${socket.id}`);
 
       socket.on('joinRoom', (roomId: string) => {
-        socket.join(roomId);
+        const parsedRoomId = z.string().min(73).max(73).safeParse(roomId);
+        if (!parsedRoomId.success) {
+          return // Handle error here
+        }
+
+        socket.join(parsedRoomId.data);
       });
 
       socket.on('leaveRoom', (roomId: string) => {
@@ -35,7 +42,22 @@ class SocketServer {
       });
 
       socket.on('message', (data: EncryptedMessage) => {
-        this.io.to(data.roomId).emit('message', data);
+        // Zod verify data here
+        const ParsedEncryptedMessage = z.object({
+          roomId: z.string(),
+          author: z.string(),
+          recipient: z.string(),
+          encryptedAESKey: z.string(),
+          iv: z.string(),
+          encryptedMessage: z.string(),
+          timestamp: z.date(),
+        }).safeParse(data);
+
+        if (!ParsedEncryptedMessage.success) {
+          return // Handle error here
+        }
+
+        this.io.to(data.roomId).emit('message', ParsedEncryptedMessage.data);
       });
     });
 

@@ -16,7 +16,7 @@ const ChatIndex = () => {
   const { user, authStatus, privKey } = useAuth();
   const { notification, showNotification } = useNotification();
   const { getContactProfile, getContactPubKey } = useContacts();
-  const { joinRoom, leaveRoom, sendMessage, currentMessages, fetchMessages } = useMessages();
+  const { joinRoom, leaveRoom, sendMessage, currentMessages, setCurrentMessages } = useMessages();
 
   const redirect = useNavigate();
   const { user_id: contactID } = useParams();
@@ -37,10 +37,6 @@ const ChatIndex = () => {
 
   const inputRef = React.useRef<HTMLInputElement>(null);
 
-  const [messages, setMessages] = React.useState<Message[]>([]);
-
-  const [currentMessageOffset, setCurrentMessageOffset] = React.useState<number>(0);
-
   React.useEffect(() => {
     if (contactID === undefined) return redirect('/home');
     if (authStatus !== 'authenticated') return;
@@ -52,7 +48,7 @@ const ChatIndex = () => {
       if (result.status !== 'success') return redirect('/home'); // TODO: Handle for blocked etc
       setContact(result.contact!);
 
-      const roomName = joinRoom(user!.userID, result.contact!.userID);
+      const roomName = await joinRoom(user!.userID, result.contact!.userID);
       setRoomID(roomName);
 
       // Fetch contact's public key
@@ -60,8 +56,6 @@ const ChatIndex = () => {
       if (!pubKey) return redirect('/home');
 
       setContactPubKey(pubKey);
-      
-      console.log(await fetchMessages(currentMessageOffset))
     })();
 
     return () => {
@@ -72,6 +66,10 @@ const ChatIndex = () => {
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [authStatus]);
+
+  React.useEffect(() => {
+    console.log('Messages:', currentMessages);
+  }, [currentMessages]);
 
   const sendMessageButtonClicked = () => {
     if (!inputRef.current?.value) return showNotification('Error', 'Message cannot be empty', 'error');
@@ -90,13 +88,15 @@ const ChatIndex = () => {
       reactions: [],
     };
 
-    setMessages((prev) => [...prev, message]);
+    setCurrentMessages((prev) => [...prev, message]);
     sendMessage(contactPubKey!, message);
+
+    inputRef.current!.value = '';
   };
 
   useMessageListener(privKey as string, (message) => {
-    setMessages((prev) => [...prev, message]);
-    console.log('New message:', message);
+    setCurrentMessages((prev) => [...prev, message]); 
+    // Message automatically saved to indexedDB
   });
 
   return (
@@ -117,7 +117,7 @@ const ChatIndex = () => {
               </div>
 
               <div className='mt-2 rounded-md shadow-md p-4 dark:bg-gray-700 bg-slate-100 h-[calc(100%-3rem)] relative'>
-                <div className='flex flex-col gap-2 overflow-y-scroll pb-4 min-h-[calc(100%-3.5rem)] px-4'>
+                <div className='flex flex-col gap-2 overflow-y-scroll pb-4 h-[calc(100%-3.5rem)] px-4'>
                   {currentMessages.map((message) => (
                     <MessageComponent messageStatus='sent' key={message.id} message={message} userID={user.userID} />
                   ))}

@@ -17,15 +17,13 @@ const useMessages = () => {
   const [currentMessages, setCurrentMessages] = React.useState<Message[]>([]);
   const [loading, setLoading] = React.useState<boolean>(false);
 
-  const [currentMessageOffset, setCurrentMessageOffset] = React.useState<number>(0);
-
-  const joinRoom = (userID: string, contactID: string) => {
+  const joinRoom = async (userID: string, contactID: string) => {
     const roomID = userID < contactID ? `${userID}-${contactID}` : `${contactID}-${userID}`;
     MessageSocketService.joinRoom(roomID);
     setCurrentRoom(roomID);
 
-    setCurrentMessageOffset(0);
-    setCurrentMessages([]);
+    const messages = await fetchMessages(roomID);
+    setCurrentMessages(messages);
 
     return roomID;
   };
@@ -55,7 +53,7 @@ const useMessages = () => {
     } as EncryptedMessage);
 
     // Save the message to indexedDB
-    console.log(await MessageStorage.createMessage(currentRoom, message))
+    console.log(await MessageStorage.createMessage(currentRoom, message));
   };
 
   const onMessage = (privateKeyPem: string, callback: (message: Message) => void) => {
@@ -69,6 +67,10 @@ const useMessages = () => {
         );
 
         const result = JSON.parse(decryptedMessage) as Message; // The decrypted message must be converted back to an object
+
+        // Save the message to indexedDB
+        MessageStorage.createMessage(encryptedMessage.roomId, result);
+
         callback(result);
       } catch (err) {
         // The user deleted their own private key, so guess what, they can't read their messages anymore
@@ -77,8 +79,8 @@ const useMessages = () => {
     });
   };
 
-  const fetchMessages = async (offset: number) => {
-    const messages = await MessageStorage.fetchMessaes(currentRoom, offset);
+  const fetchMessages = async (roomID: string, offset?: number) => {
+    const messages = await MessageStorage.fetchMessaes(roomID, offset);
     if (!messages) return [];
     return messages;
   };
@@ -92,6 +94,7 @@ const useMessages = () => {
     currentRoom,
     currentMessages,
     loading,
+    setCurrentMessages
   };
 };
 

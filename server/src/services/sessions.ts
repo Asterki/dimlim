@@ -16,6 +16,23 @@ class SessionManager {
   authStrategies: { [key: string]: passportLocal.Strategy };
   private instance: SessionManager | null = null;
 
+  private sessionMiddleware = session({
+    secret: process.env.SESSION_SECRET as string,
+    resave: false,
+    saveUninitialized: false,
+    cookie: {
+      secure: false,
+      maxAge: 1000 * 60 * 60 * 24 * 7,
+      sameSite: 'lax',
+      httpOnly: false,
+    },
+    store: MongoStore.create({
+      mongoUrl: process.env.MONGODB_URI as string,
+      collectionName: 'sessions',
+      dbName: 'dimlim',
+    }),
+  });
+
   constructor() {
     this.authStrategies = {
       local: new passportLocal.Strategy(
@@ -68,26 +85,7 @@ class SessionManager {
   }
 
   public loadToServer(server: Express) {
-    server.use(
-      session({
-        secret: process.env.SESSION_SECRET as string,
-        resave: false,
-        saveUninitialized: false,
-        cookie: {
-          secure: false,
-          maxAge: 1000 * 60 * 60 * 24 * 7,
-          sameSite: 'lax',
-          httpOnly: false,
-          path: '/',
-          domain: 'localhost',
-        },
-        store: MongoStore.create({
-          mongoUrl: process.env.MONGODB_URI as string,
-          collectionName: 'sessions',
-          dbName: 'dimlim',
-        }),
-      }),
-    );
+    server.use(this.sessionMiddleware);
     server.use(passport.initialize());
     server.use(passport.session());
   }
@@ -103,6 +101,10 @@ class SessionManager {
     });
 
     passport.use(this.authStrategies.local);
+  }
+
+  public getSessionMiddleware() {
+    return this.sessionMiddleware;
   }
 }
 

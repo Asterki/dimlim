@@ -61,7 +61,6 @@ class SocketServer {
 
       // @ts-ignore
       const user = socket.request.user as User;
-      console.log(user);
 
       socket.on('joinRoom', (roomId: string) => {
         const parsedRoomId = z.string().min(73).max(73).safeParse(roomId);

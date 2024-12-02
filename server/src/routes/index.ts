@@ -7,7 +7,7 @@ import ProfileRouter from './profile';
 import SettingsRouter from './settings';
 import UsersRouter from './users';
 import UtilsRouter from './utils';
-
+import MessageRouter from './messages';
 class Router {
   private instance: Router | null = null;
 
@@ -25,6 +25,7 @@ class Router {
     server.use('/api/settings', SettingsRouter);
     server.use('/api/users', UsersRouter);
     server.use('/api/utils', UtilsRouter);
+    server.use('/api/messages', MessageRouter);
   };
 }
 

@@ -15,7 +15,12 @@ const fetchMessaes = async (roomId: string, offset?: number) => {
     const messages = await get<Message[]>(`messages-${roomId}-offset-${offset}`); // Get the messages
     if (!messages) return null;
 
-    return messages; // Return the messages
+    
+    // Attach the offset to the messages
+    // This is because we need to know which page the messages are in
+    // So that we can be able to delete/edit them
+    const messagesWithOffset = messages.map((message) => ({ ...message, offset })); 
+    return messagesWithOffset; // Return the messages
   } catch (err) {
     return null;
   }

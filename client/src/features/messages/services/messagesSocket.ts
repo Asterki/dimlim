@@ -27,13 +27,25 @@ const MessageSocketService = (() => {
       reconnectAttempts = 0;
     });
 
-    socket.on('message', (data: EncryptedMessage) => {
+    socket.on('error', (data) => {
+      console.log(data);
+    });
+
+    socket.on('privateMessage', (data: EncryptedMessage) => {
       notifySubscribers(data);
     });
 
+    socket.on('joinedPrivateChatRoom', (data) => {
+      console.log(`Joined room: ${data}`); // TODO: Handle this event
+    });
+
+    socket.on('leftPrivateChatRoom', (data) => {
+      console.log(`Left room: ${data}`); // TODO: Handle this event
+    });
+
     // Timeout and reconnect on disconnect
-    socket.on("timeout", () => {
-      console.log("Socket.io connection timed out");
+    socket.on('timeout', () => {
+      console.log('Socket.io connection timed out');
       reconnect();
     });
 
@@ -67,9 +79,9 @@ const MessageSocketService = (() => {
     }
   };
 
-  const joinRoom = (roomId: string) => {
+  const joinPrivateChatRoom = (contactID: string) => {
     if (socket) {
-      socket.emit('joinRoom', roomId);
+      socket.emit('joinPrivateChatRoom', contactID);
     } else {
       console.error('Socket.io is not connected. Cannot join room.');
     }
@@ -77,7 +89,7 @@ const MessageSocketService = (() => {
 
   const leaveRoom = (roomId: string) => {
     if (socket) {
-      socket.emit('leaveRoom', roomId);
+      socket.emit('leavePrivateChatRoom', roomId);
     } else {
       console.error('Socket.io is not connected. Cannot leave room.');
     }
@@ -85,7 +97,7 @@ const MessageSocketService = (() => {
 
   const sendMessage = (roomId: string, message: EncryptedMessage) => {
     if (socket && socket.connected) {
-      socket.emit('message', message);
+      socket.emit('privateMessage', message);
     } else {
       console.error('Socket.io is not connected. Message not sent.');
     }
@@ -109,7 +121,7 @@ const MessageSocketService = (() => {
   return {
     connect,
     disconnect,
-    joinRoom,
+    joinPrivateChatRoom,
     leaveRoom,
     sendMessage,
     subscribe,

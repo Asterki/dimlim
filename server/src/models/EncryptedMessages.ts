@@ -13,7 +13,7 @@ const EncryptedMessages = new Schema({
   },
   recipient: {
     type: String,
-    required: true,
+    required: true,  
   },
   encryptedAESKey: {
     type: String,

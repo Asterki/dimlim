@@ -1,15 +1,16 @@
 import { Server } from 'socket.io';
 import { createServer } from 'http';
-import Logger from 'file-error-logging/dist/cjs';
 
 import SessionManager from './sessions';
 
 // Middleware for auth
 import passport from 'passport';
 
-import { z } from 'zod';
-
 import { EncryptedMessage, User } from '../../../shared/types/models';
+
+// Import routes
+import RoomsSocketHandlers from '../sockets/rooms';
+import MessageSocketHandlers from '../sockets/messages';
 
 class SocketServer {
   private static instance: SocketServer | null = null;
@@ -21,15 +22,54 @@ class SocketServer {
     return SocketServer.instance;
   }
 
-  onlyForHandshake(middleware: any) {
-    return (req: any, res: any, next: any) => {
-      const isHandshake = req._query.sid === undefined;
-      if (isHandshake) {
-        middleware(req, res, next);
-      } else {
-        next();
-      }
+  registerEventHandlers() {
+    this.io.on('connection', (socket) => {
+      socket.on('joinPrivateChatRoom', async (contactID: string) => {
+        // @ts-ignore
+        const user = socket.request.user as User;
+        RoomsSocketHandlers.joinPrivateRoom(user, socket, contactID);
+      });
+
+      socket.on('leavePrivateChatRoom', (contactID: string) => {
+        // @ts-ignore
+        const user = socket.request.user as User;
+        RoomsSocketHandlers.leavePrivateRoom(user, socket, contactID);
+      });
+
+      socket.on('sendPrivateMessage', async (data: { message: EncryptedMessage; contactID: string }) => {
+        // @ts-ignore
+        const user = socket.request.user as User;
+        MessageSocketHandlers.sendPrivateMessage(user, socket, this.io, data);
+      });
+    });
+  }
+
+  registerAuthMiddleware() {
+    const onlyForHandshake = (middleware: any) => {
+      return (req: any, res: any, next: any) => {
+        const isHandshake = req._query.sid === undefined;
+        if (isHandshake) {
+          middleware(req, res, next);
+        } else {
+          next();
+        }
+      };
     };
+
+    this.io.engine.use(onlyForHandshake(SessionManager.prototype.getInstance().getSessionMiddleware()));
+    this.io.engine.use(onlyForHandshake(passport.session()));
+    this.io.engine.use(
+      onlyForHandshake(
+        (req: { user: any }, res: { writeHead: (arg0: number) => void; end: () => void }, next: () => void) => {
+          if (req.user) {
+            next();
+          } else {
+            res.writeHead(401);
+            res.end();
+          }
+        },
+      ),
+    );
   }
 
   loadToServer(server: ReturnType<typeof createServer>) {
@@ -41,65 +81,13 @@ class SocketServer {
       },
     });
 
-    this.io.engine.use(this.onlyForHandshake(SessionManager.prototype.getInstance().getSessionMiddleware()));
-    this.io.engine.use(this.onlyForHandshake(passport.session()));
-    this.io.engine.use(
-      this.onlyForHandshake(
-        (req: { user: any }, res: { writeHead: (arg0: number) => void; end: () => void }, next: () => void) => {
-          if (req.user) {
-            next();
-          } else {
-            res.writeHead(401);
-            res.end();
-          }
-        },
-      ),
-    );
+    this.registerAuthMiddleware();
+    this.registerEventHandlers();
 
-    this.io.on('connection', (socket) => {
-      Logger.log('info', `Socket connected: ${socket.id}`);
+    // Load each event here
 
-      // @ts-ignore
-      const user = socket.request.user as User;
-
-      socket.on('joinRoom', (roomId: string) => {
-        const parsedRoomId = z.string().min(73).max(73).safeParse(roomId);
-        if (!parsedRoomId.success) {
-          return; // Handle error here
-        }
-
-        socket.join(parsedRoomId.data);
-      });
-
-      socket.on('leaveRoom', (roomId: string) => {
-        socket.leave(roomId);
-      });
-
-      socket.on('message', (data: EncryptedMessage) => {
-        // Zod verify data here
-        const ParsedEncryptedMessage = z
-          .object({
-            roomId: z.string(),
-            author: z.string(),
-            recipient: z.string(),
-            encryptedAESKey: z.string(),
-            iv: z.string(),
-            encryptedMessage: z.string(),
-            timestamp: z.date(),
-          })
-          .safeParse(data);
-
-        if (!ParsedEncryptedMessage.success) {
-          return; // Handle error here
-        }
-
-        this.io.to(data.roomId).emit('message', ParsedEncryptedMessage.data);
-      });
-    });
-
-    // Once the server is ready
     this.io.on('listening', () => {
-      Logger.log('info', 'Socket server listening');
+      console.log('Socket server ready');
     });
   }
 }

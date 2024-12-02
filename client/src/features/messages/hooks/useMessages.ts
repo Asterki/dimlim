@@ -19,7 +19,7 @@ const useMessages = () => {
 
   const joinRoom = async (userID: string, contactID: string) => {
     const roomID = userID < contactID ? `${userID}-${contactID}` : `${contactID}-${userID}`;
-    MessageSocketService.joinRoom(roomID);
+    MessageSocketService.joinPrivateChatRoom(contactID);
     setCurrentRoom(roomID);
 
     const messages = await fetchMessages(roomID);

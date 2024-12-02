@@ -84,6 +84,7 @@ export interface Message {
   reactions?: Reaction[];
   editHistory?: EditHistory[];
   isRead: boolean;
+  offset: number; // This is client-side only
 }
 
 export interface EncryptedMessage {

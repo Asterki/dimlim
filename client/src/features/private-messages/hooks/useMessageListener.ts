@@ -1,6 +1,6 @@
 import { useEffect, useRef } from 'react';
 import { Message } from '../../../../../shared/types/models';
-import { useMessages } from '../';
+import { useMessages } from '..';
 
 
 const useMessageListener = (privKey: string, callback: (message: Message) => void) => {

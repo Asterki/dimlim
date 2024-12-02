@@ -1,7 +1,7 @@
 import { Socket, Server } from 'socket.io';
 import { z } from 'zod';
 
-import { EncryptedMessage, User } from '../../../shared/types/models';
+import { User } from '../../../shared/types/models';
 
 import { MessagesPrivateSendData, MessagePrivateSendResponse } from '../../../shared/types/sockets/messages';
 

@@ -6,11 +6,11 @@ import PageLayout from '../../layouts/PageLayout';
 
 import { useAuth } from '../../features/auth';
 import { useContacts } from '../../features/contacts';
-import { useMessageListener, useMessages } from '../../features/messages';
+import { useMessageListener, useMessages } from '../../features/private-messages';
 import useNotification from '../../hooks/useNotification';
 
 import { Message } from '../../../../shared/types/models';
-import MessageComponent from '../../features/messages/components/MessageComponent';
+import MessageComponent from '../../features/private-messages/components/MessageComponent';
 
 const ChatIndex = () => {
   const { user, authStatus, privKey } = useAuth();

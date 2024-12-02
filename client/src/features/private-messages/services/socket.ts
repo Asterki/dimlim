@@ -3,7 +3,7 @@ import { EncryptedMessage } from '../../../../../shared/types/models';
 
 type MessageCallback = (message: EncryptedMessage) => void;
 
-const MessageSocketService = (() => {
+const SocketService = (() => {
   let socket: Socket | null = null;
   const messageCallbacks: MessageCallback[] = [];
   const reconnectInterval = 5000; // 5 seconds
@@ -58,6 +58,8 @@ const MessageSocketService = (() => {
       console.error('Socket.io connection error:', error);
       socket?.disconnect();
     });
+
+    return socket;
   };
 
   const disconnect = () => {
@@ -132,4 +134,4 @@ const MessageSocketService = (() => {
   };
 })();
 
-export default MessageSocketService;
+export default SocketService;

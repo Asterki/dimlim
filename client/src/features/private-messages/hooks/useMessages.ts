@@ -1,8 +1,9 @@
 import * as React from 'react';
 
-import MessageSocketService from '../services/messagesSocket';
+import SocketService from '../services/socket';
 import MessageStorage from '../services/messageStorage';
 import { EncryptedMessage, Message } from '../../../../../shared/types/models';
+import { Socket } from 'socket.io-client';
 
 import {
   generateAESKey,
@@ -14,11 +15,26 @@ import {
 
 const useMessages = () => {
   const [currentMessages, setCurrentMessages] = React.useState<Message[]>([]);
-  const [loading, setLoading] = React.useState<boolean>(false);
 
-  const joinRoom = async (userID: string, contactID: string) => {
+  // Connecton to the socket when the component mounts
+  const [socket, setSocket] = React.useState<Socket | null>(null);
+  React.useEffect(() => {
+    if (socket) {
+      socket.disconnect();
+    }
+
+    const newSocket = SocketService.connect();
+    setSocket(newSocket);
+
+    return () => {
+      newSocket.disconnect();
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const joinPrivateChat = async (userID: string, contactID: string) => {
     const roomID = userID < contactID ? `${userID}-${contactID}` : `${contactID}-${userID}`;
-    MessageSocketService.joinPrivateChatRoom(contactID);
+    SocketService.joinPrivateChatRoom(contactID);
 
     const messages = await fetchMessages(roomID);
     setCurrentMessages(messages);
@@ -26,9 +42,9 @@ const useMessages = () => {
     return roomID;
   };
 
-  const leaveRoom = () => {
-    MessageSocketService.leaveRoom(currentRoom);
-    return currentRoom;
+  const leavePrivateChat = (contactID: string) => {
+    SocketService.leavePrivateChatRoom(contactID);
+    return true;
   };
 
   const sendMessage = async (publicKey: string, message: Message) => {
@@ -40,7 +56,7 @@ const useMessages = () => {
     const encryptedAESKey = encryptKeyWithRSA(aesKey, publicKey);
 
     // Send both the encrypted symmetric key and the encrypted message
-    MessageSocketService.sendMessage(currentRoom, {
+    SocketService.sendMessage(currentRoom, {
       iv: aesResult.iv,
       encryptedAESKey: encryptedAESKey,
       encryptedMessage: aesResult.ciphertext,
@@ -54,7 +70,7 @@ const useMessages = () => {
   };
 
   const onMessage = (privateKeyPem: string, callback: (message: Message) => void) => {
-    MessageSocketService.subscribe((encryptedMessage: EncryptedMessage) => {
+    SocketService.subscribe((encryptedMessage: EncryptedMessage) => {
       try {
         const decryptedAESKey = decryptKeyWithRSA(encryptedMessage.encryptedAESKey, privateKeyPem);
         const decryptedMessage = decryptWithAES(
@@ -83,14 +99,12 @@ const useMessages = () => {
   };
 
   return {
-    joinRoom,
-    leaveRoom,
+    currentMessages,
+    joinPrivateChat,
+    leavePrivateChat,
     sendMessage,
     onMessage,
     fetchMessages,
-    currentMessages,
-    loading,
-    setCurrentMessages,
   };
 };
 

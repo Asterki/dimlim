@@ -13,14 +13,12 @@ import {
 } from '../../../utils/crypto';
 
 const useMessages = () => {
-  const [currentRoom, setCurrentRoom] = React.useState<string>('');
   const [currentMessages, setCurrentMessages] = React.useState<Message[]>([]);
   const [loading, setLoading] = React.useState<boolean>(false);
 
   const joinRoom = async (userID: string, contactID: string) => {
     const roomID = userID < contactID ? `${userID}-${contactID}` : `${contactID}-${userID}`;
     MessageSocketService.joinPrivateChatRoom(contactID);
-    setCurrentRoom(roomID);
 
     const messages = await fetchMessages(roomID);
     setCurrentMessages(messages);
@@ -46,7 +44,6 @@ const useMessages = () => {
       iv: aesResult.iv,
       encryptedAESKey: encryptedAESKey,
       encryptedMessage: aesResult.ciphertext,
-      roomId: currentRoom,
       author: message.senderId,
       recipient: message.receiverId,
       timestamp: message.createdAt,
@@ -91,10 +88,9 @@ const useMessages = () => {
     sendMessage,
     onMessage,
     fetchMessages,
-    currentRoom,
     currentMessages,
     loading,
-    setCurrentMessages
+    setCurrentMessages,
   };
 };
 

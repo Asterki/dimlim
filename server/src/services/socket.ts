@@ -12,6 +12,9 @@ import { EncryptedMessage, User } from '../../../shared/types/models';
 import RoomsSocketHandlers from '../sockets/rooms';
 import MessageSocketHandlers from '../sockets/messages';
 
+import { MessagesPrivateSendData } from '../../../shared/types/sockets/messages';
+import { RoomsPrivateJoinData, RoomsPrivateLeaveData } from '../../../shared/types/sockets/rooms';
+
 class SocketServer {
   private static instance: SocketServer | null = null;
 
@@ -24,19 +27,21 @@ class SocketServer {
 
   registerEventHandlers() {
     this.io.on('connection', (socket) => {
-      socket.on('joinPrivateChatRoom', async (contactID: string) => {
+      // Room events
+      socket.on('rooms.private.join', async (data: RoomsPrivateJoinData) => {
         // @ts-ignore
         const user = socket.request.user as User;
-        RoomsSocketHandlers.joinPrivateRoom(user, socket, contactID);
+        RoomsSocketHandlers.joinPrivateRoom(user, socket, data);
       });
 
-      socket.on('leavePrivateChatRoom', (contactID: string) => {
+      socket.on('rooms.private.leave', (data: RoomsPrivateLeaveData) => {
         // @ts-ignore
         const user = socket.request.user as User;
-        RoomsSocketHandlers.leavePrivateRoom(user, socket, contactID);
+        RoomsSocketHandlers.leavePrivateRoom(user, socket, data);
       });
 
-      socket.on('sendPrivateMessage', async (data: { message: EncryptedMessage; contactID: string }) => {
+      // Message events
+      socket.on('messages.private.send', async (data: MessagesPrivateSendData) => {
         // @ts-ignore
         const user = socket.request.user as User;
         MessageSocketHandlers.sendPrivateMessage(user, socket, this.io, data);

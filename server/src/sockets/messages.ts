@@ -1,42 +1,50 @@
 import { Socket, Server } from 'socket.io';
-
 import { z } from 'zod';
-
-import { fetchUserByID } from '../utils/users';
 
 import { EncryptedMessage, User } from '../../../shared/types/models';
 
-const sendPrivateMessage = async (
-  user: User,
-  socket: Socket,
-  io: Server,
-  data: { message: EncryptedMessage; contactID: string },
-) => {
+import { MessagesPrivateSendData, MessagePrivateSendResponse } from '../../../shared/types/sockets/messages';
+
+const sendPrivateMessage = async (user: User, socket: Socket, io: Server, data: MessagesPrivateSendData) => {
   // Zod verify data here
-  const ParsedEncryptedMessage = z
+  const parsedEncryptedMessage = z
     .object({
       message: z.object({
-        roomId: z.string(),
-        author: z.string(),
-        recipient: z.string(),
+        messageID: z.string().length(36),
         encryptedAESKey: z.string(),
         iv: z.string(),
         encryptedMessage: z.string(),
-        timestamp: z.date(),
       }),
       contactID: z.string().length(36),
     })
     .safeParse(data);
 
-  if (!ParsedEncryptedMessage.success) return socket.emit('error', 'Invalid message data');
+  if (!parsedEncryptedMessage.success) return socket.emit('error', 'Invalid message data');
+  const message = parsedEncryptedMessage.data.message;
 
   // Check if the user is in the room, if they're not, it's assumed that either:
   // - The user is not in the room
   // - The user is blocked by the contact
-  const roomName = [user.userID, ParsedEncryptedMessage.data.contactID].sort().join('-');
-  if (!socket.rooms.has(roomName)) return socket.emit('error', 'You are not in this room');
+  const roomName = [user.userID, parsedEncryptedMessage.data.contactID].sort().join('-');
+  if (!socket.rooms.has(roomName))
+    return socket.emit('messages.private.sent', {
+      messageID: message.messageID,
+      status: 'error',
+    } as MessagePrivateSendResponse);
 
-  io.to(roomName).emit('privateMessage', ParsedEncryptedMessage.data);
+  // TODO: If the recipient is not in the room, we should send a push notification, and save the message to the database
+  if (false) {
+    socket.emit('messages.private.sent', {
+      messageID: message.messageID,
+      status: 'delivered',
+    } as MessagePrivateSendResponse); // Acknowledge the sender
+  } else {
+    io.to(roomName).emit('privateMessage', parsedEncryptedMessage.data); // Send the message to the recipient
+    socket.emit('messages.private.sent', {
+      messageID: message.messageID,
+      status: 'sent',
+    } as MessagePrivateSendResponse); // Acknowledge the sender
+  }
 };
 
 export default { sendPrivateMessage };

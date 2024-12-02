@@ -28,7 +28,7 @@ const MessageSocketService = (() => {
     });
 
     socket.on('error', (data) => {
-      console.log(data);
+      console.log(data); // These wont be handled since it's impossible that they will happen unless the user is messing with the code
     });
 
     socket.on('privateMessage', (data: EncryptedMessage) => {
@@ -87,17 +87,20 @@ const MessageSocketService = (() => {
     }
   };
 
-  const leaveRoom = (roomId: string) => {
+  const leavePrivateChatRoom = (contactID: string) => {
     if (socket) {
-      socket.emit('leavePrivateChatRoom', roomId);
+      socket.emit('leavePrivateChatRoom', contactID);
     } else {
       console.error('Socket.io is not connected. Cannot leave room.');
     }
   };
 
-  const sendMessage = (roomId: string, message: EncryptedMessage) => {
+  const sendPrivateMessage = (contactID: string, message: EncryptedMessage) => {
     if (socket && socket.connected) {
-      socket.emit('privateMessage', message);
+      socket.emit('privateMessage', {
+        message,
+        contactID,
+      });
     } else {
       console.error('Socket.io is not connected. Message not sent.');
     }
@@ -122,8 +125,8 @@ const MessageSocketService = (() => {
     connect,
     disconnect,
     joinPrivateChatRoom,
-    leaveRoom,
-    sendMessage,
+    leavePrivateChatRoom,
+    sendPrivateMessage,
     subscribe,
     unsubscribe,
   };

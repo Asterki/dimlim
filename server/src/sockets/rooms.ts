@@ -5,40 +5,64 @@ import { z } from 'zod';
 import { fetchUserByID } from '../utils/users';
 
 import { User } from '../../../shared/types/models';
+import {
+  RoomsPrivateJoinData,
+  RoomsPrivateJoinResponse,
+  RoomsPrivateLeaveData,
+  RoomsPrivateLeaveResponse,
+} from '../../../shared/types/sockets/rooms';
 
 // We don't check if the room has more than 2 users, because users may have multiple devices
 // connected to the same account, and we want to deliver messages to all of them
 // However, we should check if the user is in the contacts list, and if they belong to that room.
-const joinPrivateRoom = async (user: User, socket: Socket, contactID: string) => {
+const joinPrivateRoom = async (user: User, socket: Socket, data: RoomsPrivateJoinData) => {
   // Validate contact ID
-  const parsedContactID = z.string().length(36).safeParse(contactID);
-  if (!parsedContactID.success) return socket.emit('error', 'Invalid contact ID');
-  if (user.userID === parsedContactID.data) return socket.emit('error', 'Cannot chat with yourself');
-  if (!user.contacts.accepted.includes(parsedContactID.data)) return socket.emit('error', 'Contact not found');
-  if (user.contacts.blocked.includes(parsedContactID.data)) return socket.emit('error', 'Contact is blocked');
+  const parsedData = z
+    .object({
+      contactID: z.string().min(37).max(37),
+    })
+    .safeParse(data);
+  if (!parsedData.success)
+    return socket.emit('rooms.private.join', { roomName: '', status: 'error' } as RoomsPrivateJoinResponse);
+  const contactID = parsedData.data.contactID;
+
+  // Anti-inspect-element-user-really-get-a-life-and-stop-trying-to-break-things
+  if (!user.contacts.accepted.includes(contactID))
+    return socket.emit('rooms.private.join', { roomName: '', status: 'error' } as RoomsPrivateJoinResponse);
+  if (user.userID === contactID)
+    return socket.emit('rooms.private.join', { roomName: '', status: 'error' } as RoomsPrivateJoinResponse);
+
+  // Avoid the user from joining the room if they blocked the contact
+  if (user.contacts.blocked.includes(contactID))
+    return socket.emit('rooms.private.join', { roomName: '', status: 'blocked' } as RoomsPrivateJoinResponse);
 
   // Avoid the user from joining the room if they're blocked by the contact
-  const contact = await fetchUserByID(parsedContactID.data);
-  if (!contact) return socket.emit('error', 'Contact not found');
-  if (contact.contacts.blocked.includes(user.userID)) return socket.emit('error', 'You are blocked by this contact');
+  const contact = await fetchUserByID(contactID);
+  if (!contact) return socket.emit('rooms.private.join', { roomName: '', status: 'error' } as RoomsPrivateJoinResponse);
+  if (contact.contacts.blocked.includes(user.userID))
+    return socket.emit('rooms.private.join', { roomName: '', status: 'blocked' } as RoomsPrivateJoinResponse);
 
   // Join the room
-  const roomName = [user.userID, parsedContactID.data].sort().join('-');
+  const roomName = [user.userID, contactID].sort().join('-');
   socket.join(roomName);
-  socket.emit('joinedPrivateChatRoom', roomName);
+  socket.emit('rooms.private.join', { roomName, status: 'joined' } as RoomsPrivateJoinResponse);
 };
 
-const leavePrivateRoom = (user: User, socket: Socket, contactID: string) => {
+const leavePrivateRoom = (user: User, socket: Socket, data: RoomsPrivateLeaveData) => {
   // Validate contact ID
-  const parsedContactID = z.string().min(37).max(37).safeParse(contactID);
-  if (!parsedContactID.success) return socket.emit('error', 'Invalid contact ID');
-  if (user.userID === parsedContactID.data) return socket.emit('error', 'Cannot chat with yourself');
-  if (!user.contacts.accepted.includes(parsedContactID.data)) return socket.emit('error', 'Contact not found');
+  const parsedData = z
+    .object({
+      contactID: z.string().min(37).max(37),
+    })
+    .safeParse(data);
+  if (!parsedData.success)
+    return socket.emit('rooms.private.leave', { roomName: '', status: 'error' } as RoomsPrivateLeaveResponse);
+  const contactID = parsedData.data.contactID;
 
   // Leave the room
-  const roomName = [user.userID, parsedContactID.data].sort().join('-');
+  const roomName = [user.userID, contactID].sort().join('-');
   socket.leave(roomName);
-  socket.emit('leftPrivateChatRoom', roomName);
+  socket.emit('rooms.private.leave', { roomName, status: 'left' } as RoomsPrivateLeaveResponse);
 };
 
 export default { joinPrivateRoom, leavePrivateRoom };

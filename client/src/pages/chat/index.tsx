@@ -11,11 +11,12 @@ import useNotification from '../../hooks/useNotification';
 
 import { EncryptedMessage, Message } from '../../../../shared/types/models';
 import MessageComponent from '../../features/private-messages/components/MessageComponent';
+
 import { RoomsPrivateJoinResponse, RoomsPrivateLeaveResponse } from '../../../../shared/types/sockets/rooms';
-import { addMessage } from '../../features/private-messages/slices/messageSlice';
+import { MessagePrivateSendResponse } from '../../../../shared/types/sockets/messages';
 
 const ChatIndex = () => {
-  const { user, authStatus, privKey, getPrivateKey } = useAuth();
+  const { user, authStatus, getPrivateKey } = useAuth();
   const { notification, showNotification } = useNotification();
   const { getContactProfile, getContactPubKey } = useContacts();
   const { currentMessages, sendMessage, joinPrivateChat, leavePrivateChat, addMessage, decryptMessage } = useMessages();
@@ -37,7 +38,11 @@ const ChatIndex = () => {
   const [roomID, setRoomID] = React.useState<string | null>(null);
   const [contactPubKey, setContactPubKey] = React.useState<string | null>(null);
 
+  const [isTyping, setIsTyping] = React.useState<boolean>(false);
+  const [isConnectedToRoom, setIsConnectedToRoom] = React.useState<boolean>(false);
+
   const inputRef = React.useRef<HTMLInputElement>(null);
+  const messageChatRef = React.useRef<HTMLDivElement>(null);
 
   React.useEffect(() => {
     if (contactID === undefined) return redirect('/home');
@@ -71,15 +76,22 @@ const ChatIndex = () => {
 
   React.useEffect(() => {
     console.log('Messages:', currentMessages);
+    // Scroll to bottom of messages
+
+    if (messageChatRef.current) {
+      messageChatRef.current.scrollTop = messageChatRef.current.scrollHeight;
+    }
   }, [currentMessages]);
 
   React.useEffect(() => {
     const handleRoomJoin = (data: RoomsPrivateJoinResponse) => {
       console.log('Joined room:', data);
+      setIsConnectedToRoom(true);
     };
 
     const handleRoomLeave = (data: RoomsPrivateLeaveResponse) => {
       console.log('Left room:', data);
+      setIsConnectedToRoom(false);
     };
 
     eventListener.subscribe('rooms-private-join', handleRoomJoin);
@@ -87,15 +99,20 @@ const ChatIndex = () => {
 
     eventListener.subscribe('messages-private-new', async (data: { message: EncryptedMessage }) => {
       if (data.message.recipientId !== user!.userID) return; // Only decrypt messages meant for the current user
-      const decryptedMessage = decryptMessage(data.message, await getPrivateKey() as string);
+      const decryptedMessage = decryptMessage(data.message, (await getPrivateKey()) as string);
       if (!decryptedMessage) return;
       addMessage(decryptedMessage);
+    });
+
+    eventListener.subscribe('messages-private-send', async (data: MessagePrivateSendResponse) => {
+      console.log(data);
     });
 
     return () => {
       eventListener.unsubscribe('rooms-private-join', handleRoomJoin);
       eventListener.unsubscribe('rooms-private-leave', handleRoomLeave);
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const sendMessageButtonClicked = () => {
@@ -116,7 +133,11 @@ const ChatIndex = () => {
       reactions: [],
     };
 
-    sendMessage(contactPubKey!, message); // This automatically adds the message to the currentMessages state and to indexedDB
+    if (isConnectedToRoom) {
+      sendMessage(contactPubKey!, message); // This automatically adds the message to the currentMessages state and to indexedDB
+    } else {
+      // Store the message in indexedDB and send it when connected to the room
+    }
     inputRef.current!.value = '';
   };
 
@@ -138,7 +159,10 @@ const ChatIndex = () => {
               </div>
 
               <div className='mt-2 rounded-md shadow-md p-4 dark:bg-gray-700 bg-slate-100 h-[calc(100%-3rem)] relative'>
-                <div className='flex flex-col gap-2 overflow-y-scroll pb-4 h-[calc(100%-3.5rem)] px-4'>
+                <div
+                  ref={messageChatRef}
+                  className='flex flex-col gap-2 overflow-y-scroll pb-4 h-[calc(100%-3.5rem)] px-4'
+                >
                   {currentMessages.map((message) => (
                     <MessageComponent messageStatus='sent' key={message.id} message={message} userID={user.userID} />
                   ))}

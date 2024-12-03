@@ -53,9 +53,34 @@ const createMessage = async (roomId: string, message: Message) => {
   }
 };
 
-const deleteMessage = async (roomId: string, messageId: string) => {
-  // This is gonna be hell because we have to get of the message from the indexedDB
-  // Unless we attach the pagination id to the message, and then we can just delete it
+const deleteMessage = async (roomId: string, messageId: string, offset: number) => {
+  try {
+    const messages = await get<Message[]>(`messages-${roomId}-offset-${offset}`); // Get the messages
+    if (!messages) return false;
+
+    const newMessages = messages.filter((message) => message.id !== messageId); // Filter out the message to delete
+    await set(`messages-${roomId}-offset-${offset}`, newMessages); // Save the new messages
+
+    return true;
+  } catch (err) {
+    console.log(err);
+    return false;
+  }
 };
 
-export default { fetchMessaes, createMessage };
+const updateMessage = async (roomId: string, messageId: string, offset: number, newMessage: Message) => {
+  try {
+    const messages = await get<Message[]>(`messages-${roomId}-offset-${offset}`); // Get the messages
+    if (!messages) return false;
+
+    const newMessages = messages.map((message) => (message.id === messageId ? newMessage : message)); // Update the message
+    await set(`messages-${roomId}-offset-${offset}`, newMessages); // Save the new messages
+
+    return true;
+  } catch (err) {
+    console.log(err);
+    return false;
+  }
+}
+
+export default { fetchMessaes, createMessage, deleteMessage, updateMessage };

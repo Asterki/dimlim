@@ -2,6 +2,7 @@ import * as React from 'react';
 
 import SocketService from '../services/socket';
 import MessageStorage from '../services/messageStorage';
+
 import { EncryptedMessage, Message } from '../../../../../shared/types/models';
 import { Socket } from 'socket.io-client';
 
@@ -34,7 +35,7 @@ const useMessages = () => {
 
   const joinPrivateChat = async (userID: string, contactID: string) => {
     const roomID = userID < contactID ? `${userID}-${contactID}` : `${contactID}-${userID}`;
-    SocketService.joinPrivateChatRoom(contactID);
+    SocketService.socketEmitters.rooms.joinPrivateChatRoom(contactID);
 
     const messages = await fetchMessages(roomID);
     setCurrentMessages(messages);
@@ -43,7 +44,7 @@ const useMessages = () => {
   };
 
   const leavePrivateChat = (contactID: string) => {
-    SocketService.leavePrivateChatRoom(contactID);
+    SocketService.socketEmitters.rooms.leavePrivateChatRoom(contactID);
     return true;
   };
 
@@ -56,17 +57,27 @@ const useMessages = () => {
     const encryptedAESKey = encryptKeyWithRSA(aesKey, publicKey);
 
     // Send both the encrypted symmetric key and the encrypted message
-    SocketService.sendMessage(currentRoom, {
+    SocketService.socketEmitters.messages.sendPrivateMessage(message.recipientId, {
+      messageId: message.id,
+      senderId: message.senderId,
+      recipientId: message.recipientId,
       iv: aesResult.iv,
       encryptedAESKey: encryptedAESKey,
       encryptedMessage: aesResult.ciphertext,
-      author: message.senderId,
-      recipient: message.receiverId,
-      timestamp: message.createdAt,
     } as EncryptedMessage);
 
     // Save the message to indexedDB
-    console.log(await MessageStorage.createMessage(currentRoom, message));
+    const roomID =
+      message.senderId < message.recipientId
+        ? `${message.senderId}-${message.recipientId}`
+        : `${message.recipientId}-${message.senderId}`;
+    console.log(await MessageStorage.createMessage(roomID, message));
+  };
+
+  const fetchMessages = async (roomID: string, offset?: number) => {
+    const messages = await MessageStorage.fetchMessaes(roomID, offset);
+    if (!messages) return [];
+    return messages;
   };
 
   const onMessage = (privateKeyPem: string, callback: (message: Message) => void) => {
@@ -82,7 +93,11 @@ const useMessages = () => {
         const result = JSON.parse(decryptedMessage) as Message; // The decrypted message must be converted back to an object
 
         // Save the message to indexedDB
-        MessageStorage.createMessage(encryptedMessage.roomId, result);
+        const roomID =
+          result.senderId < result.recipientId
+            ? `${result.senderId}-${result.recipientId}`
+            : `${result.recipientId}-${result.senderId}`;
+        MessageStorage.createMessage(roomID, result);
 
         callback(result);
       } catch (err) {
@@ -90,12 +105,6 @@ const useMessages = () => {
         // We'll make them pay by logging them out
       }
     });
-  };
-
-  const fetchMessages = async (roomID: string, offset?: number) => {
-    const messages = await MessageStorage.fetchMessaes(roomID, offset);
-    if (!messages) return [];
-    return messages;
   };
 
   return {

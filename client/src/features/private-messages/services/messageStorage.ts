@@ -9,27 +9,28 @@ const createChatIfNotExists = async (roomId: string) => {
 };
 
 const fetchMessaes = async (roomId: string, offset?: number) => {
-  await createChatIfNotExists(roomId); 
+  await createChatIfNotExists(roomId);
 
   try {
     if (!offset) offset = (await get<number>(`messages-${roomId}-offset`)) || 0; // Get the latest offset
+    const currentOffset = offset;
 
-    const messages = await get<Message[]>(`messages-${roomId}-offset-${offset}`); // Get the messages
-    if (!messages) return null;
+    const messages = await get<Message[]>(`messages-${roomId}-offset-${currentOffset}`); // Get the messages
+    if (!messages) return [];
 
     // Attach the offset to the messages
     // This is because we need to know which page the messages are in
     // So that we can be able to delete/edit them
-    const messagesWithOffset = messages.map((message) => ({ ...message, offset })); 
+    const messagesWithOffset = messages.map((message) => ({ ...message, currentOffset }));
     return messagesWithOffset; // Return the messages
   } catch (err) {
-    return null;
+    return [];
   }
 };
 
 const createMessage = async (roomId: string, message: Message) => {
   try {
-    await createChatIfNotExists(roomId); 
+    await createChatIfNotExists(roomId);
 
     const currentPagination = (await get<number>(`messages-${roomId}-offset`)) || 0; // Get the current pagination
     const messagesInPage = await get<Message[]>(`messages-${roomId}-offset-${currentPagination}`); // Get the messages in the current page

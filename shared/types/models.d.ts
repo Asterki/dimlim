@@ -45,7 +45,7 @@ export type User = {
       password: string;
     };
   };
-}
+};
 
 export type Contact = {
   username: string;
@@ -76,7 +76,7 @@ export interface EditHistory {
 export interface Message {
   id: string;
   senderId: string;
-  receiverId: string;
+  recipientId: string;
   content: string;
   createdAt: Date;
   updatedAt: Date;
@@ -88,11 +88,10 @@ export interface Message {
 }
 
 export interface EncryptedMessage {
-  roomId: string;
-  author: string;
-  recipient: string;
+  senderId: string;
+  recipientId: string;
+  messageId: string;
   encryptedAESKey: string; // Encrypted symmetric key
   iv: string; // Initialization vector
   encryptedMessage: string; // Encrypted message data
-  timestamp: Date; // Timestamp of the message
 }

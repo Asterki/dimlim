@@ -19,50 +19,50 @@ const joinPrivateRoom = async (user: User, socket: Socket, data: RoomsPrivateJoi
   // Validate contact ID
   const parsedData = z
     .object({
-      contactID: z.string().min(37).max(37),
+      contactID: z.string().length(36),
     })
     .safeParse(data);
   if (!parsedData.success)
-    return socket.emit('rooms.private.join', { roomName: '', status: 'error' } as RoomsPrivateJoinResponse);
+    return socket.emit('rooms-private-join', { roomName: '', status: 'error' } as RoomsPrivateJoinResponse);
   const contactID = parsedData.data.contactID;
 
   // Anti-inspect-element-user-really-get-a-life-and-stop-trying-to-break-things
   if (!user.contacts.accepted.includes(contactID))
-    return socket.emit('rooms.private.join', { roomName: '', status: 'error' } as RoomsPrivateJoinResponse);
+    return socket.emit('rooms-private-join', { roomName: '', status: 'error' } as RoomsPrivateJoinResponse);
   if (user.userID === contactID)
-    return socket.emit('rooms.private.join', { roomName: '', status: 'error' } as RoomsPrivateJoinResponse);
+    return socket.emit('rooms-private-join', { roomName: '', status: 'error' } as RoomsPrivateJoinResponse);
 
   // Avoid the user from joining the room if they blocked the contact
   if (user.contacts.blocked.includes(contactID))
-    return socket.emit('rooms.private.join', { roomName: '', status: 'blocked' } as RoomsPrivateJoinResponse);
+    return socket.emit('rooms-private-join', { roomName: '', status: 'blocked' } as RoomsPrivateJoinResponse);
 
   // Avoid the user from joining the room if they're blocked by the contact
   const contact = await fetchUserByID(contactID);
-  if (!contact) return socket.emit('rooms.private.join', { roomName: '', status: 'error' } as RoomsPrivateJoinResponse);
+  if (!contact) return socket.emit('rooms-private-join', { roomName: '', status: 'error' } as RoomsPrivateJoinResponse);
   if (contact.contacts.blocked.includes(user.userID))
-    return socket.emit('rooms.private.join', { roomName: '', status: 'blocked' } as RoomsPrivateJoinResponse);
+    return socket.emit('rooms-private-join', { roomName: '', status: 'blocked' } as RoomsPrivateJoinResponse);
 
   // Join the room
   const roomName = [user.userID, contactID].sort().join('-');
   socket.join(roomName);
-  socket.emit('rooms.private.join', { roomName, status: 'joined' } as RoomsPrivateJoinResponse);
+  socket.emit('rooms-private-join', { roomName, status: 'joined' } as RoomsPrivateJoinResponse);
 };
 
 const leavePrivateRoom = (user: User, socket: Socket, data: RoomsPrivateLeaveData) => {
   // Validate contact ID
   const parsedData = z
     .object({
-      contactID: z.string().min(37).max(37),
+      contactID: z.string().length(36),
     })
     .safeParse(data);
   if (!parsedData.success)
-    return socket.emit('rooms.private.leave', { roomName: '', status: 'error' } as RoomsPrivateLeaveResponse);
+    return socket.emit('rooms-private-leave', { roomName: '', status: 'error' } as RoomsPrivateLeaveResponse);
   const contactID = parsedData.data.contactID;
 
   // Leave the room
   const roomName = [user.userID, contactID].sort().join('-');
   socket.leave(roomName);
-  socket.emit('rooms.private.leave', { roomName, status: 'left' } as RoomsPrivateLeaveResponse);
+  socket.emit('rooms-private-leave', { roomName, status: 'left' } as RoomsPrivateLeaveResponse);
 };
 
 export default { joinPrivateRoom, leavePrivateRoom };

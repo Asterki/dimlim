@@ -3,17 +3,17 @@ import mongoose from 'mongoose';
 const Schema = mongoose.Schema;
 
 const EncryptedMessages = new Schema({
-  roomId: {
+  senderId: {
     type: String,
     required: true,
   },
-  author: {
+  recipientId: {
     type: String,
     required: true,
   },
-  recipient: {
+  messageId: {
     type: String,
-    required: true,  
+    required: true,
   },
   encryptedAESKey: {
     type: String,
@@ -25,10 +25,6 @@ const EncryptedMessages = new Schema({
   },
   encryptedMessage: {
     type: String,
-    required: true,
-  },
-  timestamp: {
-    type: Date,
     required: true,
   },
 });

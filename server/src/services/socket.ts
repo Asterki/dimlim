@@ -28,20 +28,20 @@ class SocketServer {
   registerEventHandlers() {
     this.io.on('connection', (socket) => {
       // Room events
-      socket.on('rooms.private.join', async (data: RoomsPrivateJoinData) => {
+      socket.on('rooms-private-join', async (data: RoomsPrivateJoinData) => {
         // @ts-ignore
         const user = socket.request.user as User;
         RoomsSocketHandlers.joinPrivateRoom(user, socket, data);
       });
 
-      socket.on('rooms.private.leave', (data: RoomsPrivateLeaveData) => {
+      socket.on('rooms-private-leave', (data: RoomsPrivateLeaveData) => {
         // @ts-ignore
         const user = socket.request.user as User;
         RoomsSocketHandlers.leavePrivateRoom(user, socket, data);
       });
 
       // Message events
-      socket.on('messages.private.send', async (data: MessagesPrivateSendData) => {
+      socket.on('messages-private-send', async (data: MessagesPrivateSendData) => {
         // @ts-ignore
         const user = socket.request.user as User;
         MessageSocketHandlers.sendPrivateMessage(user, socket, this.io, data);

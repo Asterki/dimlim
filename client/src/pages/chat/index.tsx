@@ -6,17 +6,18 @@ import PageLayout from '../../layouts/PageLayout';
 
 import { useAuth } from '../../features/auth';
 import { useContacts } from '../../features/contacts';
-import { useMessageListener, useMessages } from '../../features/private-messages';
+import { eventListener, useMessages } from '../../features/private-messages';
 import useNotification from '../../hooks/useNotification';
 
 import { Message } from '../../../../shared/types/models';
 import MessageComponent from '../../features/private-messages/components/MessageComponent';
+import { RoomsPrivateJoinResponse, RoomsPrivateLeaveResponse } from '../../../../shared/types/sockets/rooms';
 
 const ChatIndex = () => {
   const { user, authStatus, privKey } = useAuth();
   const { notification, showNotification } = useNotification();
   const { getContactProfile, getContactPubKey } = useContacts();
-  const { joinRoom, leaveRoom, sendMessage, currentMessages, setCurrentMessages } = useMessages();
+  const { currentMessages, sendMessage, joinPrivateChat, leavePrivateChat } = useMessages();
 
   const redirect = useNavigate();
   const { user_id: contactID } = useParams();
@@ -48,7 +49,7 @@ const ChatIndex = () => {
       if (result.status !== 'success') return redirect('/home'); // TODO: Handle for blocked etc
       setContact(result.contact!);
 
-      const roomName = await joinRoom(user!.userID, result.contact!.userID);
+      const roomName = await joinPrivateChat(user!.userID, result.contact!.userID);
       setRoomID(roomName);
 
       // Fetch contact's public key
@@ -60,7 +61,7 @@ const ChatIndex = () => {
 
     return () => {
       if (roomID) {
-        leaveRoom();
+        leavePrivateChat(contactID);
       }
     };
 
@@ -70,6 +71,24 @@ const ChatIndex = () => {
   React.useEffect(() => {
     console.log('Messages:', currentMessages);
   }, [currentMessages]);
+
+  React.useEffect(() => {
+    const handleRoomJoin = (data: RoomsPrivateJoinResponse) => {
+      console.log('Joined room:', data);
+    };
+
+    const handleRoomLeave = (data: RoomsPrivateLeaveResponse) => {
+      console.log('Left room:', data);
+    };
+
+    eventListener.subscribe('rooms-private-join', handleRoomJoin);
+    eventListener.subscribe('rooms-private-leave', handleRoomLeave);
+
+    return () => {
+      eventListener.unsubscribe('rooms-private-join', handleRoomJoin);
+      eventListener.unsubscribe('rooms-private-leave', handleRoomLeave);
+    };
+  }, []);
 
   const sendMessageButtonClicked = () => {
     if (!inputRef.current?.value) return showNotification('Error', 'Message cannot be empty', 'error');
@@ -88,16 +107,16 @@ const ChatIndex = () => {
       reactions: [],
     };
 
-    setCurrentMessages((prev) => [...prev, message]);
-    sendMessage(contactPubKey!, message);
+    // setCurrentMessages((prev) => [...prev, message]);
+    // sendMessage(contactPubKey!, message);
 
     inputRef.current!.value = '';
   };
 
-  useMessageListener(privKey as string, (message) => {
-    setCurrentMessages((prev) => [...prev, message]); 
-    // Message automatically saved to indexedDB
-  });
+  // useMessageListener(privKey as string, (message) => {
+  //   setCurrentMessages((prev) => [...prev, message]);
+  //   // Message automatically saved to indexedDB
+  // });
 
   return (
     <PageLayout

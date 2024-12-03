@@ -1,15 +1,37 @@
 import { io, Socket } from 'socket.io-client';
 import { EncryptedMessage } from '../../../../../shared/types/models';
 
-type MessageCallback = (message: EncryptedMessage) => void;
+// Emmitters
+import { sendPrivateMessage } from './socketEmitters/messages';
+import { joinPrivateChatRoom, leavePrivateChatRoom } from './socketEmitters/rooms';
+
+// Types
+import type { MessagePrivateSendResponse } from '../../../../../shared/types/sockets/messages';
+import type { RoomsPrivateJoinResponse, RoomsPrivateLeaveResponse } from '../../../../../shared/types/sockets/rooms';
+
+// Listeners
+import eventManager from './eventListener';
 
 const SocketService = (() => {
-  let socket: Socket | null = null;
-  const messageCallbacks: MessageCallback[] = [];
-  const reconnectInterval = 5000; // 5 seconds
-  let reconnectAttempts = 0;
-  const maxReconnectAttempts = 10;
   const url = import.meta.env.VITE_SERVER_HOST;
+  let socket: Socket | undefined = undefined;
+
+  const reconnectInterval = 5000; // 5 seconds
+  const maxReconnectAttempts = 10;
+  let reconnectAttempts = 0;
+
+  const socketEmitters = {
+    messages: {
+      sendPrivateMessage: (recipientId: string, data: EncryptedMessage) =>
+        sendPrivateMessage(recipientId, data, socket),
+    },
+    rooms: {
+      joinPrivateChatRoom: (contactId: string) => joinPrivateChatRoom(contactId, socket),
+      leavePrivateChatRoom: (contactId: string) => leavePrivateChatRoom(contactId, socket),
+    },
+  };
+
+  const socketListeners = {};
 
   const connect = () => {
     if (socket) {
@@ -31,18 +53,6 @@ const SocketService = (() => {
       console.log(data); // These wont be handled since it's impossible that they will happen unless the user is messing with the code
     });
 
-    socket.on('privateMessage', (data: EncryptedMessage) => {
-      notifySubscribers(data);
-    });
-
-    socket.on('joinedPrivateChatRoom', (data) => {
-      console.log(`Joined room: ${data}`); // TODO: Handle this event
-    });
-
-    socket.on('leftPrivateChatRoom', (data) => {
-      console.log(`Left room: ${data}`); // TODO: Handle this event
-    });
-
     // Timeout and reconnect on disconnect
     socket.on('timeout', () => {
       console.log('Socket.io connection timed out');
@@ -59,13 +69,32 @@ const SocketService = (() => {
       socket?.disconnect();
     });
 
+    // Custom events
+    // #region Message events
+    socket.on('messages-private-new', (data: MessagePrivateSendResponse) => {
+      eventManager.notifySubscribers('messages-private-new', data);
+    });
+    socket.on('messages-private-send', (data: MessagePrivateSendResponse) => {
+      eventManager.notifySubscribers('messages-private-send', data);
+    });
+    // #endregion
+
+    // #region Message events
+    socket.on('rooms-private-join', (data: RoomsPrivateJoinResponse) => {
+      eventManager.notifySubscribers('rooms-private-join', data);
+    });
+    socket.on('rooms-private-leave', (data: RoomsPrivateLeaveResponse) => {
+      eventManager.notifySubscribers('rooms-private-leave', data);
+    });
+    // #endregion
+
     return socket;
   };
 
   const disconnect = () => {
     if (socket) {
       socket.disconnect();
-      socket = null;
+      socket = undefined;
     }
   };
 
@@ -81,56 +110,11 @@ const SocketService = (() => {
     }
   };
 
-  const joinPrivateChatRoom = (contactID: string) => {
-    if (socket) {
-      socket.emit('joinPrivateChatRoom', contactID);
-    } else {
-      console.error('Socket.io is not connected. Cannot join room.');
-    }
-  };
-
-  const leavePrivateChatRoom = (contactID: string) => {
-    if (socket) {
-      socket.emit('leavePrivateChatRoom', contactID);
-    } else {
-      console.error('Socket.io is not connected. Cannot leave room.');
-    }
-  };
-
-  const sendPrivateMessage = (contactID: string, message: EncryptedMessage) => {
-    if (socket && socket.connected) {
-      socket.emit('privateMessage', {
-        message,
-        contactID,
-      });
-    } else {
-      console.error('Socket.io is not connected. Message not sent.');
-    }
-  };
-
-  const subscribe = (callback: MessageCallback) => {
-    messageCallbacks.push(callback);
-  };
-
-  const unsubscribe = (callback: MessageCallback) => {
-    const index = messageCallbacks.indexOf(callback);
-    if (index !== -1) {
-      messageCallbacks.splice(index, 1);
-    }
-  };
-
-  const notifySubscribers = (message: EncryptedMessage) => {
-    messageCallbacks.forEach((callback) => callback(message));
-  };
-
   return {
     connect,
     disconnect,
-    joinPrivateChatRoom,
-    leavePrivateChatRoom,
-    sendPrivateMessage,
-    subscribe,
-    unsubscribe,
+    socketEmitters,
+    socketListeners,
   };
 })();
 

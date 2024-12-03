@@ -22,8 +22,8 @@ const SocketService = (() => {
 
   const socketEmitters = {
     messages: {
-      sendPrivateMessage: (recipientId: string, data: EncryptedMessage) =>
-        sendPrivateMessage(recipientId, data, socket),
+      sendPrivateMessage: (message: EncryptedMessage) =>
+        sendPrivateMessage(message, socket),
     },
     rooms: {
       joinPrivateChatRoom: (contactId: string) => joinPrivateChatRoom(contactId, socket),

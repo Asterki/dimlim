@@ -121,12 +121,24 @@ const useAuth = () => {
     }
   };
 
+  const getPrivateKey = async () => {
+    const currentUser = await authApi.fetchUser();
+    if (currentUser) {
+      const privKeyFromLocalStorage = localStorage.getItem('privKey');
+      if (privKeyFromLocalStorage) {
+        return privKeyFromLocalStorage;
+      } else {
+        return 'No private key found';
+      }
+    }
+  };
+
   useEffect(() => {
     checkAuth(); // Check authentication status on component mount only if the user is not authenticated
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  return { user, privKey, authStatus, login, logout, register };
+  return { user, privKey, authStatus, login, logout, register, getPrivateKey };
 };
 
 export default useAuth;

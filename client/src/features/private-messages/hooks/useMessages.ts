@@ -57,7 +57,7 @@ const useMessages = () => {
     const encryptedAESKey = encryptKeyWithRSA(aesKey, publicKey);
 
     // Send both the encrypted symmetric key and the encrypted message
-    SocketService.socketEmitters.messages.sendPrivateMessage(message.recipientId, {
+    SocketService.socketEmitters.messages.sendPrivateMessage({
       messageId: message.id,
       senderId: message.senderId,
       recipientId: message.recipientId,
@@ -66,12 +66,7 @@ const useMessages = () => {
       encryptedMessage: aesResult.ciphertext,
     } as EncryptedMessage);
 
-    // Save the message to indexedDB
-    const roomID =
-      message.senderId < message.recipientId
-        ? `${message.senderId}-${message.recipientId}`
-        : `${message.recipientId}-${message.senderId}`;
-    console.log(await MessageStorage.createMessage(roomID, message));
+    addMessage(message);
   };
 
   const fetchMessages = async (roomID: string, offset?: number) => {
@@ -80,31 +75,22 @@ const useMessages = () => {
     return messages;
   };
 
-  const onMessage = (privateKeyPem: string, callback: (message: Message) => void) => {
-    SocketService.subscribe((encryptedMessage: EncryptedMessage) => {
-      try {
-        const decryptedAESKey = decryptKeyWithRSA(encryptedMessage.encryptedAESKey, privateKeyPem);
-        const decryptedMessage = decryptWithAES(
-          encryptedMessage.encryptedMessage,
-          decryptedAESKey,
-          encryptedMessage.iv,
-        );
+  const addMessage = (message: Message) => {
+    setCurrentMessages((prev) => [...prev, message]);
 
-        const result = JSON.parse(decryptedMessage) as Message; // The decrypted message must be converted back to an object
+    // Save the message to indexedDB
+    const roomID =
+      message.senderId < message.recipientId
+        ? `${message.senderId}-${message.recipientId}`
+        : `${message.recipientId}-${message.senderId}`;
+    MessageStorage.createMessage(roomID, message);
+  };
 
-        // Save the message to indexedDB
-        const roomID =
-          result.senderId < result.recipientId
-            ? `${result.senderId}-${result.recipientId}`
-            : `${result.recipientId}-${result.senderId}`;
-        MessageStorage.createMessage(roomID, result);
+  const decryptMessage = (message: EncryptedMessage, privateKey: string) => {
+    const aesKey = decryptKeyWithRSA(message.encryptedAESKey, privateKey);
+    const decryptedMessage = decryptWithAES(message.encryptedMessage, aesKey, message.iv);
 
-        callback(result);
-      } catch (err) {
-        // The user deleted their own private key, so guess what, they can't read their messages anymore
-        // We'll make them pay by logging them out
-      }
-    });
+    return JSON.parse(decryptedMessage) as Message;
   };
 
   return {
@@ -112,8 +98,9 @@ const useMessages = () => {
     joinPrivateChat,
     leavePrivateChat,
     sendMessage,
-    onMessage,
+    decryptMessage,
     fetchMessages,
+    addMessage,
   };
 };
 

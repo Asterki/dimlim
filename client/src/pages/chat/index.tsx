@@ -9,15 +9,16 @@ import { useContacts } from '../../features/contacts';
 import { eventListener, useMessages } from '../../features/private-messages';
 import useNotification from '../../hooks/useNotification';
 
-import { Message } from '../../../../shared/types/models';
+import { EncryptedMessage, Message } from '../../../../shared/types/models';
 import MessageComponent from '../../features/private-messages/components/MessageComponent';
 import { RoomsPrivateJoinResponse, RoomsPrivateLeaveResponse } from '../../../../shared/types/sockets/rooms';
+import { addMessage } from '../../features/private-messages/slices/messageSlice';
 
 const ChatIndex = () => {
-  const { user, authStatus, privKey } = useAuth();
+  const { user, authStatus, privKey, getPrivateKey } = useAuth();
   const { notification, showNotification } = useNotification();
   const { getContactProfile, getContactPubKey } = useContacts();
-  const { currentMessages, sendMessage, joinPrivateChat, leavePrivateChat } = useMessages();
+  const { currentMessages, sendMessage, joinPrivateChat, leavePrivateChat, addMessage, decryptMessage } = useMessages();
 
   const redirect = useNavigate();
   const { user_id: contactID } = useParams();
@@ -84,6 +85,13 @@ const ChatIndex = () => {
     eventListener.subscribe('rooms-private-join', handleRoomJoin);
     eventListener.subscribe('rooms-private-leave', handleRoomLeave);
 
+    eventListener.subscribe('messages-private-new', async (data: { message: EncryptedMessage }) => {
+      if (data.message.recipientId !== user!.userID) return; // Only decrypt messages meant for the current user
+      const decryptedMessage = decryptMessage(data.message, await getPrivateKey() as string);
+      if (!decryptedMessage) return;
+      addMessage(decryptedMessage);
+    });
+
     return () => {
       eventListener.unsubscribe('rooms-private-join', handleRoomJoin);
       eventListener.unsubscribe('rooms-private-leave', handleRoomLeave);
@@ -94,29 +102,23 @@ const ChatIndex = () => {
     if (!inputRef.current?.value) return showNotification('Error', 'Message cannot be empty', 'error');
     if (!roomID || !contactPubKey) return showNotification('Error', 'An error occurred', 'error');
 
-    const message = {
+    const message: Message = {
       id: uuidv4(),
+      senderId: user!.userID,
+      recipientId: contact!.userID,
+      offset: 0, // This really doesn't matter
       content: inputRef.current!.value,
       createdAt: new Date(Date.now()),
       isRead: false,
-      receiverId: contact!.userID,
-      senderId: user!.userID,
       updatedAt: new Date(Date.now()),
       attachments: [],
       editHistory: [],
       reactions: [],
     };
 
-    // setCurrentMessages((prev) => [...prev, message]);
-    // sendMessage(contactPubKey!, message);
-
+    sendMessage(contactPubKey!, message); // This automatically adds the message to the currentMessages state and to indexedDB
     inputRef.current!.value = '';
   };
-
-  // useMessageListener(privKey as string, (message) => {
-  //   setCurrentMessages((prev) => [...prev, message]);
-  //   // Message automatically saved to indexedDB
-  // });
 
   return (
     <PageLayout

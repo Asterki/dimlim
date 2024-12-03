@@ -11,13 +11,12 @@ const sendPrivateMessage = async (user: User, socket: Socket, io: Server, data: 
     .object({
       message: z.object({
         messageId: z.string().length(36),
-        authorId: z.string().length(36),
-        receiverId: z.string().length(36),
+        senderId: z.string().length(36),
+        recipientId: z.string().length(36),
         encryptedAESKey: z.string(),
         iv: z.string(),
         encryptedMessage: z.string(),
       }),
-      contactID: z.string().length(36),
     })
     .safeParse(data);
 
@@ -27,7 +26,7 @@ const sendPrivateMessage = async (user: User, socket: Socket, io: Server, data: 
   // Check if the user is in the room, if they're not, it's assumed that either:
   // - The user is not in the room
   // - The user is blocked by the contact
-  const roomName = [user.userID, parsedEncryptedMessage.data.contactID].sort().join('-');
+  const roomName = [user.userID, parsedEncryptedMessage.data.message.recipientId].sort().join('-');
   if (!socket.rooms.has(roomName))
     return socket.emit('messages-private-send', {
       messageID: message.messageId,
@@ -41,7 +40,7 @@ const sendPrivateMessage = async (user: User, socket: Socket, io: Server, data: 
       status: 'delivered',
     } as MessagePrivateSendResponse); // Acknowledge the sender
   } else {
-    io.to(roomName).emit('messages.private.new', parsedEncryptedMessage.data); // Send the message to the recipient
+    io.to(roomName).emit('messages-private-new', parsedEncryptedMessage.data); // Send the message to the recipient
     socket.emit('messages-private-send', {
       messageID: message.messageId,
       status: 'sent',

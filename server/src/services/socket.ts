@@ -31,7 +31,7 @@ class SocketServer {
       socket.on('rooms-private-join', async (data: RoomsPrivateJoinData) => {
         // @ts-ignore
         const user = socket.request.user as User;
-        RoomsSocketHandlers.joinPrivateRoom(user, socket, data);
+        RoomsSocketHandlers.joinPrivateRoom(user, socket, this.io, data);
       });
 
       socket.on('rooms-private-leave', (data: RoomsPrivateLeaveData) => {
@@ -46,6 +46,8 @@ class SocketServer {
         const user = socket.request.user as User;
         MessageSocketHandlers.sendPrivateMessage(user, socket, this.io, data);
       });
+
+      socket.on('messages-private-seen', async (data: { roomName: string, messageID: string; }) => {});
     });
   }
 

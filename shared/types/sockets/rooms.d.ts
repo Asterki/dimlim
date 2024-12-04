@@ -3,7 +3,7 @@ export interface RoomsPrivateJoinData {
 }
 export interface RoomsPrivateJoinResponse {
   roomName: string;
-  status: 'joined' | 'blocked' | 'error';
+  status: 'joined' | 'blocked' | 'error' | 'full';
 }
 
 export interface RoomsPrivateLeaveData {

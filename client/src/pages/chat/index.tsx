@@ -65,25 +65,6 @@ const ChatIndex = () => {
       setContactPubKey(pubKey);
     })();
 
-    return () => {
-      if (roomID) {
-        leavePrivateChat(contactID);
-      }
-    };
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [authStatus]);
-
-  React.useEffect(() => {
-    console.log('Messages:', currentMessages);
-    // Scroll to bottom of messages
-
-    if (messageChatRef.current) {
-      messageChatRef.current.scrollTop = messageChatRef.current.scrollHeight;
-    }
-  }, [currentMessages]);
-
-  React.useEffect(() => {
     const handleRoomJoin = (data: RoomsPrivateJoinResponse) => {
       console.log('Joined room:', data);
       setIsConnectedToRoom(true);
@@ -109,11 +90,26 @@ const ChatIndex = () => {
     });
 
     return () => {
-      eventListener.unsubscribe('rooms-private-join', handleRoomJoin);
-      eventListener.unsubscribe('rooms-private-leave', handleRoomLeave);
+      if (roomID) {
+        leavePrivateChat(contactID);
+        eventListener.unsubscribe('rooms-private-join', handleRoomJoin);
+        eventListener.unsubscribe('rooms-private-leave', handleRoomLeave);
+      }
     };
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [authStatus]);
+
+  React.useEffect(() => {
+    console.log('Messages:', currentMessages);
+    // Scroll to bottom of messages
+
+    if (messageChatRef.current) {
+      messageChatRef.current.scrollTop = messageChatRef.current.scrollHeight;
+    }
+  }, [currentMessages]);
+
+  React.useEffect(() => {}, []);
 
   const sendMessageButtonClicked = () => {
     if (!inputRef.current?.value) return showNotification('Error', 'Message cannot be empty', 'error');

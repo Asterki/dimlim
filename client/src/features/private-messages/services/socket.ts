@@ -42,6 +42,9 @@ const SocketService = (() => {
       autoConnect: true,
       reconnection: false,
       withCredentials: true,
+      auth: {
+        hey: "I'm authenticated",
+      }
     });
 
     socket.on('connect', () => {

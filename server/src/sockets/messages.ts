@@ -32,9 +32,13 @@ const sendPrivateMessage = async (user: User, socket: Socket, io: Server, data: 
       messageID: message.messageId,
       status: 'error',
     } as MessagePrivateSendResponse);
-
-  // TODO: If the recipient is not in the room, we should send a push notification, and save the message to the database
-  if (false) {
+    
+    // Check if the recipient is in the room
+  const room = io.sockets.adapter.rooms.get(roomName)!
+  const recipientRoom = Array.from(room)
+  if (recipientRoom.length < 2) {
+    // If the recipient is offline, store the message in the database
+    // (Implement your logic to store the message in the database here)
     socket.emit('messages-private-send', {
       messageID: message.messageId,
       status: 'delivered',

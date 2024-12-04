@@ -1,4 +1,4 @@
-import { Socket } from 'socket.io';
+import { Socket, Server } from 'socket.io';
 
 import { z } from 'zod';
 
@@ -15,7 +15,7 @@ import {
 // We don't check if the room has more than 2 users, because users may have multiple devices
 // connected to the same account, and we want to deliver messages to all of them
 // However, we should check if the user is in the contacts list, and if they belong to that room.
-const joinPrivateRoom = async (user: User, socket: Socket, data: RoomsPrivateJoinData) => {
+const joinPrivateRoom = async (user: User, socket: Socket, io: Server, data: RoomsPrivateJoinData) => {
   // Validate contact ID
   const parsedData = z
     .object({
@@ -42,8 +42,14 @@ const joinPrivateRoom = async (user: User, socket: Socket, data: RoomsPrivateJoi
   if (contact.contacts.blocked.includes(user.userID))
     return socket.emit('rooms-private-join', { roomName: '', status: 'blocked' } as RoomsPrivateJoinResponse);
 
-  // Join the room
+  // Avoid the user from joining if the room is already full (2 sockets)
   const roomName = [user.userID, contactID].sort().join('-');
+  const room = io.sockets.adapter.rooms.get(roomName)!
+
+  if (room && room.size >= 2)
+    return socket.emit('rooms-private-join', { roomName, status: 'full' } as RoomsPrivateJoinResponse);
+
+  // Join the room
   socket.join(roomName);
   socket.emit('rooms-private-join', { roomName, status: 'joined' } as RoomsPrivateJoinResponse);
 };

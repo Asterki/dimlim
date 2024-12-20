@@ -1,4 +1,4 @@
-# DIMLIM
+# DIMLIM Secure Chat
 
 DIMLIM is a secure, end-to-end encrypted messaging app designed to protect user privacy and provide a safe space for communication. With DIMLIM, your messages are encrypted from the moment they leave your device until they reach the intended recipient, preventing any third parties—including the server hosting the app—from accessing your private conversations. DIMLIM is built with a modular infrastructure and is optimized for seamless performance, offering users a robust and reliable messaging experience.
 
